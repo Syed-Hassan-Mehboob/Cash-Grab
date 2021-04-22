@@ -1,7 +1,12 @@
 const Constants = {
-  fontLight: 'BrownLight',
-  fontRegular: 'BrownRegular',
-  fontBold: 'BrownRegular',
+  /* * Font Families * */
+  fontLight: 'JostLight',
+  fontRegular: 'JostRegular',
+  fontBold: 'JostBold',
+  /* * Screens * */
+  login: 'Login',
+  signUp: 'SignUp',
+  createAccount: 'CreateAccount',
 };
 
 export default Constants;

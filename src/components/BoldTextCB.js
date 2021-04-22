@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text} from 'react-native';
+import Constants from '../common/Constants';
 
 export default class BoldTextCB extends Component {
   constructor(props) {
@@ -17,6 +18,6 @@ export default class BoldTextCB extends Component {
 
 const styles = StyleSheet.create({
   defaultStyle: {
-    fontFamily: 'BrownBold',
+    fontFamily: Constants.fontBold,
   },
 });

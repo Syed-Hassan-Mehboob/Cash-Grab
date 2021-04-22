@@ -18,14 +18,17 @@ export default class SearchBox extends Component {
     const {disabled = false, onPress = null} = this.props;
     return (
       <TouchableOpacity
-        activeOpacity={!disabled}
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          backgroundColor: '#eaeaea',
-          borderRadius: 10,
-          marginVertical: 10,
-        }}
+        activeOpacity={disabled ? 0.8 : 1.0}
+        style={[
+          styles.default,
+          {
+            flexDirection: 'row',
+            width: '100%',
+            backgroundColor: '#eaeaea',
+            borderRadius: 10,
+            marginVertical: 10,
+          },
+        ]}
         onPress={onPress}>
         <View
           style={{
@@ -75,6 +78,15 @@ export default class SearchBox extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  default: {
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+    overflow: 'hidden',
+  },
+});
 
 export {SearchBox};

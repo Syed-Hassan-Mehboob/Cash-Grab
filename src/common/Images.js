@@ -19,6 +19,10 @@ const Images = {
   employeeHoldingBox: require('../assets/icon_box.png'),
   userPlaceHolder: require('../assets/icon_user_placeholder.png'),
   iconPencil: require('../assets/icon_pencil.png'),
+  bgSplash: require('../assets/bg_splash.png'),
+  logoCashGrab: require('../assets/logo_cash_grab.png'),
+  becomeAVendor: require('../assets/becomeavendor.png'),
+  becomeAUser: require('../assets/becomeauser.png'),
 };
 
 export default Images;

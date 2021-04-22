@@ -1,8 +1,9 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {Component} from 'react';
 import Login from '../views/Login';
 import Splash from '../views/Splash';
+import CreateAccount from '../views/CreateAccount';
 import SignUp from '../views/SignUp';
 import ForgetPassword from '../views/ForgetPassword';
 import Categories from '../views/Categories';
@@ -14,6 +15,7 @@ import Nearby from '../views/Nearby';
 import AdvanceBooking from '../views/AdvanceBooking';
 import Home from '../views/Home';
 import EditProfile from '../views/EditProfile';
+import Constants from '../common/Constants';
 
 const Stack = createStackNavigator();
 
@@ -33,10 +35,16 @@ export default class Routes extends Component {
 
 const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash" headerMode="none">
+    <Stack.Navigator
+      initialRouteName="Splash"
+      headerMode="none"
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}>
       <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name={Constants.login} component={Login} />
+      <Stack.Screen name={Constants.createAccount} component={CreateAccount} />
+      <Stack.Screen name={Constants.signUp} component={SignUp} />
       <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="BestEmployees" component={BestEmployees} />
