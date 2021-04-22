@@ -17,6 +17,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import RegularTextCB from '../components/RegularTextCB';
+import BoldTextCB from '../components/BoldTextCB';
+import EditText from '../components/EditText';
 
 const fall = new Animated.Value(1);
 const bs = React.createRef();
@@ -27,18 +30,11 @@ export default class SignUp extends Component {
     this.state = {
       avatar: '',
       fullName: '',
+      service: '',
       email: '',
       password: '',
-      tickIcon: 'cross',
-      secureText: true,
-      eyeIcon: 'eye-off',
+      confirmPassword: '',
     };
-  }
-
-  changePasswordState() {
-    if (this.state.secureText)
-      this.setState({secureText: false, eyeIcon: 'eye'});
-    else this.setState({secureText: true, eyeIcon: 'eye-off'});
   }
 
   validateEmail = (text) => {
@@ -65,24 +61,30 @@ export default class SignUp extends Component {
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+        <RegularTextCB style={{fontSize: 30}}>Upload Photo</RegularTextCB>
         <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
           Upload a photo from
         </LightTextCB>
         <View style={{marginTop: 30}}>
           <ButtonRadius10
-            label="Camera"
+            bgColor={Colors.newGreen}
+            label="CAMERA"
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
         <View style={{marginTop: 20}}>
           <ButtonRadius10
-            label="Gallery"
+            bgColor={Colors.newGreen}
+            label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
         <View style={{marginTop: 20}}>
-          <ButtonRadius10 label="Cancel" onPress={() => bs.current.snapTo(1)} />
+          <ButtonRadius10
+            bgColor={Colors.newGreen}
+            label="CANCEL"
+            onPress={() => bs.current.snapTo(1)}
+          />
         </View>
       </View>
     );
@@ -122,19 +124,35 @@ export default class SignUp extends Component {
             style={styles.container}
             contentContainerStyle={{flexGrow: 1}}>
             {/* <ScrollView bounces={false} showsVerticalScrollIndicator={false}> */}
-            <View>
+            <View style={{alignItems: 'center'}}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.goBack();
-                }}>
+                }}
+                style={{position: 'absolute', top: 0, left: 0}}>
                 <Image source={Images.arrowBack} style={styles.iconBack} />
               </TouchableOpacity>
-              <LightTextCB style={{fontSize: 30, marginTop: 30}}>
-                {'Need account?\nSign Up'}
-              </LightTextCB>
+              <Image
+                source={Images.logoCashGrab}
+                style={{
+                  height: 250,
+                  width: 250,
+                }}
+              />
+              <BoldTextCB
+                style={{
+                  fontSize: 28,
+                  color: Colors.black,
+                  marginTop: -50,
+                }}>
+                Create an account
+              </BoldTextCB>
+              <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+                Hello there, sign in to continue!
+              </RegularTextCB>
             </View>
             <View style={[styles.childContainer]}>
-              <View
+              {/* <View
                 style={{
                   flexShrink: 1,
                   flexDirection: 'row',
@@ -165,87 +183,75 @@ export default class SignUp extends Component {
                     </View>
                   </ImageBackground>
                 </TouchableOpacity>
-              </View>
-              <LightTextCB style={[styles.formLabel, {marginTop: 20}]}>
-                Full Name
-              </LightTextCB>
-              <View style={styles.textInputContainer}>
-                <TextInput
+              </View> */}
+              <View style={[styles.textInputContainer, {marginTop: 30}]}>
+                <EditText
                   ref={'fullName'}
-                  placeholder={'Enter Full Name'}
-                  placeholderTextColor={Colors.grey}
-                  autoCapitalize="none"
-                  underlineColorAndroid="transparent"
-                  blurOnSubmit={true}
-                  returnKeyType={'next'}
+                  placeholder={'Full Name'}
                   value={this.state.fullName}
                   onChangeText={(text) => {
                     this.setState({
                       fullName: text,
                     });
                   }}
-                  style={[styles.textInput, {flex: 1}]}
+                  style={[styles.textInput]}
                 />
               </View>
-              <LightTextCB style={[styles.formLabel, {marginTop: 20}]}>
-                Email Address
-              </LightTextCB>
-              <View style={styles.textInputContainer}>
-                <TextInput
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
+                  ref={'service'}
+                  placeholder={'Select Service'}
+                  value={this.state.service}
+                  onChangeText={(text) => {
+                    this.setState({
+                      service: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
                   ref={'email'}
-                  placeholder={'Enter Email'}
-                  placeholderTextColor={Colors.grey}
-                  autoCapitalize="none"
-                  underlineColorAndroid="transparent"
-                  blurOnSubmit={true}
                   keyboardType="email-address"
-                  returnKeyType={'next'}
+                  placeholder={'Email Address'}
                   value={this.state.email}
                   onChangeText={(text) => {
                     this.validateEmail(text);
                   }}
-                  style={[styles.textInput, {flex: 1}]}
-                />
-                <Icon
-                  type={'Entypo'}
-                  name={this.state.tickIcon}
-                  style={styles.iconPassword}
+                  style={[styles.textInput]}
                 />
               </View>
-              <LightTextCB style={[styles.formLabel, {marginTop: 20}]}>
-                Password
-              </LightTextCB>
-              <View style={styles.textInputContainer}>
-                <TextInput
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
                   ref={'password'}
-                  placeholder={'Enter Password'}
-                  placeholderTextColor={Colors.grey}
-                  autoCapitalize="none"
-                  underlineColorAndroid="transparent"
-                  blurOnSubmit={true}
-                  returnKeyType={'done'}
-                  secureTextEntry={this.state.secureText}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
                   value={this.state.password}
                   onChangeText={(text) => {
                     this.setState({
                       password: text,
                     });
                   }}
-                  style={[styles.textInput, {flex: 1}]}
+                  style={[styles.textInput]}
                 />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.changePasswordState();
-                  }}>
-                  <Icon
-                    type={'Ionicons'}
-                    name={this.state.eyeIcon}
-                    style={styles.iconPassword}
-                  />
-                </TouchableOpacity>
+              </View>
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
+                  ref={'confirm_password'}
+                  placeholder={'Confirm Password'}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => {
+                    this.setState({
+                      confirmPassword: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
               </View>
             </View>
-            <View style={{justifyContent: 'flex-end'}}>
+            <View style={{justifyContent: 'flex-end', marginHorizontal: 15}}>
               <View
                 style={[
                   {
@@ -259,15 +265,15 @@ export default class SignUp extends Component {
                 </LightTextCB>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.goBack();
+                    this.props.navigation.navigate(Constants.login);
                   }}>
                   <LightTextCB style={styles.underlineText}>
                     Sign In
                   </LightTextCB>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 30}}>
-                <ButtonRadius10 label="Sign Up" />
+              <View style={{marginVertical: 20}}>
+                <ButtonRadius10 label="SIGN UP" bgColor={Colors.newGreen} />
               </View>
             </View>
             {/* </ScrollView> */}
@@ -275,7 +281,7 @@ export default class SignUp extends Component {
         </Animated.View>
         <BottomSheet
           ref={bs}
-          snapPoints={[380, 0]}
+          snapPoints={[400, 0]}
           initialSnap={1}
           callbackNode={fall}
           renderContent={this.renderBottomSheetContent}
@@ -310,7 +316,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    padding: 20,
   },
   childContainer: {
     flex: 1,
@@ -322,17 +327,14 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
-    flex: 1,
-    height: 50,
+    width: '100%',
     fontFamily: Constants.fontLight,
-    color: Colors.black1,
+    color: Colors.black,
   },
   textInputContainer: {
-    borderBottomWidth: 0.3,
-    height: 45,
-    borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
+    marginHorizontal: 15,
   },
   underlineText: {
     color: Colors.black1,

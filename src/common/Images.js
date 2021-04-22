@@ -21,6 +21,7 @@ const Images = {
   iconPencil: require('../assets/icon_pencil.png'),
   bgSplash: require('../assets/bg_splash.png'),
   logoCashGrab: require('../assets/logo_cash_grab.png'),
+  logoCashGrab2: require('../assets/logo_cash_grab2.png'),
   becomeAVendor: require('../assets/becomeavendor.png'),
   becomeAUser: require('../assets/becomeauser.png'),
 };

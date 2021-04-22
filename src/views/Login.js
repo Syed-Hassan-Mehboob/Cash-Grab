@@ -16,6 +16,7 @@ import Constants from '../common/Constants';
 import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import {CommonActions} from '@react-navigation/native';
+import EditText from '../components/EditText';
 
 const {width, height} = Dimensions.get('window');
 const resetAction = CommonActions.reset({
@@ -63,59 +64,34 @@ export default class Login extends Component {
           <LightTextCB style={[styles.formLabel, {marginTop: 50}]}>
             Email Address
           </LightTextCB>
-          <View style={styles.textInputContainer}>
-            <TextInput
+          <View style={[styles.textInputContainer, {marginTop: 15}]}>
+            <EditText
               ref={'email'}
-              placeholder={'Enter Email'}
-              placeholderTextColor={Colors.grey}
-              autoCapitalize="none"
-              underlineColorAndroid="transparent"
-              blurOnSubmit={true}
               keyboardType="email-address"
-              returnKeyType={'next'}
+              placeholder={'Email Address'}
               value={this.state.email}
               onChangeText={(text) => {
                 this.validateEmail(text);
               }}
-              style={[styles.textInput, {flex: 1}]}
-            />
-            <Icon
-              type={'Entypo'}
-              name={this.state.tickIcon}
-              style={styles.iconPassword}
+              style={[styles.textInput]}
             />
           </View>
           <LightTextCB style={[styles.formLabel, {marginTop: 20}]}>
             Password
           </LightTextCB>
-          <View style={styles.textInputContainer}>
-            <TextInput
+          <View style={[styles.textInputContainer, {marginTop: 15}]}>
+            <EditText
               ref={'password'}
-              placeholder={'Enter Password'}
-              placeholderTextColor={Colors.grey}
-              autoCapitalize="none"
-              underlineColorAndroid="transparent"
-              blurOnSubmit={true}
-              returnKeyType={'done'}
-              secureTextEntry={this.state.secureText}
+              placeholder={'Password'}
+              secureTextEntry={true}
               value={this.state.password}
               onChangeText={(text) => {
                 this.setState({
                   password: text,
                 });
               }}
-              style={[styles.textInput, {flex: 1}]}
+              style={[styles.textInput]}
             />
-            <TouchableOpacity
-              onPress={() => {
-                this.changePasswordState();
-              }}>
-              <Icon
-                type={'Ionicons'}
-                name={this.state.eyeIcon}
-                style={styles.iconPassword}
-              />
-            </TouchableOpacity>
           </View>
           <View
             style={{
@@ -138,6 +114,7 @@ export default class Login extends Component {
           </View>
           <View style={{marginTop: 40}}>
             <ButtonRadius10
+              bgColor={Colors.newGreen}
               onPress={() => {
                 this.props.navigation.dispatch(resetAction);
               }}

@@ -1,5 +1,6 @@
+import {Icon} from 'native-base';
 import React, {Component} from 'react';
-import {StyleSheet, View, TextInput} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 
@@ -8,27 +9,53 @@ export default class EditText extends Component {
     super(props);
   }
 
+  state = {
+    secureText: false,
+    eyeIcon: 'eye-off',
+  };
+
+  changePasswordState(secureTextEntry = false) {
+    if (secureTextEntry) {
+      if (this.state.secureText)
+        this.setState({secureText: false, eyeIcon: 'eye'});
+      else this.setState({secureText: true, eyeIcon: 'eye-off'});
+    }
+  }
+
   render() {
     const {
       value,
       keyboardType,
       onChangeText,
-      placeHolder,
+      placeholder,
       secureTextEntry,
     } = this.props;
     return (
       <View style={[styles.card, this.props.style]}>
         <TextInput
-          secureTextEntry={secureTextEntry}
+          secureTextEntry={secureTextEntry ? this.state.secureText : null}
           placeholderTextColor={Colors.grey}
           autoCapitalize="none"
           blurOnSubmit={true}
-          placeholder={placeHolder}
+          selectionColor={Colors.newGreen}
+          placeholder={placeholder}
           keyboardType={keyboardType}
+          placeholderTextColor={Colors.coolGrey}
           value={value}
           onChangeText={onChangeText}
           style={[styles.textInput]}
         />
+        <TouchableOpacity
+          onPress={() => {
+            this.changePasswordState(secureTextEntry);
+          }}
+          style={{opacity: secureTextEntry ? 1 : 0}}>
+          <Icon
+            type={'Ionicons'}
+            name={this.state.eyeIcon}
+            style={styles.iconPassword}
+          />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -36,23 +63,29 @@ export default class EditText extends Component {
 
 const styles = StyleSheet.create({
   card: {
+    flexDirection: 'row',
     height: 60,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderRadius: 10,
-    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
     shadowColor: '#ccc',
     shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
-    overflow: 'hidden',
+    alignItems: 'center',
   },
   textInput: {
     fontSize: 16,
-    marginHorizontal: 10,
-    marginVertical: 5,
     flex: 1,
-    fontFamily: Constants.fontLight,
-    color: Colors.black1,
+    fontFamily: Constants.fontRegular,
+    color: Colors.black,
+  },
+  iconPassword: {
+    fontSize: 20,
+    height: 20,
+    width: 20,
+    color: Colors.newGreen,
   },
 });

@@ -7,15 +7,26 @@ import {
   View,
 } from 'react-native';
 import Colors from '../common/Colors';
+import Constants from '../common/Constants';
 import Images from '../common/Images';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 
 export default class CreateAccount extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     isUserSelected: false,
     isVendorSelected: false,
   };
+
+  openSignUp() {
+    setTimeout(() => {
+      this.props.navigation.navigate(Constants.signUp);
+    }, 500);
+  }
 
   render() {
     return (
@@ -33,6 +44,7 @@ export default class CreateAccount extends React.Component {
               isUserSelected: true,
               isVendorSelected: false,
             });
+            this.openSignUp();
           }}
           style={[
             styles.card,
@@ -58,6 +70,7 @@ export default class CreateAccount extends React.Component {
               isUserSelected: false,
               isVendorSelected: true,
             });
+            this.openSignUp();
           }}
           style={[
             styles.card,
