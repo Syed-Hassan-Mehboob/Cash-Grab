@@ -10,7 +10,7 @@ export default class EditText extends Component {
   }
 
   state = {
-    secureText: false,
+    secureText: true,
     eyeIcon: 'eye-off',
   };
 

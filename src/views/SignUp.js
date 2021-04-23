@@ -124,32 +124,37 @@ export default class SignUp extends Component {
             style={styles.container}
             contentContainerStyle={{flexGrow: 1}}>
             {/* <ScrollView bounces={false} showsVerticalScrollIndicator={false}> */}
-            <View style={{alignItems: 'center'}}>
+            <View>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.goBack();
                 }}
-                style={{position: 'absolute', top: 0, left: 0}}>
+                style={{
+                  marginStart: 15,
+                  alignSelf: 'flex-start',
+                }}>
                 <Image source={Images.arrowBack} style={styles.iconBack} />
               </TouchableOpacity>
-              <Image
-                source={Images.logoCashGrab}
-                style={{
-                  height: 250,
-                  width: 250,
-                }}
-              />
-              <BoldTextCB
-                style={{
-                  fontSize: 28,
-                  color: Colors.black,
-                  marginTop: -50,
-                }}>
-                Create an account
-              </BoldTextCB>
-              <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-                Hello there, sign in to continue!
-              </RegularTextCB>
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={Images.logoCashGrab}
+                  style={{
+                    height: 250,
+                    width: 250,
+                  }}
+                />
+                <BoldTextCB
+                  style={{
+                    fontSize: 28,
+                    color: Colors.black,
+                    marginTop: -50,
+                  }}>
+                  Create an account
+                </BoldTextCB>
+                <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+                  Hello there, sign up to continue!
+                </RegularTextCB>
+              </View>
             </View>
             <View style={[styles.childContainer]}>
               {/* <View
@@ -273,7 +278,11 @@ export default class SignUp extends Component {
                 </TouchableOpacity>
               </View>
               <View style={{marginVertical: 20}}>
-                <ButtonRadius10 label="SIGN UP" bgColor={Colors.newGreen} />
+                <ButtonRadius10
+                  label="SIGN UP"
+                  bgColor={Colors.newGreen}
+                  onPress={() => this.props.navigation.navigate(Constants.otp)}
+                />
               </View>
             </View>
             {/* </ScrollView> */}

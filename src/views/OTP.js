@@ -6,30 +6,21 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
-import EditText from '../components/EditText';
 
-export default class ForgetPassword extends Component {
+export default class OTP extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      code: '',
     };
   }
-
-  validateEmail = (text) => {
-    this.setState({email: text});
-
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(text) === false) {
-    } else {
-    }
-  };
 
   render() {
     return (
@@ -55,32 +46,37 @@ export default class ForgetPassword extends Component {
               color: Colors.black,
               marginTop: -50,
             }}>
-            Forgot Password
+            Verification
           </BoldTextCB>
           <RegularTextCB
             style={{fontSize: 18, color: Colors.coolGrey, textAlign: 'center'}}>
-            Enter your email & we will send you a {'\n'} verification code
+            Enter your verification code that we sent{'\n'}you through your
+            email or phone number
           </RegularTextCB>
         </View>
         <View style={[styles.childContainer]}>
-          <View style={[styles.textInputContainer, {marginTop: 50}]}>
-            <EditText
-              ref={'email'}
-              keyboardType="email-address"
-              placeholder={'Email Address'}
-              value={this.state.email}
-              onChangeText={(text) => {
-                this.validateEmail(text);
+          <View style={[styles.textInputContainer]}>
+            <OTPInputView
+              style={{width: '90%', height: 75, marginTop: 50}}
+              pinCount={4}
+              code={this.state.code}
+              onCodeChanged={(code) => {
+                this.setState({code});
               }}
-              style={[styles.textInput]}
+              autoFocusOnLoad
+              codeInputFieldStyle={styles.card}
+              codeInputHighlightStyle={styles.card}
+              onCodeFilled={(code) => {
+                console.log(`Code is ${code}, you are good to go!`);
+              }}
             />
           </View>
         </View>
-        <View style={{marginVertical: 30, marginHorizontal: 15}}>
+        <View style={{marginVertical: 50, marginHorizontal: 15}}>
           <ButtonRadius10
-            label="CONTINUE"
+            label="VERIFY"
             bgColor={Colors.newGreen}
-            onPress={() => this.props.navigation.navigate(Constants.otp)}
+            onPress={() => this.props.navigation.naigate(Constants.login)}
           />
         </View>
       </KeyboardAvoidingView>
@@ -118,16 +114,25 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: 15,
   },
-  underlineText: {
-    color: Colors.black1,
-    textDecorationLine: 'underline',
-    fontSize: 16,
-  },
-  noUnderlineText: {
-    color: Colors.black1,
-    textDecorationLine: 'none',
-    fontSize: 16,
+  card: {
+    height: 65,
+    width: 65,
+    backgroundColor: Colors.white,
+    borderColor: Colors.newGreen,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    shadowColor: '#ccc',
+    color: Colors.black,
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+    alignItems: 'center',
+    fontFamily: Constants.fontRegular,
+    fontSize: 24,
   },
 });

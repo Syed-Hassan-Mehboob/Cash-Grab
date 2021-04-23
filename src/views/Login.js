@@ -1,28 +1,19 @@
 import React, {Component} from 'react';
 import {
-  Dimensions,
-  TextInput,
   KeyboardAvoidingView,
-  SafeAreaView,
   StyleSheet,
   View,
   Image,
+  Switch,
+  TouchableOpacity,
 } from 'react-native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import LightTextCB from '../components/LightTextCB';
 import Constants from '../common/Constants';
-import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
-import {CommonActions} from '@react-navigation/native';
 import EditText from '../components/EditText';
-
-const {width, height} = Dimensions.get('window');
-const resetAction = CommonActions.reset({
-  index: 0,
-  routes: [{name: 'Home'}],
-});
+import BoldTextCB from '../components/BoldTextCB';
+import RegularTextCB from '../components/RegularTextCB';
 
 export default class Login extends Component {
   constructor(props) {
@@ -30,11 +21,15 @@ export default class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,
       eyeIcon: 'eye-off',
     };
   }
+
+  toggleIsEnabled = () =>
+    this.setState({isSwitchEnabled: !this.state.isSwitchEnabled});
 
   changePasswordState() {
     if (this.state.secureText)
@@ -56,15 +51,28 @@ export default class Login extends Component {
   render() {
     return (
       <KeyboardAvoidingView style={styles.container}>
-        {/* <ScrollView bounces={false} showsVerticalScrollIndicator={false}> */}
-        <LightTextCB style={{fontSize: 30, marginTop: 30}}>
-          Hi, Login
-        </LightTextCB>
-        <View style={styles.childContainer}>
-          <LightTextCB style={[styles.formLabel, {marginTop: 50}]}>
-            Email Address
-          </LightTextCB>
-          <View style={[styles.textInputContainer, {marginTop: 15}]}>
+        <View style={{alignItems: 'center'}}>
+          <Image
+            source={Images.logoCashGrab}
+            style={{
+              height: 250,
+              width: 250,
+            }}
+          />
+          <BoldTextCB
+            style={{
+              fontSize: 28,
+              color: Colors.black,
+              marginTop: -50,
+            }}>
+            Welcome Back
+          </BoldTextCB>
+          <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+            Hello there, sign in to continue!
+          </RegularTextCB>
+        </View>
+        <View>
+          <View style={[styles.textInputContainer, {marginTop: 50}]}>
             <EditText
               ref={'email'}
               keyboardType="email-address"
@@ -76,10 +84,7 @@ export default class Login extends Component {
               style={[styles.textInput]}
             />
           </View>
-          <LightTextCB style={[styles.formLabel, {marginTop: 20}]}>
-            Password
-          </LightTextCB>
-          <View style={[styles.textInputContainer, {marginTop: 15}]}>
+          <View style={[styles.textInputContainer, {marginTop: 30}]}>
             <EditText
               ref={'password'}
               placeholder={'Password'}
@@ -93,42 +98,83 @@ export default class Login extends Component {
               style={[styles.textInput]}
             />
           </View>
+        </View>
+        <View style={{marginHorizontal: 15}}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginTop: 30,
             }}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('ForgetPassword')}>
-              <LightTextCB style={styles.underlineText}>
-                Forget Password?
-              </LightTextCB>
-            </TouchableOpacity>
+            <RegularTextCB style={styles.noUnderlineText}>
+              Rember Me
+            </RegularTextCB>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('SignUp');
+                this.props.navigation.navigate(Constants.login);
               }}>
-              <LightTextCB style={styles.underlineText}>Sign Up</LightTextCB>
+              <Switch
+                trackColor={{
+                  false: Colors.lightGrey,
+                  true: Colors.lighNewGreen,
+                }}
+                thumbColor={
+                  this.state.isSwitchEnabled ? Colors.newGreen : Colors.coolGrey
+                }
+                ios_backgroundColor={Colors.coolGrey}
+                onValueChange={this.toggleIsEnabled}
+                value={this.state.isSwitchEnabled}
+              />
             </TouchableOpacity>
           </View>
-          <View style={{marginTop: 40}}>
+          <View style={{marginVertical: 30}}>
             <ButtonRadius10
+              label="LOGIN"
               bgColor={Colors.newGreen}
-              onPress={() => {
-                this.props.navigation.dispatch(resetAction);
-              }}
-              label="Login"
+              onPress={() =>
+                this.props.navigation.navigate(Constants.tabNavigator)
+              }
             />
           </View>
+          <TouchableOpacity
+            style={{marginTop: 30, alignSelf: 'center'}}
+            onPress={() =>
+              this.props.navigation.navigate(Constants.forgetPassword)
+            }>
+            <RegularTextCB style={styles.noUnderlineText}>
+              Forgot Password?
+            </RegularTextCB>
+          </TouchableOpacity>
         </View>
-        {/* </ScrollView> */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'center',
+            position: 'absolute',
+            bottom: 10,
+          }}>
+          <RegularTextCB style={styles.noUnderlineText}>
+            Don't have any account?
+          </RegularTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate(Constants.signUp);
+            }}>
+            <RegularTextCB style={styles.underlineText}>Sign Up</RegularTextCB>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  iconBack: {
+    height: 20,
+    width: 20,
+    marginTop: 20,
+    resizeMode: 'contain',
+  },
   iconTick: {
     height: 15,
     width: 15,
@@ -141,13 +187,7 @@ const styles = StyleSheet.create({
     color: Colors.orange,
   },
   container: {
-    justifyContent: 'flex-end',
     backgroundColor: Colors.white,
-    flex: 1,
-    padding: 20,
-  },
-  childContainer: {
-    justifyContent: 'flex-end',
     flex: 1,
   },
   formLabel: {
@@ -157,19 +197,17 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 16,
     flex: 1,
-    fontFamily: Constants.fontLight,
     color: Colors.black1,
   },
   textInputContainer: {
-    borderBottomWidth: 0.3,
-    height: 45,
-    borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
+    marginHorizontal: 15,
   },
   underlineText: {
     color: Colors.black1,
     textDecorationLine: 'underline',
     fontSize: 16,
+    color: Colors.newGreen,
   },
 });

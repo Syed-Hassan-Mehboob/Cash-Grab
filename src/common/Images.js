@@ -24,6 +24,12 @@ const Images = {
   logoCashGrab2: require('../assets/logo_cash_grab2.png'),
   becomeAVendor: require('../assets/becomeavendor.png'),
   becomeAUser: require('../assets/becomeauser.png'),
+  barBell: require('../assets/barbell.png'),
+  barHome: require('../assets/barhome.png'),
+  barHomeSelected: require('../assets/barhomeselected.png'),
+  barPlus: require('../assets/barplus.png'),
+  barMore: require('../assets/barmore.png'),
+  barProfile: require('../assets/barprofile.png'),
 };
 
 export default Images;

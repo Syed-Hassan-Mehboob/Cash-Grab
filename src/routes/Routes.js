@@ -16,6 +16,8 @@ import AdvanceBooking from '../views/AdvanceBooking';
 import Home from '../views/Home';
 import EditProfile from '../views/EditProfile';
 import Constants from '../common/Constants';
+import OTP from '../views/OTP';
+import TabNavigator from '../views/TabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -45,14 +47,18 @@ const AppStack = () => {
       <Stack.Screen name={Constants.login} component={Login} />
       <Stack.Screen name={Constants.createAccount} component={CreateAccount} />
       <Stack.Screen name={Constants.signUp} component={SignUp} />
-      <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+      <Stack.Screen
+        name={Constants.forgetPassword}
+        component={ForgetPassword}
+      />
+      <Stack.Screen name={Constants.otp} component={OTP} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="BestEmployees" component={BestEmployees} />
       <Stack.Screen name="BookingConfirmed" component={BookingConfirmed} />
       <Stack.Screen name="EmergencyBooking" component={EmergencyBooking} />
       <Stack.Screen name="Nearby" component={Nearby} />
       <Stack.Screen name="AdvanceBooking" component={AdvanceBooking} />
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name={Constants.tabNavigator} component={TabNavigator} />
       <Stack.Screen name="ConfirmBooking" component={ConfirmBooking} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>

@@ -8,7 +8,7 @@ const ButtonRadius10 = ({
   label,
   onPress,
   bgColor = Colors.orange,
-  textColor = '#FFF',
+  textColor = Colors.black,
 }) => (
   <View>
     <TouchableOpacity activeOpacity={0.8} onPress={onPress}>

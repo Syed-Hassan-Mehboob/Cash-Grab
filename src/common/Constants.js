@@ -5,8 +5,18 @@ const Constants = {
   fontBold: 'JostBold',
   /* * Screens * */
   login: 'Login',
-  signUp: 'SignUp',
   createAccount: 'CreateAccount',
+  signUp: 'SignUp',
+  forgetPassword: 'ForgetPassword',
+  otp: 'OTP',
+  termsAndConditionsScreen: 'TermsAndConditions',
+  /* tabs */
+  tabNavigator: 'TabNavigator',
+  home: 'Home',
+  nearby: 'Nearby',
+  plus: 'Plus',
+  profile: 'Profile',
+  more: 'More',
 };
 
 export default Constants;
