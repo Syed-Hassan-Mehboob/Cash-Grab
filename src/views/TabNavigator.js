@@ -1,12 +1,17 @@
 import React from 'react';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Constants from '../common/Constants';
 import Home from '../views/Home';
 import Nearby from '../views/Nearby';
 import Images from '../common/Images';
 import TabBar from './TabBar';
+import AllCategories from '../views/AllCategories';
+import Notifications from './Notifications';
+import Filter from './Filter';
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
 // const MoreStack = createStackNavigator();
 // const MoreNavigator = () => {
 //   return (
@@ -36,17 +41,35 @@ const Tab = createBottomTabNavigator();
 //   );
 // };
 
+const HomeNavigator = () => {
+  return (
+    <HomeStack.Navigator
+      initialRouteName={Constants.home}
+      headerMode="none"
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}>
+      <HomeStack.Screen name={Constants.home} component={Home} />
+      <HomeStack.Screen
+        name={Constants.allCategories}
+        component={AllCategories}
+      />
+      <HomeStack.Screen name={Constants.filter} component={Filter} />
+    </HomeStack.Navigator>
+  );
+};
+
 const TabScreens = () => {
   return (
     <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
       <Tab.Screen
         name={Constants.home}
-        component={Home}
+        component={HomeNavigator}
         initialParams={{icon: Images.barHome}}
       />
       <Tab.Screen
-        name={Constants.nearby}
-        component={Nearby}
+        name={Constants.notifications}
+        component={Notifications}
         initialParams={{icon: Images.barBell}}
       />
       <Tab.Screen

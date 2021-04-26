@@ -9,7 +9,9 @@ const Colors = {
   lightGrey: '#808e9b',
   coolGrey: '#8b9897',
   green: '#2ED573',
-  newGreen: '#abcf37',
+  sickGreen: '#abcf37',
   lighNewGreen: '#e9ffa1',
+  turqoiseGreen: '#00ff77',
+  orangeYellow: '#ffa502',
 };
 export default Colors;

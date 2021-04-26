@@ -12,6 +12,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
+import RegularTextCB from '../components/RegularTextCB';
 
 const {height, width} = Dimensions.get('window');
 const CARD_HEIGHT = 200;
@@ -51,51 +52,56 @@ const Nearby = (props) => {
   const markers = [
     {
       coordinate: {
-        latitude: 24.9181723,
-        longitude: 67.0881384,
+        latitude: 24.9048005,
+        longitude: 67.0782334,
       },
       title: 'Ray Hammond',
       location: 'Gardening, NY (2km)',
       image: Images.emp1,
+      type: 'mechanic',
       rating: '4.6 ratings',
     },
     {
       coordinate: {
-        latitude: 24.918221,
-        longitude: 67.0807891,
+        latitude: 24.9112095,
+        longitude: 67.0893753,
       },
       title: 'Gene Mitchell',
       location: 'Gardening, NY (2km)',
       image: Images.emp2,
+      type: 'fire',
       rating: '4.0 ratings',
     },
     {
       coordinate: {
-        latitude: 24.9232178,
-        longitude: 67.0882784,
+        latitude: 24.917755,
+        longitude: 67.0949881,
       },
       title: 'Sophia Patton',
       location: 'Gardening, NY (2km)',
       image: Images.emp3,
+      type: 'repair',
       rating: '4.9 ratings',
     },
     {
       coordinate: {
-        latitude: 24.9234902,
-        longitude: 67.0875381,
+        latitude: 24.9241723,
+        longitude: 67.0892863,
       },
       title: 'Jeanette Zimmerman',
       location: 'Gardening, NY (2km)',
+      type: 'wash',
       image: Images.emp4,
       rating: '3.6 ratings',
     },
     {
       coordinate: {
-        latitude: 24.9248217,
-        longitude: 67.0965359,
+        latitude: 24.9215856,
+        longitude: 67.0853476,
       },
       title: 'Ray Hammond',
       location: 'Gardening, NY (2km)',
+      type: 'mechanic',
       image: Images.emp1,
       rating: '3.8 ratings',
     },
@@ -155,7 +161,7 @@ const Nearby = (props) => {
 
     const scale = mapAnimation.interpolate({
       inputRange,
-      outputRange: [1, 1.5, 1],
+      outputRange: [1, 2, 1],
       extrapolate: 'clamp',
     });
 
@@ -336,25 +342,44 @@ const Nearby = (props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          props.navigation.goBack();
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          width: '90%',
+          alignSelf: 'center',
+          flexDirection: 'row',
+          elevation: 10,
+          backgroundColor: '#FFF',
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          padding: 15,
+          shadowColor: '#000',
+          shadowRadius: 5,
+          shadowOpacity: 0.3,
+          alignItems: 'center',
+          shadowOffset: {x: 2, y: -2},
         }}>
-        <Image source={Images.arrowBack} style={styles.iconBack} />
-      </TouchableOpacity>
-      <LightTextCB style={{fontSize: 30, marginHorizontal: 20, marginTop: 20}}>
-        102 Electricians
-      </LightTextCB>
-      <LightTextCB
-        style={{fontSize: 20, marginHorizontal: 20, color: Colors.black1}}>
-        Near by..
-      </LightTextCB>
+        <View style={{flex: 1}}>
+          <RegularTextCB style={{fontSize: 20}}>102 Electricians</RegularTextCB>
+          <LightTextCB style={{fontSize: 16, color: Colors.black}}>
+            Near by..
+          </LightTextCB>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('asd');
+            props.navigation.goBack();
+          }}>
+          <Image source={Images.iconClose} style={styles.iconBack} />
+        </TouchableOpacity>
+      </View>
       <MapView
         ref={_map}
         provider={PROVIDER_GOOGLE}
         initialRegion={state.region}
         customMapStyle={mapStyle}
-        style={[styles.container, {marginTop: 10}]}>
+        style={[styles.container]}>
         {state.markers.map((marker, index) => {
           const scaleStyle = {
             transform: [
@@ -372,7 +397,15 @@ const Nearby = (props) => {
               }}>
               <Animated.View style={[styles.markerWrap, scaleStyle]}>
                 <Animated.Image
-                  source={Images.mapMarker}
+                  source={
+                    marker.type === 'mechanic'
+                      ? Images.markerMechanic
+                      : marker.type === 'fire'
+                      ? Images.markerFireman
+                      : marker.type === 'repair'
+                      ? Images.markerRepairer
+                      : Images.markerWash
+                  }
                   style={styles.marker}
                 />
               </Animated.View>
@@ -431,7 +464,7 @@ const Nearby = (props) => {
                     alignSelf: 'center',
                     marginTop: 5,
                   }}>
-                  <LightTextCB style={{fontSize: 16, color: Colors.black1}}>
+                  <LightTextCB style={{fontSize: 16, color: Colors.black}}>
                     Verified
                   </LightTextCB>
                   <Image
@@ -460,10 +493,9 @@ export default Nearby;
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginStart: 20,
-    marginTop: 40,
+    height: 15,
+    width: 15,
+    tintColor: Colors.coolGrey,
     resizeMode: 'contain',
   },
   container: {
@@ -536,7 +568,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardtitle: {
-    color: Colors.black1,
+    color: Colors.black,
     fontSize: 18,
   },
   cardDescription: {

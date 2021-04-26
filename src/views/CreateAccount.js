@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderColor: Colors.newGreen,
+    borderColor: Colors.sickGreen,
     borderRadius: 15,
     width: '90%',
     shadowColor: '#ccc',

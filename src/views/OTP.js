@@ -75,7 +75,7 @@ export default class OTP extends Component {
         <View style={{marginVertical: 50, marginHorizontal: 15}}>
           <ButtonRadius10
             label="VERIFY"
-            bgColor={Colors.newGreen}
+            bgColor={Colors.sickGreen}
             onPress={() => this.props.navigation.naigate(Constants.login)}
           />
         </View>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     height: 65,
     width: 65,
     backgroundColor: Colors.white,
-    borderColor: Colors.newGreen,
+    borderColor: Colors.sickGreen,
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 5,

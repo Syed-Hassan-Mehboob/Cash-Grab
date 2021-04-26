@@ -67,21 +67,21 @@ export default class SignUp extends Component {
         </LightTextCB>
         <View style={{marginTop: 30}}>
           <ButtonRadius10
-            bgColor={Colors.newGreen}
+            bgColor={Colors.sickGreen}
             label="CAMERA"
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
         <View style={{marginTop: 20}}>
           <ButtonRadius10
-            bgColor={Colors.newGreen}
+            bgColor={Colors.sickGreen}
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
         <View style={{marginTop: 20}}>
           <ButtonRadius10
-            bgColor={Colors.newGreen}
+            bgColor={Colors.sickGreen}
             label="CANCEL"
             onPress={() => bs.current.snapTo(1)}
           />
@@ -280,7 +280,7 @@ export default class SignUp extends Component {
               <View style={{marginVertical: 20}}>
                 <ButtonRadius10
                   label="SIGN UP"
-                  bgColor={Colors.newGreen}
+                  bgColor={Colors.sickGreen}
                   onPress={() => this.props.navigation.navigate(Constants.otp)}
                 />
               </View>

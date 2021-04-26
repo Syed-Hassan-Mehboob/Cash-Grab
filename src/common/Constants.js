@@ -4,16 +4,21 @@ const Constants = {
   fontRegular: 'JostRegular',
   fontBold: 'JostBold',
   /* * Screens * */
+  splash: 'Splash',
   login: 'Login',
   createAccount: 'CreateAccount',
   signUp: 'SignUp',
   forgetPassword: 'ForgetPassword',
   otp: 'OTP',
   termsAndConditionsScreen: 'TermsAndConditions',
-  /* tabs */
+  allCategories: 'AllCategories',
+  advanceBooking: 'AdvanceBooking',
+  filter: 'Filter',
+  /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
   nearby: 'Nearby',
+  notifications: 'Notifications',
   plus: 'Plus',
   profile: 'Profile',
   more: 'More',

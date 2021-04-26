@@ -37,7 +37,7 @@ export default class EditText extends Component {
           placeholderTextColor={Colors.grey}
           autoCapitalize="none"
           blurOnSubmit={true}
-          selectionColor={Colors.newGreen}
+          selectionColor={Colors.sickGreen}
           placeholder={placeholder}
           keyboardType={keyboardType}
           placeholderTextColor={Colors.coolGrey}
@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 20,
     width: 20,
-    color: Colors.newGreen,
+    color: Colors.sickGreen,
   },
 });

@@ -13,7 +13,6 @@ import ConfirmBooking from '../views/ConfirmBooking';
 import EmergencyBooking from '../views/EmergencyBooking';
 import Nearby from '../views/Nearby';
 import AdvanceBooking from '../views/AdvanceBooking';
-import Home from '../views/Home';
 import EditProfile from '../views/EditProfile';
 import Constants from '../common/Constants';
 import OTP from '../views/OTP';
@@ -38,12 +37,12 @@ export default class Routes extends Component {
 const AppStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Splash"
+      initialRouteName={Constants.splash}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
       }}>
-      <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen name={Constants.splash} component={Splash} />
       <Stack.Screen name={Constants.login} component={Login} />
       <Stack.Screen name={Constants.createAccount} component={CreateAccount} />
       <Stack.Screen name={Constants.signUp} component={SignUp} />

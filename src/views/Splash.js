@@ -41,7 +41,7 @@ export default class Splash extends Component {
                 this.props.navigation.replace(Constants.createAccount);
               }}
               label="SIGN UP"
-              bgColor={Colors.newGreen}
+              bgColor={Colors.sickGreen}
               textColor={Colors.black}
             />
           </View>

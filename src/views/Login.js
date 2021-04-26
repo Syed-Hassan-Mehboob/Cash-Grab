@@ -119,7 +119,9 @@ export default class Login extends Component {
                   true: Colors.lighNewGreen,
                 }}
                 thumbColor={
-                  this.state.isSwitchEnabled ? Colors.newGreen : Colors.coolGrey
+                  this.state.isSwitchEnabled
+                    ? Colors.sickGreen
+                    : Colors.coolGrey
                 }
                 ios_backgroundColor={Colors.coolGrey}
                 onValueChange={this.toggleIsEnabled}
@@ -130,7 +132,7 @@ export default class Login extends Component {
           <View style={{marginVertical: 30}}>
             <ButtonRadius10
               label="LOGIN"
-              bgColor={Colors.newGreen}
+              bgColor={Colors.sickGreen}
               onPress={() =>
                 this.props.navigation.navigate(Constants.tabNavigator)
               }
@@ -208,6 +210,6 @@ const styles = StyleSheet.create({
     color: Colors.black1,
     textDecorationLine: 'underline',
     fontSize: 16,
-    color: Colors.newGreen,
+    color: Colors.sickGreen,
   },
 });

@@ -79,7 +79,7 @@ export default class ForgetPassword extends Component {
         <View style={{marginVertical: 30, marginHorizontal: 15}}>
           <ButtonRadius10
             label="CONTINUE"
-            bgColor={Colors.newGreen}
+            bgColor={Colors.sickGreen}
             onPress={() => this.props.navigation.navigate(Constants.otp)}
           />
         </View>
