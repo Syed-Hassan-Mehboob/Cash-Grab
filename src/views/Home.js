@@ -194,7 +194,7 @@ export default class Home extends Component {
       <View
         style={[
           styles.card,
-          {padding: 20, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
+          {padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
         ]}>
         <View
           style={{
@@ -209,8 +209,8 @@ export default class Home extends Component {
               style={{
                 color: Colors.black,
                 textDecorationLine: 'underline',
-                marginStart: 15,
-                fontSize: 16,
+                marginStart: 5,
+                fontSize: 14,
               }}>
               View Profile
             </RegularTextCB>
@@ -220,7 +220,7 @@ export default class Home extends Component {
           style={{
             color: Colors.black,
             marginTop: 10,
-            fontSize: 16,
+            fontSize: 14,
           }}>
           {item.title}
         </RegularTextCB>
@@ -262,7 +262,7 @@ export default class Home extends Component {
         style={[
           styles.card,
           {
-            padding: 20,
+            padding: 10,
             marginHorizontal: 15,
             marginTop: 5,
             marginBottom: 40,
@@ -281,8 +281,8 @@ export default class Home extends Component {
               style={{
                 color: Colors.black,
                 textDecorationLine: 'underline',
-                marginStart: 15,
-                fontSize: 16,
+                marginStart: 5,
+                fontSize: 14,
               }}>
               View Profile
             </RegularTextCB>
@@ -292,7 +292,7 @@ export default class Home extends Component {
           style={{
             color: Colors.black,
             marginTop: 10,
-            fontSize: 16,
+            fontSize: 14,
           }}>
           {item.title}
         </RegularTextCB>

@@ -545,7 +545,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: {x: 2, y: -2},
     alignItems: 'center',
-    height: CARD_HEIGHT,
     width: CARD_WIDTH,
     paddingVertical: 20,
     overflow: 'hidden',

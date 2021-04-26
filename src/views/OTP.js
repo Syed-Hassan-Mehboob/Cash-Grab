@@ -76,7 +76,7 @@ export default class OTP extends Component {
           <ButtonRadius10
             label="VERIFY"
             bgColor={Colors.sickGreen}
-            onPress={() => this.props.navigation.naigate(Constants.login)}
+            onPress={() => this.props.navigation.navigate(Constants.login)}
           />
         </View>
       </KeyboardAvoidingView>
