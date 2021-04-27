@@ -14,6 +14,7 @@ import {
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import ButtonRadius10 from '../components/ButtonRadius10';
+import EditText from '../components/EditText';
 import Constants from '../common/Constants';
 
 const bs = React.createRef();
@@ -127,6 +128,13 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      service: '',
+      rateRequested: '',
+      location: '',
+      address: '',
+      exactTime: '',
+    };
   }
 
   componentDidMount() {
@@ -145,33 +153,114 @@ export default class Home extends Component {
 
   renderBottomSheetContent = () => {
     return (
-      <View style={styles.bottomSheetBody}>
-        <RegularTextCB style={{fontSize: 30}}>Upload Photo</RegularTextCB>
-        <RegularTextCB style={{fontSize: 16, color: Colors.grey}}>
-          Upload a photo from
-        </RegularTextCB>
-        <View style={{marginTop: 30}}>
+      <ScrollView style={styles.bottomSheetBody}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+            Quick Service
+          </RegularTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              bs.current.snapTo(1);
+            }}>
+            <Image
+              source={Images.iconClose}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: Colors.coolGrey,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.textInputContainer, {marginTop: 10}]}>
+          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+            Select Service
+          </RegularTextCB>
+          <EditText
+            ref={'service'}
+            placeholder={'Select Service'}
+            value={this.state.service}
+            onChangeText={(text) => {
+              this.setState({
+                service: text,
+              });
+            }}
+            style={[styles.textInput]}
+          />
+        </View>
+        <View style={[styles.textInputContainer, {marginTop: 20}]}>
+          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+            Rate Requested
+          </RegularTextCB>
+          <EditText
+            ref={'rate'}
+            placeholder={'Enter Rate'}
+            value={this.state.rateRequested}
+            onChangeText={(text) => {
+              this.setState({
+                rateRequested: text,
+              });
+            }}
+            style={[styles.textInput]}
+          />
+        </View>
+        <View style={[styles.textInputContainer, {marginTop: 20}]}>
+          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+            Location
+          </RegularTextCB>
+          <EditText
+            ref={'location'}
+            placeholder={'Enter Location'}
+            value={this.state.location}
+            onChangeText={(text) => {
+              this.setState({
+                location: text,
+              });
+            }}
+            style={[styles.textInput]}
+          />
+        </View>
+        <View style={[styles.textInputContainer, {marginTop: 20}]}>
+          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+            Address
+          </RegularTextCB>
+          <EditText
+            ref={'address'}
+            placeholder={'Enter Address'}
+            value={this.state.address}
+            onChangeText={(text) => {
+              this.setState({
+                address: text,
+              });
+            }}
+            style={[styles.textInput]}
+          />
+        </View>
+        <View style={[styles.textInputContainer, {marginTop: 20}]}>
+          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+            Exact Time
+          </RegularTextCB>
+          <EditText
+            ref={'exact_time'}
+            placeholder={'Enter Exact Time'}
+            value={this.state.exactTime}
+            onChangeText={(text) => {
+              this.setState({
+                exactTime: text,
+              });
+            }}
+            style={[styles.textInput]}
+          />
+        </View>
+        <View style={{marginTop: 30, paddingBottom: 80, marginHorizontal: 10}}>
           <ButtonRadius10
             bgColor={Colors.sickGreen}
-            label="CAMERA"
+            label="QUICK NOTIFY"
             onPress={() => bs.current.snapTo(1)}
           />
         </View>
-        <View style={{marginTop: 20}}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="GALLERY"
-            onPress={() => bs.current.snapTo(1)}
-          />
-        </View>
-        <View style={{marginTop: 20}}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="CANCEL"
-            onPress={() => bs.current.snapTo(1)}
-          />
-        </View>
-      </View>
+      </ScrollView>
     );
   };
 
@@ -317,195 +406,205 @@ export default class Home extends Component {
     );
   };
 
+  animatedShadowOpacity = Animated.interpolate(fall, {
+    inputRange: [0, 1],
+    outputRange: [0.5, 0],
+  });
+
   render() {
     return (
       <View style={styles.container}>
-        <Animated.View
-          style={{
-            flex: 1,
-            opacity: Animated.add(0.5, Animated.multiply(fall, 1.0)),
-          }}>
-          <ScrollView style={styles.container}>
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  width: '100%',
-                  alignItems: 'center',
-                  paddingHorizontal: 20,
-                  marginTop: 20,
-                }}>
-                <View style={styles.circleCard}>
-                  <Image source={Images.emp1} style={styles.iconUser} />
-                </View>
-                <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
-                  Welcome,
-                </RegularTextCB>
-                <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    marginStart: 3,
-                    color: Colors.sickGreen,
-                  }}>
-                  Damien
-                </RegularTextCB>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate(Constants.filter);
-                  }}
-                  style={{
-                    position: 'absolute',
-                    right: 20,
-                  }}>
-                  <Image
-                    source={Images.iconHamburger}
-                    style={{
-                      height: 20,
-                      width: 20,
-                      resizeMode: 'contain',
-                    }}
-                  />
-                </TouchableOpacity>
+        <ScrollView style={styles.container}>
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                alignItems: 'center',
+                paddingHorizontal: 20,
+                marginTop: 20,
+              }}>
+              <View style={styles.circleCard}>
+                <Image source={Images.emp1} style={styles.iconUser} />
               </View>
-              <TouchableOpacity
+              <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
+                Welcome,
+              </RegularTextCB>
+              <RegularTextCB
                 style={{
-                  marginVertical: 10,
-                  paddingStart: 20,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  fontSize: 16,
+                  marginStart: 3,
+                  color: Colors.sickGreen,
                 }}>
-                <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
-                  Search Service...
-                </RegularTextCB>
+                Damien
+              </RegularTextCB>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.filter);
+                }}
+                style={{
+                  position: 'absolute',
+                  right: 20,
+                }}>
                 <Image
-                  source={Images.iconSearch}
-                  style={{height: 80, width: 80}}
+                  source={Images.iconHamburger}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    resizeMode: 'contain',
+                  }}
                 />
               </TouchableOpacity>
-              <View
-                style={{
-                  paddingHorizontal: 20,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <RegularTextCB
-                  style={{
-                    fontSize: 20,
-                    color: Colors.black,
-                  }}>
-                  Browse categories
-                </RegularTextCB>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate(Constants.allCategories)
-                  }>
-                  <RegularTextCB
-                    style={{
-                      color: Colors.black,
-                      textDecorationLine: 'underline',
-                    }}>
-                    See All
-                  </RegularTextCB>
-                </TouchableOpacity>
-              </View>
-              <FlatList
-                horizontal
-                data={this.categories}
-                keyExtractor={(item) => item.id}
-                renderItem={this.renderCategoryItem}
-                showsHorizontalScrollIndicator={false}
-                contentInset={{
-                  // for ios
-                  top: 0,
-                  bottom: 0,
-                  left: 10,
-                  right: 10,
-                }}
-                contentContainerStyle={{
-                  // for android
-                  paddingHorizontal: Platform.OS === 'android' ? 10 : 0,
-                }}
-              />
-              <View
-                style={{
-                  paddingHorizontal: 20,
-                  paddingTop: 20,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <RegularTextCB
-                  style={{
-                    fontSize: 20,
-                    color: Colors.black,
-                  }}>
-                  Vendors Around You
-                </RegularTextCB>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate(Constants.nearby)
-                  }>
-                  <RegularTextCB
-                    style={{
-                      color: Colors.black,
-                      textDecorationLine: 'underline',
-                    }}>
-                    See All
-                  </RegularTextCB>
-                </TouchableOpacity>
-              </View>
-              <FlatList
-                horizontal
-                data={this.vendors}
-                keyExtractor={(item) => item.id}
-                renderItem={this.renderVendorsAroundYouItem}
-                showsHorizontalScrollIndicator={false}
-              />
-              <RegularTextCB
-                style={{fontSize: 20, marginTop: 10, paddingHorizontal: 20}}>
-                Urgent Services
-              </RegularTextCB>
-              <FlatList
-                style={{paddingBottom: 100}}
-                numColumns={2}
-                data={this.urgentServices}
-                keyExtractor={(item) => item.id}
-                renderItem={this.renderUrgentServicesItem}
-                showsHorizontalScrollIndicator={false}
-              />
             </View>
-          </ScrollView>
-          <TouchableOpacity
-            style={{
-              padding: 10,
-              backgroundColor: Colors.navy,
-              borderRadius: 10,
-              position: 'absolute',
-              bottom: 75,
-              right: 15,
-              shadowColor: '#ccc',
-              shadowOffset: {width: 0, height: 3},
-              shadowOpacity: 0.5,
-              shadowRadius: 5,
-              elevation: 10,
-            }}
-            onPress={() => {}}>
-            <RegularTextCB style={{color: Colors.white}}>
-              Quick Service
+            <TouchableOpacity
+              style={{
+                marginVertical: 10,
+                paddingStart: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+                Search Service...
+              </RegularTextCB>
+              <Image
+                source={Images.iconSearch}
+                style={{height: 80, width: 80}}
+              />
+            </TouchableOpacity>
+            <View
+              style={{
+                paddingHorizontal: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB
+                style={{
+                  fontSize: 20,
+                  color: Colors.black,
+                }}>
+                Browse categories
+              </RegularTextCB>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate(Constants.allCategories)
+                }>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              horizontal
+              data={this.categories}
+              keyExtractor={(item) => item.id}
+              renderItem={this.renderCategoryItem}
+              showsHorizontalScrollIndicator={false}
+              contentInset={{
+                // for ios
+                top: 0,
+                bottom: 0,
+                left: 10,
+                right: 10,
+              }}
+              contentContainerStyle={{
+                // for android
+                paddingHorizontal: Platform.OS === 'android' ? 10 : 0,
+              }}
+            />
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingTop: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB
+                style={{
+                  fontSize: 20,
+                  color: Colors.black,
+                }}>
+                Vendors Around You
+              </RegularTextCB>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate(Constants.nearby)
+                }>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              horizontal
+              data={this.vendors}
+              keyExtractor={(item) => item.id}
+              renderItem={this.renderVendorsAroundYouItem}
+              showsHorizontalScrollIndicator={false}
+            />
+            <RegularTextCB
+              style={{fontSize: 20, marginTop: 10, paddingHorizontal: 20}}>
+              Urgent Services
             </RegularTextCB>
-          </TouchableOpacity>
-          <BottomSheet
-            ref={bs}
-            snapPoints={[450, 0]}
-            initialSnap={1}
-            callbackNode={fall}
-            renderContent={this.renderBottomSheetContent}
-            renderHeader={this.renderBottomSheetHeader}
-            enabledGestureInteraction={true}
-          />
-        </Animated.View>
+            <FlatList
+              style={{paddingBottom: 100}}
+              numColumns={2}
+              data={this.urgentServices}
+              keyExtractor={(item) => item.id}
+              renderItem={this.renderUrgentServicesItem}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+          style={{
+            padding: 10,
+            backgroundColor: Colors.navy,
+            borderRadius: 10,
+            position: 'absolute',
+            bottom: 15,
+            right: 15,
+            shadowColor: '#ccc',
+            shadowOffset: {width: 0, height: 3},
+            shadowOpacity: 0.5,
+            shadowRadius: 5,
+            elevation: 10,
+          }}
+          onPress={() => {
+            bs.current.snapTo(0);
+          }}>
+          <RegularTextCB style={{color: Colors.white}}>
+            Quick Service
+          </RegularTextCB>
+        </TouchableOpacity>
+        <BottomSheet
+          ref={bs}
+          snapPoints={[550, 0]}
+          initialSnap={1}
+          callbackNode={fall}
+          renderContent={this.renderBottomSheetContent}
+          enabledGestureInteraction={true}
+        />
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            {
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: Colors.silver,
+              opacity: this.animatedShadowOpacity,
+            },
+          ]}
+        />
       </View>
     );
   }
@@ -515,6 +614,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+  },
+  textInputContainer: {
+    marginHorizontal: 10,
+    height: 70,
+  },
+  textInput: {
+    fontSize: 16,
+    flex: 1,
+    color: Colors.black1,
   },
   iconUser: {
     height: 60,
@@ -547,28 +655,10 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 10,
   },
-  bottomSheetHeader: {
-    backgroundColor: Colors.white,
-    shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
-    shadowRadius: 2,
-    shadowOpacity: 0.4,
-    paddingTop: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
-  },
-  panelHeader: {
-    alignItems: 'center',
-  },
-  panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#00000040',
-    marginBottom: 10,
-  },
   bottomSheetBody: {
     backgroundColor: Colors.white,
     padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });

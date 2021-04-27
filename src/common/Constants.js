@@ -14,6 +14,7 @@ const Constants = {
   allCategories: 'AllCategories',
   advanceBooking: 'AdvanceBooking',
   filter: 'Filter',
+  editProfile: 'EditProfile',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',

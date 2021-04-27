@@ -43,7 +43,7 @@ export default class EditText extends Component {
           placeholderTextColor={Colors.coolGrey}
           value={value}
           onChangeText={onChangeText}
-          style={[styles.textInput]}
+          style={styles.textInput}
         />
         <TouchableOpacity
           onPress={() => {
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
+    height: 60,
     flex: 1,
     fontFamily: Constants.fontRegular,
     color: Colors.black,

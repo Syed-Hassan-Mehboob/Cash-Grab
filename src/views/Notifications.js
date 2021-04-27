@@ -113,7 +113,7 @@ export default class Notifications extends Component {
 
   renderNotificationsItem = ({item}) => {
     return (
-      <View style={{margin: 20}}>
+      <View style={{margin: 15}}>
         <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
           {item.date}
         </RegularTextCB>

@@ -28,8 +28,10 @@ const Images = {
   barHome: require('../assets/barhome.png'),
   barHomeSelected: require('../assets/barhomeselected.png'),
   barPlus: require('../assets/barplus.png'),
+  barDashboard: require('../assets/bardashboard.png'),
   barMore: require('../assets/barmore.png'),
   barProfile: require('../assets/barprofile.png'),
+  barProfileSelected: require('../assets/barprofileselected.png'),
   iconAutomobile: require('../assets/iconautomobile.png'),
   iconCleaning: require('../assets/iconcleaning.png'),
   iconElectrician: require('../assets/iconelectrician.png'),
@@ -48,6 +50,7 @@ const Images = {
   markerRepairer: require('../assets/markerrepairer.png'),
   markerWash: require('../assets/markerwash.png'),
   iconClose: require('../assets/iconclose.png'),
+  iconEdit: require('../assets/iconedit.png'),
 };
 
 export default Images;
