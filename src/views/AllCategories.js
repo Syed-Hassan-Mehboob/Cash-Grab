@@ -136,7 +136,11 @@ export default class AllCategories extends Component {
   renderBestEmployeesItem = ({item}) => {
     return (
       <View style={[styles.card, {margin: 10}]}>
-        <TouchableOpacity style={styles.itemContainer} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => {
+            this.openNextScreen(Constants.viewVendorProfile);
+          }}>
           <View
             style={{
               flexDirection: 'row',
@@ -181,6 +185,10 @@ export default class AllCategories extends Component {
     );
   };
 
+  openNextScreen = (nextScreen) => {
+    this.props.navigation.navigate(nextScreen);
+  };
+
   render() {
     return (
       <View style={[styles.container]}>
@@ -201,7 +209,7 @@ export default class AllCategories extends Component {
           </RegularTextCB>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate(Constants.filter);
+              this.openNextScreen(Constants.filter);
             }}>
             <Image
               source={Images.iconHamburger}

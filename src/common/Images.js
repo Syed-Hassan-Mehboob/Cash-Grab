@@ -51,6 +51,21 @@ const Images = {
   markerWash: require('../assets/markerwash.png'),
   iconClose: require('../assets/iconclose.png'),
   iconEdit: require('../assets/iconedit.png'),
+  greenTick: require('../assets/greentick.png'),
+  flag: require('../assets/flag.png'),
+  client: require('../assets/client.png'),
+  star: require('../assets/star.png'),
+  iconUserCleaning: require('../assets/iconusercleaning.png'),
+  iconUserRepairing: require('../assets/iconuserrepairing.png'),
+  iconRepairing: require('../assets/iconrepairing.png'),
+  iconCleaning1: require('../assets/iconcleaning1.png'),
+  starFull: require('../assets/starfull.png'),
+  starHalf: require('../assets/starhalf.png'),
+  moreDots: require('../assets/moredots.png'),
+  like: require('../assets/like.png'),
+  iconpencil: require('../assets/iconpencil.png'),
+  buttonSend: require('../assets/buttonsend.png'),
+  cloud: require('../assets/cloud.png'),
 };
 
 export default Images;

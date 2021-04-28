@@ -13,8 +13,10 @@ const Constants = {
   termsAndConditionsScreen: 'TermsAndConditions',
   allCategories: 'AllCategories',
   advanceBooking: 'AdvanceBooking',
+  bookingConfirmed: 'BookingConfirmed',
   filter: 'Filter',
   editProfile: 'EditProfile',
+  viewVendorProfile: 'ViewVendorProfile',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -23,6 +25,7 @@ const Constants = {
   plus: 'Plus',
   profile: 'Profile',
   more: 'More',
+  settings: 'Settings',
 };
 
 export default Constants;

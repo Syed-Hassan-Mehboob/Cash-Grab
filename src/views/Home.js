@@ -293,7 +293,10 @@ export default class Home extends Component {
           <View style={styles.circleCard}>
             <Image source={item.image} style={styles.iconUser} />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate(Constants.viewVendorProfile)
+            }>
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -365,7 +368,10 @@ export default class Home extends Component {
           <View style={styles.circleCard}>
             <Image source={item.image} style={styles.iconUser} />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate(Constants.viewVendorProfile)
+            }>
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -581,7 +587,8 @@ export default class Home extends Component {
             elevation: 10,
           }}
           onPress={() => {
-            bs.current.snapTo(0);
+            // bs.current.snapTo(0);
+            this.props.navigation.navigate(Constants.bookingConfirmed);
           }}>
           <RegularTextCB style={{color: Colors.white}}>
             Quick Service

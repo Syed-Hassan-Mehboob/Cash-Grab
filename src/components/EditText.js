@@ -29,6 +29,8 @@ export default class EditText extends Component {
       onChangeText,
       placeholder,
       secureTextEntry,
+      multiline = false,
+      numberOfLines = 1,
     } = this.props;
     return (
       <View style={[styles.card, this.props.style]}>
@@ -44,18 +46,21 @@ export default class EditText extends Component {
           value={value}
           onChangeText={onChangeText}
           style={styles.textInput}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
         />
-        <TouchableOpacity
-          onPress={() => {
-            this.changePasswordState(secureTextEntry);
-          }}
-          style={{opacity: secureTextEntry ? 1 : 0}}>
-          <Icon
-            type={'Ionicons'}
-            name={this.state.eyeIcon}
-            style={styles.iconPassword}
-          />
-        </TouchableOpacity>
+        {secureTextEntry && (
+          <TouchableOpacity
+            onPress={() => {
+              this.changePasswordState(secureTextEntry);
+            }}>
+            <Icon
+              type={'Ionicons'}
+              name={this.state.eyeIcon}
+              style={styles.iconPassword}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }

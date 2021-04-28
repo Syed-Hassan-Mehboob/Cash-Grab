@@ -11,10 +11,16 @@ import {Image, View} from 'react-native';
 import Colors from '../common/Colors';
 import Profile from './Profile';
 import EditProfile from './EditProfile';
+import BookingConfirmed from './BookingConfirmed';
+import Settings from './Settings';
+import ViewVendorProfile from './ViewVendorProfile';
+import PostJob from './PostJob';
+import Nearby from './Nearby';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 
 const HomeNavigator = () => {
   return (
@@ -30,6 +36,15 @@ const HomeNavigator = () => {
         component={AllCategories}
       />
       <HomeStack.Screen name={Constants.filter} component={Filter} />
+      <HomeStack.Screen name={Constants.nearby} component={Nearby} />
+      <HomeStack.Screen
+        name={Constants.bookingConfirmed}
+        component={BookingConfirmed}
+      />
+      <HomeStack.Screen
+        name={Constants.viewVendorProfile}
+        component={ViewVendorProfile}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -47,6 +62,22 @@ const ProfileNavigator = () => {
         component={EditProfile}
       />
     </ProfileStack.Navigator>
+  );
+};
+
+const SettingsNavigator = () => {
+  return (
+    <SettingsStack.Navigator
+      headerMode="none"
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}>
+      <SettingsStack.Screen name={Constants.settings} component={Settings} />
+      <SettingsStack.Screen
+        name={Constants.notifications}
+        component={Notifications}
+      />
+    </SettingsStack.Navigator>
   );
 };
 
@@ -119,7 +150,7 @@ const Tabs = () => {
             </View>
           ),
         }}
-        component={Home}
+        component={PostJob}
       />
       <Tab.Screen
         name={Constants.profile}
@@ -134,7 +165,7 @@ const Tabs = () => {
         component={ProfileNavigator}
       />
       <Tab.Screen
-        name={Constants.more}
+        name={Constants.settings}
         options={{
           tabBarIcon: ({color}) => (
             <Image
@@ -143,7 +174,7 @@ const Tabs = () => {
             />
           ),
         }}
-        component={Home}
+        component={SettingsNavigator}
       />
     </Tab.Navigator>
   );

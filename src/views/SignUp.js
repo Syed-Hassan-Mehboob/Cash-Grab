@@ -11,7 +11,6 @@ import Colors from '../common/Colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import LightTextCB from '../components/LightTextCB';
 import Constants from '../common/Constants';
-import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import Animated from 'react-native-reanimated';

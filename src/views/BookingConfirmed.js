@@ -8,10 +8,12 @@ import Constants from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import LightTextCB from '../components/LightTextCB';
+import RegularTextCB from '../components/RegularTextCB';
+import BoldTextCB from '../components/BoldTextCB';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{name: 'Home'}],
+  routes: [{name: Constants.home}],
 });
 
 export default class BookingConfirmed extends Component {
@@ -34,60 +36,74 @@ export default class BookingConfirmed extends Component {
           <Image source={Images.arrowBack} style={styles.iconBack} />
         </TouchableOpacity>
         <View style={styles.childContainer}>
-          <View style={styles.greenCircle}>
-            <Image
-              source={Images.tickYellow}
-              style={{tintColor: Colors.white, height: 30, width: 30}}
-            />
-          </View>
-          <LightTextCB style={{fontSize: 30, marginTop: 30}}>
+          <Image source={Images.greenTick} style={{height: 100, width: 100}} />
+          <BoldTextCB style={{fontSize: 30, marginTop: 30}}>
             Booking Confirmed
-          </LightTextCB>
-          <LightTextCB
+          </BoldTextCB>
+          <RegularTextCB
             style={{
               fontSize: 18,
-              marginTop: 20,
+              marginTop: 10,
               marginStart: 30,
               marginEnd: 30,
               textAlign: 'center',
+              color: Colors.coolGrey,
             }}>
             Your booking has been confirmed for Tue 14th Mar, 2020 (10:30pm)
-          </LightTextCB>
-          <Card
-            style={{
-              borderRadius: 20,
-              shadowRadius: 20,
-              shadowOffset: 20,
-              shadowOpacity: 20,
-              width: '100%',
-              marginTop: 20,
-            }}>
+          </RegularTextCB>
+          <View
+            style={[
+              styles.card,
+              {
+                marginTop: 20,
+              },
+            ]}>
             <View style={styles.itemContainer}>
-              <LightTextCB style={{fontSize: 30}}>Ray Hammond</LightTextCB>
-              <View style={{flexDirection: 'row', marginTop: 5}}>
-                <LightTextCB style={{fontSize: 18, color: Colors.black1}}>
-                  Verified
-                </LightTextCB>
-                <Image
-                  source={Images.tickVerified}
-                  style={{height: 20, width: 20, marginStart: 5}}
-                />
+              <View style={styles.circleCard}>
+                <Image source={Images.emp1} style={styles.iconUser} />
               </View>
-              <LightTextCB
-                style={{fontSize: 18, color: Colors.black1, marginTop: 20}}>
+              <RegularTextCB style={{fontSize: 20, marginTop: 10}}>
+                Ray Hammond
+              </RegularTextCB>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 5,
+                }}>
+                <Image
+                  source={Images.iconVerified}
+                  style={{height: 25, width: 25, resizeMode: 'contain'}}
+                />
+                <RegularTextCB
+                  style={{
+                    color: Colors.turqoiseGreen,
+                    fontSize: 16,
+                    marginStart: 5,
+                  }}>
+                  Verified
+                </RegularTextCB>
+              </View>
+              <RegularTextCB
+                style={{fontSize: 18, color: Colors.coolGrey, marginTop: 5}}>
                 Gardening, NY (2km)
-              </LightTextCB>
-              <LightTextCB
-                style={{fontSize: 18, color: Colors.orange, marginTop: 10}}>
+              </RegularTextCB>
+              <RegularTextCB
+                style={{
+                  fontSize: 18,
+                  color: Colors.orangeYellow,
+                  marginTop: 5,
+                }}>
                 4.6 ratings
-              </LightTextCB>
+              </RegularTextCB>
             </View>
-          </Card>
+          </View>
         </View>
         <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <ButtonRadius10
             onPress={() => this.navigateToHome()}
-            label="Back to Home"
+            label="BACK TO HOME"
+            bgColor={Colors.sickGreen}
           />
         </View>
       </View>
@@ -112,13 +128,30 @@ const styles = StyleSheet.create({
     width: 12,
     resizeMode: 'contain',
   },
-  greenCircle: {
-    height: 90,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 90,
-    borderRadius: 90 / 2,
-    backgroundColor: Colors.green,
+  iconUser: {
+    height: 80,
+    width: 80,
+    borderRadius: 80 / 2,
+    resizeMode: 'contain',
+  },
+  circleCard: {
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 10,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
   },
   iconPassword: {
     fontSize: 20,
@@ -138,7 +171,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding: 30,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
     alignItems: 'center',
   },
   formLabel: {

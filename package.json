@@ -24,10 +24,12 @@
     "react-native-image-crop-picker": "^0.36.0",
     "react-native-image-picker": "^3.2.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-maps": "0.27.1",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.18.0",
+    "react-native-star-rating": "^1.1.0",
     "react-native-swipe-list-view": "^3.2.7",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "save": "^2.4.0"

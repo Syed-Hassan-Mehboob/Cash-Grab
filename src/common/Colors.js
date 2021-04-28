@@ -8,10 +8,17 @@ const Colors = {
   grey: '#808e9b',
   lightGrey: '#808e9b',
   coolGrey: '#8b9897',
+  pinkishGrey: '#cecece',
   green: '#2ED573',
   sickGreen: '#abcf37',
   lighNewGreen: '#e9ffa1',
   turqoiseGreen: '#00ff77',
   orangeYellow: '#ffa502',
+  lightGold: '#ffc45e',
+  orange: '#ff6f00',
+  pinky: '#f878b4',
+  barbiePink: '#fc368a',
+  darkSkyBlue: '#51cae9',
+  turquoiseBlue: '#05abd0',
 };
 export default Colors;

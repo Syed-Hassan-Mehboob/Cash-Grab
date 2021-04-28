@@ -10,6 +10,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../common/Colors';
+import Constants from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
@@ -20,35 +21,6 @@ const CARD_WIDTH = width * 0.5;
 const SPACING_FOR_CARD_INSET = width * 0.08 - 10;
 
 const Nearby = (props) => {
-  /*componentDidMount() {
-    console.log('position');
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log(
-          'position: ' +
-            position.coords.latitude +
-            ' ' +
-            position.coords.longitude,
-        );
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      },
-      (error) => {
-        console.log('error: ' + error.message);
-        this.setState({
-          error: error.message,
-        });
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-      },
-    );
-  }*/
-
   const markers = [
     {
       coordinate: {
@@ -350,7 +322,7 @@ const Nearby = (props) => {
           alignSelf: 'center',
           flexDirection: 'row',
           elevation: 10,
-          backgroundColor: '#FFF',
+          backgroundColor: Colors.white,
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20,
           padding: 15,
@@ -452,34 +424,48 @@ const Nearby = (props) => {
             <TouchableOpacity
               style={styles.card}
               key={index}
-              onPress={() => props.navigation.navigate('ConfirmBooking')}>
-              <Image source={marker.image} style={styles.iconUser} />
+              onPress={() =>
+                props.navigation.navigate(Constants.viewVendorProfile)
+              }>
+              <View style={styles.circleCard}>
+                <Image source={marker.image} style={styles.iconUser} />
+              </View>
               <View style={styles.textContent}>
-                <LightTextCB style={[styles.cardtitle]}>
+                <RegularTextCB style={[styles.cardtitle]}>
                   {marker.title}
-                </LightTextCB>
+                </RegularTextCB>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignSelf: 'center',
+                    alignItems: 'center',
                     marginTop: 5,
                   }}>
-                  <LightTextCB style={{fontSize: 16, color: Colors.black}}>
-                    Verified
-                  </LightTextCB>
                   <Image
-                    source={Images.tickVerified}
-                    style={{height: 20, width: 20, marginStart: 5}}
+                    source={Images.iconVerified}
+                    style={{height: 15, width: 15, resizeMode: 'contain'}}
                   />
+                  <RegularTextCB
+                    style={{
+                      fontSize: 14,
+                      color: Colors.turqoiseGreen,
+                      marginStart: 5,
+                    }}>
+                    Verified
+                  </RegularTextCB>
                 </View>
-                <LightTextCB
+                <RegularTextCB
                   style={{fontSize: 16, color: Colors.grey, marginTop: 5}}>
                   {marker.location}
-                </LightTextCB>
-                <LightTextCB
-                  style={{fontSize: 16, color: Colors.orange, marginTop: 5}}>
+                </RegularTextCB>
+                <RegularTextCB
+                  style={{
+                    fontSize: 16,
+                    color: Colors.orangeYellow,
+                    marginTop: 5,
+                  }}>
                   {marker.rating}
-                </LightTextCB>
+                </RegularTextCB>
               </View>
             </TouchableOpacity>
           );
@@ -559,8 +545,18 @@ const styles = StyleSheet.create({
   iconUser: {
     height: 60,
     width: 60,
-    borderRadius: 60 / 2,
+    borderRadius: 30,
     resizeMode: 'contain',
+  },
+  circleCard: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 10,
   },
   textContent: {
     padding: 10,
