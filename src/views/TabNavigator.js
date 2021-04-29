@@ -122,7 +122,7 @@ const Tabs = () => {
         options={{
           tabBarIcon: ({focused, color}) => (
             <Image
-              source={Images.barBell}
+              source={focused ? Images.barBellSelected : Images.barBell}
               style={{height: 25, width: 25, resizeMode: 'contain'}}
             />
           ),
@@ -155,9 +155,9 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.profile}
         options={{
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
-              source={Images.barProfile}
+              source={focused ? Images.barProfileSelected : Images.barProfile}
               style={{height: 25, width: 25, resizeMode: 'contain'}}
             />
           ),
@@ -167,9 +167,9 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.settings}
         options={{
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
-              source={Images.barMore}
+              source={focused ? Images.barMoreSelected : Images.barMore}
               style={{height: 25, width: 25, resizeMode: 'contain'}}
             />
           ),

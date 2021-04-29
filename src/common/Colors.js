@@ -11,6 +11,7 @@ const Colors = {
   pinkishGrey: '#cecece',
   green: '#2ED573',
   sickGreen: '#abcf37',
+  sand: '#c1dc69',
   lighNewGreen: '#e9ffa1',
   turqoiseGreen: '#00ff77',
   orangeYellow: '#ffa502',

@@ -22,9 +22,11 @@ export default class CreateAccount extends React.Component {
     isVendorSelected: false,
   };
 
-  openSignUp() {
+  openSignUp(userType) {
     setTimeout(() => {
-      this.props.navigation.navigate(Constants.signUp);
+      this.props.navigation.navigate(Constants.signUp, {
+        userType: userType,
+      });
     }, 500);
   }
 

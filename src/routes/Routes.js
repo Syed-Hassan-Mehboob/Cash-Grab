@@ -53,13 +53,10 @@ const AppStack = () => {
       <Stack.Screen name={Constants.otp} component={OTP} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="BestEmployees" component={BestEmployees} />
-      <Stack.Screen name="BookingConfirmed" component={BookingConfirmed} />
       <Stack.Screen name="EmergencyBooking" component={EmergencyBooking} />
-      <Stack.Screen name="Nearby" component={Nearby} />
       <Stack.Screen name="AdvanceBooking" component={AdvanceBooking} />
       <Stack.Screen name={Constants.tabNavigator} component={TabNavigator} />
       <Stack.Screen name="ConfirmBooking" component={ConfirmBooking} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };
