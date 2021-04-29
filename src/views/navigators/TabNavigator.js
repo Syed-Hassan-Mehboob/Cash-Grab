@@ -1,21 +1,22 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Constants from '../common/Constants';
-import Home from '../views/Home';
-import Images from '../common/Images';
-import AllCategories from '../views/AllCategories';
-import Notifications from './Notifications';
-import Filter from './Filter';
 import {Image, View} from 'react-native';
-import Colors from '../common/Colors';
-import Profile from './Profile';
-import EditProfile from './EditProfile';
-import BookingConfirmed from './BookingConfirmed';
-import Settings from './Settings';
-import ViewVendorProfile from './ViewVendorProfile';
-import PostJob from './PostJob';
-import Nearby from './Nearby';
+import Constants from '../../common/Constants';
+import Colors from '../../common/Colors';
+import Images from '../../common/Images';
+import Home from '../../views/Home';
+import Filter from '../../views/Filter';
+import Nearby from '../../views/Nearby';
+import BookingConfirmed from '../../views/BookingConfirmed';
+import ViewVendorProfile from '../../views/ViewVendorProfile';
+import AllCategories from '../../views/AllCategories';
+import PostJob from '../../views/PostJob';
+import Profile from '../../views/Profile';
+import EditProfile from '../../views/EditProfile';
+import Notifications from '../../views/Notifications';
+import Settings from '../../views/Settings';
+import TermsAndConditions from '../TermsAndConditions';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -76,6 +77,10 @@ const SettingsNavigator = () => {
       <SettingsStack.Screen
         name={Constants.notifications}
         component={Notifications}
+      />
+      <SettingsStack.Screen
+        name={Constants.termsAndConditionsScreen}
+        component={TermsAndConditions}
       />
     </SettingsStack.Navigator>
   );

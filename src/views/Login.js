@@ -134,7 +134,7 @@ export default class Login extends Component {
               label="LOGIN"
               bgColor={Colors.sickGreen}
               onPress={() =>
-                this.props.navigation.navigate(Constants.tabNavigator)
+                this.props.navigation.navigate(Constants.drawerNavigator)
               }
             />
           </View>
@@ -160,7 +160,7 @@ export default class Login extends Component {
           </RegularTextCB>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate(Constants.signUp);
+              this.props.navigation.navigate(Constants.createAccount);
             }}>
             <RegularTextCB style={styles.underlineText}>Sign Up</RegularTextCB>
           </TouchableOpacity>

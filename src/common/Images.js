@@ -68,6 +68,13 @@ const Images = {
   iconpencil: require('../assets/iconpencil.png'),
   buttonSend: require('../assets/buttonsend.png'),
   cloud: require('../assets/cloud.png'),
+  iconDrawerBell: require('../assets/icondrawerbell.png'),
+  iconDrawerChat: require('../assets/icondrawerchat.png'),
+  iconDrawerFaq: require('../assets/icondrawerfaq.png'),
+  iconDrawerLogOut: require('../assets/icondrawerlogout.png'),
+  iconDrawerSettings: require('../assets/icondrawersettings.png'),
+  iconDrawerSupport: require('../assets/icondrawersupport.png'),
+  iconDrawerTermsAndCond: require('../assets/icondrawertermsconditions.png'),
 };
 
 export default Images;

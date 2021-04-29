@@ -22,10 +22,10 @@ export default class CreateAccount extends React.Component {
     isVendorSelected: false,
   };
 
-  openSignUp(userType) {
+  openSignUp(isVendor) {
     setTimeout(() => {
       this.props.navigation.navigate(Constants.signUp, {
-        userType: userType,
+        isVendor: isVendor,
       });
     }, 500);
   }
@@ -46,7 +46,7 @@ export default class CreateAccount extends React.Component {
               isUserSelected: true,
               isVendorSelected: false,
             });
-            this.openSignUp();
+            this.openSignUp(false);
           }}
           style={[
             styles.card,
@@ -72,7 +72,7 @@ export default class CreateAccount extends React.Component {
               isUserSelected: false,
               isVendorSelected: true,
             });
-            this.openSignUp();
+            this.openSignUp(true);
           }}
           style={[
             styles.card,

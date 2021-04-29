@@ -24,6 +24,8 @@ const fall = new Animated.Value(1);
 const bs = React.createRef();
 
 export default class SignUp extends Component {
+ isVendor = false
+
   constructor(props) {
     super(props);
     this.state = {
@@ -114,7 +116,7 @@ export default class SignUp extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        {console.log(this.props.route.params.userType)}
+        {this.isVendor = this.props.route.params.isVendor}
         <Animated.View
           style={{
             flex: 1,
@@ -202,7 +204,8 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+              {console.log('usVendor: '+ this.isVendor)}
+              {this.isVendor && <View style={[styles.textInputContainer, {marginTop: 15}]}>
                 <EditText
                   ref={'service'}
                   placeholder={'Select Service'}
@@ -214,7 +217,7 @@ export default class SignUp extends Component {
                   }}
                   style={[styles.textInput]}
                 />
-              </View>
+              </View>}
               <View style={[styles.textInputContainer, {marginTop: 15}]}>
                 <EditText
                   ref={'email'}

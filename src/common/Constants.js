@@ -10,13 +10,13 @@ const Constants = {
   signUp: 'SignUp',
   forgetPassword: 'ForgetPassword',
   otp: 'OTP',
-  termsAndConditionsScreen: 'TermsAndConditions',
   allCategories: 'AllCategories',
   advanceBooking: 'AdvanceBooking',
   bookingConfirmed: 'BookingConfirmed',
   filter: 'Filter',
   editProfile: 'EditProfile',
   viewVendorProfile: 'ViewVendorProfile',
+  chat: 'Chat',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -26,6 +26,12 @@ const Constants = {
   profile: 'Profile',
   more: 'More',
   settings: 'Settings',
+  /* * drawer * */
+  drawerNavigator:'DrawerNavigator',
+  support:'Support',
+  termsAndConditionsScreen: 'TermsAndConditions',
+  faqs:'FAQ\'s',
+  logOut:'Log Out',
 };
 
 export default Constants;

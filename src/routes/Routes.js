@@ -16,7 +16,7 @@ import AdvanceBooking from '../views/AdvanceBooking';
 import EditProfile from '../views/EditProfile';
 import Constants from '../common/Constants';
 import OTP from '../views/OTP';
-import TabNavigator from '../views/TabNavigator';
+import DrawerNavigator from '../views/navigators/DrawerNavigator';
 
 const Stack = createStackNavigator();
 
@@ -55,7 +55,7 @@ const AppStack = () => {
       <Stack.Screen name="BestEmployees" component={BestEmployees} />
       <Stack.Screen name="EmergencyBooking" component={EmergencyBooking} />
       <Stack.Screen name="AdvanceBooking" component={AdvanceBooking} />
-      <Stack.Screen name={Constants.tabNavigator} component={TabNavigator} />
+      <Stack.Screen name={Constants.drawerNavigator} component={DrawerNavigator} />
       <Stack.Screen name="ConfirmBooking" component={ConfirmBooking} />
     </Stack.Navigator>
   );

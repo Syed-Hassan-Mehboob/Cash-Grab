@@ -126,6 +126,10 @@ export default class Home extends Component {
     },
   ];
 
+  openDrawer = () => {
+    this.props.navigation.openDrawer();
+}
+
   constructor(props) {
     super(props);
     this.state = {
@@ -446,7 +450,8 @@ export default class Home extends Component {
               </RegularTextCB>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.filter);
+                  // this.props.navigation.navigate(Constants.filter);
+                  this.openDrawer()
                 }}
                 style={{
                   position: 'absolute',
