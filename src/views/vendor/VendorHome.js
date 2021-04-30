@@ -55,62 +55,67 @@ export default class VendorHome extends Component {
       id: '1',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '2',
       image: Images.emp2,
       title: 'Jay Almond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '3',
       image: Images.emp3,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '4',
       image: Images.emp4,
       title: 'Jay Almond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '5',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
   ];
 
   openDrawer = () => {
     this.props.navigation.openDrawer();
-}
+  };
 
   constructor(props) {
     super(props);
@@ -255,10 +260,9 @@ export default class VendorHome extends Component {
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate(Constants.vendorSingleCategory, {
-          item: item
-        })
-      }
-      }
+            item: item,
+          });
+        }}
         style={{alignItems: 'center'}}>
         <Image style={styles.circle} source={item.image} />
         <RegularTextCB
@@ -271,11 +275,13 @@ export default class VendorHome extends Component {
 
   renderJobsForYouItem = ({item}) => {
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={0.5}
         style={[
           styles.card,
           {padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
-        ]}>
+        ]}
+        onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
         <View
           style={{
             flexDirection: 'row',
@@ -285,57 +291,71 @@ export default class VendorHome extends Component {
             <Image source={item.image} style={styles.iconUser} />
           </View>
           <View style={{marginStart: 10}}>
-          <RegularTextCB
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 16,
+              }}>
+              {item.title}
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{height: 15, width: 15, resizeMode: 'contain'}}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+                  fontSize: 12,
+                  marginStart: 5,
+                }}>
+                Verified
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
+        <View
           style={{
-            color: Colors.black,
-            fontSize: 16,
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}>
-          {item.title}
-        </RegularTextCB>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-          <Image
-            source={Images.iconVerified}
-            style={{height: 15, width: 15, resizeMode: 'contain'}}
-          />
           <RegularTextCB
             style={{
-              color: Colors.turqoiseGreen,
-              fontSize: 12,
-              marginStart: 5,
+              color: Colors.black,
+              fontSize: 16,
             }}>
-            Verified
+            {item.requirement}
           </RegularTextCB>
-        </View>
-        </View>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between'}}>
-           <RegularTextCB
-          style={{
-            color: Colors.black,
-            fontSize: 16
-          }}>
-          {item.requirement}
-        </RegularTextCB>
-        <LightTextCB
-          style={{
-            color: Colors.black,
-            fontSize: 12
-          }}>{item.pricing}</LightTextCB>
+          <LightTextCB
+            style={{
+              color: Colors.black,
+              fontSize: 12,
+            }}>
+            {item.pricing}
+          </LightTextCB>
         </View>
         <RegularTextCB
-            style={{
-              color: Colors.sickGreen,
-              fontSize: 12,
-            }}>
-            {item.type}
-          </RegularTextCB>
+          style={{
+            color: Colors.sickGreen,
+            fontSize: 12,
+          }}>
+          {item.type}
+        </RegularTextCB>
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
           }}>
           {item.desc}
         </RegularTextCB>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
           <Image
             source={Images.iconLocationPin}
             style={{height: 17, width: 17, resizeMode: 'contain'}}
@@ -348,27 +368,35 @@ export default class VendorHome extends Component {
             {item.location}
           </RegularTextCB>
         </View>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center',}}>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
           <Image
             source={Images.iconStopWatch}
             style={{height: 17, width: 17, resizeMode: 'contain'}}
           />
-          <View style={{flexDirection: 'row', marginStart: 5, alignItems: 'center', flex: 1, justifyContent: 'space-between'}}>
-            <RegularTextCB
+          <View
             style={{
-              color: Colors.coolGrey,
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
             }}>
-            {item.time}
-          </RegularTextCB>
             <RegularTextCB
-            style={{
-              color: Colors.black
-            }}>
-            {'Contact >'}
-          </RegularTextCB>
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {item.time}
+            </RegularTextCB>
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+              }}>
+              {'Contact >'}
+            </RegularTextCB>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -407,7 +435,7 @@ export default class VendorHome extends Component {
               <TouchableOpacity
                 onPress={() => {
                   // this.props.navigation.navigate(Constants.filter);
-                  this.openDrawer()
+                  this.openDrawer();
                 }}
                 style={{
                   position: 'absolute',
@@ -499,10 +527,7 @@ export default class VendorHome extends Component {
                 }}>
                 Jobs For You
               </RegularTextCB>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate(Constants.nearby)
-                }>
+              <TouchableOpacity onPress={() => {}}>
                 <RegularTextCB
                   style={{
                     color: Colors.black,

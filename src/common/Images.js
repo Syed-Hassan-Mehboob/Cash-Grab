@@ -77,6 +77,12 @@ const Images = {
   iconDrawerTermsAndCond: require('../assets/icondrawertermsconditions.png'),
   iconLocationPin: require('../assets/iconlocationpin.png'),
   iconStopWatch: require('../assets/iconstopwatch.png'),
+  car1: require('../assets/car1.png'),
+  car2: require('../assets/car2.png'),
+  car3: require('../assets/car3.png'),
+  iconCamera: require('../assets/iconcamera.png'),
+  iconAudioCall: require('../assets/iconaudiocall.png'),
+  iconVideoCall: require('../assets/iconvideocall.png'),
 };
 
 export default Images;

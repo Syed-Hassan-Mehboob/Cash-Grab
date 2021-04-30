@@ -19,7 +19,9 @@ const Constants = {
   vendorEditProfile: 'VendorEditProfile',
   viewVendorProfile: 'ViewVendorProfile',
   chat: 'Chat',
+  chatListing: 'ChatListing',
   vendorSingleCategory: 'VendorSingleCategory',
+  viewJob: 'ViewJob',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -32,11 +34,11 @@ const Constants = {
   more: 'More',
   settings: 'Settings',
   /* * drawer * */
-  drawerNavigator:'DrawerNavigator',
-  support:'Support',
+  drawerNavigator: 'DrawerNavigator',
+  support: 'Support',
   termsAndConditionsScreen: 'TermsAndConditions',
-  faqs:'FAQ\'s',
-  logOut:'Log Out',
+  faqs: "FAQ's",
+  logOut: 'Log Out',
 };
 
 export default Constants;

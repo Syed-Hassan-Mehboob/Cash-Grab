@@ -6,7 +6,6 @@ import Constants from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import Filter from '../Filter';
-import PostJob from '../PostJob';
 import Notifications from '../Notifications';
 import Settings from '../Settings';
 import TermsAndConditions from '../TermsAndConditions';
@@ -15,6 +14,11 @@ import VendorProfile from '../vendor/VendorProfile';
 import VendorEditProfile from '../vendor/VendorEditProfile';
 import VendorAllCategories from '../vendor/VendorAllCategories';
 import VendorSingleCategory from '../vendor/VendorSingleCategory';
+import Dashboard from '../vendor/Dashboard';
+import ViewJob from '../vendor/ViewJob';
+import Support from '../Support';
+import ChatListing from '../ChatListing';
+import Chat from '../Chat';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -39,6 +43,12 @@ const HomeNavigator = () => {
         component={VendorSingleCategory}
       />
       <HomeStack.Screen name={Constants.filter} component={Filter} />
+      <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
+      <HomeStack.Screen
+        name={Constants.termsAndConditionsScreen}
+        component={TermsAndConditions}
+      />
+      <HomeStack.Screen name={Constants.support} component={Support} />
     </HomeStack.Navigator>
   );
 };
@@ -50,7 +60,10 @@ const ProfileNavigator = () => {
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
       }}>
-      <ProfileStack.Screen name={Constants.vendorProfile} component={VendorProfile} />
+      <ProfileStack.Screen
+        name={Constants.vendorProfile}
+        component={VendorProfile}
+      />
       <ProfileStack.Screen
         name={Constants.vendorEditProfile}
         component={VendorEditProfile}
@@ -72,9 +85,10 @@ const SettingsNavigator = () => {
         component={Notifications}
       />
       <SettingsStack.Screen
-        name={Constants.termsAndConditionsScreen}
-        component={TermsAndConditions}
+        name={Constants.chatListing}
+        component={ChatListing}
       />
+      <SettingsStack.Screen name={Constants.chat} component={Chat} />
     </SettingsStack.Navigator>
   );
 };
@@ -148,7 +162,7 @@ const Tabs = () => {
             </View>
           ),
         }}
-        component={PostJob}
+        component={Dashboard}
       />
       <Tab.Screen
         name={Constants.vendorProfile}

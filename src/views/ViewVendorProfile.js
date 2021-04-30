@@ -329,7 +329,7 @@ export default class ViewVendorProfile extends React.Component {
           <View
             style={[
               styles.card,
-              {marginHorizontal: 20, marginTop: 20, padding: 20},
+              {marginHorizontal: 20, marginTop: 30, padding: 20},
             ]}>
             <View
               style={{
@@ -344,7 +344,7 @@ export default class ViewVendorProfile extends React.Component {
                   {
                     width: '40%',
                     paddingVertical: 10,
-                    borderWidth: this.state.isDescriptionSelected ? 1 : 0,
+                    borderWidth: this.state.isDescriptionSelected ? 2 : 0,
                     borderColor: Colors.sickGreen,
                   },
                 ]}
@@ -359,7 +359,7 @@ export default class ViewVendorProfile extends React.Component {
                   {
                     width: '40%',
                     paddingVertical: 10,
-                    borderWidth: this.state.isReviewsSelected ? 1 : 0,
+                    borderWidth: this.state.isReviewsSelected ? 2 : 0,
                     borderColor: Colors.sickGreen,
                   },
                 ]}
@@ -454,7 +454,13 @@ export default class ViewVendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.white,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        fontSize: 12,
+                      }}>
                       8 Years
                     </RegularTextCB>
                   </LinearGradient>
@@ -479,7 +485,13 @@ export default class ViewVendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.white,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        fontSize: 12,
+                      }}>
                       4.9 Rating
                     </RegularTextCB>
                   </LinearGradient>
@@ -503,7 +515,13 @@ export default class ViewVendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.white,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        fontSize: 12,
+                      }}>
                       350 Client
                     </RegularTextCB>
                   </LinearGradient>

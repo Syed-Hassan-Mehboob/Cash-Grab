@@ -17,6 +17,9 @@ import EditProfile from '../EditProfile';
 import Notifications from '../Notifications';
 import Settings from '../Settings';
 import TermsAndConditions from '../TermsAndConditions';
+import Support from '../Support';
+import ChatListing from '../ChatListing';
+import Chat from '../Chat';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -46,6 +49,11 @@ const HomeNavigator = () => {
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
       />
+      <HomeStack.Screen
+        name={Constants.termsAndConditionsScreen}
+        component={TermsAndConditions}
+      />
+      <HomeStack.Screen name={Constants.support} component={Support} />
     </HomeStack.Navigator>
   );
 };
@@ -79,9 +87,10 @@ const SettingsNavigator = () => {
         component={Notifications}
       />
       <SettingsStack.Screen
-        name={Constants.termsAndConditionsScreen}
-        component={TermsAndConditions}
+        name={Constants.chatListing}
+        component={ChatListing}
       />
+      <SettingsStack.Screen name={Constants.chat} component={Chat} />
     </SettingsStack.Navigator>
   );
 };

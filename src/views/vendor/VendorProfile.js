@@ -343,7 +343,7 @@ export default class VendorProfile extends React.Component {
           <View
             style={[
               styles.card,
-              {marginHorizontal: 20, marginTop: 20, padding: 20},
+              {marginHorizontal: 20, marginTop: 30, padding: 20},
             ]}>
             <View
               style={{
@@ -358,7 +358,7 @@ export default class VendorProfile extends React.Component {
                   {
                     width: '40%',
                     paddingVertical: 10,
-                    borderWidth: this.state.isDescriptionSelected ? 1 : 0,
+                    borderWidth: this.state.isDescriptionSelected ? 2 : 0,
                     borderColor: Colors.sickGreen,
                   },
                 ]}
@@ -373,7 +373,7 @@ export default class VendorProfile extends React.Component {
                   {
                     width: '40%',
                     paddingVertical: 10,
-                    borderWidth: this.state.isReviewsSelected ? 1 : 0,
+                    borderWidth: this.state.isReviewsSelected ? 2 : 0,
                     borderColor: Colors.sickGreen,
                   },
                 ]}
@@ -468,7 +468,13 @@ export default class VendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.white,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        fontSize: 12,
+                      }}>
                       8 Years
                     </RegularTextCB>
                   </LinearGradient>
@@ -493,7 +499,13 @@ export default class VendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.white,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        fontSize: 12,
+                      }}>
                       4.9 Rating
                     </RegularTextCB>
                   </LinearGradient>
@@ -517,7 +529,13 @@ export default class VendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.white,
+                        marginTop: 10,
+                        textAlign: 'center',
+                        fontSize: 12,
+                      }}>
                       350 Client
                     </RegularTextCB>
                   </LinearGradient>
@@ -533,37 +551,6 @@ export default class VendorProfile extends React.Component {
                   renderItem={this.renderReviewsItem}
                   keyExtractor={(item) => item.id}
                 />
-                <View
-                  style={[
-                    styles.card,
-                    {
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      marginHorizontal: -20,
-                      padding: 10,
-                    },
-                  ]}>
-                  <Image
-                    source={Images.iconpencil}
-                    style={{height: 25, width: 25}}
-                  />
-                  <TextInput
-                    placeholder={'Write Review'}
-                    value={this.state.review}
-                    style={styles.textInput}
-                    onChangeText={(text) => this.setState({review: text})}
-                  />
-                  <TouchableOpacity onPress={() => {}}>
-                    <Image
-                      source={Images.iconpencil}
-                      style={{height: 25, width: 25}}
-                    />
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
           </View>

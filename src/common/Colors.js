@@ -21,5 +21,6 @@ const Colors = {
   barbiePink: '#fc368a',
   darkSkyBlue: '#51cae9',
   turquoiseBlue: '#05abd0',
+  paleGrey: '#eef1ff',
 };
 export default Colors;

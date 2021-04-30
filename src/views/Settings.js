@@ -56,6 +56,7 @@ export default class Settings extends React.Component {
       isChatSelected: true,
       isVerificationSelected: false,
     });
+    this.openNextScreen(Constants.chatListing);
   };
 
   selectVerification = () => {
@@ -145,21 +146,6 @@ export default class Settings extends React.Component {
             }}>
             <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
               Chat
-            </RegularTextCB>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.card,
-              {
-                padding: 15,
-                borderWidth: this.state.isVerificationSelected ? 2 : 0,
-              },
-            ]}
-            onPress={() => {
-              this.selectVerification();
-            }}>
-            <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
-              Verification
             </RegularTextCB>
           </TouchableOpacity>
         </View>
