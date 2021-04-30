@@ -10,120 +10,97 @@ import Colors from '../../common/Colors';
 import Constants from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
+import LightTextCB from '../../components/LightTextCB';
 
 export default class VendorAllCategories extends Component {
-  bestEmployees = [
+  categories = [
     {
       id: '1',
-      name: 'Home Renovation',
       image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      title: 'Ray Hammond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '2',
-      name: 'Electrician',
       image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      title: 'Jay Almond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '3',
-      name: 'Home Cleaner',
       image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      title: 'Ray Hammond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '4',
-      name: 'Automobile',
       image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      title: 'Jay Almond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '5',
-      name: 'Home Renovation',
       image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      title: 'Ray Hammond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '6',
-      name: 'Electrician',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      image: Images.emp3,
+      title: 'Ray Hammond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '7',
-      name: 'Home Cleaner',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      image: Images.emp4,
+      title: 'Jay Almond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
     {
       id: '8',
-      name: 'Automobile',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '9',
-      name: 'Home Renovation',
       image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '10',
-      name: 'Home Cleaner',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '11',
-      name: 'Automobile',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '12',
-      name: 'Electrician',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '13',
-      name: 'Home Cleaner',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '14',
-      name: 'Automobile',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '15',
-      name: 'Home Renovation',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-    },
-    {
-      id: '16',
-      name: 'Electrician',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      title: 'Ray Hammond',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      pricing: '$24/Hr',
+      requirement: 'Car Mechanic Needed',
+      type: 'Automobile',
+      location: '111, NYC Street, NY 121',
+      time: '12:00-3:00'
     },
   ];
 
@@ -131,69 +108,105 @@ export default class VendorAllCategories extends Component {
     super(props);
   }
 
-  state = {
-    title: '',
-    image: '',
-  };
-
-  componentDidMount() {
-    this.getData()
-  }
-
-  getData = () => {
-    this.setState({title: this.props.route.params.item.title, 
-      image: this.props.route.params.item.image});
-    console.log(this.props.route.params.item.title + ' ' + this.state.title + ' ' + this.state.image);
-  }
-
-  renderBestEmployeesItem = ({item}) => {
+  renderSingleCategoriesItem = ({item}) => {
     return (
-      <View style={[styles.card, {margin: 10}]}>
-        <TouchableOpacity
-          style={styles.itemContainer}
-          onPress={() => {
-            this.openNextScreen(Constants.viewVendorProfile);
+      <View
+        style={[
+          styles.card,
+          {padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5},
+        ]}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-            }}>
-            <View style={{flex: 1}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <View style={styles.circleCard}>
-                  <Image source={item.image} style={styles.iconUser} />
-                </View>
-                <View style={{marginStart: 20, marginEnd: 20}}>
-                  <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-                    {item.name}
-                  </RegularTextCB>
-                  <RegularTextCB
-                    style={{
-                      fontSize: 16,
-                      color: Colors.black,
-                      textDecorationLine: 'underline',
-                    }}>
-                    View Profile
-                  </RegularTextCB>
-                </View>
-              </View>
-              <RegularTextCB
-                style={{fontSize: 16, color: Colors.coolGrey, marginTop: 5}}>
-                {item.desc}
-              </RegularTextCB>
-            </View>
-            <Image
-              source={Images.circularArrowForward}
-              style={[styles.iconForward, {flex: 0.4}]}
-            />
+          <View style={styles.circleCard}>
+            <Image source={item.image} style={styles.iconUser} />
           </View>
-        </TouchableOpacity>
+          <View style={{marginStart: 10}}>
+          <RegularTextCB
+          style={{
+            color: Colors.black,
+            fontSize: 16,
+          }}>
+          {item.title}
+        </RegularTextCB>
+        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconVerified}
+            style={{height: 15, width: 15, resizeMode: 'contain'}}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.turqoiseGreen,
+              fontSize: 12,
+              marginStart: 5,
+            }}>
+            Verified
+          </RegularTextCB>
+        </View>
+        </View>
+        </View>
+        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between'}}>
+           <RegularTextCB
+          style={{
+            color: Colors.black,
+            fontSize: 16
+          }}>
+          {item.requirement}
+        </RegularTextCB>
+        <LightTextCB
+          style={{
+            color: Colors.black,
+            fontSize: 12
+          }}>{item.pricing}</LightTextCB>
+        </View>
+        <RegularTextCB
+            style={{
+              color: Colors.sickGreen,
+              fontSize: 12,
+            }}>
+            {item.type}
+          </RegularTextCB>
+        <RegularTextCB
+          style={{
+            color: Colors.coolGrey,
+          }}>
+          {item.desc}
+        </RegularTextCB>
+        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconLocationPin}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              marginStart: 5,
+            }}>
+            {item.location}
+          </RegularTextCB>
+        </View>
+        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center',}}>
+          <Image
+            source={Images.iconStopWatch}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <View style={{flexDirection: 'row', marginStart: 5, alignItems: 'center', flex: 1, justifyContent: 'space-between'}}>
+            <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+            }}>
+            {item.time}
+          </RegularTextCB>
+            <RegularTextCB
+            style={{
+              color: Colors.black
+            }}>
+            {'Contact >'}
+          </RegularTextCB>
+          </View>
+        </View>
       </View>
     );
   };
@@ -234,10 +247,10 @@ export default class VendorAllCategories extends Component {
           </View>
         <FlatList
           style={{marginTop: 10}}
-          data={this.bestEmployees}
+          data={this.categories}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
-          renderItem={this.renderBestEmployeesItem}
+          renderItem={this.renderSingleCategoriesItem}
           contentInset={{
             // for ios
             bottom: 100,
