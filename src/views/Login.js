@@ -14,6 +14,7 @@ import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Login extends Component {
   constructor(props) {
@@ -26,6 +27,10 @@ export default class Login extends Component {
       secureText: true,
       eyeIcon: 'eye-off',
     };
+  }
+
+  componentDidMount() {
+    this.getUserType()
   }
 
   toggleIsEnabled = () =>
@@ -47,6 +52,12 @@ export default class Login extends Component {
       this.setState({tickIcon: 'check'});
     }
   };
+
+  getUserType = async () => {
+    const value = await AsyncStorage.getItem('isVendor')
+    var data = JSON.parse(value)
+    console.log(data)
+  }
 
   render() {
     return (

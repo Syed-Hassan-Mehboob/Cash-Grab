@@ -19,16 +19,16 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import EditText from '../components/EditText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fall = new Animated.Value(1);
 const bs = React.createRef();
 
 export default class SignUp extends Component {
- isVendor = false
-
   constructor(props) {
     super(props);
     this.state = {
+      isVendor: false,
       avatar: '',
       fullName: '',
       service: '',
@@ -36,6 +36,19 @@ export default class SignUp extends Component {
       password: '',
       confirmPassword: '',
     };
+  }
+
+  componentDidMount() {
+    this.getUserType()
+  }
+
+  getUserType = async () => {
+    const value = await AsyncStorage.getItem('isVendor')
+    var data = JSON.parse(value)
+    console.log(data)
+    if(value !== null){
+      this.setState({ isVendor: data });
+    }
   }
 
   validateEmail = (text) => {
@@ -116,8 +129,7 @@ export default class SignUp extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        {this.isVendor = this.props.route.params.isVendor}
-        <Animated.View
+       <Animated.View
           style={{
             flex: 1,
             opacity: Animated.add(0.5, Animated.multiply(fall, 1.0)),
@@ -204,8 +216,8 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              {console.log('usVendor: '+ this.isVendor)}
-              {this.isVendor && <View style={[styles.textInputContainer, {marginTop: 15}]}>
+              {console.log('usVendor: '+ this.state.isVendor)}
+              {this.state.isVendor && <View style={[styles.textInputContainer, {marginTop: 15}]}>
                 <EditText
                   ref={'service'}
                   placeholder={'Select Service'}

@@ -293,31 +293,31 @@ export default class ViewVendorProfile extends React.Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginTop: 10,
+              marginTop: 5,
             }}>
             <Image
               source={Images.iconVerified}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
+              style={{height: 15, width: 15, resizeMode: 'contain'}}
             />
             <RegularTextCB
               style={{
                 color: Colors.turqoiseGreen,
-                fontSize: 16,
+                fontSize: 14,
                 marginStart: 5,
               }}>
               Verified
             </RegularTextCB>
           </View>
           <RegularTextCB
-            style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
+            style={{color: Colors.white, fontSize: 18, marginTop: 5}}>
             Damian Santosa
           </RegularTextCB>
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
-              fontSize: 18,
+              fontSize: 16,
               textAlign: 'center',
-              marginTop: 10,
+              marginTop: 5,
             }}>
             Hello there i am a professional car mechanic,{'\n'}I have 8 years of
             experience so feel free{'\n'}to contact me.
@@ -454,7 +454,7 @@ export default class ViewVendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10}}>
+                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
                       8 Years
                     </RegularTextCB>
                   </LinearGradient>
@@ -467,6 +467,7 @@ export default class ViewVendorProfile extends React.Component {
                         borderRadius: 20,
                         width: '25%',
                         alignItems: 'center',
+                        justifyContent: 'center',
                       },
                     ]}>
                     <Image
@@ -478,7 +479,7 @@ export default class ViewVendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10}}>
+                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
                       4.9 Rating
                     </RegularTextCB>
                   </LinearGradient>
@@ -502,7 +503,7 @@ export default class ViewVendorProfile extends React.Component {
                         resizeMode: 'contain',
                       }}
                     />
-                    <RegularTextCB style={{color: Colors.white, marginTop: 10}}>
+                    <RegularTextCB style={{color: Colors.white, marginTop: 10, textAlign: 'center', fontSize: 12}}>
                       350 Client
                     </RegularTextCB>
                   </LinearGradient>

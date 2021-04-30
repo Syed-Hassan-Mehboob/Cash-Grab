@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   Image,
@@ -23,6 +24,7 @@ export default class CreateAccount extends React.Component {
   };
 
   openSignUp(isVendor) {
+    AsyncStorage.setItem('isVendor', JSON.stringify(isVendor));
     setTimeout(() => {
       this.props.navigation.navigate(Constants.signUp, {
         isVendor: isVendor,

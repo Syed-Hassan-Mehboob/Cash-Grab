@@ -14,6 +14,7 @@ import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -37,7 +38,9 @@ export default class DrawerScreen extends Component {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "Yes", onPress: () => this.props.navigation.dispatch(resetAction) }
+        { text: "Yes", onPress: () => {
+          AsyncStorage.removeItem('isVendor')
+          this.props.navigation.dispatch(resetAction)} }
       ],
       { cancelable: false }
     );

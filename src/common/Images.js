@@ -75,6 +75,8 @@ const Images = {
   iconDrawerSettings: require('../assets/icondrawersettings.png'),
   iconDrawerSupport: require('../assets/icondrawersupport.png'),
   iconDrawerTermsAndCond: require('../assets/icondrawertermsconditions.png'),
+  iconLocationPin: require('../assets/iconlocationpin.png'),
+  iconStopWatch: require('../assets/iconstopwatch.png'),
 };
 
 export default Images;
