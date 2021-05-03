@@ -20,6 +20,8 @@ import TermsAndConditions from '../TermsAndConditions';
 import Support from '../Support';
 import ChatListing from '../ChatListing';
 import Chat from '../Chat';
+import Faq from '../Faq';
+import DateTimeSlots from '../DateTimeSlots';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -50,10 +52,15 @@ const HomeNavigator = () => {
         component={ViewVendorProfile}
       />
       <HomeStack.Screen
+        name={Constants.dateTimeSlots}
+        component={DateTimeSlots}
+      />
+      <HomeStack.Screen
         name={Constants.termsAndConditionsScreen}
         component={TermsAndConditions}
       />
       <HomeStack.Screen name={Constants.support} component={Support} />
+      <HomeStack.Screen name={Constants.faq} component={Faq} />
     </HomeStack.Navigator>
   );
 };

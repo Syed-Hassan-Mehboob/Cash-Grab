@@ -146,9 +146,7 @@ export default class DrawerScreen extends Component {
                   padding: 15,
                 }}
                 onPress={() => {
-                  this.props.navigation.navigate(
-                    Constants.termsAndConditionsScreen,
-                  );
+                  this.props.navigation.navigate(Constants.faq);
                 }}>
                 <Image
                   source={Images.iconDrawerFaq}

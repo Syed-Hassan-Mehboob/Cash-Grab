@@ -19,6 +19,7 @@ import ViewJob from '../vendor/ViewJob';
 import Support from '../Support';
 import ChatListing from '../ChatListing';
 import Chat from '../Chat';
+import Faq from '../Faq';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -48,6 +49,7 @@ const HomeNavigator = () => {
         name={Constants.termsAndConditionsScreen}
         component={TermsAndConditions}
       />
+      <HomeStack.Screen name={Constants.faq} component={Faq} />
       <HomeStack.Screen name={Constants.support} component={Support} />
     </HomeStack.Navigator>
   );

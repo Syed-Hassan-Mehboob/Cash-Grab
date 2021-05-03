@@ -83,6 +83,11 @@ const Images = {
   iconCamera: require('../assets/iconcamera.png'),
   iconAudioCall: require('../assets/iconaudiocall.png'),
   iconVideoCall: require('../assets/iconvideocall.png'),
+  iconArrowDown: require('../assets/arrowdown.png'),
+  iconDash: require('../assets/dash.png'),
+  iconStopWatchGrey: require('../assets/iconstopwatchgrey.png'),
+  iconCalendar: require('../assets/iconcalendar.png'),
+  sliderThumb: require('../assets/sliderthumb.png'),
 };
 
 export default Images;

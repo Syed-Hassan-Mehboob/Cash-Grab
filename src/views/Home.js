@@ -128,7 +128,7 @@ export default class Home extends Component {
 
   openDrawer = () => {
     this.props.navigation.openDrawer();
-}
+  };
 
   constructor(props) {
     super(props);
@@ -451,7 +451,7 @@ export default class Home extends Component {
               <TouchableOpacity
                 onPress={() => {
                   // this.props.navigation.navigate(Constants.filter);
-                  this.openDrawer()
+                  this.openDrawer();
                 }}
                 style={{
                   position: 'absolute',
@@ -592,8 +592,7 @@ export default class Home extends Component {
             elevation: 10,
           }}
           onPress={() => {
-            // bs.current.snapTo(0);
-            this.props.navigation.navigate(Constants.bookingConfirmed);
+            bs.current.snapTo(0);
           }}>
           <RegularTextCB style={{color: Colors.white}}>
             Quick Service

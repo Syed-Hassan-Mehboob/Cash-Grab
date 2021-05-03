@@ -22,6 +22,8 @@ const Constants = {
   chatListing: 'ChatListing',
   vendorSingleCategory: 'VendorSingleCategory',
   viewJob: 'ViewJob',
+  faq: 'Faq',
+  dateTimeSlots: 'DateTimeSlots',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -37,7 +39,6 @@ const Constants = {
   drawerNavigator: 'DrawerNavigator',
   support: 'Support',
   termsAndConditionsScreen: 'TermsAndConditions',
-  faqs: "FAQ's",
   logOut: 'Log Out',
 };
 

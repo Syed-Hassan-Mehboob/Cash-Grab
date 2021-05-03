@@ -127,7 +127,7 @@ export default class ViewVendorProfile extends React.Component {
 
   renderServicesItem = ({item}) => {
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.card,
           {
@@ -139,7 +139,8 @@ export default class ViewVendorProfile extends React.Component {
             backgroundColor: Colors.white,
             marginBottom: 20,
           },
-        ]}>
+        ]}
+        onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
         <Image
           source={item.image}
           style={{height: 90, width: 90, borderRadius: 15}}
@@ -166,7 +167,7 @@ export default class ViewVendorProfile extends React.Component {
             {item.desc}
           </RegularTextCB>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
