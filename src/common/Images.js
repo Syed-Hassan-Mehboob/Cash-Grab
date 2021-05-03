@@ -88,6 +88,11 @@ const Images = {
   iconStopWatchGrey: require('../assets/iconstopwatchgrey.png'),
   iconCalendar: require('../assets/iconcalendar.png'),
   sliderThumb: require('../assets/sliderthumb.png'),
+  loginOrJoinBgWeb: require('../assets/loginorjoinbgweb.png'),
+  loginBgWeb: require('../assets/loginbgweb.png'),
+  splashBgWeb: require('../assets/splashbgweb.png'),
+  cashGrabLogoNew: require('../assets/cashgrablogonew.png'),
+  cashGrabLogoNew2: require('../assets/cashgrablogonew2.png'),
 };
 
 export default Images;

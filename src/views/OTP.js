@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Images from '../common/Images';
@@ -24,62 +25,72 @@ export default class OTP extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.goBack();
-          }}
-          style={{marginStart: 15, alignSelf: 'flex-start'}}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
-        </TouchableOpacity>
-        <View style={{alignItems: 'center'}}>
-          <Image
-            source={Images.logoCashGrab}
-            style={{
-              height: 250,
-              width: 250,
+      <ImageBackground
+        source={Images.loginBgWeb}
+        style={[styles.container, {width: '100%'}]}>
+        <KeyboardAvoidingView style={{flex: 1}}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.goBack();
             }}
-          />
-          <BoldTextCB
-            style={{
-              fontSize: 28,
-              color: Colors.black,
-              marginTop: -50,
-            }}>
-            Verification
-          </BoldTextCB>
-          <RegularTextCB
-            style={{fontSize: 18, color: Colors.coolGrey, textAlign: 'center'}}>
-            Enter your verification code that we sent{'\n'}you through your
-            email or phone number
-          </RegularTextCB>
-        </View>
-        <View style={[styles.childContainer]}>
-          <View style={[styles.textInputContainer]}>
-            <OTPInputView
-              style={{width: '90%', height: 75, marginTop: 50}}
-              pinCount={4}
-              code={this.state.code}
-              onCodeChanged={(code) => {
-                this.setState({code});
-              }}
-              autoFocusOnLoad
-              codeInputFieldStyle={styles.card}
-              codeInputHighlightStyle={styles.card}
-              onCodeFilled={(code) => {
-                console.log(`Code is ${code}, you are good to go!`);
+            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            <Image source={Images.arrowBack} style={styles.iconBack} />
+          </TouchableOpacity>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              source={Images.cashGrabLogoNew2}
+              style={{
+                height: 70,
+                width: '60%',
+                resizeMode: 'contain',
+                marginTop: 100,
               }}
             />
+            <BoldTextCB
+              style={{
+                fontSize: 28,
+                color: Colors.black,
+                marginTop: 50,
+              }}>
+              Verification
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                fontSize: 18,
+                color: Colors.coolGrey,
+                textAlign: 'center',
+              }}>
+              Enter your verification code that we sent{'\n'}you through your
+              email or phone number
+            </RegularTextCB>
           </View>
-        </View>
-        <View style={{marginVertical: 50, marginHorizontal: 15}}>
-          <ButtonRadius10
-            label="VERIFY"
-            bgColor={Colors.sickGreen}
-            onPress={() => this.props.navigation.navigate(Constants.login)}
-          />
-        </View>
-      </KeyboardAvoidingView>
+          <View style={[styles.childContainer]}>
+            <View style={[styles.textInputContainer]}>
+              <OTPInputView
+                style={{width: '90%', height: 75, marginTop: 50}}
+                pinCount={4}
+                code={this.state.code}
+                onCodeChanged={(code) => {
+                  this.setState({code});
+                }}
+                autoFocusOnLoad
+                codeInputFieldStyle={styles.card}
+                codeInputHighlightStyle={styles.card}
+                onCodeFilled={(code) => {
+                  console.log(`Code is ${code}, you are good to go!`);
+                }}
+              />
+            </View>
+          </View>
+          <View style={{marginVertical: 50, marginHorizontal: 15}}>
+            <ButtonRadius10
+              label="VERIFY"
+              bgColor={Colors.sickGreen}
+              onPress={() => this.props.navigation.navigate(Constants.login)}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     );
   }
 }

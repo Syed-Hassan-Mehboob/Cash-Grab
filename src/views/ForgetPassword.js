@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
@@ -33,57 +34,67 @@ export default class ForgetPassword extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.goBack();
-          }}
-          style={{marginStart: 15, alignSelf: 'flex-start'}}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
-        </TouchableOpacity>
-        <View style={{alignItems: 'center'}}>
-          <Image
-            source={Images.logoCashGrab}
-            style={{
-              height: 250,
-              width: 250,
+      <ImageBackground
+        source={Images.loginBgWeb}
+        style={[styles.container, {width: '100%'}]}>
+        <KeyboardAvoidingView style={{flex: 1}}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.goBack();
             }}
-          />
-          <BoldTextCB
-            style={{
-              fontSize: 28,
-              color: Colors.black,
-              marginTop: -50,
-            }}>
-            Forgot Password
-          </BoldTextCB>
-          <RegularTextCB
-            style={{fontSize: 18, color: Colors.coolGrey, textAlign: 'center'}}>
-            Enter your email & we will send you a {'\n'} verification code
-          </RegularTextCB>
-        </View>
-        <View style={[styles.childContainer]}>
-          <View style={[styles.textInputContainer, {marginTop: 50}]}>
-            <EditText
-              ref={'email'}
-              keyboardType="email-address"
-              placeholder={'Email Address'}
-              value={this.state.email}
-              onChangeText={(text) => {
-                this.validateEmail(text);
+            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            <Image source={Images.arrowBack} style={styles.iconBack} />
+          </TouchableOpacity>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              source={Images.cashGrabLogoNew2}
+              style={{
+                height: 70,
+                width: '60%',
+                resizeMode: 'contain',
+                marginTop: 100,
               }}
-              style={[styles.textInput]}
+            />
+            <BoldTextCB
+              style={{
+                fontSize: 28,
+                color: Colors.black,
+                marginTop: 50,
+              }}>
+              Forgot Password
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                fontSize: 18,
+                color: Colors.coolGrey,
+                textAlign: 'center',
+              }}>
+              Enter your email & we will send you a {'\n'} verification code
+            </RegularTextCB>
+          </View>
+          <View style={[styles.childContainer]}>
+            <View style={[styles.textInputContainer, {marginTop: 50}]}>
+              <EditText
+                ref={'email'}
+                keyboardType="email-address"
+                placeholder={'Email Address'}
+                value={this.state.email}
+                onChangeText={(text) => {
+                  this.validateEmail(text);
+                }}
+                style={[styles.textInput]}
+              />
+            </View>
+          </View>
+          <View style={{marginVertical: 30, marginHorizontal: 15}}>
+            <ButtonRadius10
+              label="CONTINUE"
+              bgColor={Colors.sickGreen}
+              onPress={() => this.props.navigation.navigate(Constants.otp)}
             />
           </View>
-        </View>
-        <View style={{marginVertical: 30, marginHorizontal: 15}}>
-          <ButtonRadius10
-            label="CONTINUE"
-            bgColor={Colors.sickGreen}
-            onPress={() => this.props.navigation.navigate(Constants.otp)}
-          />
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     );
   }
 }

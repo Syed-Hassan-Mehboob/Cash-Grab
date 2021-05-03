@@ -5,6 +5,7 @@ const Constants = {
   fontBold: 'JostBold',
   /* * Screens * */
   splash: 'Splash',
+  loginOrJoin: 'LoinOrJoin',
   login: 'Login',
   createAccount: 'CreateAccount',
   signUp: 'SignUp',

@@ -17,6 +17,7 @@ import EditProfile from '../views/EditProfile';
 import Constants from '../common/Constants';
 import OTP from '../views/OTP';
 import DrawerNavigator from '../views/navigators/DrawerNavigator';
+import LoginOrJoin from '../views/LoginOrJoin';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ const AppStack = () => {
         ...TransitionPresets.SlideFromRightIOS,
       }}>
       <Stack.Screen name={Constants.splash} component={Splash} />
+      <Stack.Screen name={Constants.loginOrJoin} component={LoginOrJoin} />
       <Stack.Screen name={Constants.login} component={Login} />
       <Stack.Screen name={Constants.createAccount} component={CreateAccount} />
       <Stack.Screen name={Constants.signUp} component={SignUp} />
@@ -55,7 +57,10 @@ const AppStack = () => {
       <Stack.Screen name="BestEmployees" component={BestEmployees} />
       <Stack.Screen name="EmergencyBooking" component={EmergencyBooking} />
       <Stack.Screen name="AdvanceBooking" component={AdvanceBooking} />
-      <Stack.Screen name={Constants.drawerNavigator} component={DrawerNavigator} />
+      <Stack.Screen
+        name={Constants.drawerNavigator}
+        component={DrawerNavigator}
+      />
       <Stack.Screen name="ConfirmBooking" component={ConfirmBooking} />
     </Stack.Navigator>
   );

@@ -2,10 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   Image,
-  SafeAreaView,
+  KeyboardAvoidingView,
   StyleSheet,
   TouchableOpacity,
   View,
+  ImageBackground,
 } from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
@@ -34,67 +35,82 @@ export default class CreateAccount extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.main}>
-        <Image source={Images.logoCashGrab} style={{height: 250, width: 250}} />
-        <BoldTextCB style={{fontSize: 28, color: Colors.black}}>
-          Create an account
-        </BoldTextCB>
-        <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-          Which type of account would you like?
-        </RegularTextCB>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({
-              isUserSelected: true,
-              isVendorSelected: false,
-            });
-            this.openSignUp(false);
-          }}
-          style={[
-            styles.card,
-            {
-              marginTop: 20,
-              paddingHorizontal: 25,
-              borderWidth: this.state.isUserSelected ? 2 : 0,
-            },
-          ]}>
-          <Image source={Images.becomeAUser} style={styles.circularImage} />
-          <View style={{marginHorizontal: 15}}>
-            <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-              Become a user
-            </RegularTextCB>
-            <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-              Lorem ipsum eluit fold sed, {'\n'}fludin gem
-            </RegularTextCB>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({
-              isUserSelected: false,
-              isVendorSelected: true,
-            });
-            this.openSignUp(true);
-          }}
-          style={[
-            styles.card,
-            {
-              marginTop: 20,
-              paddingHorizontal: 25,
-              borderWidth: this.state.isVendorSelected ? 2 : 0,
-            },
-          ]}>
-          <Image source={Images.becomeAVendor} style={styles.circularImage} />
-          <View style={{marginHorizontal: 15}}>
-            <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-              Become a vendor
-            </RegularTextCB>
-            <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-              Lorem ipsum eluit fold sed, {'\n'}fludin gem
-            </RegularTextCB>
-          </View>
-        </TouchableOpacity>
-      </SafeAreaView>
+      <ImageBackground
+        source={Images.loginBgWeb}
+        style={[styles.main, {width: '100%'}]}>
+        <KeyboardAvoidingView style={{flex: 1, alignItems: 'center'}}>
+          <Image
+            source={Images.cashGrabLogoNew2}
+            style={{
+              height: 70,
+              width: '60%',
+              resizeMode: 'contain',
+              marginTop: 100,
+            }}
+          />
+          <BoldTextCB
+            style={{fontSize: 28, color: Colors.black, marginTop: 50}}>
+            Create an account
+          </BoldTextCB>
+          <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+            Which type of account would you like?
+          </RegularTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({
+                isUserSelected: true,
+                isVendorSelected: false,
+              });
+              this.openSignUp(false);
+            }}
+            style={[
+              styles.card,
+              {
+                height: 120,
+                marginTop: 20,
+                paddingHorizontal: 25,
+                borderWidth: this.state.isUserSelected ? 2 : 0,
+              },
+            ]}>
+            <Image source={Images.becomeAUser} style={styles.circularImage} />
+            <View style={{marginHorizontal: 15}}>
+              <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+                Become a user
+              </RegularTextCB>
+              <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+                Lorem ipsum eluit fold sed, {'\n'}fludin gem
+              </RegularTextCB>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({
+                isUserSelected: false,
+                isVendorSelected: true,
+              });
+              this.openSignUp(true);
+            }}
+            style={[
+              styles.card,
+              {
+                height: 120,
+                marginTop: 20,
+                paddingHorizontal: 25,
+                borderWidth: this.state.isVendorSelected ? 2 : 0,
+              },
+            ]}>
+            <Image source={Images.becomeAVendor} style={styles.circularImage} />
+            <View style={{marginHorizontal: 15}}>
+              <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+                Become a vendor
+              </RegularTextCB>
+              <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+                Lorem ipsum eluit fold sed, {'\n'}fludin gem
+              </RegularTextCB>
+            </View>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     );
   }
 }
@@ -103,7 +119,6 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'center',
   },
   card: {
     backgroundColor: '#fff',
