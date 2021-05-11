@@ -22,6 +22,7 @@ import ChatListing from '../ChatListing';
 import Chat from '../Chat';
 import Faq from '../Faq';
 import DateTimeSlots from '../DateTimeSlots';
+import Search from '../Search';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -37,6 +38,7 @@ const HomeNavigator = () => {
         ...TransitionPresets.SlideFromRightIOS,
       }}>
       <HomeStack.Screen name={Constants.home} component={Home} />
+      <HomeStack.Screen name={Constants.search} component={Search} />
       <HomeStack.Screen
         name={Constants.allCategories}
         component={AllCategories}

@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -17,6 +18,7 @@ import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import Constants from '../common/Constants';
 
+const {height, width} = Dimensions.get('window');
 const bs = React.createRef();
 const fall = new Animated.Value(1);
 
@@ -284,11 +286,14 @@ export default class Home extends Component {
 
   renderVendorsAroundYouItem = ({item}) => {
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.card,
           {padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
-        ]}>
+        ]}
+        onPress={() =>
+          this.props.navigation.navigate(Constants.viewVendorProfile)
+        }>
         <View
           style={{
             flexDirection: 'row',
@@ -297,20 +302,15 @@ export default class Home extends Component {
           <View style={styles.circleCard}>
             <Image source={item.image} style={styles.iconUser} />
           </View>
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.navigate(Constants.viewVendorProfile)
-            }>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-                textDecorationLine: 'underline',
-                marginStart: 5,
-                fontSize: 14,
-              }}>
-              View Profile
-            </RegularTextCB>
-          </TouchableOpacity>
+          <RegularTextCB
+            style={{
+              color: Colors.black,
+              textDecorationLine: 'underline',
+              marginStart: 5,
+              fontSize: 14,
+            }}>
+            View Profile
+          </RegularTextCB>
         </View>
         <RegularTextCB
           style={{
@@ -348,13 +348,13 @@ export default class Home extends Component {
           }}>
           {item.ratings}
         </RegularTextCB>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   renderUrgentServicesItem = ({item}) => {
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.card,
           {
@@ -363,7 +363,10 @@ export default class Home extends Component {
             marginTop: 5,
             marginBottom: 40,
           },
-        ]}>
+        ]}
+        onPress={() =>
+          this.props.navigation.navigate(Constants.viewVendorProfile)
+        }>
         <View
           style={{
             flexDirection: 'row',
@@ -372,20 +375,15 @@ export default class Home extends Component {
           <View style={styles.circleCard}>
             <Image source={item.image} style={styles.iconUser} />
           </View>
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.navigate(Constants.viewVendorProfile)
-            }>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-                textDecorationLine: 'underline',
-                marginStart: 5,
-                fontSize: 14,
-              }}>
-              View Profile
-            </RegularTextCB>
-          </TouchableOpacity>
+          <RegularTextCB
+            style={{
+              color: Colors.black,
+              textDecorationLine: 'underline',
+              marginStart: 5,
+              fontSize: 14,
+            }}>
+            View Profile
+          </RegularTextCB>
         </View>
         <RegularTextCB
           style={{
@@ -412,7 +410,7 @@ export default class Home extends Component {
             alignSelf: 'center',
           }}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -450,8 +448,7 @@ export default class Home extends Component {
               </RegularTextCB>
               <TouchableOpacity
                 onPress={() => {
-                  // this.props.navigation.navigate(Constants.filter);
-                  this.openDrawer();
+                  this.props.navigation.navigate(Constants.filter);
                 }}
                 style={{
                   position: 'absolute',
@@ -474,7 +471,8 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-              }}>
+              }}
+              onPress={() => this.props.navigation.navigate(Constants.search)}>
               <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
                 Search Service...
               </RegularTextCB>
@@ -600,7 +598,7 @@ export default class Home extends Component {
         </TouchableOpacity>
         <BottomSheet
           ref={bs}
-          snapPoints={[550, 0]}
+          snapPoints={[height / 1.15, 0]}
           initialSnap={1}
           callbackNode={fall}
           renderContent={this.renderBottomSheetContent}

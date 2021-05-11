@@ -18,89 +18,97 @@ export default class VendorAllCategories extends Component {
       id: '1',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '2',
       image: Images.emp2,
       title: 'Jay Almond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '3',
       image: Images.emp3,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '4',
       image: Images.emp4,
       title: 'Jay Almond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '5',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '6',
       image: Images.emp3,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '7',
       image: Images.emp4,
       title: 'Jay Almond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
     {
       id: '8',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc:
+        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
       location: '111, NYC Street, NY 121',
-      time: '12:00-3:00'
+      time: '12:00-3:00',
     },
   ];
 
@@ -124,57 +132,71 @@ export default class VendorAllCategories extends Component {
             <Image source={item.image} style={styles.iconUser} />
           </View>
           <View style={{marginStart: 10}}>
-          <RegularTextCB
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 16,
+              }}>
+              {item.title}
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{height: 15, width: 15, resizeMode: 'contain'}}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+                  fontSize: 12,
+                  marginStart: 5,
+                }}>
+                Verified
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
+        <View
           style={{
-            color: Colors.black,
-            fontSize: 16,
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}>
-          {item.title}
-        </RegularTextCB>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-          <Image
-            source={Images.iconVerified}
-            style={{height: 15, width: 15, resizeMode: 'contain'}}
-          />
           <RegularTextCB
             style={{
-              color: Colors.turqoiseGreen,
-              fontSize: 12,
-              marginStart: 5,
+              color: Colors.black,
+              fontSize: 16,
             }}>
-            Verified
+            {item.requirement}
           </RegularTextCB>
-        </View>
-        </View>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between'}}>
-           <RegularTextCB
-          style={{
-            color: Colors.black,
-            fontSize: 16
-          }}>
-          {item.requirement}
-        </RegularTextCB>
-        <LightTextCB
-          style={{
-            color: Colors.black,
-            fontSize: 12
-          }}>{item.pricing}</LightTextCB>
+          <LightTextCB
+            style={{
+              color: Colors.black,
+              fontSize: 12,
+            }}>
+            {item.pricing}
+          </LightTextCB>
         </View>
         <RegularTextCB
-            style={{
-              color: Colors.sickGreen,
-              fontSize: 12,
-            }}>
-            {item.type}
-          </RegularTextCB>
+          style={{
+            color: Colors.sickGreen,
+            fontSize: 12,
+          }}>
+          {item.type}
+        </RegularTextCB>
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
           }}>
           {item.desc}
         </RegularTextCB>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
           <Image
             source={Images.iconLocationPin}
             style={{height: 17, width: 17, resizeMode: 'contain'}}
@@ -187,24 +209,32 @@ export default class VendorAllCategories extends Component {
             {item.location}
           </RegularTextCB>
         </View>
-        <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center',}}>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
           <Image
             source={Images.iconStopWatch}
             style={{height: 17, width: 17, resizeMode: 'contain'}}
           />
-          <View style={{flexDirection: 'row', marginStart: 5, alignItems: 'center', flex: 1, justifyContent: 'space-between'}}>
-            <RegularTextCB
+          <View
             style={{
-              color: Colors.coolGrey,
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
             }}>
-            {item.time}
-          </RegularTextCB>
             <RegularTextCB
-            style={{
-              color: Colors.black
-            }}>
-            {'Contact >'}
-          </RegularTextCB>
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {item.time}
+            </RegularTextCB>
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+              }}>
+              {'Contact >'}
+            </RegularTextCB>
           </View>
         </View>
       </View>
@@ -219,32 +249,32 @@ export default class VendorAllCategories extends Component {
     return (
       <View style={[styles.container]}>
         <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+          }}>
+          <TouchableOpacity
+            style={{position: 'absolute', left: 10}}
+            onPress={() => {
+              this.props.navigation.goBack();
             }}>
-            <TouchableOpacity
-              style={{position: 'absolute', left: 10}}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}>
-              <Image
-                source={Images.arrowBack}
-                style={[styles.iconBack, {tintColor: Colors.black}]}
-              />
-            </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
             <Image
-                source={this.props.route.params.item.image}
-                style={{height: 50, width: 50}}
-              />
+              source={Images.arrowBack}
+              style={[styles.iconBack, {tintColor: Colors.black}]}
+            />
+          </TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={this.props.route.params.item.image}
+              style={{height: 50, width: 50}}
+            />
             <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
-{this.props.route.params.item.title}
+              {this.props.route.params.item.title}
             </RegularTextCB>
-            </View>
           </View>
+        </View>
         <FlatList
           style={{marginTop: 10}}
           data={this.categories}

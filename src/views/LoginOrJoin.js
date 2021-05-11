@@ -12,6 +12,10 @@ export default class LoginOrJoin extends Component {
     super(props);
   }
 
+  openNewScreen(newScreen) {
+    this.props.navigation.replace(newScreen);
+  }
+
   render() {
     return (
       <LinearGradient
@@ -34,7 +38,7 @@ export default class LoginOrJoin extends Component {
             <View style={{width: '90%', marginTop: 60}}>
               <ButtonRadius10
                 onPress={() => {
-                  this.props.navigation.replace(Constants.login);
+                  this.openNewScreen(Constants.login);
                 }}
                 label="LOG IN"
                 bgColor={Colors.white}
@@ -44,10 +48,10 @@ export default class LoginOrJoin extends Component {
             <View style={{width: '90%', marginTop: 20}}>
               <ButtonRadius10
                 onPress={() => {
-                  this.props.navigation.replace(Constants.createAccount);
+                  this.openNewScreen(Constants.createAccount);
                 }}
                 label="SIGN UP"
-                bgColor={Colors.sickGreen}
+                bgColor={Colors.lightYellowGreen}
                 textColor={Colors.black}
               />
             </View>
