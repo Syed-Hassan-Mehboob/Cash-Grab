@@ -26,6 +26,7 @@ const Constants = {
   faq: 'Faq',
   dateTimeSlots: 'DateTimeSlots',
   search: 'Search',
+  confirmPayment: 'ConfirmPayment',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',

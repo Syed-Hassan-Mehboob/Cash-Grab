@@ -263,6 +263,10 @@ export default class VendorProfile extends React.Component {
             height: height / 2.15,
             backgroundColor: Colors.navy,
             alignItems: 'center',
+            position: 'absolute',
+            top: 0,
+            start: 0,
+            end: 0,
           }}>
           <View
             style={{
@@ -300,46 +304,48 @@ export default class VendorProfile extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.circleCard}>
-            <Image source={Images.emp1} style={styles.iconUser} />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 5,
-            }}>
-            <Image
-              source={Images.iconVerified}
-              style={{height: 15, width: 15, resizeMode: 'contain'}}
-            />
-            <RegularTextCB
-              style={{
-                color: Colors.turqoiseGreen,
-                fontSize: 14,
-                marginStart: 5,
-              }}>
-              Verified
-            </RegularTextCB>
-          </View>
-          <RegularTextCB
-            style={{color: Colors.white, fontSize: 18, marginTop: 5}}>
-            Damian Santosa
-          </RegularTextCB>
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              fontSize: 16,
-              textAlign: 'center',
-              marginTop: 5,
-            }}>
-            Hello there i am a professional car mechanic,{'\n'}I have 8 years of
-            experience so feel free{'\n'}to contact me.
-          </RegularTextCB>
         </View>
         <ScrollView
-          contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}
-          style={{marginTop: -40}}>
+          contentContainerStyle={{flexGrow: 1}}
+          style={{marginTop: 75}}>
+          <View style={{alignItems: 'center'}}>
+            <View style={styles.circleCard}>
+              <Image source={Images.emp1} style={styles.iconUser} />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 5,
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{height: 15, width: 15, resizeMode: 'contain'}}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+                  fontSize: 14,
+                  marginStart: 5,
+                }}>
+                Verified
+              </RegularTextCB>
+            </View>
+            <RegularTextCB
+              style={{color: Colors.white, fontSize: 18, marginTop: 5}}>
+              Damian Santosa
+            </RegularTextCB>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                textAlign: 'center',
+                marginTop: 5,
+              }}>
+              Hello there i am a professional car mechanic,{'\n'}I have 8 years
+              of experience so feel free{'\n'}to contact me.
+            </RegularTextCB>
+          </View>
           <View
             style={[
               styles.card,

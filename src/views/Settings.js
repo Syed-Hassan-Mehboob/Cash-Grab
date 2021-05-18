@@ -9,6 +9,10 @@ export default class Settings extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.navigation.openDrawer();
+  }
+
   state = {
     isGeneralSettingsSelected: false,
     isAccountSettingsSelected: false,

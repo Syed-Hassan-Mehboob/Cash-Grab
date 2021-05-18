@@ -389,7 +389,7 @@ export default class DateTimeSlots extends Component {
             label="NEXT"
             bgColor={Colors.sickGreen}
             onPress={() =>
-              this.props.navigation.navigate(Constants.bookingConfirmed)
+              this.props.navigation.navigate(Constants.confirmPayment)
             }
           />
         </View>

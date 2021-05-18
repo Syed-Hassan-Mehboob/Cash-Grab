@@ -28,7 +28,7 @@ export default class DrawerScreen extends Component {
 
   logout() {
     Alert.alert(
-      'Dynout',
+      'CashGrab',
       'Are you sure you want to logout?',
       [
         {

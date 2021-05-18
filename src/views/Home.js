@@ -359,6 +359,7 @@ export default class Home extends Component {
           styles.card,
           {
             padding: 10,
+            paddingBottom: 30,
             marginHorizontal: 15,
             marginTop: 5,
             marginBottom: 40,
@@ -432,20 +433,27 @@ export default class Home extends Component {
                 paddingHorizontal: 20,
                 marginTop: 20,
               }}>
-              <View style={styles.circleCard}>
-                <Image source={Images.emp1} style={styles.iconUser} />
-              </View>
-              <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
-                Welcome,
-              </RegularTextCB>
-              <RegularTextCB
-                style={{
-                  fontSize: 16,
-                  marginStart: 3,
-                  color: Colors.sickGreen,
-                }}>
-                Damien
-              </RegularTextCB>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={() =>
+                  this.props.navigation.navigate(Constants.profile)
+                }>
+                <View style={styles.circleCard}>
+                  <Image source={Images.emp1} style={styles.iconUser} />
+                </View>
+                <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
+                  Welcome,
+                </RegularTextCB>
+                <RegularTextCB
+                  style={{
+                    fontSize: 16,
+                    marginStart: 3,
+                    color: Colors.sickGreen,
+                  }}>
+                  Damien
+                </RegularTextCB>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);

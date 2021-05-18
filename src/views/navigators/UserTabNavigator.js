@@ -23,6 +23,7 @@ import Chat from '../Chat';
 import Faq from '../Faq';
 import DateTimeSlots from '../DateTimeSlots';
 import Search from '../Search';
+import ConfirmPayment from '../ConfirmPayment';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -52,6 +53,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
+      />
+      <HomeStack.Screen
+        name={Constants.confirmPayment}
+        component={ConfirmPayment}
       />
       <HomeStack.Screen
         name={Constants.dateTimeSlots}
