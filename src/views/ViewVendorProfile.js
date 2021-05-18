@@ -571,8 +571,8 @@ export default class ViewVendorProfile extends React.Component {
                   />
                   <TouchableOpacity onPress={() => {}}>
                     <Image
-                      source={Images.iconpencil}
-                      style={{height: 25, width: 25}}
+                      source={Images.iconSend}
+                      style={{height: 40, width: 40, resizeMode: 'contain'}}
                     />
                   </TouchableOpacity>
                 </View>
