@@ -44,11 +44,11 @@ export default class Home extends Component {
       image: Images.iconAutomobile,
       title: 'Automobile',
     },
-    {
-      id: '5',
-      image: Images.iconMechanic,
-      title: 'Mechanic',
-    },
+    // {
+    //   id: '5',
+    //   image: Images.iconMechanic,
+    //   title: 'Mechanic',
+    // },
   ];
 
   vendors = [
@@ -273,7 +273,11 @@ export default class Home extends Component {
   renderCategoryItem = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Nearby')}
+        onPress={() =>
+          this.props.navigation.navigate(Constants.singleCategory, {
+            item: item,
+          })
+        }
         style={{alignItems: 'center'}}>
         <Image style={styles.circle} source={item.image} />
         <RegularTextCB
@@ -287,6 +291,7 @@ export default class Home extends Component {
   renderVendorsAroundYouItem = ({item}) => {
     return (
       <TouchableOpacity
+        activeOpacity={0.8}
         style={[
           styles.card,
           {padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
@@ -355,6 +360,7 @@ export default class Home extends Component {
   renderUrgentServicesItem = ({item}) => {
     return (
       <TouchableOpacity
+        activeOpacity={0.8}
         style={[
           styles.card,
           {
@@ -606,7 +612,7 @@ export default class Home extends Component {
         </TouchableOpacity>
         <BottomSheet
           ref={bs}
-          snapPoints={[height / 1.15, 0]}
+          snapPoints={[height / 1.2, 0]}
           initialSnap={1}
           callbackNode={fall}
           renderContent={this.renderBottomSheetContent}

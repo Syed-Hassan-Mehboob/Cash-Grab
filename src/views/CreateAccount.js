@@ -66,19 +66,19 @@ export default class CreateAccount extends React.Component {
             style={[
               styles.card,
               {
-                height: 120,
+                paddingVertical: 15,
                 marginTop: 20,
-                paddingHorizontal: 25,
+                paddingHorizontal: 15,
                 borderWidth: this.state.isUserSelected ? 2 : 0,
               },
             ]}>
             <Image source={Images.becomeAUser} style={styles.circularImage} />
-            <View style={{marginHorizontal: 15}}>
+            <View style={{marginHorizontal: 10, flexShrink: 1}}>
               <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
                 Become a user
               </RegularTextCB>
-              <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-                Lorem ipsum eluit fold sed, {'\n'}fludin gem
+              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+                Lorem ipsum eluit fold sed, fludin gem
               </RegularTextCB>
             </View>
           </TouchableOpacity>
@@ -93,19 +93,19 @@ export default class CreateAccount extends React.Component {
             style={[
               styles.card,
               {
-                height: 120,
+                paddingVertical: 15,
                 marginTop: 20,
-                paddingHorizontal: 25,
+                paddingHorizontal: 15,
                 borderWidth: this.state.isVendorSelected ? 2 : 0,
               },
             ]}>
             <Image source={Images.becomeAVendor} style={styles.circularImage} />
-            <View style={{marginHorizontal: 15}}>
+            <View style={{marginHorizontal: 10, flexShrink: 1}}>
               <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
                 Become a vendor
               </RegularTextCB>
-              <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-                Lorem ipsum eluit fold sed, {'\n'}fludin gem
+              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+                Lorem ipsum eluit fold sed, fludin gem
               </RegularTextCB>
             </View>
           </TouchableOpacity>

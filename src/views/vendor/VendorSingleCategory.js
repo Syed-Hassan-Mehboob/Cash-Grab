@@ -12,7 +12,7 @@ import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
 
-export default class VendorAllCategories extends Component {
+export default class VendorSingleCategory extends Component {
   categories = [
     {
       id: '1',

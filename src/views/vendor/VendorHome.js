@@ -43,11 +43,11 @@ export default class VendorHome extends Component {
       image: Images.iconAutomobile,
       title: 'Automobile',
     },
-    {
-      id: '5',
-      image: Images.iconMechanic,
-      title: 'Mechanic',
-    },
+    // {
+    //   id: '5',
+    //   image: Images.iconMechanic,
+    //   title: 'Mechanic',
+    // },
   ];
 
   jobs = [

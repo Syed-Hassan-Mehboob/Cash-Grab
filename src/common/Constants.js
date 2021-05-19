@@ -12,6 +12,7 @@ const Constants = {
   forgetPassword: 'ForgetPassword',
   otp: 'OTP',
   allCategories: 'AllCategories',
+  singleCategory: 'SingleCategory',
   vendorAllCategories: 'VendorAllCategories',
   advanceBooking: 'AdvanceBooking',
   bookingConfirmed: 'BookingConfirmed',
@@ -27,6 +28,7 @@ const Constants = {
   dateTimeSlots: 'DateTimeSlots',
   search: 'Search',
   confirmPayment: 'ConfirmPayment',
+  withDraw: 'WithDraw',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -34,6 +36,7 @@ const Constants = {
   nearby: 'Nearby',
   notifications: 'Notifications',
   plus: 'Plus',
+  dashboard: 'Dashboard',
   profile: 'Profile',
   vendorProfile: 'VendorProfile',
   more: 'More',

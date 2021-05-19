@@ -20,9 +20,11 @@ import Support from '../Support';
 import ChatListing from '../ChatListing';
 import Chat from '../Chat';
 import Faq from '../Faq';
+import WithDraw from '../vendor/WithDraw';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
+const DashboardStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 
@@ -51,7 +53,28 @@ const HomeNavigator = () => {
       />
       <HomeStack.Screen name={Constants.faq} component={Faq} />
       <HomeStack.Screen name={Constants.support} component={Support} />
+      <HomeStack.Screen
+        name={Constants.notifications}
+        component={Notifications}
+      />
+      <HomeStack.Screen name={Constants.settings} component={Settings} />
+      <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
+      <HomeStack.Screen name={Constants.chat} component={Chat} />
     </HomeStack.Navigator>
+  );
+};
+
+const DashboardNavigator = () => {
+  return (
+    <DashboardStack.Navigator
+      headerMode="none"
+      screenOptions={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}>
+      <DashboardStack.Screen name={Constants.dashboard} component={Dashboard} />
+      <DashboardStack.Screen name={Constants.withDraw} component={WithDraw} />
+      <DashboardStack.Screen name={Constants.viewJob} component={ViewJob} />
+    </DashboardStack.Navigator>
   );
 };
 
@@ -164,7 +187,7 @@ const Tabs = () => {
             </View>
           ),
         }}
-        component={Dashboard}
+        component={DashboardNavigator}
       />
       <Tab.Screen
         name={Constants.vendorProfile}
@@ -188,7 +211,13 @@ const Tabs = () => {
             />
           ),
         }}
-        component={SettingsNavigator}
+        component={Settings}
+        listeners={({navigation}) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.openDrawer();
+          },
+        })}
       />
     </Tab.Navigator>
   );

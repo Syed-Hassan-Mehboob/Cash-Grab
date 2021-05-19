@@ -13,6 +13,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import BoldTextCB from '../../components/BoldTextCB';
+import Constants from '../../common/Constants';
 
 export default class Dashboard extends Component {
   completedJobs = [
@@ -263,6 +264,16 @@ export default class Dashboard extends Component {
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
           <RegularTextCB style={{fontSize: 30}}>Dashboard</RegularTextCB>
+          <TouchableOpacity
+            style={{position: 'absolute', right: 10}}
+            onPress={() => {
+              this.props.navigation.navigate(Constants.withDraw);
+            }}>
+            <Image
+              source={Images.iconWithDraw}
+              style={{height: 40, width: 40}}
+            />
+          </TouchableOpacity>
         </View>
         <ScrollView>
           <View style={{marginTop: 10, marginHorizontal: 15}}>
@@ -277,7 +288,9 @@ export default class Dashboard extends Component {
               <ButtonRadius10
                 label="1 Job available in your location"
                 bgColor={Colors.sickGreen}
-                onPress={() => {}}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.viewJob);
+                }}
               />
             </View>
           </View>

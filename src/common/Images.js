@@ -77,6 +77,7 @@ const Images = {
   iconDrawerTermsAndCond: require('../assets/icondrawertermsconditions.png'),
   iconLocationPin: require('../assets/iconlocationpin.png'),
   iconStopWatch: require('../assets/iconstopwatch.png'),
+  iconWithDraw: require('../assets/iconwithdraw.png'),
   car1: require('../assets/car1.png'),
   car2: require('../assets/car2.png'),
   car3: require('../assets/car3.png'),
@@ -93,6 +94,7 @@ const Images = {
   splashBgWeb: require('../assets/splashbgweb.png'),
   cashGrabLogoNew: require('../assets/cashgrablogonew.png'),
   cashGrabLogoNew2: require('../assets/cashgrablogonew2.png'),
+  visa: require('../assets/visa.png'),
 };
 
 export default Images;

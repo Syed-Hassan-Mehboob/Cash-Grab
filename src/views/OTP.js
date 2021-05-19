@@ -43,14 +43,14 @@ export default class OTP extends Component {
                 height: 70,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 100,
+                marginTop: 75,
               }}
             />
             <BoldTextCB
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: 50,
+                marginTop: 30,
               }}>
               Verification
             </BoldTextCB>
@@ -67,7 +67,7 @@ export default class OTP extends Component {
           <View style={[styles.childContainer]}>
             <View style={[styles.textInputContainer]}>
               <OTPInputView
-                style={{width: '90%', height: 75, marginTop: 50}}
+                style={{width: '90%', height: 75, marginTop: 30}}
                 pinCount={4}
                 code={this.state.code}
                 onCodeChanged={(code) => {

@@ -24,6 +24,7 @@ import Faq from '../Faq';
 import DateTimeSlots from '../DateTimeSlots';
 import Search from '../Search';
 import ConfirmPayment from '../ConfirmPayment';
+import SingleCategory from '../SingleCategory';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -43,6 +44,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.allCategories}
         component={AllCategories}
+      />
+      <HomeStack.Screen
+        name={Constants.singleCategory}
+        component={SingleCategory}
       />
       <HomeStack.Screen name={Constants.filter} component={Filter} />
       <HomeStack.Screen name={Constants.nearby} component={Nearby} />
@@ -68,6 +73,13 @@ const HomeNavigator = () => {
       />
       <HomeStack.Screen name={Constants.support} component={Support} />
       <HomeStack.Screen name={Constants.faq} component={Faq} />
+      <HomeStack.Screen
+        name={Constants.notifications}
+        component={Notifications}
+      />
+      <HomeStack.Screen name={Constants.settings} component={Settings} />
+      <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
+      <HomeStack.Screen name={Constants.chat} component={Chat} />
     </HomeStack.Navigator>
   );
 };
@@ -202,7 +214,13 @@ const Tabs = () => {
             />
           ),
         }}
-        component={SettingsNavigator}
+        component={Settings}
+        listeners={({navigation}) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.openDrawer();
+          },
+        })}
       />
     </Tab.Navigator>
   );

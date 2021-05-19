@@ -73,7 +73,7 @@ export default class Filter extends Component {
         },
         {
           id: '3',
-          name: '$100 - $ 150',
+          name: '$100-$150',
           isSelected: false,
         },
       ],
@@ -125,7 +125,7 @@ export default class Filter extends Component {
           this.handleOnDateItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{fontSize: 16}}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
@@ -152,7 +152,7 @@ export default class Filter extends Component {
           this.handleOnPriceItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{fontSize: 16}}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
@@ -179,7 +179,7 @@ export default class Filter extends Component {
           this.handleOnSlotItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{fontSize: 16}}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );

@@ -166,9 +166,24 @@ export default class VendorEditProfile extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={styles.circleCard}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={[
+                styles.circleCard,
+                {justifyContent: 'center', alignItems: 'center'},
+              ]}>
               <Image source={Images.emp1} style={styles.iconUser} />
-            </View>
+              <Image
+                source={Images.iconCamera}
+                style={{
+                  height: 25,
+                  width: 25,
+                  position: 'absolute',
+                  resizeMode: 'contain',
+                  opacity: 0.4,
+                }}
+              />
+            </TouchableOpacity>
             <RegularTextCB
               style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
               Damian Santosa

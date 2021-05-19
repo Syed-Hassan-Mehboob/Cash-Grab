@@ -461,7 +461,7 @@ export default class VendorProfile extends React.Component {
                       {
                         padding: 10,
                         borderRadius: 20,
-                        width: '25%',
+                        width: '30%',
                         alignItems: 'center',
                       },
                     ]}>
@@ -491,7 +491,7 @@ export default class VendorProfile extends React.Component {
                       {
                         padding: 10,
                         borderRadius: 20,
-                        width: '25%',
+                        width: '30%',
                         alignItems: 'center',
                         justifyContent: 'center',
                       },
@@ -522,7 +522,7 @@ export default class VendorProfile extends React.Component {
                       {
                         padding: 10,
                         borderRadius: 20,
-                        width: '25%',
+                        width: '30%',
                         alignItems: 'center',
                       },
                     ]}>

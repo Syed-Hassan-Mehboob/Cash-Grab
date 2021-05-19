@@ -11,12 +11,11 @@ const ButtonRadius10 = ({
   textColor = Colors.black,
 }) => (
   <View>
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
-      <View style={[styles.loginBtnBg, {backgroundColor: bgColor}]}>
-        <Text style={[styles.buttonLoginText, {color: textColor}]}>
-          {label}
-        </Text>
-      </View>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={onPress}
+      style={[styles.loginBtnBg, {backgroundColor: bgColor}]}>
+      <Text style={[styles.buttonLoginText, {color: textColor}]}>{label}</Text>
     </TouchableOpacity>
   </View>
 );

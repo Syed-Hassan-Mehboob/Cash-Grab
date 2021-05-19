@@ -156,10 +156,10 @@ export default class SignUp extends Component {
                   <Image
                     source={Images.cashGrabLogoNew2}
                     style={{
-                      height: 70,
+                      height: 50,
                       width: '60%',
                       resizeMode: 'contain',
-                      marginTop: 100,
+                      marginTop: 75,
                     }}
                   />
                   <BoldTextCB

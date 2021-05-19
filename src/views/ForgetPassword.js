@@ -52,14 +52,14 @@ export default class ForgetPassword extends Component {
                 height: 70,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 100,
+                marginTop: 75,
               }}
             />
             <BoldTextCB
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: 50,
+                marginTop: 30,
               }}>
               Forgot Password
             </BoldTextCB>
