@@ -21,6 +21,7 @@ export default class AllCategories extends Component {
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '2',
@@ -28,6 +29,7 @@ export default class AllCategories extends Component {
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '3',
@@ -35,6 +37,7 @@ export default class AllCategories extends Component {
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '4',
@@ -42,6 +45,7 @@ export default class AllCategories extends Component {
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '5',
@@ -49,6 +53,7 @@ export default class AllCategories extends Component {
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '6',
@@ -56,6 +61,7 @@ export default class AllCategories extends Component {
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '7',
@@ -63,6 +69,7 @@ export default class AllCategories extends Component {
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '8',
@@ -70,6 +77,7 @@ export default class AllCategories extends Component {
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '9',
@@ -77,6 +85,7 @@ export default class AllCategories extends Component {
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '10',
@@ -84,6 +93,7 @@ export default class AllCategories extends Component {
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '11',
@@ -91,6 +101,7 @@ export default class AllCategories extends Component {
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '12',
@@ -98,6 +109,7 @@ export default class AllCategories extends Component {
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '13',
@@ -105,6 +117,7 @@ export default class AllCategories extends Component {
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '14',
@@ -112,6 +125,7 @@ export default class AllCategories extends Component {
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '15',
@@ -119,6 +133,7 @@ export default class AllCategories extends Component {
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
     {
       id: '16',
@@ -126,6 +141,7 @@ export default class AllCategories extends Component {
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+      ratings: '1.0 ratings',
     },
   ];
 
@@ -156,29 +172,53 @@ export default class AllCategories extends Component {
                 <View style={styles.circleCard}>
                   <Image source={item.image} style={styles.iconUser} />
                 </View>
-                <View style={{marginStart: 20, marginEnd: 20}}>
-                  <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-                    {item.name}
-                  </RegularTextCB>
+                <View
+                  style={{
+                    marginStart: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexShrink: 1,
+                  }}>
+                  <View style={{flex: 1}}>
+                    <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+                      {item.name}
+                    </RegularTextCB>
+                    <RegularTextCB
+                      style={{
+                        fontSize: 16,
+                        color: Colors.black,
+                        textDecorationLine: 'underline',
+                      }}>
+                      View Profile
+                    </RegularTextCB>
+                  </View>
                   <RegularTextCB
                     style={{
                       fontSize: 16,
-                      color: Colors.black,
-                      textDecorationLine: 'underline',
+                      color: Colors.orangeYellow,
                     }}>
-                    View Profile
+                    {item.ratings}
                   </RegularTextCB>
                 </View>
               </View>
-              <RegularTextCB
-                style={{fontSize: 16, color: Colors.coolGrey, marginTop: 5}}>
-                {item.desc}
-              </RegularTextCB>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexShrink: 1,
+                  marginTop: 5,
+                }}>
+                <RegularTextCB
+                  style={{flex: 1, fontSize: 16, color: Colors.coolGrey}}>
+                  {item.desc}
+                </RegularTextCB>
+                <Image
+                  source={Images.circularArrowForward}
+                  style={[styles.iconForward]}
+                />
+              </View>
             </View>
-            <Image
-              source={Images.circularArrowForward}
-              style={[styles.iconForward, {flex: 0.4}]}
-            />
           </View>
         </TouchableOpacity>
       </View>
@@ -253,8 +293,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 100,
-    width: 100,
+    height: 50,
+    width: 50,
     resizeMode: 'contain',
   },
   iconUser: {

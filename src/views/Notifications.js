@@ -143,10 +143,23 @@ export default class Notifications extends Component {
                       style={styles.iconUser}
                     />
                   </View>
-                  <View style={{marginStart: 10, marginEnd: 10}}>
-                    <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-                      {notification.name}
-                    </RegularTextCB>
+                  <View
+                    style={{
+                      marginStart: 10,
+                      flex: 1,
+                      flexShrink: 1,
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <RegularTextCB
+                        style={{fontSize: 16, color: Colors.black}}>
+                        {notification.name}
+                      </RegularTextCB>
+                      <RegularTextCB>{notification.time}</RegularTextCB>
+                    </View>
                     <RegularTextCB
                       numberOfLines={1}
                       style={{
@@ -157,9 +170,6 @@ export default class Notifications extends Component {
                       {notification.desc}
                     </RegularTextCB>
                   </View>
-                  <RegularTextCB style={{position: 'absolute', right: 0}}>
-                    {notification.time}
-                  </RegularTextCB>
                 </View>
               </TouchableOpacity>
             </View>

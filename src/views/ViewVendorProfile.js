@@ -138,6 +138,7 @@ export default class ViewVendorProfile extends React.Component {
             width: width / 1.75,
             backgroundColor: Colors.white,
             marginBottom: 20,
+            flexShrink: 1,
           },
         ]}
         onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
@@ -145,7 +146,7 @@ export default class ViewVendorProfile extends React.Component {
           source={item.image}
           style={{height: 90, width: 90, borderRadius: 15}}
         />
-        <View style={{marginStart: 10}}>
+        <View style={{marginStart: 10, flexShrink: 1}}>
           <Image
             source={item.icon}
             style={{height: 20, width: 20, justifyContent: 'space-evenly'}}
@@ -290,6 +291,16 @@ export default class ViewVendorProfile extends React.Component {
             <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
               Profile
             </RegularTextCB>
+            <TouchableOpacity
+              style={{position: 'absolute', right: 10}}
+              onPress={() => {
+                this.props.navigation.navigate(Constants.chat);
+              }}>
+              <Image
+                source={Images.iconDrawerChat}
+                style={[styles.iconBack, {tintColor: Colors.white}]}
+              />
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView
@@ -403,7 +414,7 @@ export default class ViewVendorProfile extends React.Component {
                     Email Address
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    damiansantosa@gmail.com
+                    damian@gmail.com
                   </RegularTextCB>
                 </View>
                 <View
@@ -538,7 +549,6 @@ export default class ViewVendorProfile extends React.Component {
             {this.state.isReviewsSelected && (
               <View>
                 <FlatList
-                  style={{paddingBottom: 50}}
                   showsVerticalScrollIndicator={false}
                   data={this.reviews}
                   renderItem={this.renderReviewsItem}
@@ -550,10 +560,6 @@ export default class ViewVendorProfile extends React.Component {
                     {
                       flexDirection: 'row',
                       alignItems: 'center',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
                       marginHorizontal: -20,
                       paddingHorizontal: 10,
                       paddingVertical: 5,

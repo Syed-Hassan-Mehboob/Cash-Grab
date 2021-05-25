@@ -56,7 +56,11 @@ export default class WithDraw extends Component {
             </RegularTextCB>
           </View>
           <Slider
-            style={{width: '100%', height: 50}}
+            style={{
+              width: '100%',
+              height: 50,
+              transform: [{scaleX: 1.0}, {scaleY: 1.0}],
+            }}
             minimumValue={this.state.min}
             maximumValue={this.state.max}
             step={5}

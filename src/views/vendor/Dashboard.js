@@ -256,13 +256,6 @@ export default class Dashboard extends Component {
             width: '100%',
             padding: 15,
           }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image source={Images.arrowBack} style={[styles.iconBack]} />
-          </TouchableOpacity>
           <RegularTextCB style={{fontSize: 30}}>Dashboard</RegularTextCB>
           <TouchableOpacity
             style={{position: 'absolute', right: 10}}

@@ -159,7 +159,7 @@ export default class SignUp extends Component {
                       height: 50,
                       width: '60%',
                       resizeMode: 'contain',
-                      marginTop: 75,
+                      marginTop: 40,
                     }}
                   />
                   <BoldTextCB

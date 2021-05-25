@@ -416,7 +416,7 @@ export default class VendorProfile extends React.Component {
                     Email Address
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    damiansantosa@gmail.com
+                    damian@gmail.com
                   </RegularTextCB>
                 </View>
                 <View

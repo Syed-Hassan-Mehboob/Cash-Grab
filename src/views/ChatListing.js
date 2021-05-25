@@ -268,7 +268,11 @@ export default class ChatListing extends Component {
               />
             </View>
           </View>
-          <View style={{height: 85}}>
+          <View>
+            <RegularTextCB
+              style={{fontSize: 20, color: Colors.white, marginStart: 15}}>
+              Favorites
+            </RegularTextCB>
             <FlatList
               horizontal
               data={this.users}

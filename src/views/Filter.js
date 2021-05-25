@@ -63,17 +63,32 @@ export default class Filter extends Component {
       prices: [
         {
           id: '1',
-          name: '$12-$20',
+          name: '$12-$50',
           isSelected: false,
         },
         {
           id: '2',
-          name: '$35-$50',
+          name: '$51-$100',
           isSelected: false,
         },
         {
           id: '3',
-          name: '$100-$150',
+          name: '$101-$150',
+          isSelected: false,
+        },
+        {
+          id: '4',
+          name: '$151-$200',
+          isSelected: false,
+        },
+        {
+          id: '5',
+          name: '$201-$250',
+          isSelected: false,
+        },
+        {
+          id: '6',
+          name: '$251-$300',
           isSelected: false,
         },
       ],
@@ -81,32 +96,32 @@ export default class Filter extends Component {
       locations: [
         {
           id: '1',
-          name: 'UK',
+          name: '10km',
           isSelected: false,
         },
         {
           id: '2',
-          name: 'New York',
+          name: '15km',
           isSelected: false,
         },
         {
           id: '3',
-          name: 'France',
+          name: '20km',
           isSelected: false,
         },
         {
           id: '4',
-          name: 'Durban',
+          name: '25km',
           isSelected: false,
         },
         {
           id: '5',
-          name: 'UAE',
+          name: '30km',
           isSelected: false,
         },
         {
           id: '6',
-          name: 'Italy',
+          name: '35km',
           isSelected: false,
         },
       ],
@@ -214,6 +229,22 @@ export default class Filter extends Component {
             <RegularTextCB style={{fontSize: 30}}>
               Furniture service
             </RegularTextCB>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                right: 0,
+              }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  textDecorationLine: 'underline',
+                }}>
+                RESET
+              </RegularTextCB>
+            </TouchableOpacity>
           </View>
           <View style={{marginTop: 20}}>
             <RegularTextCB style={{fontSize: 18}}>Categories</RegularTextCB>
@@ -254,7 +285,7 @@ export default class Filter extends Component {
             />
           </View>
           <View style={{marginTop: 20}}>
-            <RegularTextCB style={{fontSize: 18}}>Location</RegularTextCB>
+            <RegularTextCB style={{fontSize: 18}}>Within</RegularTextCB>
             <FlatList
               style={{marginTop: 10}}
               data={this.state.locations}

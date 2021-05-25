@@ -93,38 +93,50 @@ export default class Home extends Component {
     {
       id: '1',
       image: Images.emp1,
+      name: 'Ray Hammond',
       title: 'Home Renovation',
       type: 'Lorem ipsum',
+      ratings: '1.0 ratings',
     },
     {
       id: '2',
       image: Images.emp2,
+      name: 'Ray Hammond',
       title: 'Car Mechanic',
       type: 'Lorem ipsum',
+      ratings: '1.0 ratings',
     },
     {
       id: '3',
       image: Images.emp3,
+      name: 'Ray Hammond',
       title: 'Home Renovation',
       type: 'Lorem ipsum',
+      ratings: '1.0 ratings',
     },
     {
       id: '4',
       image: Images.emp1,
+      name: 'Ray Hammond',
       title: 'Car Mechanic',
       type: 'Lorem ipsum',
+      ratings: '1.0 ratings',
     },
     {
       id: '5',
       image: Images.emp2,
+      name: 'Ray Hammond',
       title: 'Home Renovation',
       type: 'Lorem ipsum',
+      ratings: '1.0 ratings',
     },
     {
       id: '6',
       image: Images.emp1,
+      name: 'Ray Hammond',
       title: 'Car Mechanic',
       type: 'Lorem ipsum',
+      ratings: '1.0 ratings',
     },
   ];
 
@@ -398,22 +410,29 @@ export default class Home extends Component {
             marginTop: 10,
             fontSize: 14,
           }}>
-          {item.title}
+          {item.name}
         </RegularTextCB>
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
             marginTop: 5,
           }}>
-          {item.type}
+          {item.title}
+        </RegularTextCB>
+        <RegularTextCB
+          style={{
+            color: Colors.orangeYellow,
+            marginTop: 5,
+          }}>
+          {item.ratings}
         </RegularTextCB>
         <Image
           source={Images.circularArrowForward}
           style={{
-            height: 100,
-            width: 100,
+            height: 50,
+            width: 50,
             position: 'absolute',
-            bottom: -60,
+            bottom: -25,
             alignSelf: 'center',
           }}
         />
@@ -597,11 +616,6 @@ export default class Home extends Component {
             position: 'absolute',
             bottom: 15,
             right: 15,
-            shadowColor: '#ccc',
-            shadowOffset: {width: 0, height: 3},
-            shadowOpacity: 0.5,
-            shadowRadius: 5,
-            elevation: 10,
           }}
           onPress={() => {
             bs.current.snapTo(0);

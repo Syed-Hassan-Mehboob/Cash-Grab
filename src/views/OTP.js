@@ -43,7 +43,7 @@ export default class OTP extends Component {
                 height: 70,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 75,
+                marginTop: 40,
               }}
             />
             <BoldTextCB

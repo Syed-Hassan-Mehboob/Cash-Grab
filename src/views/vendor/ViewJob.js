@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../../common/Colors';
+import Constants from '../../common/Constants';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
@@ -292,7 +293,9 @@ export default class ViewJob extends React.Component {
               <ButtonRadius10
                 label="CONTACT"
                 bgColor={Colors.sickGreen}
-                onPress={() => {}}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.chat);
+                }}
               />
             </View>
           </View>

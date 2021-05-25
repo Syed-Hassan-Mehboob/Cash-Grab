@@ -114,22 +114,24 @@ export default class Chat extends React.Component {
                 right: 10,
                 flexDirection: 'row',
               }}>
-              <Image
-                source={Images.iconAudioCall}
-                style={{
-                  height: 75,
-                  width: 75,
-                  resizeMode: 'contain',
-                }}
-              />
-              <Image
-                source={Images.iconVideoCall}
-                style={{
-                  height: 75,
-                  width: 75,
-                  resizeMode: 'contain',
-                }}
-              />
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  source={Images.iconAudioCall}
+                  style={{
+                    height: 50,
+                    width: 50,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  source={Images.iconVideoCall}
+                  style={{
+                    height: 50,
+                    width: 50,
+                  }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>

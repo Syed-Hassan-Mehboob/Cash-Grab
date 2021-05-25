@@ -261,7 +261,12 @@ export default class DateTimeSlots extends Component {
             {this.state.sliderValue}
           </RegularTextCB>
           <Slider
-            style={{width: width / 1.3, height: 75, marginStart: 10}}
+            style={{
+              width: width / 1.3,
+              height: 55,
+              marginStart: 10,
+              transform: [{scaleX: 1.0}, {scaleY: 1.0}],
+            }}
             minimumValue={0}
             maximumValue={340}
             minimumTrackTintColor={Colors.silver}

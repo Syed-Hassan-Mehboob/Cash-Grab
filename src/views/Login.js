@@ -73,7 +73,7 @@ export default class Login extends Component {
                 height: 70,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 100,
+                marginTop: 85,
               }}
             />
             <BoldTextCB
