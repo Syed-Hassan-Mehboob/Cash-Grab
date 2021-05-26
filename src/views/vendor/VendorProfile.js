@@ -135,7 +135,7 @@ export default class VendorProfile extends React.Component {
             padding: 10,
             margin: 5,
             flexDirection: 'row',
-            width: width / 1.75,
+            width: width / 1.65,
             backgroundColor: Colors.white,
             marginBottom: 20,
           },

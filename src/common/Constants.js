@@ -10,6 +10,7 @@ const Constants = {
   createAccount: 'CreateAccount',
   signUp: 'SignUp',
   forgetPassword: 'ForgetPassword',
+  verifyVia: 'VerifyVia',
   otp: 'OTP',
   allCategories: 'AllCategories',
   singleCategory: 'SingleCategory',

@@ -63,7 +63,7 @@ export default class Filter extends Component {
       prices: [
         {
           id: '1',
-          name: '$12-$50',
+          name: '$1-$50',
           isSelected: false,
         },
         {
@@ -101,27 +101,27 @@ export default class Filter extends Component {
         },
         {
           id: '2',
-          name: '15km',
-          isSelected: false,
-        },
-        {
-          id: '3',
           name: '20km',
           isSelected: false,
         },
         {
+          id: '3',
+          name: '50km',
+          isSelected: false,
+        },
+        {
           id: '4',
-          name: '25km',
+          name: '100km',
           isSelected: false,
         },
         {
           id: '5',
-          name: '30km',
+          name: '150km',
           isSelected: false,
         },
         {
           id: '6',
-          name: '35km',
+          name: '200km',
           isSelected: false,
         },
       ],
@@ -285,7 +285,9 @@ export default class Filter extends Component {
             />
           </View>
           <View style={{marginTop: 20}}>
-            <RegularTextCB style={{fontSize: 18}}>Within</RegularTextCB>
+            <RegularTextCB style={{fontSize: 18}}>
+              Location (within)
+            </RegularTextCB>
             <FlatList
               style={{marginTop: 10}}
               data={this.state.locations}
@@ -334,7 +336,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     margin: 10,
-    flex: 1,
+    flex: 1 / 3,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
     borderRadius: 12,
@@ -349,7 +351,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     margin: 10,
-    flex: 1,
+    flex: 1 / 3,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
     borderRadius: 12,

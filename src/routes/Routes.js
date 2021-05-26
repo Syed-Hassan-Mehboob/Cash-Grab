@@ -18,6 +18,7 @@ import Constants from '../common/Constants';
 import OTP from '../views/OTP';
 import DrawerNavigator from '../views/navigators/DrawerNavigator';
 import LoginOrJoin from '../views/LoginOrJoin';
+import VerifyVia from '../views/VerifyVia';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,7 @@ const AppStack = () => {
         name={Constants.forgetPassword}
         component={ForgetPassword}
       />
+      <Stack.Screen name={Constants.verifyVia} component={VerifyVia} />
       <Stack.Screen name={Constants.otp} component={OTP} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="BestEmployees" component={BestEmployees} />

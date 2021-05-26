@@ -304,7 +304,7 @@ export default class SignUp extends Component {
                     label="SIGN UP"
                     bgColor={Colors.sickGreen}
                     onPress={() =>
-                      this.props.navigation.navigate(Constants.otp)
+                      this.props.navigation.navigate(Constants.verifyVia)
                     }
                   />
                 </View>

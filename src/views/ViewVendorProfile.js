@@ -135,10 +135,9 @@ export default class ViewVendorProfile extends React.Component {
             padding: 10,
             margin: 5,
             flexDirection: 'row',
-            width: width / 1.75,
+            width: width / 1.65,
             backgroundColor: Colors.white,
             marginBottom: 20,
-            flexShrink: 1,
           },
         ]}
         onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
@@ -146,7 +145,11 @@ export default class ViewVendorProfile extends React.Component {
           source={item.image}
           style={{height: 90, width: 90, borderRadius: 15}}
         />
-        <View style={{marginStart: 10, flexShrink: 1}}>
+        <View
+          style={{
+            marginStart: 10,
+            flex: 1,
+          }}>
           <Image
             source={item.icon}
             style={{height: 20, width: 20, justifyContent: 'space-evenly'}}
@@ -159,14 +162,20 @@ export default class ViewVendorProfile extends React.Component {
             }}>
             {item.name}
           </RegularTextCB>
-          <RegularTextCB
+          <View
             style={{
-              fontSize: 14,
-              color: Colors.coolGrey,
-              width: width / 1.75 - 100,
+              flexDirection: 'row',
+              flexShrink: 1,
             }}>
-            {item.desc}
-          </RegularTextCB>
+            <RegularTextCB
+              style={{
+                fontSize: 14,
+                color: Colors.coolGrey,
+                width: width / 1.75 - 100,
+              }}>
+              {item.desc}
+            </RegularTextCB>
+          </View>
         </View>
       </TouchableOpacity>
     );

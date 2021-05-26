@@ -26,6 +26,23 @@ export default class DrawerScreen extends Component {
     super(props);
   }
 
+  state = {
+    isVendor: false,
+  };
+
+  componentDidMount() {
+    this.getUserType();
+  }
+
+  getUserType = async () => {
+    const value = await AsyncStorage.getItem('isVendor');
+    var data = JSON.parse(value);
+    console.log('drawer getUserType: ' + data);
+    if (value !== null) {
+      this.setState({isVendor: data});
+    }
+  };
+
   logout() {
     Alert.alert(
       'CashGrab',
@@ -66,7 +83,13 @@ export default class DrawerScreen extends Component {
       <View style={styles.drawerContainer}>
         <View style={{flex: 1}}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('EditProfile')}
+            onPress={() =>
+              this.props.navigation.navigate(
+                this.state.isVendor
+                  ? Constants.vendorEditProfile
+                  : Constants.editProfile,
+              )
+            }
             style={{
               width: '100%',
               flexDirection: 'row',

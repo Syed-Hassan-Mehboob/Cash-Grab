@@ -596,7 +596,7 @@ export default class Home extends Component {
             />
             <RegularTextCB
               style={{fontSize: 20, marginTop: 10, paddingHorizontal: 20}}>
-              Urgent Services
+              Top Services
             </RegularTextCB>
             <FlatList
               style={{paddingBottom: 100}}
