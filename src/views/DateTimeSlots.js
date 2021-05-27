@@ -265,7 +265,6 @@ export default class DateTimeSlots extends Component {
               width: width / 1.3,
               height: 55,
               marginStart: 10,
-              transform: [{scaleX: 1.0}, {scaleY: 1.0}],
             }}
             minimumValue={0}
             maximumValue={340}

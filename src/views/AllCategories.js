@@ -17,131 +17,147 @@ export default class AllCategories extends Component {
   bestEmployees = [
     {
       id: '1',
-      name: 'Home Renovation',
+      title: 'Home Renovation',
+      name: 'Mark Ruffalo',
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '2',
-      name: 'Electrician',
+      title: 'Electrician',
+      name: 'Mark Ruffalo',
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '3',
-      name: 'Home Cleaner',
+      title: 'Home Cleaner',
+      name: 'Mark Ruffalo',
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '4',
-      name: 'Automobile',
+      title: 'Automobile',
+      name: 'Mark Ruffalo',
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '5',
-      name: 'Home Renovation',
+      title: 'Home Renovation',
+      name: 'Mark Ruffalo',
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '6',
-      name: 'Electrician',
+      title: 'Electrician',
+      name: 'Mark Ruffalo',
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '7',
-      name: 'Home Cleaner',
+      title: 'Home Cleaner',
+      name: 'Mark Ruffalo',
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '8',
-      name: 'Automobile',
+      title: 'Automobile',
+      name: 'Mark Ruffalo',
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '9',
-      name: 'Home Renovation',
+      title: 'Home Renovation',
+      name: 'Mark Ruffalo',
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '10',
-      name: 'Home Cleaner',
+      title: 'Home Cleaner',
+      name: 'Mark Ruffalo',
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '11',
-      name: 'Automobile',
+      title: 'Automobile',
+      name: 'Mark Ruffalo',
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '12',
-      name: 'Electrician',
+      title: 'Electrician',
+      name: 'Mark Ruffalo',
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '13',
-      name: 'Home Cleaner',
+      title: 'Home Cleaner',
+      name: 'Mark Ruffalo',
       image: Images.emp1,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '14',
-      name: 'Automobile',
+      title: 'Automobile',
+      name: 'Mark Ruffalo',
       image: Images.emp2,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '15',
-      name: 'Home Renovation',
+      title: 'Home Renovation',
+      name: 'Mark Ruffalo',
       image: Images.emp3,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '16',
-      name: 'Electrician',
+      title: 'Electrician',
+      name: 'Mark Ruffalo',
       image: Images.emp4,
       desc:
         'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
   ];
 
@@ -181,31 +197,53 @@ export default class AllCategories extends Component {
                     flexShrink: 1,
                   }}>
                   <View style={{flex: 1}}>
-                    <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-                      {item.name}
-                    </RegularTextCB>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <RegularTextCB
+                        style={{fontSize: 16, color: Colors.black}}>
+                        {item.name}
+                      </RegularTextCB>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={Images.star}
+                          style={{
+                            height: 15,
+                            width: 15,
+                            resizeMode: 'contain',
+                            tintColor: Colors.orangeYellow,
+                          }}
+                        />
+                        <RegularTextCB
+                          style={{
+                            fontSize: 14,
+                            color: Colors.orangeYellow,
+                            marginStart: 2,
+                          }}>
+                          {item.ratings}
+                        </RegularTextCB>
+                      </View>
+                    </View>
                     <RegularTextCB
                       style={{
-                        fontSize: 16,
-                        color: Colors.black,
-                        textDecorationLine: 'underline',
+                        fontSize: 14,
+                        color: Colors.coolGrey,
                       }}>
-                      View Profile
+                      {item.title}
                     </RegularTextCB>
                   </View>
-                  <RegularTextCB
-                    style={{
-                      fontSize: 16,
-                      color: Colors.orangeYellow,
-                    }}>
-                    {item.ratings}
-                  </RegularTextCB>
                 </View>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  alignItems: 'center',
+                  alignItems: 'flex-end',
                   flexShrink: 1,
                   marginTop: 5,
                 }}>

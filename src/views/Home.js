@@ -57,35 +57,35 @@ export default class Home extends Component {
       image: Images.emp1,
       title: 'Ray Hammond',
       type: 'Car Mechanic, NY (2km)',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '2',
       image: Images.emp2,
       title: 'Jay Almond',
       type: 'Car Wash, NY (1km)',
-      ratings: '1.1 ratings',
+      ratings: '1.1',
     },
     {
       id: '3',
       image: Images.emp3,
       title: 'Ray Hammond',
       type: 'Puncture, NY (1.2km)',
-      ratings: '1.2 ratings',
+      ratings: '1.2',
     },
     {
       id: '4',
       image: Images.emp4,
       title: 'Jay Almond',
       type: 'Plumber, NY (0.2km)',
-      ratings: '1.3 ratings',
+      ratings: '1.3',
     },
     {
       id: '5',
       image: Images.emp1,
       title: 'Ray Hammond',
       type: 'Bike Electrician, NY (0.5km)',
-      ratings: '1.4 ratings',
+      ratings: '1.4',
     },
   ];
 
@@ -96,7 +96,7 @@ export default class Home extends Component {
       name: 'Ray Hammond',
       title: 'Home Renovation',
       type: 'Lorem ipsum',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '2',
@@ -104,7 +104,7 @@ export default class Home extends Component {
       name: 'Ray Hammond',
       title: 'Car Mechanic',
       type: 'Lorem ipsum',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '3',
@@ -112,7 +112,7 @@ export default class Home extends Component {
       name: 'Ray Hammond',
       title: 'Home Renovation',
       type: 'Lorem ipsum',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '4',
@@ -120,7 +120,7 @@ export default class Home extends Component {
       name: 'Ray Hammond',
       title: 'Car Mechanic',
       type: 'Lorem ipsum',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '5',
@@ -128,7 +128,7 @@ export default class Home extends Component {
       name: 'Ray Hammond',
       title: 'Home Renovation',
       type: 'Lorem ipsum',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
     {
       id: '6',
@@ -136,7 +136,7 @@ export default class Home extends Component {
       name: 'Ray Hammond',
       title: 'Car Mechanic',
       type: 'Lorem ipsum',
-      ratings: '1.0 ratings',
+      ratings: '1.0',
     },
   ];
 
@@ -358,13 +358,29 @@ export default class Home extends Component {
           }}>
           {item.type}
         </RegularTextCB>
-        <RegularTextCB
+        <View
           style={{
-            color: Colors.orangeYellow,
-            marginTop: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          {item.ratings}
-        </RegularTextCB>
+          <Image
+            source={Images.star}
+            style={{
+              height: 15,
+              width: 15,
+              resizeMode: 'contain',
+              tintColor: Colors.orangeYellow,
+            }}
+          />
+          <RegularTextCB
+            style={{
+              fontSize: 14,
+              color: Colors.orangeYellow,
+              marginStart: 2,
+            }}>
+            {item.ratings}
+          </RegularTextCB>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -377,7 +393,7 @@ export default class Home extends Component {
           styles.card,
           {
             padding: 10,
-            paddingBottom: 30,
+            paddingBottom: 20,
             marginHorizontal: 15,
             marginTop: 5,
             marginBottom: 40,
@@ -415,17 +431,32 @@ export default class Home extends Component {
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
-            marginTop: 5,
           }}>
           {item.title}
         </RegularTextCB>
-        <RegularTextCB
+        <View
           style={{
-            color: Colors.orangeYellow,
-            marginTop: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          {item.ratings}
-        </RegularTextCB>
+          <Image
+            source={Images.star}
+            style={{
+              height: 15,
+              width: 15,
+              resizeMode: 'contain',
+              tintColor: Colors.orangeYellow,
+            }}
+          />
+          <RegularTextCB
+            style={{
+              fontSize: 14,
+              color: Colors.orangeYellow,
+              marginStart: 2,
+            }}>
+            {item.ratings}
+          </RegularTextCB>
+        </View>
         <Image
           source={Images.circularArrowForward}
           style={{
