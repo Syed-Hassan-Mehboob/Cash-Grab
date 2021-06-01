@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
@@ -23,6 +29,7 @@ export default class ConfirmPayment extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 10}}
@@ -176,11 +183,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   card: {
     flexDirection: 'row',
@@ -188,10 +195,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
   },

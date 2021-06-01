@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -8,7 +8,7 @@ import {
   Animated,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
@@ -327,10 +327,10 @@ const Nearby = (props) => {
           borderBottomRightRadius: 20,
           padding: 15,
           shadowColor: '#000',
-          shadowRadius: 5,
-          shadowOpacity: 0.3,
+          shadowOffset: {width: 5, height: 5},
+          shadowOpacity: 1.0,
+          shadowRadius: 10,
           alignItems: 'center',
-          shadowOffset: {x: 2, y: -2},
         }}>
         <View style={{flex: 1}}>
           <RegularTextCB style={{fontSize: 20}}>102 Electricians</RegularTextCB>
@@ -390,6 +390,7 @@ const Nearby = (props) => {
         horizontal
         scrollEventThrottle={1}
         showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         pagingEnabled
         snapToInterval={CARD_WIDTH + 20}
@@ -504,10 +505,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginHorizontal: 10,
     height: 35,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   scrollView: {
@@ -527,9 +528,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 10,
     shadowColor: '#000',
-    shadowRadius: 5,
-    shadowOpacity: 0.3,
-    shadowOffset: {x: 2, y: -2},
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     alignItems: 'center',
     width: CARD_WIDTH,
     paddingVertical: 20,
@@ -552,11 +553,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   textContent: {
     padding: 10,

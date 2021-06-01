@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
@@ -38,7 +39,19 @@ export default class CreateAccount extends React.Component {
       <ImageBackground
         source={Images.loginBgWeb}
         style={[styles.main, {width: '100%'}]}>
-        <KeyboardAvoidingView style={{flex: 1, alignItems: 'center'}}>
+        <KeyboardAvoidingView
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            paddingTop: Platform.OS === 'android' ? 0 : 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}
+            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            <Image source={Images.arrowBack} style={styles.iconBack} />
+          </TouchableOpacity>
           <Image
             source={Images.cashGrabLogoNew2}
             style={{
@@ -120,20 +133,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
   },
+  iconBack: {
+    height: 20,
+    width: 20,
+    marginTop: 20,
+    resizeMode: 'contain',
+  },
   card: {
     backgroundColor: '#fff',
     borderColor: Colors.sickGreen,
     borderRadius: 15,
     width: '90%',
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     padding: 15,
     elevation: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    overflow: 'hidden',
   },
   circularImage: {
     height: 90,

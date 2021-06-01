@@ -28,14 +28,7 @@ export default class BookingConfirmed extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          style={{height: 0, width: 0}}
-          onPress={() => {
-            this.navigateToHome;
-          }}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
-        </TouchableOpacity>
-        <View style={styles.childContainer}>
+        <View style={[styles.childContainer, {marginTop: 30}]}>
           <Image source={Images.greenTick} style={{height: 100, width: 100}} />
           <BoldTextCB style={{fontSize: 30, marginTop: 30}}>
             Booking Confirmed
@@ -138,19 +131,19 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 40,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   iconPassword: {

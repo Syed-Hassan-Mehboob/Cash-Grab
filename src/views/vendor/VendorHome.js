@@ -3,13 +3,12 @@ import {
   FlatList,
   Image,
   LogBox,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
 import Constants from '../../common/Constants';
@@ -17,9 +16,6 @@ import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import LightTextCB from '../../components/LightTextCB';
-
-const bs = React.createRef();
-const fall = new Animated.Value(1);
 
 export default class VendorHome extends Component {
   categories = [
@@ -144,15 +140,14 @@ export default class VendorHome extends Component {
 
   renderBottomSheetContent = () => {
     return (
-      <ScrollView style={styles.bottomSheetBody}>
+      <ScrollView
+        style={styles.bottomSheetBody}
+        showsVerticalScrollIndicator={false}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
             Quick Service
           </RegularTextCB>
-          <TouchableOpacity
-            onPress={() => {
-              bs.current.snapTo(1);
-            }}>
+          <TouchableOpacity onPress={() => {}}>
             <Image
               source={Images.iconClose}
               style={{
@@ -248,7 +243,7 @@ export default class VendorHome extends Component {
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
-            onPress={() => bs.current.snapTo(1)}
+            onPress={() => {}}
           />
         </View>
       </ScrollView>
@@ -400,15 +395,12 @@ export default class VendorHome extends Component {
     );
   };
 
-  animatedShadowOpacity = Animated.interpolate(fall, {
-    inputRange: [0, 1],
-    outputRange: [0.5, 0],
-  });
-
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}>
           <View>
             <View
               style={{
@@ -416,7 +408,7 @@ export default class VendorHome extends Component {
                 width: '100%',
                 alignItems: 'center',
                 paddingHorizontal: 20,
-                marginTop: 20,
+                marginTop: Platform.OS === 'android' ? 20 : 60,
               }}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -461,17 +453,18 @@ export default class VendorHome extends Component {
             <TouchableOpacity
               style={{
                 marginVertical: 10,
-                paddingStart: 20,
+                paddingHorizontal: 20,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-              }}>
+              }}
+              onPress={() => this.props.navigation.navigate(Constants.search)}>
               <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
                 Search Service...
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{height: 80, width: 80}}
+                style={{height: 50, width: 50}}
               />
             </TouchableOpacity>
             <View
@@ -552,24 +545,6 @@ export default class VendorHome extends Component {
             />
           </View>
         </ScrollView>
-        <BottomSheet
-          ref={bs}
-          snapPoints={[550, 0]}
-          initialSnap={1}
-          callbackNode={fall}
-          renderContent={this.renderBottomSheetContent}
-          enabledGestureInteraction={true}
-        />
-        <Animated.View
-          pointerEvents="none"
-          style={[
-            {
-              ...StyleSheet.absoluteFillObject,
-              backgroundColor: Colors.silver,
-              opacity: this.animatedShadowOpacity,
-            },
-          ]}
-        />
       </View>
     );
   }
@@ -604,20 +579,20 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
     flex: 1,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   bottomSheetBody: {

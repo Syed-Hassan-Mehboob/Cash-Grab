@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   LayoutAnimation,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -127,6 +128,7 @@ export default class Faq extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 10}}
@@ -166,10 +168,10 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     borderColor: Colors.sickGreen,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
 });

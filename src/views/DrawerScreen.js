@@ -2,19 +2,19 @@
 import React, {Component} from 'react';
 import {
   View,
-  Alert,
   TouchableOpacity,
   Image,
-  Dimensions,
   StyleSheet,
+  Platform,
 } from 'react-native';
-const {width, height} = Dimensions.get('window');
+import Modal from 'react-native-modal';
 import {CommonActions} from '@react-navigation/native';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BoldTextCB from '../components/BoldTextCB';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -28,6 +28,7 @@ export default class DrawerScreen extends Component {
 
   state = {
     isVendor: false,
+    isLogoutModalVisible: false,
   };
 
   componentDidMount() {
@@ -44,26 +45,33 @@ export default class DrawerScreen extends Component {
   };
 
   logout() {
-    Alert.alert(
-      'CashGrab',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'No',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Yes',
-          onPress: () => {
-            AsyncStorage.removeItem('isVendor');
-            this.props.navigation.dispatch(resetAction);
-          },
-        },
-      ],
-      {cancelable: false},
-    );
+    // Alert.alert(
+    //   'CashGrab',
+    //   'Are you sure you want to logout?',
+    //   [
+    //     {
+    //       text: 'No',
+    //       onPress: () => console.log('Cancel Pressed'),
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: 'Yes',
+    //       onPress: () => {
+    //         AsyncStorage.removeItem('isVendor');
+    //         this.props.navigation.dispatch(resetAction);
+    //       },
+    //     },
+    //   ],
+    //   {cancelable: false},
+    // );
+    this.toggleModal();
   }
+
+  toggleModal = () => {
+    this.setState({
+      isLogoutModalVisible: !this.state.isLogoutModalVisible,
+    });
+  };
 
   getUserName() {
     const {userData} = this.state;
@@ -94,7 +102,7 @@ export default class DrawerScreen extends Component {
               width: '100%',
               flexDirection: 'row',
               height: 110,
-              paddingTop: 30,
+              paddingTop: Platform.OS === 'android' ? 30 : 60,
               paddingBottom: 20,
               alignItems: 'center',
               paddingHorizontal: 25,
@@ -234,6 +242,67 @@ export default class DrawerScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <Modal
+          isVisible={this.state.isLogoutModalVisible}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View style={{backgroundColor: Colors.navy, padding: 15}}>
+            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
+              CashGrab
+            </BoldTextCB>
+            <RegularTextCB
+              style={{marginVertical: 10, fontSize: 16, color: Colors.white}}>
+              Are you sure you want to logout?
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 10,
+                alignSelf: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState(
+                    {
+                      isLogoutModalVisible: false,
+                    },
+                    () => {
+                      AsyncStorage.removeItem('isVendor');
+                      this.props.navigation.dispatch(resetAction);
+                    },
+                  );
+                }}
+                style={{
+                  padding: 10,
+                  width: 50,
+                  alignItems: 'center',
+                  borderRadius: 15,
+                  backgroundColor: Colors.white,
+                  marginEnd: 5,
+                }}>
+                <RegularTextCB style={{color: Colors.navy}}>Yes</RegularTextCB>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleModal();
+                }}
+                style={{
+                  padding: 10,
+                  width: 50,
+                  alignItems: 'center',
+                  borderRadius: 15,
+                  backgroundColor: Colors.white,
+                  marginStart: 5,
+                }}>
+                <RegularTextCB style={{color: Colors.navy}}>No</RegularTextCB>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -265,11 +334,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   iconDrawer: {
     width: 22,

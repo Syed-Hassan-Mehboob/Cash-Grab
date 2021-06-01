@@ -12,13 +12,18 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CashGrabTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CashGrabTests.m */; };
-		33C18708AABCCFDB721B7A1B /* libPods-CashGrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CAD58D49974F65D1F4844F75 /* libPods-CashGrab.a */; };
 		5005DFC919D4BC2938AD3E02 /* libPods-CashGrab-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C72D3209BE0461B736BDB97C /* libPods-CashGrab-tvOS.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A602C08E2666205000BA20C5 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFDB266619AB00BA20C5 /* Entypo.ttf */; };
+		A602C0932666205400BA20C5 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFD7266619AB00BA20C5 /* Ionicons.ttf */; };
+		A602C098266620A900BA20C5 /* Jost-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFDC266619AB00BA20C5 /* Jost-Light.ttf */; };
+		A602C0A22666212200BA20C5 /* Jost-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFD9266619AB00BA20C5 /* Jost-Regular.ttf */; };
+		A602C0A72666212600BA20C5 /* Jost-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFD8266619AB00BA20C5 /* Jost-Medium.ttf */; };
+		A602C0B02666219600BA20C5 /* Jost-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFDA266619AB00BA20C5 /* Jost-Bold.ttf */; };
+		A602C2422666567600BA20C5 /* libPods-CashGrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A602C2412666567600BA20C5 /* libPods-CashGrab.a */; };
 		ED1A83CA42BDE0C3E6EDD3D4 /* libPods-CashGrab-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCB08AB19FC970F071D3986 /* libPods-CashGrab-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +45,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* CashGrabTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CashGrabTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CashGrabTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CashGrabTests.m; sourceTree = "<group>"; };
@@ -59,6 +63,14 @@
 		678A39AB02D2BB65C9196A46 /* Pods-CashGrab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CashGrab.release.xcconfig"; path = "Target Support Files/Pods-CashGrab/Pods-CashGrab.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CashGrab/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		82C0C4EB0C50D662232B5486 /* Pods-CashGrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CashGrab.debug.xcconfig"; path = "Target Support Files/Pods-CashGrab/Pods-CashGrab.debug.xcconfig"; sourceTree = "<group>"; };
+		A602BFD7266619AB00BA20C5 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		A602BFD8266619AB00BA20C5 /* Jost-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Medium.ttf"; sourceTree = "<group>"; };
+		A602BFD9266619AB00BA20C5 /* Jost-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Regular.ttf"; sourceTree = "<group>"; };
+		A602BFDA266619AB00BA20C5 /* Jost-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Bold.ttf"; sourceTree = "<group>"; };
+		A602BFDB266619AB00BA20C5 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		A602BFDC266619AB00BA20C5 /* Jost-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Light.ttf"; sourceTree = "<group>"; };
+		A602C23B2666566A00BA20C5 /* libPods-CashGrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-CashGrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A602C2412666567600BA20C5 /* libPods-CashGrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-CashGrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4635F46E5D3069FCEF671EC /* Pods-CashGrab-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CashGrab-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-CashGrab-tvOSTests/Pods-CashGrab-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C72D3209BE0461B736BDB97C /* libPods-CashGrab-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CashGrab-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAD58D49974F65D1F4844F75 /* libPods-CashGrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CashGrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,7 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33C18708AABCCFDB721B7A1B /* libPods-CashGrab.a in Frameworks */,
+				A602C2422666567600BA20C5 /* libPods-CashGrab.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,7 +137,6 @@
 		13B07FAE1A68108700A75B9A /* CashGrab */ = {
 			isa = PBXGroup;
 			children = (
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -139,6 +150,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A602C2412666567600BA20C5 /* libPods-CashGrab.a */,
+				A602C23B2666566A00BA20C5 /* libPods-CashGrab.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				CAD58D49974F65D1F4844F75 /* libPods-CashGrab.a */,
@@ -161,7 +174,6 @@
 				C4635F46E5D3069FCEF671EC /* Pods-CashGrab-tvOSTests.debug.xcconfig */,
 				DF4DE921A356767FD0E1D448 /* Pods-CashGrab-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -175,6 +187,12 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A602BFDB266619AB00BA20C5 /* Entypo.ttf */,
+				A602BFD7266619AB00BA20C5 /* Ionicons.ttf */,
+				A602BFDA266619AB00BA20C5 /* Jost-Bold.ttf */,
+				A602BFDC266619AB00BA20C5 /* Jost-Light.ttf */,
+				A602BFD8266619AB00BA20C5 /* Jost-Medium.ttf */,
+				A602BFD9266619AB00BA20C5 /* Jost-Regular.ttf */,
 				13B07FAE1A68108700A75B9A /* CashGrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CashGrabTests */,
@@ -209,7 +227,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				3D4959A1CDEFAC21F1193AD3 /* [CP] Embed Pods Frameworks */,
 				DACD807392BB1AE9CA60D522 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -232,7 +249,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				27EF09A2817D4D87EEE9D318 /* [CP] Embed Pods Frameworks */,
 				656AD46E401570E75267FA03 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -343,6 +359,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				A602C0B02666219600BA20C5 /* Jost-Bold.ttf in Resources */,
+				A602C098266620A900BA20C5 /* Jost-Light.ttf in Resources */,
+				A602C0A22666212200BA20C5 /* Jost-Regular.ttf in Resources */,
+				A602C0A72666212600BA20C5 /* Jost-Medium.ttf in Resources */,
+				A602C08E2666205000BA20C5 /* Entypo.ttf in Resources */,
+				A602C0932666205400BA20C5 /* Ionicons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,7 +399,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		08D52AAAE8221BB75BAA419D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -423,24 +445,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		27EF09A2817D4D87EEE9D318 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CashGrab/Pods-CashGrab-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CashGrab/Pods-CashGrab-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -455,24 +459,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		3D4959A1CDEFAC21F1193AD3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CashGrab-CashGrabTests/Pods-CashGrab-CashGrabTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CashGrab-CashGrabTests/Pods-CashGrab-CashGrabTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		656AD46E401570E75267FA03 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -480,12 +466,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CashGrab/Pods-CashGrab-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
@@ -524,12 +512,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CashGrab-CashGrabTests/Pods-CashGrab-CashGrabTests-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
@@ -624,7 +614,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
-				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

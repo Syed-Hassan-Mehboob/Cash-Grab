@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -141,6 +142,7 @@ export default class ViewJob extends React.Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 10}}
@@ -151,7 +153,7 @@ export default class ViewJob extends React.Component {
           </TouchableOpacity>
           <RegularTextCB style={{fontSize: 30}}>View Job</RegularTextCB>
         </View>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: 5}}>
             <View style={{padding: 20}}>
               <View
@@ -325,21 +327,18 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
     elevation: 10,
   },
   circleCard: {
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   carImage: {
     height: 150,
@@ -350,10 +349,8 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 10,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
+    shadowColor: '#c5c5c5',
+    shadowRadius: 10,
     elevation: 10,
   },
   iconUser: {

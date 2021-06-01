@@ -1,8 +1,8 @@
 const Constants = {
   /* * Font Families * */
-  fontLight: 'JostLight',
-  fontRegular: 'JostRegular',
-  fontBold: 'JostBold',
+  fontLight: 'Jost-Light',
+  fontRegular: 'Jost-Regular',
+  fontBold: 'Jost-Bold',
   /* * Screens * */
   splash: 'Splash',
   loginOrJoin: 'LoinOrJoin',

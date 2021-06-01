@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {
   FlatList,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -211,13 +212,14 @@ export default class Filter extends Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
+              marginTop: Platform.OS === 'android' ? 0 : 20,
             }}>
             <TouchableOpacity
               style={{position: 'absolute', left: 0}}
@@ -325,7 +327,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 20,
   },
   childContainer: {
@@ -341,10 +343,10 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 12,
     borderColor: Colors.sickGreen,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   unselectedDate: {
@@ -356,10 +358,10 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 12,
     borderColor: Colors.white,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   iconBack: {

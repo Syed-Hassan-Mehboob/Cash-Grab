@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Animated,
+  Platform,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 20,
+    paddingTop: Platform.OS === 'android' ? 20 : 40,
   },
   childContainer: {
     flex: 1,
@@ -296,21 +297,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     flex: 1,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   circleCard: {
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   rowFront: {
     backgroundColor: '#FFF',
@@ -319,9 +320,9 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 15,
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 5,
   },
   rowFrontVisible: {
@@ -352,9 +353,9 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 15,
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 5,
   },
   rowFrontVisible: {

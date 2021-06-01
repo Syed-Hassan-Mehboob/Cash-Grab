@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, View} from 'react-native';
+import {Image, Platform, View} from 'react-native';
 import Constants from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
@@ -21,6 +21,7 @@ import ChatListing from '../ChatListing';
 import Chat from '../Chat';
 import Faq from '../Faq';
 import WithDraw from '../vendor/WithDraw';
+import Search from '../Search';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -37,6 +38,7 @@ const HomeNavigator = () => {
         ...TransitionPresets.SlideFromRightIOS,
       }}>
       <HomeStack.Screen name={Constants.vendorHome} component={VendorHome} />
+      <HomeStack.Screen name={Constants.search} component={Search} />
       <HomeStack.Screen
         name={Constants.vendorAllCategories}
         component={VendorAllCategories}
@@ -131,10 +133,10 @@ const customTabBarStyle = {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowColor: '#000000 ',
-    shadowOffset: {width: 0, height: -5},
-    shadowOpacity: 0.5,
-    height: 60,
-    shadowRadius: 2,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
+    height: Platform.OS === 'android' ? 60 : 80,
     marginTop: 2,
     elevation: 4,
     borderTopWidth: 0,
@@ -178,14 +180,14 @@ const Tabs = () => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
+                bottom: 10,
               }}>
               <Image
                 source={Images.barDashboard}
                 style={{
-                  height: 180,
-                  width: 180,
+                  height: 90,
+                  width: 90,
                   resizeMode: 'contain',
-                  bottom: 10,
                 }}
               />
             </View>

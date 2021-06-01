@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
@@ -37,7 +38,8 @@ export default class VerifyVia extends Component {
       <ImageBackground
         source={Images.loginBgWeb}
         style={[styles.container, {width: '100%'}]}>
-        <KeyboardAvoidingView style={{flex: 1}}>
+        <KeyboardAvoidingView
+          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();

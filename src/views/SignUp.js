@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   Image,
+  Platform,
 } from 'react-native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
@@ -20,9 +21,6 @@ import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import EditText from '../components/EditText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const fall = new Animated.Value(1);
-const bs = React.createRef();
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -97,7 +95,7 @@ export default class SignUp extends Component {
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="CANCEL"
-            onPress={() => bs.current.snapTo(1)}
+            onPress={() => {}}
           />
         </View>
       </View>
@@ -110,7 +108,6 @@ export default class SignUp extends Component {
       height: 500,
       cropping: true,
     }).then((image) => {
-      bs.current.snapTo(1);
       this.setState({avatar: image.path});
     });
   };
@@ -121,7 +118,6 @@ export default class SignUp extends Component {
       height: 500,
       cropping: true,
     }).then((image) => {
-      bs.current.snapTo(1);
       this.setState({avatar: image.path});
     });
   };
@@ -132,51 +128,47 @@ export default class SignUp extends Component {
         source={Images.loginBgWeb}
         style={[styles.container, {flex: 1, width: '100%'}]}>
         <View style={{flex: 1}}>
-          <Animated.View
-            style={{
-              flex: 1,
-              opacity: Animated.add(0.5, Animated.multiply(fall, 1.0)),
-            }}>
-            <KeyboardAwareScrollView
-              style={{flex: 1}}
-              contentContainerStyle={{flexGrow: 1}}>
-              {/* <ScrollView bounces={false} showsVerticalScrollIndicator={false}> */}
-              <View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.goBack();
-                  }}
+          <KeyboardAwareScrollView
+            style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}
+            contentContainerStyle={{flexGrow: 1}}
+            showsVerticalScrollIndicator={false}>
+            {/* <ScrollView bounces={false} showsVerticalScrollIndicator={false}> */}
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+                style={{
+                  marginStart: 15,
+                  alignSelf: 'flex-start',
+                }}>
+                <Image source={Images.arrowBack} style={styles.iconBack} />
+              </TouchableOpacity>
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={Images.cashGrabLogoNew2}
                   style={{
-                    marginStart: 15,
-                    alignSelf: 'flex-start',
+                    height: 50,
+                    width: '60%',
+                    resizeMode: 'contain',
+                    marginTop: 40,
+                  }}
+                />
+                <BoldTextCB
+                  style={{
+                    fontSize: 28,
+                    color: Colors.black,
+                    marginTop: 20,
                   }}>
-                  <Image source={Images.arrowBack} style={styles.iconBack} />
-                </TouchableOpacity>
-                <View style={{alignItems: 'center'}}>
-                  <Image
-                    source={Images.cashGrabLogoNew2}
-                    style={{
-                      height: 50,
-                      width: '60%',
-                      resizeMode: 'contain',
-                      marginTop: 40,
-                    }}
-                  />
-                  <BoldTextCB
-                    style={{
-                      fontSize: 28,
-                      color: Colors.black,
-                      marginTop: 20,
-                    }}>
-                    Create an account
-                  </BoldTextCB>
-                  <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
-                    Hello there, sign up to continue!
-                  </RegularTextCB>
-                </View>
+                  Create an account
+                </BoldTextCB>
+                <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+                  Hello there, sign up to continue!
+                </RegularTextCB>
               </View>
-              <View style={[styles.childContainer]}>
-                {/* <View
+            </View>
+            <View style={[styles.childContainer]}>
+              {/* <View
                 style={{
                   flexShrink: 1,
                   flexDirection: 'row',
@@ -208,119 +200,109 @@ export default class SignUp extends Component {
                   </ImageBackground>
                 </TouchableOpacity>
               </View> */}
-                <View style={[styles.textInputContainer, {marginTop: 30}]}>
-                  <EditText
-                    ref={'fullName'}
-                    placeholder={'Full Name'}
-                    value={this.state.fullName}
-                    onChangeText={(text) => {
-                      this.setState({
-                        fullName: text,
-                      });
-                    }}
-                    style={[styles.textInput]}
-                  />
-                </View>
-                {console.log('usVendor: ' + this.state.isVendor)}
-                {this.state.isVendor && (
-                  <View style={[styles.textInputContainer, {marginTop: 15}]}>
-                    <EditText
-                      ref={'service'}
-                      placeholder={'Select Service'}
-                      value={this.state.service}
-                      onChangeText={(text) => {
-                        this.setState({
-                          service: text,
-                        });
-                      }}
-                      style={[styles.textInput]}
-                    />
-                  </View>
-                )}
-                <View style={[styles.textInputContainer, {marginTop: 15}]}>
-                  <EditText
-                    ref={'email'}
-                    keyboardType="email-address"
-                    placeholder={'Email Address'}
-                    value={this.state.email}
-                    onChangeText={(text) => {
-                      this.validateEmail(text);
-                    }}
-                    style={[styles.textInput]}
-                  />
-                </View>
-                <View style={[styles.textInputContainer, {marginTop: 15}]}>
-                  <EditText
-                    ref={'password'}
-                    placeholder={'Password'}
-                    secureTextEntry={true}
-                    value={this.state.password}
-                    onChangeText={(text) => {
-                      this.setState({
-                        password: text,
-                      });
-                    }}
-                    style={[styles.textInput]}
-                  />
-                </View>
-                <View style={[styles.textInputContainer, {marginTop: 15}]}>
-                  <EditText
-                    ref={'confirm_password'}
-                    placeholder={'Confirm Password'}
-                    secureTextEntry={true}
-                    value={this.state.password}
-                    onChangeText={(text) => {
-                      this.setState({
-                        confirmPassword: text,
-                      });
-                    }}
-                    style={[styles.textInput]}
-                  />
-                </View>
+              <View style={[styles.textInputContainer, {marginTop: 30}]}>
+                <EditText
+                  ref={'fullName'}
+                  placeholder={'Full Name'}
+                  value={this.state.fullName}
+                  onChangeText={(text) => {
+                    this.setState({
+                      fullName: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
               </View>
-              <View style={{justifyContent: 'flex-end', marginHorizontal: 15}}>
-                <View
-                  style={[
-                    {
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginTop: 30,
-                    },
-                  ]}>
-                  <LightTextCB style={styles.noUnderlineText}>
-                    Already have an account?
+              {console.log('usVendor: ' + this.state.isVendor)}
+              {this.state.isVendor && (
+                <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                  <EditText
+                    ref={'service'}
+                    placeholder={'Select Service'}
+                    value={this.state.service}
+                    onChangeText={(text) => {
+                      this.setState({
+                        service: text,
+                      });
+                    }}
+                    style={[styles.textInput]}
+                  />
+                </View>
+              )}
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
+                  ref={'email'}
+                  keyboardType="email-address"
+                  placeholder={'Email Address'}
+                  value={this.state.email}
+                  onChangeText={(text) => {
+                    this.validateEmail(text);
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
+                  ref={'password'}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => {
+                    this.setState({
+                      password: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <EditText
+                  ref={'confirm_password'}
+                  placeholder={'Confirm Password'}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => {
+                    this.setState({
+                      confirmPassword: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+            </View>
+            <View style={{justifyContent: 'flex-end', marginHorizontal: 15}}>
+              <View
+                style={[
+                  {
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: 30,
+                  },
+                ]}>
+                <LightTextCB style={styles.noUnderlineText}>
+                  Already have an account?
+                </LightTextCB>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate(Constants.login);
+                  }}>
+                  <LightTextCB style={styles.underlineText}>
+                    Sign In
                   </LightTextCB>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate(Constants.login);
-                    }}>
-                    <LightTextCB style={styles.underlineText}>
-                      Sign In
-                    </LightTextCB>
-                  </TouchableOpacity>
-                </View>
-                <View style={{marginVertical: 20}}>
-                  <ButtonRadius10
-                    label="SIGN UP"
-                    bgColor={Colors.sickGreen}
-                    onPress={() =>
-                      this.props.navigation.navigate(Constants.verifyVia)
-                    }
-                  />
-                </View>
+                </TouchableOpacity>
               </View>
-              {/* </ScrollView> */}
-            </KeyboardAwareScrollView>
-          </Animated.View>
-          <BottomSheet
-            ref={bs}
-            snapPoints={[400, 0]}
-            initialSnap={1}
-            callbackNode={fall}
-            renderContent={this.renderBottomSheetContent}
-            renderHeader={this.renderBottomSheetHeader}
-            enabledGestureInteraction={true}
-          />
+              <View style={{marginVertical: 20}}>
+                <ButtonRadius10
+                  label="SIGN UP"
+                  bgColor={Colors.sickGreen}
+                  onPress={() =>
+                    this.props.navigation.navigate(Constants.verifyVia)
+                  }
+                />
+              </View>
+            </View>
+            {/* </ScrollView> */}
+          </KeyboardAwareScrollView>
         </View>
       </ImageBackground>
     );
@@ -352,7 +334,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   childContainer: {
-    flex: 1,
     justifyContent: 'flex-end',
   },
   formLabel: {
@@ -383,9 +364,9 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
-    shadowRadius: 2,
-    shadowOpacity: 0.4,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     paddingTop: 20,
     borderTopStartRadius: 20,
     borderTopEndRadius: 20,

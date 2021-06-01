@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Platform,
 } from 'react-native';
 import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
@@ -29,6 +30,7 @@ export default class Search extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 0}}
@@ -58,7 +60,7 @@ export default class Search extends Component {
           <TouchableOpacity>
             <Image
               source={Images.iconSearch}
-              style={{height: 80, width: 80, resizeMode: 'stretch'}}
+              style={{height: 50, width: 50, resizeMode: 'stretch'}}
             />
           </TouchableOpacity>
         </View>

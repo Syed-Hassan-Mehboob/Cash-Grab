@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Images from '../common/Images';
@@ -28,7 +29,8 @@ export default class OTP extends Component {
       <ImageBackground
         source={Images.loginBgWeb}
         style={[styles.container, {width: '100%'}]}>
-        <KeyboardAvoidingView style={{flex: 1}}>
+        <KeyboardAvoidingView
+          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
@@ -136,11 +138,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 5,
-    shadowColor: '#ccc',
+    shadowColor: '#c5c5c5',
     color: Colors.black,
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
     fontFamily: Constants.fontRegular,

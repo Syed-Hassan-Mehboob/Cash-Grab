@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import RegularTextCB from '../components/RegularTextCB';
@@ -85,6 +85,7 @@ export default class Settings extends React.Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
             Settings
@@ -170,10 +171,10 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     borderColor: Colors.sickGreen,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
 });

@@ -7,7 +7,7 @@ import Constants from '../common/Constants';
 const ButtonRadius10 = ({
   label,
   onPress,
-  bgColor = Colors.orange,
+  bgColor = Colors.sickGreen,
   textColor = Colors.black,
 }) => (
   <View>
@@ -26,16 +26,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#878787',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
     elevation: 10,
-    overflow: 'hidden',
   },
   buttonLoginText: {
     fontSize: 18,
-    padding: 25,
     fontFamily: Constants.fontBold,
   },
 });

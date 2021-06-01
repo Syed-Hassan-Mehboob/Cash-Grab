@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Platform,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
@@ -275,6 +276,7 @@ export default class AllCategories extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginTop: Platform.OS === 'android' ? 0 : 30,
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -393,20 +395,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     flex: 1,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   circleCard: {
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
 });

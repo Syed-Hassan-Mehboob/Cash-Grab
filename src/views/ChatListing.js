@@ -3,6 +3,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -236,7 +237,7 @@ export default class ChatListing extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              marginTop: 10,
+              marginTop: Platform.OS === 'android' ? 10 : 20,
               padding: 15,
             }}>
             <TouchableOpacity
@@ -310,11 +311,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 30,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   iconUser: {
     height: 60,

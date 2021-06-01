@@ -3,6 +3,7 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -18,7 +19,9 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
   }
+
   state = {};
+
   render() {
     return (
       <View style={styles.container}>
@@ -37,6 +40,7 @@ export default class Profile extends React.Component {
               justifyContent: 'center',
               width: '100%',
               padding: 15,
+              marginTop: Platform.OS === 'android' ? 0 : 20,
             }}>
             <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
               Profile
@@ -149,7 +153,7 @@ export default class Profile extends React.Component {
               paddingVertical: 10,
             }}>
             <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
-              Email Address
+              Phone No.
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               +1(239) 555-01089
@@ -189,10 +193,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
   },
@@ -206,10 +210,10 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 45,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
 });

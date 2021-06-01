@@ -165,25 +165,21 @@ export default class Login extends Component {
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-          <View
+          <TouchableOpacity
             style={{
               flexDirection: 'row',
               alignSelf: 'center',
               position: 'absolute',
-              bottom: 10,
+              bottom: 20,
+            }}
+            onPress={() => {
+              this.props.navigation.navigate(Constants.createAccount);
             }}>
             <RegularTextCB style={styles.noUnderlineText}>
               Don't have any account?
             </RegularTextCB>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate(Constants.createAccount);
-              }}>
-              <RegularTextCB style={styles.underlineText}>
-                Sign Up
-              </RegularTextCB>
-            </TouchableOpacity>
-          </View>
+            <RegularTextCB style={styles.underlineText}>Sign Up</RegularTextCB>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
       </ImageBackground>
     );

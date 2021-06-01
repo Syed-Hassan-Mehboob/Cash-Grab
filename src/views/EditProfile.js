@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import LightTextCB from '../components/LightTextCB';
@@ -15,7 +16,6 @@ import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import EditText from '../components/EditText';
 
 const {width, height} = Dimensions.get('window');
@@ -34,6 +34,7 @@ export default class EditProfile extends Component {
       location: '',
       oldPassword: '',
       newPassword: '',
+      isModalVisible: false,
     };
   }
 
@@ -54,6 +55,12 @@ export default class EditProfile extends Component {
     }
   };
 
+  toggleIsModalVisible = () => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+    });
+  };
+
   renderBottomSheetHeader = () => {
     return (
       <View style={styles.bottomSheetHeader}>
@@ -67,47 +74,61 @@ export default class EditProfile extends Component {
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.toggleIsModalVisible();
+            }}>
+            <Image
+              source={Images.iconClose}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: Colors.coolGrey,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
           Upload a photo from
         </LightTextCB>
         <View style={{marginTop: 30}}>
           <ButtonRadius10
-            label="Camera"
+            label="CAMERA"
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
         <View style={{marginTop: 20}}>
           <ButtonRadius10
-            label="Gallery"
+            label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{marginTop: 20}}>
-          <ButtonRadius10 label="Cancel" onPress={() => bs.current.snapTo(1)} />
-        </View>
+        <View style={{height: 50}} />
       </View>
     );
   };
 
   choosePhotoFromGallery = () => {
+    this.toggleIsModalVisible();
     ImagePicker.openPicker({
       width: 500,
       height: 500,
       cropping: true,
     }).then((image) => {
-      bs.current.snapTo(1);
       this.setState({avatar: image.path});
     });
   };
 
   takePhotoFromCamera = () => {
+    this.toggleIsModalVisible();
     ImagePicker.openCamera({
       width: 500,
       height: 500,
       cropping: true,
     }).then((image) => {
-      bs.current.snapTo(1);
       this.setState({avatar: image.path});
     });
   };
@@ -135,6 +156,7 @@ export default class EditProfile extends Component {
                 justifyContent: 'center',
                 width: '100%',
                 padding: 15,
+                marginTop: Platform.OS === 'android' ? 0 : 20,
               }}>
               <TouchableOpacity
                 style={{position: 'absolute', left: 10}}
@@ -171,7 +193,8 @@ export default class EditProfile extends Component {
               style={[
                 styles.circleCard,
                 {justifyContent: 'center', alignItems: 'center'},
-              ]}>
+              ]}
+              onPress={() => this.toggleIsModalVisible()}>
               <Image source={Images.emp1} style={styles.iconUser} />
               <Image
                 source={Images.iconCamera}
@@ -189,7 +212,9 @@ export default class EditProfile extends Component {
               Damian Santosa
             </RegularTextCB>
           </View>
-          <ScrollView style={[styles.container, {paddingVertical: 20}]}>
+          <ScrollView
+            style={[styles.container, {paddingVertical: 20}]}
+            showsVerticalScrollIndicator={false}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <RegularTextCB
                 style={{
@@ -320,15 +345,9 @@ export default class EditProfile extends Component {
             </View>
           </ScrollView>
         </Animated.View>
-        <BottomSheet
-          ref={bs}
-          snapPoints={[380, 0]}
-          initialSnap={1}
-          callbackNode={fall}
-          renderContent={this.renderBottomSheetContent}
-          renderHeader={this.renderBottomSheetHeader}
-          enabledGestureInteraction={true}
-        />
+        <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
+          {this.renderBottomSheetContent()}
+        </Modal>
       </View>
     );
   }
@@ -393,9 +412,10 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
-    shadowRadius: 2,
-    shadowOpacity: 0.4,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
+    elevation: 8,
     paddingTop: 20,
     borderTopStartRadius: 20,
     borderTopEndRadius: 20,
@@ -428,10 +448,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
   },
@@ -445,10 +465,14 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 45,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
   },
 });

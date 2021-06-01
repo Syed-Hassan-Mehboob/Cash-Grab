@@ -6,6 +6,7 @@ import {
   View,
   Image,
   FlatList,
+  Platform,
 } from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
@@ -73,6 +74,7 @@ export default class Support extends React.Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 10}}
@@ -141,11 +143,11 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   iconUser: {
     height: 40,

@@ -8,9 +8,8 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
@@ -19,9 +18,6 @@ import RegularTextCB from '../../components/RegularTextCB';
 import EditText from '../../components/EditText';
 
 const {width, height} = Dimensions.get('window');
-
-const fall = new Animated.Value(1);
-const bs = React.createRef();
 
 export default class VendorEditProfile extends Component {
   constructor(props) {
@@ -34,6 +30,7 @@ export default class VendorEditProfile extends Component {
       location: '',
       oldPassword: '',
       newPassword: '',
+      isModalVisible: false,
     };
   }
 
@@ -54,6 +51,12 @@ export default class VendorEditProfile extends Component {
     }
   };
 
+  toggleIsModalVisible = () => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+    });
+  };
+
   renderBottomSheetHeader = () => {
     return (
       <View style={styles.bottomSheetHeader}>
@@ -67,47 +70,62 @@ export default class VendorEditProfile extends Component {
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.toggleIsModalVisible();
+            }}>
+            <Image
+              source={Images.iconClose}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: Colors.coolGrey,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
           Upload a photo from
         </LightTextCB>
         <View style={{marginTop: 30}}>
           <ButtonRadius10
-            label="Camera"
+            bgColor={Colors.sickGreen}
+            label="CAMERA"
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
         <View style={{marginTop: 20}}>
           <ButtonRadius10
-            label="Gallery"
+            label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{marginTop: 20}}>
-          <ButtonRadius10 label="Cancel" onPress={() => bs.current.snapTo(1)} />
-        </View>
+        <View style={{height: 50}} />
       </View>
     );
   };
 
   choosePhotoFromGallery = () => {
+    this.toggleIsModalVisible();
     ImagePicker.openPicker({
       width: 500,
       height: 500,
       cropping: true,
     }).then((image) => {
-      bs.current.snapTo(1);
       this.setState({avatar: image.path});
     });
   };
 
   takePhotoFromCamera = () => {
+    this.toggleIsModalVisible();
     ImagePicker.openCamera({
       width: 500,
       height: 500,
       cropping: true,
     }).then((image) => {
-      bs.current.snapTo(1);
       this.setState({avatar: image.path});
     });
   };
@@ -115,220 +133,210 @@ export default class VendorEditProfile extends Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: Colors.white}}>
-        <Animated.View
+        <View
           style={{
-            flex: 1,
-            opacity: Animated.add(0.5, Animated.multiply(fall, 1.0)),
+            borderBottomStartRadius: 30,
+            borderBottomEndRadius: 30,
+            height: height / 3.75,
+            backgroundColor: Colors.navy,
+            alignItems: 'center',
           }}>
           <View
             style={{
-              borderBottomStartRadius: 30,
-              borderBottomEndRadius: 30,
-              height: height / 3.75,
-              backgroundColor: Colors.navy,
+              flexDirection: 'row',
               alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              padding: 15,
+              marginTop: Platform.OS === 'android' ? 0 : 20,
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                padding: 15,
-              }}>
-              <TouchableOpacity
-                style={{position: 'absolute', left: 10}}
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}>
-                <Image
-                  source={Images.arrowBack}
-                  style={[styles.iconBack, {tintColor: Colors.white}]}
-                />
-              </TouchableOpacity>
-              <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
-                Profile
-              </RegularTextCB>
-              <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  right: 10,
-                  paddingVertical: 5,
-                  paddingHorizontal: 15,
-                  backgroundColor: Colors.sickGreen,
-                  borderRadius: 5,
-                }}
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}>
-                <RegularTextCB style={{color: Colors.white}}>
-                  Save
-                </RegularTextCB>
-              </TouchableOpacity>
-            </View>
             <TouchableOpacity
-              activeOpacity={0.5}
-              style={[
-                styles.circleCard,
-                {justifyContent: 'center', alignItems: 'center'},
-              ]}>
-              <Image source={Images.emp1} style={styles.iconUser} />
+              style={{position: 'absolute', left: 10}}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
               <Image
-                source={Images.iconCamera}
-                style={{
-                  height: 25,
-                  width: 25,
-                  position: 'absolute',
-                  resizeMode: 'contain',
-                  opacity: 0.4,
-                }}
+                source={Images.arrowBack}
+                style={[styles.iconBack, {tintColor: Colors.white}]}
               />
             </TouchableOpacity>
-            <RegularTextCB
-              style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
-              Damian Santosa
+            <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
+              Profile
             </RegularTextCB>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                right: 10,
+                paddingVertical: 5,
+                paddingHorizontal: 15,
+                backgroundColor: Colors.sickGreen,
+                borderRadius: 5,
+              }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
+            </TouchableOpacity>
           </View>
-          <ScrollView style={[styles.container, {paddingVertical: 20}]}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 16,
-                  marginStart: 20,
-                  flex: 0.5,
-                }}>
-                Name
-              </RegularTextCB>
-              <EditText
-                ref={'name'}
-                placeholder={'Name'}
-                value={this.state.fullName}
-                onChangeText={(text) => {
-                  this.setState({fullName: text});
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 16,
-                  marginStart: 20,
-                  flex: 0.5,
-                }}>
-                Email
-              </RegularTextCB>
-              <EditText
-                ref={'email'}
-                keyboardType="email-address"
-                placeholder={'Email Address'}
-                value={this.state.email}
-                onChangeText={(text) => {
-                  this.validateEmail(text);
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 16,
-                  marginStart: 20,
-                  flex: 0.5,
-                }}>
-                Phone No.
-              </RegularTextCB>
-              <EditText
-                ref={'phone'}
-                keyboardType={
-                  Platform.OS === 'android' ? 'numeric' : 'number-pad'
-                }
-                placeholder={'Phone Number'}
-                value={this.state.phoneNumber}
-                onChangeText={(text) => {
-                  this.setState({
-                    phoneNumber: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 16,
-                  marginStart: 20,
-                  flex: 0.5,
-                }}>
-                Location
-              </RegularTextCB>
-              <EditText
-                ref={'location'}
-                placeholder={'Location'}
-                value={this.state.location}
-                onChangeText={(text) => {
-                  this.setState({location: text});
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 16,
-                  marginStart: 20,
-                  flex: 0.5,
-                }}>
-                Old Password
-              </RegularTextCB>
-              <EditText
-                ref={'oldPassword'}
-                placeholder={'Old Password'}
-                secureTextEntry={true}
-                value={this.state.oldPassword}
-                onChangeText={(text) => {
-                  this.setState({oldPassword: text});
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 16,
-                  marginStart: 20,
-                  flex: 0.5,
-                }}>
-                New Password
-              </RegularTextCB>
-              <EditText
-                ref={'newPassword'}
-                placeholder={'New Password'}
-                secureTextEntry={true}
-                value={this.state.newPassword}
-                onChangeText={(text) => {
-                  this.setState({newPassword: text});
-                }}
-                style={[styles.textInput, {marginBottom: 20}]}
-              />
-            </View>
-          </ScrollView>
-        </Animated.View>
-        <BottomSheet
-          ref={bs}
-          snapPoints={[380, 0]}
-          initialSnap={1}
-          callbackNode={fall}
-          renderContent={this.renderBottomSheetContent}
-          renderHeader={this.renderBottomSheetHeader}
-          enabledGestureInteraction={true}
-        />
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[
+              styles.circleCard,
+              {justifyContent: 'center', alignItems: 'center'},
+            ]}
+            onPress={() => this.toggleIsModalVisible()}>
+            <Image source={Images.emp1} style={styles.iconUser} />
+            <Image
+              source={Images.iconCamera}
+              style={{
+                height: 25,
+                width: 25,
+                position: 'absolute',
+                resizeMode: 'contain',
+                opacity: 0.4,
+              }}
+            />
+          </TouchableOpacity>
+          <RegularTextCB
+            style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
+            Damian Santosa
+          </RegularTextCB>
+        </View>
+        <ScrollView
+          style={[styles.container, {paddingVertical: 20}]}
+          showsVerticalScrollIndicator={false}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: 20,
+                flex: 0.5,
+              }}>
+              Name
+            </RegularTextCB>
+            <EditText
+              ref={'name'}
+              placeholder={'Name'}
+              value={this.state.fullName}
+              onChangeText={(text) => {
+                this.setState({fullName: text});
+              }}
+              style={[styles.textInput]}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: 20,
+                flex: 0.5,
+              }}>
+              Email
+            </RegularTextCB>
+            <EditText
+              ref={'email'}
+              keyboardType="email-address"
+              placeholder={'Email Address'}
+              value={this.state.email}
+              onChangeText={(text) => {
+                this.validateEmail(text);
+              }}
+              style={[styles.textInput]}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: 20,
+                flex: 0.5,
+              }}>
+              Phone No.
+            </RegularTextCB>
+            <EditText
+              ref={'phone'}
+              keyboardType={
+                Platform.OS === 'android' ? 'numeric' : 'number-pad'
+              }
+              placeholder={'Phone Number'}
+              value={this.state.phoneNumber}
+              onChangeText={(text) => {
+                this.setState({
+                  phoneNumber: text,
+                });
+              }}
+              style={[styles.textInput]}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: 20,
+                flex: 0.5,
+              }}>
+              Location
+            </RegularTextCB>
+            <EditText
+              ref={'location'}
+              placeholder={'Location'}
+              value={this.state.location}
+              onChangeText={(text) => {
+                this.setState({location: text});
+              }}
+              style={[styles.textInput]}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: 20,
+                flex: 0.5,
+              }}>
+              Old Password
+            </RegularTextCB>
+            <EditText
+              ref={'oldPassword'}
+              placeholder={'Old Password'}
+              secureTextEntry={true}
+              value={this.state.oldPassword}
+              onChangeText={(text) => {
+                this.setState({oldPassword: text});
+              }}
+              style={[styles.textInput]}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: 20,
+                flex: 0.5,
+              }}>
+              New Password
+            </RegularTextCB>
+            <EditText
+              ref={'newPassword'}
+              placeholder={'New Password'}
+              secureTextEntry={true}
+              value={this.state.newPassword}
+              onChangeText={(text) => {
+                this.setState({newPassword: text});
+              }}
+              style={[styles.textInput, {marginBottom: 20}]}
+            />
+          </View>
+        </ScrollView>
+        <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
+          {this.renderBottomSheetContent()}
+        </Modal>
       </View>
     );
   }
@@ -393,9 +401,9 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
-    shadowRadius: 2,
-    shadowOpacity: 0.4,
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     paddingTop: 20,
     borderTopStartRadius: 20,
     borderTopEndRadius: 20,
@@ -428,10 +436,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
   },
@@ -445,10 +453,14 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 45,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
   },
 });

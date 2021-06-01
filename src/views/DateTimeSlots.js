@@ -9,6 +9,7 @@ import {
   FlatList,
   TextInput,
   Switch,
+  Platform,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Slider from '@react-native-community/slider';
@@ -114,7 +115,7 @@ export default class DateTimeSlots extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',
@@ -122,6 +123,7 @@ export default class DateTimeSlots extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 10}}
@@ -241,10 +243,6 @@ export default class DateTimeSlots extends Component {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 paddingEnd: 50,
-                borderRadius: 6,
-                borderWidth: 5,
-                overflow: 'hidden',
-                borderColor: Colors.sickGreen,
               }}
             />
           </View>
@@ -418,31 +416,33 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     borderColor: Colors.sickGreen,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   circleCard: {
     height: 50,
     width: 50,
     borderRadius: 25,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 10,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   selectedDateBG: {
     height: 30,
     width: 30,
     backgroundColor: Colors.sickGreen,
     borderRadius: 15,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
   },
   selectedTimeBG: {
@@ -451,10 +451,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     backgroundColor: Colors.sickGreen,
     borderRadius: 15,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     alignItems: 'center',
     elevation: 10,
     marginBottom: 15,

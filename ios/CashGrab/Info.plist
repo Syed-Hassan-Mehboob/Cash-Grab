@@ -39,11 +39,11 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>CashGrab requires your current location.</string>
-	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>CashGrab requires access to the photo library.</string>
-	</dict>
-	<key>NSCameraUsageDescription</key>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>CashGrab requires user location to reach the destination</string>
+		<key>NSCameraUsageDescription</key>
 	<string>CashGrab requires access to the camera.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -59,5 +59,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Jost-Bold.ttf</string>
+		<string>Jost-Light.ttf</string>
+		<string>Jost-Medium.ttf</string>
+		<string>Jost-Regular.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>Ionicons.ttf</string>
+	</array>
 </dict>
 </plist>

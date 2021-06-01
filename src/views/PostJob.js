@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   TextInput,
@@ -30,7 +31,7 @@ export default class PostJob extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',
@@ -38,6 +39,7 @@ export default class PostJob extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
             Post a Job
@@ -222,10 +224,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 20,
-    shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
   },
