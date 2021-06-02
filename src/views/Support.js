@@ -8,10 +8,14 @@ import {
   FlatList,
   Platform,
 } from 'react-native';
+import Modal from 'react-native-modal';
+import ImagePicker from 'react-native-image-crop-picker';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
+import ButtonRadius10 from '../components/ButtonRadius10';
+import LightTextCB from '../components/LightTextCB';
 
 export default class Support extends React.Component {
   messages = [
@@ -41,6 +45,76 @@ export default class Support extends React.Component {
 
   state = {
     message: '',
+    isModalVisible: false,
+  };
+
+  toggleIsModalVisible = () => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+    });
+  };
+
+  renderBottomSheetContent = () => {
+    return (
+      <View style={styles.bottomSheetBody}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.toggleIsModalVisible();
+            }}>
+            <Image
+              source={Images.iconClose}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: Colors.coolGrey,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
+          Upload a photo from
+        </LightTextCB>
+        <View style={{marginTop: 30}}>
+          <ButtonRadius10
+            bgColor={Colors.sickGreen}
+            label="CAMERA"
+            onPress={() => this.takePhotoFromCamera()}
+          />
+        </View>
+        <View style={{marginTop: 20}}>
+          <ButtonRadius10
+            label="GALLERY"
+            onPress={() => this.choosePhotoFromGallery()}
+          />
+        </View>
+        <View style={{height: 50}} />
+      </View>
+    );
+  };
+
+  choosePhotoFromGallery = () => {
+    this.toggleIsModalVisible();
+    ImagePicker.openPicker({
+      width: 500,
+      height: 500,
+      cropping: true,
+    }).then((image) => {
+      this.setState({avatar: image.path});
+    });
+  };
+
+  takePhotoFromCamera = () => {
+    this.toggleIsModalVisible();
+    ImagePicker.openCamera({
+      width: 500,
+      height: 500,
+      cropping: true,
+    }).then((image) => {
+      this.setState({avatar: image.path});
+    });
   };
 
   renderChatItem = ({item}) => {
@@ -103,7 +177,7 @@ export default class Support extends React.Component {
               padding: 10,
             },
           ]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.toggleIsModalVisible()}>
             <Image
               source={Images.iconCamera}
               style={{height: 25, width: 25, resizeMode: 'contain'}}
@@ -119,6 +193,9 @@ export default class Support extends React.Component {
             <Image source={Images.iconSend} style={{height: 40, width: 40}} />
           </TouchableOpacity>
         </View>
+        <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
+          {this.renderBottomSheetContent()}
+        </Modal>
       </View>
     );
   }
@@ -162,5 +239,15 @@ const styles = StyleSheet.create({
     height: 50,
     fontFamily: Constants.fontRegular,
     color: Colors.black,
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  bottomSheetBody: {
+    backgroundColor: Colors.white,
+    padding: 20,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
   },
 });

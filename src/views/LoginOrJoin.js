@@ -7,6 +7,7 @@ import Images from '../common/Images';
 import BoldTextCB from '../components/BoldTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
+
 export default class LoginOrJoin extends Component {
   constructor(props) {
     super(props);

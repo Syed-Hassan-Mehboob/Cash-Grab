@@ -462,6 +462,7 @@ const styles = StyleSheet.create({
   unSelectedTimeBG: {
     paddingHorizontal: 15,
     paddingVertical: 15,
+    borderRadius: 15,
     marginHorizontal: 5,
     alignItems: 'center',
     backgroundColor: Colors.white,

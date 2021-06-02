@@ -57,16 +57,6 @@ export default class VendorEditProfile extends Component {
     });
   };
 
-  renderBottomSheetHeader = () => {
-    return (
-      <View style={styles.bottomSheetHeader}>
-        <View style={styles.panelHeader}>
-          <View style={styles.panelHandle} />
-        </View>
-      </View>
-    );
-  };
-
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
@@ -421,6 +411,8 @@ const styles = StyleSheet.create({
   bottomSheetBody: {
     backgroundColor: Colors.white,
     padding: 20,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
   },
   orangeCircle: {
     height: 30,

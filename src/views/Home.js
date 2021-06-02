@@ -142,12 +142,45 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      service: '',
+      service: 'Select',
       rateRequested: '',
       location: '',
       address: '',
       exactTime: '',
       isQuickServiceModalVisible: false,
+      isSelectionModalVisible: false,
+      selections: [
+        {
+          id: '0',
+          text: 'Service 1',
+          isSelected: false,
+        },
+        {
+          id: '1',
+          text: 'Service 2',
+          isSelected: false,
+        },
+        {
+          id: '2',
+          text: 'Service 3',
+          isSelected: false,
+        },
+        {
+          id: '3',
+          text: 'Service 4',
+          isSelected: false,
+        },
+        {
+          id: '4',
+          text: 'Service 5',
+          isSelected: false,
+        },
+        {
+          id: '5',
+          text: 'Service 6',
+          isSelected: false,
+        },
+      ],
     };
   }
 
@@ -161,14 +194,10 @@ export default class Home extends Component {
     });
   };
 
-  renderBottomSheetHeader = () => {
-    return (
-      <View style={styles.bottomSheetHeader}>
-        <View style={styles.panelHeader}>
-          <View style={styles.panelHandle} />
-        </View>
-      </View>
-    );
+  toggleIsSelectionModalVisible = () => {
+    this.setState({
+      isSelectionModalVisible: !this.state.isSelectionModalVisible,
+    });
   };
 
   renderBottomSheetContent = () => {
@@ -197,17 +226,22 @@ export default class Home extends Component {
           <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
             Select Service
           </RegularTextCB>
-          <EditText
-            ref={'service'}
-            placeholder={'Select Service'}
-            value={this.state.service}
-            onChangeText={(text) => {
-              this.setState({
-                service: text,
-              });
-            }}
-            style={[styles.textInput]}
-          />
+          <TouchableOpacity
+            style={[
+              styles.card,
+              {
+                height: 60,
+                borderRadius: 10,
+                justifyContent: 'center',
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+              },
+            ]}
+            onPress={() => this.toggleIsSelectionModalVisible()}>
+            <RegularTextCB style={{color: Colors.black}}>
+              {this.state.service}
+            </RegularTextCB>
+          </TouchableOpacity>
         </View>
         <View style={[styles.textInputContainer, {marginTop: 20}]}>
           <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
@@ -285,6 +319,84 @@ export default class Home extends Component {
       </View>
     );
   };
+
+  renderSelectionBottomSheetContent = () => {
+    return (
+      <View style={styles.bottomSheetBody}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+            Select
+          </RegularTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.clearSelection();
+              this.toggleIsSelectionModalVisible();
+            }}>
+            <Image
+              source={Images.iconClose}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: Colors.coolGrey,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          style={{marginTop: 5}}
+          data={this.state.selections}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={this.renderSelectionItem}
+          extraData={this.state.selections}
+          contentContainerStyle={{
+            paddingBottom: 50,
+          }}
+        />
+      </View>
+    );
+  };
+
+  renderSelectionItem = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={
+          item.isSelected === false
+            ? styles.unselectedFilter
+            : styles.selectedFilter
+        }
+        onPress={() => {
+          this.handleOnSelectionItemClick(index);
+        }}>
+        <RegularTextCB
+          style={{
+            fontSize: 14,
+            color: Colors.black,
+          }}>
+          {item.text}
+        </RegularTextCB>
+      </TouchableOpacity>
+    );
+  };
+
+  handleOnSelectionItemClick = (index) => {
+    let mSelection = this.state.selections;
+    mSelection.forEach((item) => {
+      item.isSelected = false;
+    });
+    mSelection[index].isSelected = true;
+    this.setState({selections: mSelection, service: mSelection[index].text});
+    this.toggleIsSelectionModalVisible();
+  };
+
+  clearSelection() {
+    this.state.selections.forEach((item) => {
+      item.isSelected = false;
+    });
+    this.state.service = 'Select';
+  }
 
   renderCategoryItem = ({item}) => {
     return (
@@ -662,6 +774,12 @@ export default class Home extends Component {
           style={styles.modal}>
           {this.renderBottomSheetContent()}
         </Modal>
+        <Modal
+          isVisible={this.state.isSelectionModalVisible}
+          coverScreen={false}
+          style={styles.modal}>
+          {this.renderSelectionBottomSheetContent()}
+        </Modal>
       </View>
     );
   }
@@ -721,5 +839,23 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
+  },
+  selectedFilter: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    margin: 2,
+    maxWidth: '100%',
+    width: '100%',
+    backgroundColor: Colors.sickGreen,
+    borderRadius: 12,
+  },
+  unselectedFilter: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    margin: 2,
+    maxWidth: '100%',
+    width: '100%',
+    backgroundColor: Colors.white,
+    borderRadius: 12,
   },
 });

@@ -1,26 +1,24 @@
 import React, {Component} from 'react';
 import {
   ImageBackground,
-  TextInput,
   StyleSheet,
   View,
   Image,
   Platform,
+  FlatList,
 } from 'react-native';
+import Modal from 'react-native-modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import LightTextCB from '../components/LightTextCB';
 import Constants from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
-import ImagePicker from 'react-native-image-crop-picker';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import EditText from '../components/EditText';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -29,10 +27,43 @@ export default class SignUp extends Component {
       isVendor: false,
       avatar: '',
       fullName: '',
-      service: '',
+      service: 'Select',
       email: '',
       password: '',
       confirmPassword: '',
+      isSelectionModalVisible: false,
+      selections: [
+        {
+          id: '0',
+          text: 'Service 1',
+          isSelected: false,
+        },
+        {
+          id: '1',
+          text: 'Service 2',
+          isSelected: false,
+        },
+        {
+          id: '2',
+          text: 'Service 3',
+          isSelected: false,
+        },
+        {
+          id: '3',
+          text: 'Service 4',
+          isSelected: false,
+        },
+        {
+          id: '4',
+          text: 'Service 5',
+          isSelected: false,
+        },
+        {
+          id: '5',
+          text: 'Service 6',
+          isSelected: false,
+        },
+      ],
     };
   }
 
@@ -60,67 +91,89 @@ export default class SignUp extends Component {
     }
   };
 
-  renderBottomSheetHeader = () => {
-    return (
-      <View style={styles.bottomSheetHeader}>
-        <View style={styles.panelHeader}>
-          <View style={styles.panelHandle} />
-        </View>
-      </View>
-    );
+  toggleIsSelectionModalVisible = () => {
+    this.setState({
+      isSelectionModalVisible: !this.state.isSelectionModalVisible,
+    });
   };
 
-  renderBottomSheetContent = () => {
+  renderSelectionBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <RegularTextCB style={{fontSize: 30}}>Upload Photo</RegularTextCB>
-        <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
-          Upload a photo from
-        </LightTextCB>
-        <View style={{marginTop: 30}}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="CAMERA"
-            onPress={() => this.takePhotoFromCamera()}
-          />
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+            Select
+          </RegularTextCB>
+          <TouchableOpacity
+            onPress={() => {
+              this.clearSelection();
+              this.toggleIsSelectionModalVisible();
+            }}>
+            <Image
+              source={Images.iconClose}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: Colors.coolGrey,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
         </View>
-        <View style={{marginTop: 20}}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="GALLERY"
-            onPress={() => this.choosePhotoFromGallery()}
-          />
-        </View>
-        <View style={{marginTop: 20}}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="CANCEL"
-            onPress={() => {}}
-          />
-        </View>
+        <FlatList
+          style={{marginTop: 5}}
+          data={this.state.selections}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={this.renderSelectionItem}
+          extraData={this.state.selections}
+          contentContainerStyle={{
+            paddingBottom: 50,
+          }}
+        />
       </View>
     );
   };
 
-  choosePhotoFromGallery = () => {
-    ImagePicker.openPicker({
-      width: 500,
-      height: 500,
-      cropping: true,
-    }).then((image) => {
-      this.setState({avatar: image.path});
-    });
+  renderSelectionItem = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={[
+          item.isSelected === false
+            ? styles.unselectedFilter
+            : styles.selectedFilter,
+        ]}
+        onPress={() => {
+          this.handleOnSelectionItemClick(index);
+        }}>
+        <RegularTextCB
+          style={{
+            fontSize: 14,
+            color: Colors.black,
+          }}>
+          {item.text}
+        </RegularTextCB>
+      </TouchableOpacity>
+    );
   };
 
-  takePhotoFromCamera = () => {
-    ImagePicker.openCamera({
-      width: 500,
-      height: 500,
-      cropping: true,
-    }).then((image) => {
-      this.setState({avatar: image.path});
+  handleOnSelectionItemClick = (index) => {
+    let mSelection = this.state.selections;
+    mSelection.forEach((item) => {
+      item.isSelected = false;
     });
+    mSelection[index].isSelected = true;
+    this.setState({selections: mSelection, service: mSelection[index].text});
+    this.toggleIsSelectionModalVisible();
   };
+
+  clearSelection() {
+    this.state.selections.forEach((item) => {
+      item.isSelected = false;
+    });
+    this.state.service = 'Select';
+  }
 
   render() {
     return (
@@ -132,7 +185,6 @@ export default class SignUp extends Component {
             style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}
             contentContainerStyle={{flexGrow: 1}}
             showsVerticalScrollIndicator={false}>
-            {/* <ScrollView bounces={false} showsVerticalScrollIndicator={false}> */}
             <View>
               <TouchableOpacity
                 onPress={() => {
@@ -168,38 +220,6 @@ export default class SignUp extends Component {
               </View>
             </View>
             <View style={[styles.childContainer]}>
-              {/* <View
-                style={{
-                  flexShrink: 1,
-                  flexDirection: 'row',
-                  alignSelf: 'center',
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    bs.current.snapTo(0);
-                  }}>
-                  <ImageBackground
-                    imageStyle={styles.iconUser}
-                    style={[styles.iconUser, {alignSelf: 'center'}]}
-                    source={
-                      this.state.avatar === ''
-                        ? Images.userPlaceHolder
-                        : {uri: this.state.avatar}
-                    }>
-                    <View style={styles.orangeCircle}>
-                      <Image
-                        source={Images.iconPencil}
-                        style={{
-                          height: 15,
-                          width: 15,
-                          tintColor: Colors.white,
-                          alignSelf: 'center',
-                        }}
-                      />
-                    </View>
-                  </ImageBackground>
-                </TouchableOpacity>
-              </View> */}
               <View style={[styles.textInputContainer, {marginTop: 30}]}>
                 <EditText
                   ref={'fullName'}
@@ -213,20 +233,24 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              {console.log('usVendor: ' + this.state.isVendor)}
               {this.state.isVendor && (
-                <View style={[styles.textInputContainer, {marginTop: 15}]}>
-                  <EditText
-                    ref={'service'}
-                    placeholder={'Select Service'}
-                    value={this.state.service}
-                    onChangeText={(text) => {
-                      this.setState({
-                        service: text,
-                      });
-                    }}
-                    style={[styles.textInput]}
-                  />
+                <View style={{marginTop: 15, marginHorizontal: 15}}>
+                  <TouchableOpacity
+                    style={[
+                      styles.card,
+                      {
+                        height: 60,
+                        borderRadius: 10,
+                        justifyContent: 'center',
+                        paddingHorizontal: 20,
+                        paddingVertical: 5,
+                      },
+                    ]}
+                    onPress={() => this.toggleIsSelectionModalVisible()}>
+                    <RegularTextCB style={{color: Colors.black}}>
+                      {this.state.service}
+                    </RegularTextCB>
+                  </TouchableOpacity>
                 </View>
               )}
               <View style={[styles.textInputContainer, {marginTop: 15}]}>
@@ -301,8 +325,13 @@ export default class SignUp extends Component {
                 />
               </View>
             </View>
-            {/* </ScrollView> */}
           </KeyboardAwareScrollView>
+          <Modal
+            isVisible={this.state.isSelectionModalVisible}
+            coverScreen={false}
+            style={styles.modal}>
+            {this.renderSelectionBottomSheetContent()}
+          </Modal>
         </View>
       </ImageBackground>
     );
@@ -384,6 +413,8 @@ const styles = StyleSheet.create({
   bottomSheetBody: {
     backgroundColor: Colors.white,
     padding: 20,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
   },
   orangeCircle: {
     height: 30,
@@ -394,5 +425,37 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     right: 10,
     backgroundColor: Colors.orange,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    flex: 1,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  selectedFilter: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    margin: 2,
+    maxWidth: '100%',
+    width: '100%',
+    backgroundColor: Colors.sickGreen,
+    borderRadius: 12,
+  },
+  unselectedFilter: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    margin: 2,
+    maxWidth: '100%',
+    width: '100%',
+    backgroundColor: Colors.white,
+    borderRadius: 12,
   },
 });
