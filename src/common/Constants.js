@@ -47,6 +47,20 @@ const Constants = {
   support: 'Support',
   termsAndConditionsScreen: 'TermsAndConditions',
   logOut: 'Log Out',
+  /* * api urls * */
+  baseURL: 'https://cash-grab.reignsol.net/api/v1/',
+  signUpURL: 'auth/register',
+  loginURL: 'auth/login',
+  verifyOtpURL: 'auth/verify-otp',
+  resendOtpURL: 'auth/resend-otp',
+  forgotPasswordURL: 'auth/forgot-password',
+  updatePasswordURL: 'auth/update-password',
+  getProfileURL: 'auth/get-profile',
+  updateProfileURL: 'auth/update-profile',
+  signOutURL: 'auth/sign-out',
+  customerCategoriesURL: 'customer/categories',
+  customerViewCategoriesURL: 'customer/view-category?',
+  customerRatingsURL: 'customer/ratings',
 };
 
 export default Constants;

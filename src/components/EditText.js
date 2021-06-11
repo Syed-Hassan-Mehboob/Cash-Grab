@@ -31,6 +31,7 @@ export default class EditText extends Component {
       secureTextEntry,
       multiline = false,
       numberOfLines = 1,
+      isEditable = true,
     } = this.props;
     return (
       <View style={[styles.card, this.props.style]}>
@@ -48,6 +49,7 @@ export default class EditText extends Component {
           style={styles.textInput}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          editable={isEditable}
         />
         {secureTextEntry && (
           <TouchableOpacity

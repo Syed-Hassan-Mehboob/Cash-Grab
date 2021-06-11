@@ -7,7 +7,11 @@ import {
   Switch,
   TouchableOpacity,
   ImageBackground,
+  Platform,
 } from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
@@ -15,12 +19,14 @@ import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import utils from '../utils';
+import Axios, {setClientToken} from '../network/APIKit';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
       email: '',
       password: '',
       isSwitchEnabled: false,
@@ -28,10 +34,6 @@ export default class Login extends Component {
       secureText: true,
       eyeIcon: 'eye-off',
     };
-  }
-
-  componentDidMount() {
-    this.getUserType();
   }
 
   toggleIsEnabled = () =>
@@ -42,22 +44,65 @@ export default class Login extends Component {
       this.setState({secureText: false, eyeIcon: 'eye'});
     else this.setState({secureText: true, eyeIcon: 'eye-off'});
   }
+  async saveUser(user) {
+    const resetAction = CommonActions.reset({
+      index: 0,
+      routes: [{name: Constants.drawerNavigator}],
+    });
 
-  validateEmail = (text) => {
-    this.setState({email: text});
-
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(text) === false) {
-      this.setState({tickIcon: 'cross'});
-    } else {
-      this.setState({tickIcon: 'check'});
+    try {
+      var data = JSON.stringify(user);
+      await AsyncStorage.setItem('user', data, () => {
+        console.log('save: ' + data);
+      });
+      this.setState({isLoading: false});
+      setTimeout(() => {
+        this.props.navigation.dispatch(resetAction);
+      }, 500);
+    } catch (error) {
+      utils.showToast(error);
     }
-  };
+  }
 
-  getUserType = async () => {
-    const value = await AsyncStorage.getItem('isVendor');
-    var data = JSON.parse(value);
-    console.log(data);
+  login = () => {
+    let email = this.state.email;
+    let password = this.state.password;
+
+    if (utils.isEmpty(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (utils.isEmpty(password)) {
+      utils.showToast('Invalid Password');
+      return;
+    }
+
+    const onSuccess = ({data}) => {
+      setClientToken(data.data.token);
+      this.saveUser(data.data);
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+      this.setState({isLoading: false});
+    };
+
+    // Show spinner when call is made
+    this.setState({isLoading: true});
+
+    Axios.post(Constants.loginURL, {
+      email: email,
+      password: password,
+      device_type: Platform.OS === 'android' ? 'android' : 'ios',
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   render() {
@@ -96,7 +141,7 @@ export default class Login extends Component {
                 placeholder={'Email Address'}
                 value={this.state.email}
                 onChangeText={(text) => {
-                  this.validateEmail(text);
+                  this.setState({email: text});
                 }}
                 style={[styles.textInput]}
               />
@@ -150,9 +195,7 @@ export default class Login extends Component {
               <ButtonRadius10
                 label="LOGIN"
                 bgColor={Colors.sickGreen}
-                onPress={() =>
-                  this.props.navigation.navigate(Constants.drawerNavigator)
-                }
+                onPress={() => this.login()}
               />
             </View>
             <TouchableOpacity
@@ -180,6 +223,11 @@ export default class Login extends Component {
             </RegularTextCB>
             <RegularTextCB style={styles.underlineText}>Sign Up</RegularTextCB>
           </TouchableOpacity>
+          <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+          />
         </KeyboardAvoidingView>
       </ImageBackground>
     );
@@ -227,5 +275,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 16,
     color: Colors.sickGreen,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

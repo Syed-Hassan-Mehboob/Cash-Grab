@@ -14,7 +14,7 @@ export default class LoginOrJoin extends Component {
   }
 
   openNewScreen(newScreen) {
-    this.props.navigation.replace(newScreen);
+    this.props.navigation.navigate(newScreen);
   }
 
   render() {

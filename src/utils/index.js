@@ -2,6 +2,7 @@ import React from 'react';
 import {Toast} from 'native-base';
 import {RefreshControl, Alert, StatusBar, Platform} from 'react-native';
 import Colors from '../common/Colors';
+import Constants from '../common/Constants';
 
 let userData = {};
 class utils {
@@ -25,9 +26,8 @@ class utils {
   }
 
   validateEmail(str) {
-    var newPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    // var pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return newPattern.test(str);
+    var pattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    return pattern.test(str);
   }
 
   isEmptyOrSpaces(str) {
@@ -85,17 +85,34 @@ class utils {
       position: 'bottom',
       textStyle: {
         color: Colors.white,
-        fontFamily: Fonts.type.RalewayRegular,
-        fontSize: 18,
+        fontFamily: Constants.fontRegular,
+        fontSize: 14,
       },
       type: 'danger',
       duration: 2000,
       style: {
         backgroundColor: '#000',
         minHeight: 50,
-        borderRadius: 5,
+        borderRadius: 0,
+        marginBottom: 50,
       },
     });
   }
+
+  showResponseError(error) {
+    let errorRes = error.response;
+    let errorCode = JSON.stringify(errorRes.status);
+    if (errorCode === '400') {
+      let errorData = errorRes.data;
+      this.showToast(errorData.message);
+    } else {
+      let errorResData = JSON.parse(errorRes.request._response).data;
+      for (const [, value] of Object.entries(errorResData)) {
+        this.showToast(value[0]);
+        break;
+      }
+    }
+  }
 }
+
 export default new utils();

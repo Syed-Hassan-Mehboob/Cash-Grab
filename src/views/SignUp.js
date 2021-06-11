@@ -6,32 +6,37 @@ import {
   Image,
   Platform,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
+import CountryPicker from 'react-native-country-picker-modal';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import LightTextCB from '../components/LightTextCB';
 import Constants from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import EditText from '../components/EditText';
+import utils from '../utils';
 
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isVendor: false,
-      avatar: '',
       fullName: '',
       service: 'Select',
       email: '',
+      countryCode: '+1',
+      countryFlag: 'US',
+      phone: '12345678',
       password: '',
       confirmPassword: '',
       isSelectionModalVisible: false,
+      isCountryCodePickerVisible: false,
       selections: [
         {
           id: '0',
@@ -74,26 +79,20 @@ export default class SignUp extends Component {
   getUserType = async () => {
     const value = await AsyncStorage.getItem('isVendor');
     var data = JSON.parse(value);
-    console.log(data);
     if (value !== null) {
       this.setState({isVendor: data});
-    }
-  };
-
-  validateEmail = (text) => {
-    this.setState({email: text});
-
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(text) === false) {
-      this.setState({tickIcon: 'cross'});
-    } else {
-      this.setState({tickIcon: 'check'});
     }
   };
 
   toggleIsSelectionModalVisible = () => {
     this.setState({
       isSelectionModalVisible: !this.state.isSelectionModalVisible,
+    });
+  };
+
+  toggleIsCountryCodePickerVisible = () => {
+    this.setState({
+      isCountryCodePickerVisible: !this.state.isCountryCodePickerVisible,
     });
   };
 
@@ -174,6 +173,91 @@ export default class SignUp extends Component {
     });
     this.state.service = 'Select';
   }
+
+  onSelect = (country) => {
+    this.setState({
+      countryFlag: country.cca2,
+      countryCode: country.callingCode[0],
+    });
+  };
+
+  sendDataToVerifyVia = () => {
+    let name = this.state.fullName;
+    let service = this.state.service;
+    let country_code = this.state.countryCode;
+    let phone = this.state.phone;
+    let email = this.state.email;
+    let password = this.state.password;
+    let password_confirmation = this.state.confirmPassword;
+
+    if (name === '' || name === undefined) {
+      utils.showToast('Invalid Name');
+      return;
+    }
+
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (this.state.isVendor && service === 'Select') {
+      utils.showToast('Please Select Any Service');
+      return;
+    }
+
+    if (utils.isEmpty(phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
+
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+
+    if (phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
+
+    if (utils.isEmpty(password)) {
+      utils.showToast('Invalid Password');
+      return;
+    }
+
+    if (password.length < 8) {
+      utils.showToast('Password Should Not Be Less Than 8 Digits');
+      return;
+    }
+
+    if (password_confirmation !== password) {
+      utils.showToast('Passwords Did Not Match');
+      return;
+    }
+
+    const payload = this.state.isVendor
+      ? {
+          name,
+          service,
+          email,
+          password,
+          password_confirmation,
+          type: 'vendor',
+          country_code,
+          phone,
+        }
+      : {
+          name,
+          email,
+          password,
+          password_confirmation,
+          type: 'customer',
+          country_code,
+          phone,
+        };
+
+    this.props.navigation.navigate(Constants.verifyVia, {payload});
+  };
 
   render() {
     return (
@@ -260,9 +344,47 @@ export default class SignUp extends Component {
                   placeholder={'Email Address'}
                   value={this.state.email}
                   onChangeText={(text) => {
-                    this.validateEmail(text);
+                    this.setState({email: text});
                   }}
                   style={[styles.textInput]}
+                />
+              </View>
+              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => this.toggleIsCountryCodePickerVisible()}
+                  style={[
+                    styles.card,
+                    {
+                      borderRadius: 10,
+                      height: 60,
+                      padding: 10,
+                      marginEnd: 10,
+                      flex: 0,
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                    },
+                  ]}>
+                  <CountryPicker
+                    onSelect={this.onSelect}
+                    countryCode={this.state.countryCode}
+                    visible={this.state.isCountryCodePickerVisible}
+                    withCallingCode
+                    theme={{
+                      fontFamily: Constants.fontRegular,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                </TouchableOpacity>
+                <EditText
+                  ref={'phone'}
+                  keyboardType="phone-pad"
+                  placeholder={'12345678'}
+                  value={this.state.phone}
+                  onChangeText={(text) => {
+                    this.setState({phone: text});
+                  }}
+                  style={[styles.textInput, {flex: 1}]}
                 />
               </View>
               <View style={[styles.textInputContainer, {marginTop: 15}]}>
@@ -284,7 +406,7 @@ export default class SignUp extends Component {
                   ref={'confirm_password'}
                   placeholder={'Confirm Password'}
                   secureTextEntry={true}
-                  value={this.state.password}
+                  value={this.state.confirmPassword}
                   onChangeText={(text) => {
                     this.setState({
                       confirmPassword: text,
@@ -319,9 +441,7 @@ export default class SignUp extends Component {
                 <ButtonRadius10
                   label="SIGN UP"
                   bgColor={Colors.sickGreen}
-                  onPress={() =>
-                    this.props.navigation.navigate(Constants.verifyVia)
-                  }
+                  onPress={() => this.sendDataToVerifyVia()}
                 />
               </View>
             </View>

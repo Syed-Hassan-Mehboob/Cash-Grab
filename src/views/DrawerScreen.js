@@ -36,34 +36,12 @@ export default class DrawerScreen extends Component {
   }
 
   getUserType = async () => {
-    const value = await AsyncStorage.getItem('isVendor');
-    var data = JSON.parse(value);
-    console.log('drawer getUserType: ' + data);
-    if (value !== null) {
-      this.setState({isVendor: data});
-    }
+    const user = await AsyncStorage.getItem('user');
+    var userData = JSON.parse(user);
+    this.setState({isVendor: userData === 'vendor'});
   };
 
   logout() {
-    // Alert.alert(
-    //   'CashGrab',
-    //   'Are you sure you want to logout?',
-    //   [
-    //     {
-    //       text: 'No',
-    //       onPress: () => console.log('Cancel Pressed'),
-    //       style: 'cancel',
-    //     },
-    //     {
-    //       text: 'Yes',
-    //       onPress: () => {
-    //         AsyncStorage.removeItem('isVendor');
-    //         this.props.navigation.dispatch(resetAction);
-    //       },
-    //     },
-    //   ],
-    //   {cancelable: false},
-    // );
     this.toggleModal();
   }
 
@@ -271,7 +249,7 @@ export default class DrawerScreen extends Component {
                       isLogoutModalVisible: false,
                     },
                     () => {
-                      AsyncStorage.removeItem('isVendor');
+                      AsyncStorage.removeItem('user');
                       this.props.navigation.dispatch(resetAction);
                     },
                   );

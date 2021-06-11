@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CommonActions} from '@react-navigation/native';
 import React, {Component} from 'react';
 import {StyleSheet, ImageBackground, Image, View} from 'react-native';
@@ -11,15 +12,31 @@ const Auth = CommonActions.reset({
   routes: [{name: Constants.loginOrJoin}],
 });
 
+const Home = CommonActions.reset({
+  index: 0,
+  routes: [{name: Constants.drawerNavigator}],
+});
+
 export default class Splash extends Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.props.navigation.dispatch(Auth);
-    }, 3000);
+    this.getUser();
+  }
+
+  async getUser() {
+    const value = await AsyncStorage.getItem('user');
+    if (value !== null) {
+      setTimeout(() => {
+        this.props.navigation.dispatch(Home);
+      }, 3000);
+    } else {
+      setTimeout(() => {
+        this.props.navigation.dispatch(Auth);
+      }, 3000);
+    }
   }
 
   render() {
