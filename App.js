@@ -9,5 +9,4 @@ const App = () => {
     </Root>
   );
 };
-
 export default App;

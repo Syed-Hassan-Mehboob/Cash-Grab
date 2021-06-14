@@ -36,7 +36,7 @@ export default class DrawerScreen extends Component {
   }
 
   getUserType = async () => {
-    const user = await AsyncStorage.getItem('user');
+    const user = await AsyncStorage.getItem(Constants.user);
     var userData = JSON.parse(user);
     this.setState({isVendor: userData === 'vendor'});
   };

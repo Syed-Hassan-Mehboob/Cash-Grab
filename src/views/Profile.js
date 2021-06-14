@@ -1,17 +1,20 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   Dimensions,
   Image,
-  ImageBackground,
   Platform,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
+import Axios from '../network/APIKit';
+import utils from '../utils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -20,7 +23,56 @@ export default class Profile extends React.Component {
     super(props);
   }
 
-  state = {};
+  state = {
+    isLoading: false,
+    accessToken: '',
+    name: '',
+    email: '',
+    countryCode: '',
+    phone: '',
+    location: '',
+  };
+
+  componentDidMount() {
+    this.getUserAccessToken();
+  }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getUserProfile());
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({
+        name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phone: data.data.records.phone,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   render() {
     return (
@@ -84,7 +136,7 @@ export default class Profile extends React.Component {
           </View>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 18, marginTop: 5}}>
-            Damian Santosa
+            {this.state.name}
           </RegularTextCB>
           <RegularTextCB
             style={{
@@ -128,7 +180,7 @@ export default class Profile extends React.Component {
               User Name
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              Damian Santosa
+              {this.state.name}
             </RegularTextCB>
           </View>
           <View
@@ -142,7 +194,7 @@ export default class Profile extends React.Component {
               Email Address
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              damian@gmail.com
+              {this.state.email}
             </RegularTextCB>
           </View>
           <View
@@ -156,7 +208,7 @@ export default class Profile extends React.Component {
               Phone No.
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              +1(239) 555-01089
+              {this.state.countryCode.concat('', this.state.phone)}
             </RegularTextCB>
           </View>
           <View
@@ -170,10 +222,15 @@ export default class Profile extends React.Component {
               Location
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              New York, USA
+              {this.state.location}
             </RegularTextCB>
           </View>
         </View>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -215,5 +272,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

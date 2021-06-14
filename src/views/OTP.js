@@ -9,20 +9,61 @@ import {
   Platform,
 } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
+import Axios from '../network/APIKit';
+import utils from '../utils';
 
 export default class OTP extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
       code: '',
     };
   }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  verifyOTP = () => {
+    let code = this.state.code;
+
+    if (utils.isEmpty(code) || code.length < 4) {
+      utils.showToast('Invalid OTP');
+      return;
+    }
+
+    const onSuccess = ({data}) => {
+      console.log(data);
+      this.toggleIsLoading();
+      utils.showToast(data.message);
+
+      setTimeout(() => {
+        this.props.navigation.navigate(Constants.login);
+      }, 1000);
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    this.toggleIsLoading();
+
+    Axios.post(Constants.verifyOtpURL, {
+      email: this.props.route.params.email,
+      otp: code,
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   render() {
     return (
@@ -88,9 +129,14 @@ export default class OTP extends Component {
             <ButtonRadius10
               label="VERIFY"
               bgColor={Colors.sickGreen}
-              onPress={() => this.props.navigation.navigate(Constants.login)}
+              onPress={() => this.verifyOTP()}
             />
           </View>
+          <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+          />
         </KeyboardAvoidingView>
       </ImageBackground>
     );
@@ -147,5 +193,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: Constants.fontRegular,
     fontSize: 24,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

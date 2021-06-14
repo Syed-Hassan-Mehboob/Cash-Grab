@@ -47,6 +47,9 @@ const Constants = {
   support: 'Support',
   termsAndConditionsScreen: 'TermsAndConditions',
   logOut: 'Log Out',
+  /* * cache keys * */
+  accessToken: 'accessToken',
+  user: 'user',
   /* * api urls * */
   baseURL: 'https://cash-grab.reignsol.net/api/v1/',
   signUpURL: 'auth/register',

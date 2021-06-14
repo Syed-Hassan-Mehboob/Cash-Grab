@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Platform,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
@@ -15,22 +16,56 @@ import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import EditText from '../components/EditText';
+import Axios from '../network/APIKit';
+import utils from '../utils';
 
 export default class ForgetPassword extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       email: '',
+      isLoading: false,
     };
   }
 
-  validateEmail = (text) => {
-    this.setState({email: text});
+  forgotPassword = () => {
+    let email = this.state.email;
 
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(text) === false) {
-    } else {
+    if (utils.isEmpty(email)) {
+      utils.showToast('Invalid Email');
+      return;
     }
+
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false});
+      utils.showToast(data.message);
+
+      setTimeout(() => {
+        this.props.navigation.goBack();
+      }, 1000);
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    this.setState({isLoading: true});
+    var params = {
+      email: email,
+    };
+
+    Axios.get(Constants.forgotPasswordURL, {
+      params: params,
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   render() {
@@ -82,7 +117,7 @@ export default class ForgetPassword extends Component {
                 placeholder={'Email Address'}
                 value={this.state.email}
                 onChangeText={(text) => {
-                  this.validateEmail(text);
+                  this.setState({email: text});
                 }}
                 style={[styles.textInput]}
               />
@@ -92,9 +127,14 @@ export default class ForgetPassword extends Component {
             <ButtonRadius10
               label="CONTINUE"
               bgColor={Colors.sickGreen}
-              onPress={() => this.props.navigation.navigate(Constants.otp)}
+              onPress={() => this.forgotPassword()}
             />
           </View>
+          <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+          />
         </KeyboardAvoidingView>
       </ImageBackground>
     );
@@ -142,5 +182,9 @@ const styles = StyleSheet.create({
     color: Colors.black1,
     textDecorationLine: 'none',
     fontSize: 16,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

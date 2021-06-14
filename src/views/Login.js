@@ -20,15 +20,15 @@ import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import utils from '../utils';
-import Axios, {setClientToken} from '../network/APIKit';
+import Axios from '../network/APIKit';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      email: '',
-      password: '',
+      email: 'test@yopmail.com',
+      password: '12345678',
       isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,
@@ -44,6 +44,7 @@ export default class Login extends Component {
       this.setState({secureText: false, eyeIcon: 'eye'});
     else this.setState({secureText: true, eyeIcon: 'eye-off'});
   }
+
   async saveUser(user) {
     const resetAction = CommonActions.reset({
       index: 0,
@@ -51,10 +52,9 @@ export default class Login extends Component {
     });
 
     try {
+      await AsyncStorage.setItem(Constants.accessToken, 'Bearer ' + user.token);
       var data = JSON.stringify(user);
-      await AsyncStorage.setItem('user', data, () => {
-        console.log('save: ' + data);
-      });
+      await AsyncStorage.setItem('user', data);
       this.setState({isLoading: false});
       setTimeout(() => {
         this.props.navigation.dispatch(resetAction);
@@ -84,8 +84,13 @@ export default class Login extends Component {
     }
 
     const onSuccess = ({data}) => {
-      setClientToken(data.data.token);
-      this.saveUser(data.data);
+      if (data.status === 2) {
+        this.setState({isLoading: false});
+        utils.showToast('Please verify to continue!\nOTP: ' + data.data.otp);
+        this.props.navigation.navigate(Constants.otp, {email: email});
+      } else {
+        this.saveUser(data.data);
+      }
     };
 
     const onFailure = (error) => {
@@ -93,7 +98,6 @@ export default class Login extends Component {
       this.setState({isLoading: false});
     };
 
-    // Show spinner when call is made
     this.setState({isLoading: true});
 
     Axios.post(Constants.loginURL, {

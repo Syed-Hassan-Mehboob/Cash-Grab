@@ -3,6 +3,7 @@ import {Toast} from 'native-base';
 import {RefreshControl, Alert, StatusBar, Platform} from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let userData = {};
 class utils {
@@ -89,18 +90,19 @@ class utils {
         fontSize: 14,
       },
       type: 'danger',
-      duration: 2000,
+      duration: 3000,
       style: {
         backgroundColor: '#000',
         minHeight: 50,
         borderRadius: 0,
-        marginBottom: 50,
       },
     });
   }
 
   showResponseError(error) {
+    console.log(error);
     let errorRes = error.response;
+    console.log(errorRes);
     let errorCode = JSON.stringify(errorRes.status);
     if (errorCode === '400') {
       let errorData = errorRes.data;

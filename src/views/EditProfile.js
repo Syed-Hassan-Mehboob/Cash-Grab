@@ -7,8 +7,10 @@ import {
   Dimensions,
   ScrollView,
   Platform,
+  TextInput,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import CountryPicker from 'react-native-country-picker-modal';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import LightTextCB from '../components/LightTextCB';
@@ -16,6 +18,10 @@ import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import EditText from '../components/EditText';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Constants from '../common/Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from '../network/APIKit';
 
 const {width, height} = Dimensions.get('window');
 
@@ -23,16 +29,34 @@ export default class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
+      isModalVisible: false,
+      isCountryCodePickerVisible: false,
+      accessToken: '',
       avatar: '',
       fullName: '',
       email: '',
+      countryCode: '+1',
+      countryFlag: 'US',
       phoneNumber: '',
       location: '',
       oldPassword: '',
       newPassword: '',
-      isModalVisible: false,
     };
   }
+
+  componentDidMount() {
+    this.getUserAccessToken();
+  }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getUserProfile());
+  };
 
   changePasswordState() {
     if (this.state.secureText)
@@ -40,20 +64,15 @@ export default class EditProfile extends Component {
     else this.setState({secureText: true, eyeIcon: 'eye-off'});
   }
 
-  validateEmail = (text) => {
-    this.setState({email: text});
-
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(text) === false) {
-      this.setState({tickIcon: 'cross'});
-    } else {
-      this.setState({tickIcon: 'check'});
-    }
-  };
-
   toggleIsModalVisible = () => {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
+    });
+  };
+
+  toggleIsCountryCodePickerVisible = () => {
+    this.setState({
+      isCountryCodePickerVisible: !this.state.isCountryCodePickerVisible,
     });
   };
 
@@ -127,6 +146,41 @@ export default class EditProfile extends Component {
     }).then((image) => {
       this.setState({avatar: image.path});
     });
+  };
+
+  onSelect = (country) => {
+    this.setState({
+      countryFlag: country.cca2,
+      countryCode: country.callingCode[0],
+    });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({
+        fullName: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phoneNumber: data.data.records.phone,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   render() {
@@ -240,12 +294,18 @@ export default class EditProfile extends Component {
               placeholder={'Email Address'}
               value={this.state.email}
               onChangeText={(text) => {
-                this.validateEmail(text);
+                this.setState({email: text});
               }}
               style={[styles.textInput]}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginEnd: 20,
+              marginVertical: 10,
+            }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -255,20 +315,38 @@ export default class EditProfile extends Component {
               }}>
               Phone No.
             </RegularTextCB>
-            <EditText
-              ref={'phone'}
-              keyboardType={
-                Platform.OS === 'android' ? 'numeric' : 'number-pad'
-              }
-              placeholder={'Phone Number'}
-              value={this.state.phoneNumber}
-              onChangeText={(text) => {
-                this.setState({
-                  phoneNumber: text,
-                });
-              }}
-              style={[styles.textInput]}
-            />
+            <View style={[styles.card1, {flexDirection: 'row', flex: 0.85}]}>
+              <CountryPicker
+                onSelect={this.onSelect}
+                countryCode={this.state.countryFlag}
+                visible={this.state.isCountryCodePickerVisible}
+                withCallingCode
+                theme={{
+                  fontFamily: Constants.fontRegular,
+                  resizeMode: 'contain',
+                }}
+              />
+              <TextInput
+                ref={'phone'}
+                keyboardType={
+                  Platform.OS === 'android' ? 'numeric' : 'number-pad'
+                }
+                placeholder={'Phone Number'}
+                value={this.state.phoneNumber}
+                onChangeText={(text) => {
+                  this.setState({
+                    phoneNumber: text,
+                  });
+                }}
+                style={{
+                  fontSize: 16,
+                  flex: 1,
+                  height: 50,
+                  color: Colors.black,
+                  fontFamily: Constants.fontRegular,
+                }}
+              />
+            </View>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
@@ -290,7 +368,7 @@ export default class EditProfile extends Component {
               style={[styles.textInput]}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -331,11 +409,16 @@ export default class EditProfile extends Component {
               }}
               style={[styles.textInput, {marginBottom: 20}]}
             />
-          </View>
+          </View> */}
         </ScrollView>
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
           {this.renderBottomSheetContent()}
         </Modal>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -379,6 +462,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     height: 50,
     color: Colors.black,
+    fontFamily: Constants.fontRegular,
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
@@ -445,6 +529,20 @@ const styles = StyleSheet.create({
     elevation: 10,
     alignItems: 'center',
   },
+  card1: {
+    flexDirection: 'row',
+    height: 50,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
+    elevation: 10,
+    alignItems: 'center',
+  },
   iconUser: {
     height: 90,
     width: 90,
@@ -464,5 +562,9 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

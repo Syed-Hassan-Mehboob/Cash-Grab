@@ -27,7 +27,7 @@ export default class Splash extends Component {
   }
 
   async getUser() {
-    const value = await AsyncStorage.getItem('user');
+    const value = await AsyncStorage.getItem(Constants.user);
     if (value !== null) {
       setTimeout(() => {
         this.props.navigation.dispatch(Home);

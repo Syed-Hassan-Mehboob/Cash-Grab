@@ -41,7 +41,9 @@ export default class VerifyVia extends Component {
     }
 
     const onSuccess = ({data}) => {
-      this.props.navigation.navigate(Constants.otp);
+      this.props.navigation.navigate(Constants.otp, {
+        email: this.payload.email,
+      });
       this.setState({isLoading: false});
     };
 
@@ -58,6 +60,7 @@ export default class VerifyVia extends Component {
       email: this.payload.email,
       type: this.payload.type,
       country_code: this.payload.country_code,
+      country_flag: this.payload.country_flag,
       phone: this.payload.phone,
       password: this.payload.password,
       password_confirmation: this.payload.password_confirmation,

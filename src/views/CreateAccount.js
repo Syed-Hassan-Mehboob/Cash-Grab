@@ -28,9 +28,7 @@ export default class CreateAccount extends React.Component {
   openSignUp(isVendor) {
     AsyncStorage.setItem('isVendor', JSON.stringify(isVendor));
     setTimeout(() => {
-      this.props.navigation.navigate(Constants.signUp, {
-        isVendor: isVendor,
-      });
+      this.props.navigation.navigate(Constants.signUp);
     }, 500);
   }
 

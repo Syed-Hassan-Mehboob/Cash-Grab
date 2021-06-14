@@ -25,7 +25,10 @@ import utils from '../utils';
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      isSelectionModalVisible: false,
+      isCountryCodePickerVisible: false,
       isVendor: false,
       fullName: '',
       service: 'Select',
@@ -35,8 +38,6 @@ export default class SignUp extends Component {
       phone: '12345678',
       password: '',
       confirmPassword: '',
-      isSelectionModalVisible: false,
-      isCountryCodePickerVisible: false,
       selections: [
         {
           id: '0',
@@ -78,10 +79,8 @@ export default class SignUp extends Component {
 
   getUserType = async () => {
     const value = await AsyncStorage.getItem('isVendor');
-    var data = JSON.parse(value);
-    if (value !== null) {
-      this.setState({isVendor: data});
-    }
+    const data = JSON.parse(value);
+    this.setState({isVendor: data});
   };
 
   toggleIsSelectionModalVisible = () => {
@@ -185,6 +184,7 @@ export default class SignUp extends Component {
     let name = this.state.fullName;
     let service = this.state.service;
     let country_code = this.state.countryCode;
+    let country_flag = this.state.countryFlag;
     let phone = this.state.phone;
     let email = this.state.email;
     let password = this.state.password;
@@ -192,6 +192,16 @@ export default class SignUp extends Component {
 
     if (name === '' || name === undefined) {
       utils.showToast('Invalid Name');
+      return;
+    }
+
+    if (name.length > 3) {
+      utils.showToast('Name Should Not Be Less Than 3 Characters');
+      return;
+    }
+
+    if (name.length > 55) {
+      utils.showToast('Name Should Not Be Greater Than 55 Characters');
       return;
     }
 
@@ -244,6 +254,7 @@ export default class SignUp extends Component {
           password_confirmation,
           type: 'vendor',
           country_code,
+          country_flag,
           phone,
         }
       : {
@@ -253,6 +264,7 @@ export default class SignUp extends Component {
           password_confirmation,
           type: 'customer',
           country_code,
+          country_flag,
           phone,
         };
 
@@ -367,7 +379,7 @@ export default class SignUp extends Component {
                   ]}>
                   <CountryPicker
                     onSelect={this.onSelect}
-                    countryCode={this.state.countryCode}
+                    countryCode={this.state.countryFlag}
                     visible={this.state.isCountryCodePickerVisible}
                     withCallingCode
                     theme={{
