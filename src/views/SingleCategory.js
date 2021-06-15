@@ -7,88 +7,27 @@ import {
   FlatList,
   Platform,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
-import LightTextCB from '../components/LightTextCB';
+import utils from '../utils';
+import Axios from '../network/APIKit';
 
 export default class SingleCategory extends Component {
-  vendors = [
-    {
-      id: '1',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      type: 'Car Mechanic, NY (2km)',
-      ratings: '1.0 ratings',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      type: 'Car Wash, NY (1km)',
-      ratings: '1.1 ratings',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      type: 'Puncture, NY (1.2km)',
-      ratings: '1.2 ratings',
-    },
-    {
-      id: '4',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      type: 'Plumber, NY (0.2km)',
-      ratings: '1.3 ratings',
-    },
-    {
-      id: '5',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      type: 'Bike Electrician, NY (0.5km)',
-      ratings: '1.4 ratings',
-    },
-    {
-      id: '6',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      type: 'Car Mechanic, NY (2km)',
-      ratings: '1.0 ratings',
-    },
-    {
-      id: '7',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      type: 'Car Wash, NY (1km)',
-      ratings: '1.1 ratings',
-    },
-    {
-      id: '8',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      type: 'Puncture, NY (1.2km)',
-      ratings: '1.2 ratings',
-    },
-    {
-      id: '9',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      type: 'Plumber, NY (0.2km)',
-      ratings: '1.3 ratings',
-    },
-    {
-      id: '10',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      type: 'Bike Electrician, NY (0.5km)',
-      ratings: '1.4 ratings',
-    },
-  ];
-
   constructor(props) {
     super(props);
+  }
+
+  state = {
+    isLoading: false,
+    vendors: [],
+  };
+
+  componentDidMount() {
+    this.getUserAccessToken();
   }
 
   renderSingleCategoriesItem = ({item}) => {
@@ -163,6 +102,42 @@ export default class SingleCategory extends Component {
     this.props.navigation.navigate(nextScreen);
   };
 
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getCategoryData());
+  };
+
+  getCategoryData = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({vendors: data.data.jobs});
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    let params = {
+      categoryId: this.props.route.params.item.id,
+    };
+
+    this.toggleIsLoading();
+
+    Axios.get(Constants.customerViewCategoriesURL, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   render() {
     return (
       <View style={[styles.container]}>
@@ -186,17 +161,19 @@ export default class SingleCategory extends Component {
           </TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
             <Image
-              source={this.props.route.params.item.image}
+              source={{
+                uri: Constants.imageURL + this.props.route.params.item.image,
+              }}
               style={{height: 50, width: 50}}
             />
             <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
-              {this.props.route.params.item.title}
+              {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
         </View>
         <FlatList
           style={{marginTop: 10}}
-          data={this.vendors}
+          data={this.state.vendors}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}
@@ -208,6 +185,11 @@ export default class SingleCategory extends Component {
             // for android
             paddingBottom: 100,
           }}
+        />
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
         />
       </View>
     );
@@ -303,5 +285,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

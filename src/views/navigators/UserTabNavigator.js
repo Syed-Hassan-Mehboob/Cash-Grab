@@ -25,6 +25,7 @@ import DateTimeSlots from '../DateTimeSlots';
 import Search from '../Search';
 import ConfirmPayment from '../ConfirmPayment';
 import SingleCategory from '../SingleCategory';
+import ChangePassword from '../ChangePassword';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -81,6 +82,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
       <HomeStack.Screen name={Constants.chat} component={Chat} />
       <HomeStack.Screen name={Constants.editProfile} component={EditProfile} />
+      <HomeStack.Screen
+        name={Constants.changePassword}
+        component={ChangePassword}
+      />
     </HomeStack.Navigator>
   );
 };

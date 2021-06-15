@@ -101,14 +101,14 @@ class utils {
 
   showResponseError(error) {
     console.log(error);
-    let errorRes = error.response;
-    console.log(errorRes);
-    let errorCode = JSON.stringify(errorRes.status);
+    console.log(error.response);
+    let errorCode = JSON.stringify(error.response.status);
+    console.log(errorCode);
     if (errorCode === '400') {
-      let errorData = errorRes.data;
+      let errorData = error.response.data;
       this.showToast(errorData.message);
     } else {
-      let errorResData = JSON.parse(errorRes.request._response).data;
+      let errorResData = JSON.parse(error.response.request._response).data;
       for (const [, value] of Object.entries(errorResData)) {
         this.showToast(value[0]);
         break;

@@ -11,59 +11,49 @@ import React, {Component} from 'react';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Constants from '../common/Constants';
+import Axios from '../network/APIKit';
 
 export default class Faq extends Component {
-  data = {
-    title: "FAQ's",
-    rows: [
-      {
-        id: '1',
-        title: 'Lorem ipsum dolor sit amet,',
-        isExpanded: false,
-        content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed tempor sem. Aenean vel turpis feugiat, ultricies metus at, consequat velit. Curabitur est nibh, varius in tellus nec, mattis pulvinar metus. In maximus cursus lorem, nec laoreet velit eleifend vel. Ut aliquet mauris tortor, sed egestas libero interdum vitae. Fusce sed commodo purus, at tempus turpis.`,
-      },
-      {
-        id: '2',
-        title: 'Nunc maximus, magna at ultricies elementum',
-        isExpanded: false,
-        content:
-          'Nunc maximus, magna at ultricies elementum, risus turpis vulputate quam, vitae convallis ex tortor sed dolor.',
-      },
-      {
-        id: '3',
-        title: 'Curabitur laoreet, mauris vel blandit fringilla',
-        isExpanded: false,
-        content: `Curabitur laoreet, mauris vel blandit fringilla, leo elit rhoncus nunc, ac sagittis leo elit vel lorem. Fusce tempor lacus ut libero posuere viverra. Nunc velit dolor, tincidunt at varius vel, laoreet vel quam. Sed dolor urna, lobortis in arcu auctor, tincidunt mattis ante. Vivamus venenatis ultricies nibh in volutpat. Cras eu metus quis leo vestibulum feugiat nec sagittis lacus.Mauris vulputate arcu sed massa euismod dignissim. `,
-      },
-      {
-        id: '4',
-        title: 'Lorem ipsum dolor sit amet,',
-        isExpanded: false,
-        content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed tempor sem. Aenean vel turpis feugiat, ultricies metus at, consequat velit. Curabitur est nibh, varius in tellus nec, mattis pulvinar metus. In maximus cursus lorem, nec laoreet velit eleifend vel. Ut aliquet mauris tortor, sed egestas libero interdum vitae. Fusce sed commodo purus, at tempus turpis.`,
-      },
-      {
-        id: '5',
-        title: 'Nunc maximus, magna at ultricies elementum',
-        isExpanded: false,
-        content:
-          'Nunc maximus, magna at ultricies elementum, risus turpis vulputate quam, vitae convallis ex tortor sed dolor.',
-      },
-      {
-        id: '6',
-        title: 'Curabitur laoreet, mauris vel blandit fringilla',
-        isExpanded: false,
-        content: `Curabitur laoreet, mauris vel blandit fringilla, leo elit rhoncus nunc, ac sagittis leo elit vel lorem. Fusce tempor lacus ut libero posuere viverra. Nunc velit dolor, tincidunt at varius vel, laoreet vel quam. Sed dolor urna, lobortis in arcu auctor, tincidunt mattis ante. Vivamus venenatis ultricies nibh in volutpat. Cras eu metus quis leo vestibulum feugiat nec sagittis lacus.Mauris vulputate arcu sed massa euismod dignissim. `,
-      },
-    ],
-  };
-
   constructor(props) {
     super(props);
   }
 
   state = {
     expanded: false,
-    data: this.data,
+    faqs: [],
+    title: 'FAQs',
+    isLoading: false,
+  };
+
+  componentDidMount() {
+    this.getContent();
+  }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  getContent = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({
+        faqs: data.data.faq_paragraph.map((faq) => ({
+          ...faq,
+          isExpanded: false,
+        })),
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    this.toggleIsLoading();
+
+    Axios.get(Constants.contentsURL).then(onSuccess).catch(onFailure);
   };
 
   onChangeLayout = (title) => {
@@ -81,13 +71,10 @@ export default class Faq extends Component {
         ]}
         onPress={() => {
           this.onChangeLayout(item.title);
-          this.state.data.rows.map((childItem) => {
+          this.state.faqs.map((childItem) => {
             childItem.isExpanded = false;
           });
           item.isExpanded = true;
-          console.log(
-            'item: ' + item.id + ' ' + item.title + ' ' + item.isExpanded,
-          );
         }}>
         <View
           style={{
@@ -100,7 +87,7 @@ export default class Faq extends Component {
               color: item.isExpanded ? Colors.black : Colors.coolGrey,
               flex: 1,
             }}>
-            {item.title}
+            {item.question}
           </RegularTextCB>
           <Image
             source={item.isExpanded ? Images.iconDash : Images.iconArrowDown}
@@ -108,9 +95,9 @@ export default class Faq extends Component {
           />
         </View>
         {item.isExpanded && (
-          <View style={{height: this.state.expanded === item.title ? null : 0}}>
+          <View>
             <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
-              {item.content}
+              {item.answer}
             </RegularTextCB>
           </View>
         )}
@@ -138,14 +125,19 @@ export default class Faq extends Component {
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
           <RegularTextCB style={{fontSize: 30}}>
-            {this.state.data.title}
+            {this.state.title}
           </RegularTextCB>
         </View>
         <FlatList
-          data={this.state.data.rows}
+          data={this.state.faqs}
           showsVerticalScrollIndicator={false}
           keyExtractor={(data) => data.id}
           renderItem={this.renderFaqItem}
+        />
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
         />
       </View>
     );
@@ -173,5 +165,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

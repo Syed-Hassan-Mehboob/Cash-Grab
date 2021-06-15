@@ -13,39 +13,15 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import Spinner from 'react-native-loading-spinner-overlay';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import Constants from '../common/Constants';
+import Axios from '../network/APIKit';
+import utils from '../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Home extends Component {
-  categories = [
-    {
-      id: '1',
-      image: Images.iconElectrician,
-      title: 'Electrician',
-    },
-    {
-      id: '2',
-      image: Images.iconCleaning,
-      title: 'Cleaning',
-    },
-    {
-      id: '3',
-      image: Images.iconRepair,
-      title: 'Repair',
-    },
-    {
-      id: '4',
-      image: Images.iconAutomobile,
-      title: 'Automobile',
-    },
-    // {
-    //   id: '5',
-    //   image: Images.iconMechanic,
-    //   title: 'Mechanic',
-    // },
-  ];
-
   vendors = [
     {
       id: '1',
@@ -142,13 +118,14 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
+      isQuickServiceModalVisible: false,
+      isSelectionModalVisible: false,
       service: 'Select',
       rateRequested: '',
       location: '',
       address: '',
       exactTime: '',
-      isQuickServiceModalVisible: false,
-      isSelectionModalVisible: false,
       selections: [
         {
           id: '0',
@@ -181,12 +158,18 @@ export default class Home extends Component {
           isSelected: false,
         },
       ],
+      categories: [],
     };
   }
 
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    this.getUserAccessToken();
   }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
 
   toggleIsQuickServiceModalVisible = () => {
     this.setState({
@@ -407,10 +390,13 @@ export default class Home extends Component {
           })
         }
         style={{alignItems: 'center'}}>
-        <Image style={styles.circle} source={item.image} />
+        <Image
+          style={styles.circle}
+          source={{uri: Constants.imageURL + item.image}}
+        />
         <RegularTextCB
           style={{fontSize: 14, marginTop: -20, color: Colors.coolGrey}}>
-          {item.title}
+          {item.name}
         </RegularTextCB>
       </TouchableOpacity>
     );
@@ -587,6 +573,32 @@ export default class Home extends Component {
     );
   };
 
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getCategories());
+  };
+
+  getCategories = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({categories: data.data.records});
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    this.toggleIsLoading();
+    Axios.get(Constants.customerCategoriesURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -687,7 +699,7 @@ export default class Home extends Component {
             </View>
             <FlatList
               horizontal
-              data={this.categories}
+              data={this.state.categories}
               keyExtractor={(item) => item.id}
               renderItem={this.renderCategoryItem}
               showsHorizontalScrollIndicator={false}
@@ -780,6 +792,11 @@ export default class Home extends Component {
           style={styles.modal}>
           {this.renderSelectionBottomSheetContent()}
         </Modal>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -857,5 +874,9 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: Colors.white,
     borderRadius: 12,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

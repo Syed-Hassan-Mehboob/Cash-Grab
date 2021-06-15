@@ -66,6 +66,10 @@ const HomeNavigator = () => {
         name={Constants.vendorEditProfile}
         component={VendorEditProfile}
       />
+      <HomeStack.Screen
+        name={Constants.changePassword}
+        component={ChangePassword}
+      />
     </HomeStack.Navigator>
   );
 };

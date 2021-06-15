@@ -73,6 +73,7 @@ const Images = {
   iconDrawerFaq: require('../assets/icondrawerfaq.png'),
   iconDrawerLogOut: require('../assets/icondrawerlogout.png'),
   iconDrawerSettings: require('../assets/icondrawersettings.png'),
+  iconDrawerLock: require('../assets/icondrawerlock.png'),
   iconDrawerSupport: require('../assets/icondrawersupport.png'),
   iconDrawerTermsAndCond: require('../assets/icondrawertermsconditions.png'),
   iconLocationPin: require('../assets/iconlocationpin.png'),

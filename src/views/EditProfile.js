@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal';
+import Spinner from 'react-native-loading-spinner-overlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import LightTextCB from '../components/LightTextCB';
@@ -18,10 +20,9 @@ import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import EditText from '../components/EditText';
-import Spinner from 'react-native-loading-spinner-overlay';
 import Constants from '../common/Constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
+import utils from '../utils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -36,8 +37,8 @@ export default class EditProfile extends Component {
       avatar: '',
       fullName: '',
       email: '',
-      countryCode: '+1',
-      countryFlag: 'US',
+      countryCode: '',
+      countryFlag: '',
       phoneNumber: '',
       location: '',
       oldPassword: '',
@@ -49,10 +50,6 @@ export default class EditProfile extends Component {
     this.getUserAccessToken();
   }
 
-  toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
-  };
-
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => this.getUserProfile());
@@ -63,6 +60,10 @@ export default class EditProfile extends Component {
       this.setState({secureText: false, eyeIcon: 'eye'});
     else this.setState({secureText: true, eyeIcon: 'eye-off'});
   }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
 
   toggleIsModalVisible = () => {
     this.setState({
@@ -159,10 +160,13 @@ export default class EditProfile extends Component {
     const onSuccess = ({data}) => {
       this.toggleIsLoading();
       this.setState({
+        avatar: Constants.imageURL + data.data.records.userProfile.image,
         fullName: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
+        countryFlag: data.data.records.country_flag,
         phoneNumber: data.data.records.phone,
+        location: data.data.records.userProfile.location,
       });
     };
 
@@ -179,6 +183,89 @@ export default class EditProfile extends Component {
         Authorization: this.state.accessToken,
       },
     })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  editUserProfile = () => {
+    let name = this.state.fullName;
+    let email = this.state.email;
+    let countryCode = this.state.countryCode;
+    let countryFlag = this.state.countryFlag;
+    let phone = this.state.phoneNumber;
+    let image = this.state.avatar;
+    let location = this.state.location;
+
+    if (utils.isEmpty(name)) {
+      utils.showToast('Invalid Name');
+      return;
+    }
+
+    if (name.length < 3) {
+      utils.showToast('Name Should Not Be Less Than 3 Characters');
+      return;
+    }
+
+    if (name.length > 55) {
+      utils.showToast('Name Should Not Be Greater Than 55 Characters');
+      return;
+    }
+
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (utils.isEmpty(phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
+
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+
+    if (phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
+
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      utils.showToast(data.message);
+
+      setTimeout(() => {
+        // this.props.navigation.goBack();
+      }, 1000);
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    const params = {
+      name: name,
+      email: email,
+      country_code: countryCode,
+      country_flag: countryFlag,
+      phone: phone,
+      image: image,
+      location: location,
+    };
+
+    console.log('params: ', params);
+
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
+    };
+
+    this.toggleIsLoading();
+    Axios.post(Constants.updateProfileURL, params, options)
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -226,7 +313,7 @@ export default class EditProfile extends Component {
                 borderRadius: 5,
               }}
               onPress={() => {
-                this.props.navigation.goBack();
+                this.editUserProfile();
               }}>
               <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
             </TouchableOpacity>
@@ -238,7 +325,8 @@ export default class EditProfile extends Component {
               {justifyContent: 'center', alignItems: 'center'},
             ]}
             onPress={() => this.toggleIsModalVisible()}>
-            <Image source={Images.emp1} style={styles.iconUser} />
+            <Image source={{uri: this.state.avatar}} style={styles.iconUser} />
+            {console.log(this.state.avatar)}
             <Image
               source={Images.iconCamera}
               style={{
@@ -252,7 +340,7 @@ export default class EditProfile extends Component {
           </TouchableOpacity>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
-            Damian Santosa
+            {this.state.fullName}
           </RegularTextCB>
         </View>
         <ScrollView

@@ -18,6 +18,7 @@ const Constants = {
   advanceBooking: 'AdvanceBooking',
   bookingConfirmed: 'BookingConfirmed',
   filter: 'Filter',
+  changePassword: 'ChangePassword',
   editProfile: 'EditProfile',
   vendorEditProfile: 'VendorEditProfile',
   viewVendorProfile: 'ViewVendorProfile',
@@ -52,6 +53,7 @@ const Constants = {
   user: 'user',
   /* * api urls * */
   baseURL: 'https://cash-grab.reignsol.net/api/v1/',
+  imageURL: 'https://cash-grab.reignsol.net',
   signUpURL: 'auth/register',
   loginURL: 'auth/login',
   verifyOtpURL: 'auth/verify-otp',
@@ -64,6 +66,7 @@ const Constants = {
   customerCategoriesURL: 'customer/categories',
   customerViewCategoriesURL: 'customer/view-category?',
   customerRatingsURL: 'customer/ratings',
+  contentsURL: 'contents',
 };
 
 export default Constants;

@@ -155,6 +155,23 @@ export default class DrawerScreen extends Component {
                   padding: 15,
                 }}
                 onPress={() => {
+                  this.props.navigation.navigate(Constants.changePassword);
+                }}>
+                <Image
+                  source={Images.iconDrawerLock}
+                  style={styles.iconDrawer}
+                />
+                <RegularTextCB style={styles.drawerSubText}>
+                  Change Password
+                </RegularTextCB>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  padding: 15,
+                }}
+                onPress={() => {
                   this.props.navigation.navigate(Constants.faq);
                 }}>
                 <Image

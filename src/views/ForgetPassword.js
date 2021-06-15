@@ -57,7 +57,7 @@ export default class ForgetPassword extends Component {
     };
 
     this.setState({isLoading: true});
-    var params = {
+    let params = {
       email: email,
     };
 
