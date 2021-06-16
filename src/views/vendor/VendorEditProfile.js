@@ -175,7 +175,11 @@ export default class VendorEditProfile extends Component {
               {justifyContent: 'center', alignItems: 'center'},
             ]}
             onPress={() => this.toggleIsModalVisible()}>
-            <Image source={Images.emp1} style={styles.iconUser} />
+            <Image
+              source={Images.emp1}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
             <Image
               source={Images.iconCamera}
               style={{
@@ -183,7 +187,7 @@ export default class VendorEditProfile extends Component {
                 width: 25,
                 position: 'absolute',
                 resizeMode: 'contain',
-                opacity: 0.4,
+                opacity: 0.2,
               }}
             />
           </TouchableOpacity>

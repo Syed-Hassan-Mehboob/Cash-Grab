@@ -67,6 +67,8 @@ const Constants = {
   customerViewCategoriesURL: 'customer/view-category?',
   customerRatingsURL: 'customer/ratings',
   contentsURL: 'contents',
+  notificationsURL: 'notifications',
+  logoutURL: 'auth/sign-out',
 };
 
 export default Constants;

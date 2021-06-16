@@ -130,7 +130,11 @@ export default class VendorSingleCategory extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            <Image source={item.image} style={styles.iconUser} />
+            <Image
+              source={item.image}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB

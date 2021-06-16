@@ -53,7 +53,11 @@ export default class BookingConfirmed extends Component {
             ]}>
             <View style={styles.itemContainer}>
               <View style={styles.circleCard}>
-                <Image source={Images.emp1} style={styles.iconUser} />
+                <Image
+                  source={Images.emp1}
+                  style={styles.iconUser}
+                  resizeMode="cover"
+                />
               </View>
               <RegularTextCB style={{fontSize: 20, marginTop: 10}}>
                 Ray Hammond

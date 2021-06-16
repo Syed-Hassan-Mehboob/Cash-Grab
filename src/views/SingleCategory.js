@@ -46,7 +46,11 @@ export default class SingleCategory extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            <Image source={item.image} style={styles.iconUser} />
+            <Image
+              source={item.image}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
           <RegularTextCB
             style={{

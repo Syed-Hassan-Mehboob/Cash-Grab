@@ -320,7 +320,11 @@ export default class ViewVendorProfile extends React.Component {
           showsVerticalScrollIndicator={false}>
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
-              <Image source={Images.emp1} style={styles.iconUser} />
+              <Image
+                source={Images.emp1}
+                style={styles.iconUser}
+                resizeMode="cover"
+              />
             </View>
             <View
               style={{

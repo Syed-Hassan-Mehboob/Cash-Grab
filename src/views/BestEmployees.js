@@ -179,7 +179,11 @@ export default class BestEmployees extends Component {
                 flex: 1,
                 alignItems: 'center',
               }}>
-              <Image source={item.image} style={styles.iconUser} />
+              <Image
+                source={item.image}
+                style={styles.iconUser}
+                resizeMode="cover"
+              />
               <View style={{marginStart: 20, marginEnd: 20}}>
                 <LightTextCB style={{fontSize: 18, color: Colors.black1}}>
                   {item.name}

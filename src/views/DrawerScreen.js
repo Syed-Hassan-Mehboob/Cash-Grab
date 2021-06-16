@@ -15,6 +15,8 @@ import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
+import utils from '../utils';
+import Axios from '../network/APIKit';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -27,8 +29,13 @@ export default class DrawerScreen extends Component {
   }
 
   state = {
+    isLoading: false,
     isVendor: false,
     isLogoutModalVisible: false,
+    accessToken: '',
+    avatar: '',
+    name: '',
+    location: '',
   };
 
   componentDidMount() {
@@ -38,11 +45,61 @@ export default class DrawerScreen extends Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem(Constants.user);
     var userData = JSON.parse(user);
-    this.setState({isVendor: userData === 'vendor'});
+    this.setState(
+      {
+        isVendor: userData === 'vendor',
+        accessToken: 'Bearer ' + userData.token,
+      },
+      () => this.getUserProfile(),
+    );
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.setState({
+        avatar: data.data.records.userProfile.image,
+        location: data.data.records.userProfile.location,
+        name: data.data.records.name,
+      });
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   logout() {
-    this.toggleModal();
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false});
+
+      AsyncStorage.removeItem('user');
+      this.props.navigation.dispatch(resetAction);
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
+    };
+
+    this.setState({isLoading: true});
+    Axios.get(Constants.logoutURL, options).then(onSuccess).catch(onFailure);
   }
 
   toggleModal = () => {
@@ -86,14 +143,18 @@ export default class DrawerScreen extends Component {
               paddingHorizontal: 25,
             }}>
             <View style={styles.circleCard}>
-              <Image source={Images.emp2} style={styles.iconUser} />
+              <Image
+                source={{uri: Constants.imageURL + this.state.avatar}}
+                style={styles.iconUser}
+                resizeMode="cover"
+              />
             </View>
             <View style={{flex: 1, paddingHorizontal: 10}}>
               <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
-                Damien
+                {this.state.name}
               </RegularTextCB>
               <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
-                New York, USA
+                {this.state.location}
               </RegularTextCB>
             </View>
           </TouchableOpacity>
@@ -220,7 +281,7 @@ export default class DrawerScreen extends Component {
               </TouchableOpacity>
             </View>
             <TouchableOpacity
-              onPress={() => this.logout()}
+              onPress={() => this.toggleModal()}
               style={{
                 flexDirection: 'row',
                 width: '100%',
@@ -266,8 +327,7 @@ export default class DrawerScreen extends Component {
                       isLogoutModalVisible: false,
                     },
                     () => {
-                      AsyncStorage.removeItem('user');
-                      this.props.navigation.dispatch(resetAction);
+                      this.logout();
                     },
                   );
                 }}

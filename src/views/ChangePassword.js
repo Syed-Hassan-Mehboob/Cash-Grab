@@ -190,7 +190,11 @@ export default class ChangePassword extends Component {
               styles.circleCard,
               {justifyContent: 'center', alignItems: 'center'},
             ]}>
-            <Image source={Images.emp1} style={styles.iconUser} />
+            <Image
+              source={Images.emp1}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </TouchableOpacity>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 20, marginTop: 10}}>

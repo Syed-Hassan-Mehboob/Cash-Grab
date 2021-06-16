@@ -122,6 +122,8 @@ export default class Home extends Component {
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
       service: 'Select',
+      avatar: '',
+      name: '',
       rateRequested: '',
       location: '',
       address: '',
@@ -164,7 +166,7 @@ export default class Home extends Component {
 
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.getUserAccessToken();
+    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
 
   toggleIsLoading = () => {
@@ -419,7 +421,11 @@ export default class Home extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            <Image source={item.image} style={styles.iconUser} />
+            <Image
+              source={item.image}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
           <RegularTextCB
             style={{
@@ -510,7 +516,11 @@ export default class Home extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            <Image source={item.image} style={styles.iconUser} />
+            <Image
+              source={item.image}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
           <RegularTextCB
             style={{
@@ -575,21 +585,49 @@ export default class Home extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getCategories());
+    this.setState({accessToken: token}, () => {
+      this.getUserProfile();
+      this.getCategories();
+    });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.setState({
+        isLoading: false,
+        avatar: data.data.records.userProfile.image,
+        name: data.data.records.name,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    this.setState({isLoading: true});
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   getCategories = () => {
     const onSuccess = ({data}) => {
-      this.toggleIsLoading();
-      this.setState({categories: data.data.records});
+      this.setState({isLoading: false, categories: data.data.records});
     };
 
     const onFailure = (error) => {
-      this.toggleIsLoading();
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.toggleIsLoading();
+    this.setState({isLoading: true});
     Axios.get(Constants.customerCategoriesURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -621,7 +659,11 @@ export default class Home extends Component {
                   this.props.navigation.navigate(Constants.profile)
                 }>
                 <View style={styles.circleCard}>
-                  <Image source={Images.emp1} style={styles.iconUser} />
+                  <Image
+                    source={{uri: Constants.imageURL + this.state.avatar}}
+                    style={styles.iconUser}
+                    resizeMode="cover"
+                  />
                 </View>
                 <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
                   Welcome,
@@ -632,7 +674,7 @@ export default class Home extends Component {
                     marginStart: 3,
                     color: Colors.sickGreen,
                   }}>
-                  Damien
+                  {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
               <TouchableOpacity

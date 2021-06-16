@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {Component} from 'react';
 import {
   View,
@@ -7,93 +8,28 @@ import {
   Animated,
   Platform,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
+import Axios from '../network/APIKit';
+import utils from '../utils';
 
 export default class Notifications extends Component {
-  notifications = [
-    {
-      id: '1',
-      date: 'Latest',
-      notifications: [
-        {
-          id: '1',
-          name: 'Blair Dota',
-          image: Images.emp1,
-          time: '13:30',
-          desc: 'Peter A left a review for you.',
-        },
-        {
-          id: '2',
-          name: 'Mike Combs',
-          image: Images.emp2,
-          time: '13:30',
-          desc: '10 new jobs posted for your category.',
-        },
-        {
-          id: '3',
-          name: 'Emily Jack',
-          image: Images.emp3,
-          time: '13:30',
-          desc: 'Peter A left a review for you.',
-        },
-      ],
-    },
-    {
-      id: '2',
-      date: 'Earlier',
-      notifications: [
-        {
-          id: '1',
-          name: 'Emily Jack',
-          image: Images.emp3,
-          time: '13:30',
-          desc: 'Great you recieved a 5 star.',
-        },
-        {
-          id: '2',
-          name: 'Claire Kumas',
-          image: Images.emp4,
-          time: '13:30',
-          desc: 'Completed the job.',
-        },
-        {
-          id: '3',
-          name: 'Blair Dota',
-          image: Images.emp1,
-          time: '13:30',
-          desc: 'You completed this job & earned $24.',
-        },
-        {
-          id: '4',
-          name: 'Mike Combs',
-          image: Images.emp2,
-          time: '13:30',
-          desc: '10 new jobs posted for your category. ',
-        },
-        {
-          id: '5',
-          name: 'Claire Kumas',
-          image: Images.emp4,
-          time: '13:30',
-          desc: 'Completed the job.',
-        },
-        {
-          id: '6',
-          name: 'Blair Dota',
-          image: Images.emp1,
-          time: '13:30',
-          desc: 'Lorem ipsum dolor sit amet',
-        },
-      ],
-    },
-  ];
-
   constructor(props) {
     super(props);
+  }
+
+  state = {
+    accessToken: '',
+    isLoading: false,
+    notifications: [],
+  };
+
+  componentDidMount() {
+    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
 
   renderHiddenItem = (data, rowMap) => {
@@ -114,68 +50,69 @@ export default class Notifications extends Component {
 
   renderNotificationsItem = ({item}) => {
     return (
-      <View style={{margin: 15}}>
+      <View style={{marginHorizontal: 15}}>
         <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
-          {item.date}
+          Earlier
         </RegularTextCB>
-        {item.notifications.map((notification) => {
-          return (
+        <View
+          key={item.id}
+          style={[
+            styles.card,
+            {
+              marginVertical: 10,
+              borderWidth: item.date === 'Latest' ? 1 : 0,
+            },
+          ]}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.itemContainer}
+            onPress={() => {}}>
             <View
-              key={notification.id}
-              style={[
-                styles.card,
-                {
-                  marginVertical: 10,
-                  borderWidth: item.date === 'Latest' ? 1 : 0,
-                },
-              ]}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.itemContainer}
-                onPress={() => {}}>
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View style={styles.circleCard}>
+                <Image
+                  source={item.image}
+                  style={styles.iconUser}
+                  resizeMode="cover"
+                />
+              </View>
+              <View
+                style={{
+                  marginStart: 10,
+                  flex: 1,
+                  flexShrink: 1,
+                }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}>
-                  <View style={styles.circleCard}>
-                    <Image
-                      source={notification.image}
-                      style={styles.iconUser}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      marginStart: 10,
-                      flex: 1,
-                      flexShrink: 1,
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <RegularTextCB
-                        style={{fontSize: 16, color: Colors.black}}>
-                        {notification.name}
-                      </RegularTextCB>
-                      <RegularTextCB>{notification.time}</RegularTextCB>
-                    </View>
-                    <RegularTextCB
-                      numberOfLines={1}
-                      style={{
-                        fontSize: 14,
-                        color: Colors.coolGrey,
-                        marginTop: 5,
-                      }}>
-                      {notification.desc}
-                    </RegularTextCB>
-                  </View>
+                  <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
+                    {item.title}
+                  </RegularTextCB>
+                  <RegularTextCB>{item.time}</RegularTextCB>
                 </View>
-              </TouchableOpacity>
+                <RegularTextCB
+                  numberOfLines={1}
+                  style={{
+                    fontSize: 14,
+                    color: Colors.coolGrey,
+                    marginTop: 5,
+                  }}>
+                  {item.content}
+                </RegularTextCB>
+              </View>
             </View>
+          </TouchableOpacity>
+        </View>
+        {/* {item.notifications.map((notification) => {
+          return (
+            
           );
-        })}
+        })} */}
       </View>
     );
   };
@@ -199,6 +136,40 @@ export default class Notifications extends Component {
     );
   };
 
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  getUserAccessToken = async () => {
+    console.log('getUserAccessToken');
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getNotifications());
+  };
+
+  getNotifications = () => {
+    const onSuccess = ({data}) => {
+      console.log(data.data);
+      this.toggleIsLoading();
+      this.setState({notifications: data.data});
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    this.toggleIsLoading();
+    Axios.get(Constants.notificationsURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   render() {
     return (
       <View style={[styles.container]}>
@@ -207,7 +178,7 @@ export default class Notifications extends Component {
         </RegularTextCB>
         <SwipeListView
           style={{marginTop: 10}}
-          data={this.notifications}
+          data={this.state.notifications}
           renderItem={this.renderNotificationsItem}
           contentInset={{
             // for ios
@@ -217,6 +188,11 @@ export default class Notifications extends Component {
             // for android
             paddingBottom: 100,
           }}
+        />
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
         />
       </View>
     );
@@ -409,5 +385,9 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 12,
     color: '#999',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

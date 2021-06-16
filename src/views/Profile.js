@@ -26,6 +26,7 @@ export default class Profile extends React.Component {
   state = {
     isLoading: false,
     accessToken: '',
+    avatar: '',
     name: '',
     email: '',
     countryCode: '',
@@ -34,7 +35,9 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount() {
-    this.getUserAccessToken();
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken();
+    });
   }
 
   toggleIsLoading = () => {
@@ -42,6 +45,7 @@ export default class Profile extends React.Component {
   };
 
   getUserAccessToken = async () => {
+    console.log('getUserAccessToken');
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => this.getUserProfile());
   };
@@ -50,10 +54,12 @@ export default class Profile extends React.Component {
     const onSuccess = ({data}) => {
       this.toggleIsLoading();
       this.setState({
+        avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         phone: data.data.records.phone,
+        location: data.data.records.userProfile.location,
       });
     };
 
@@ -113,7 +119,11 @@ export default class Profile extends React.Component {
             </TouchableOpacity>
           </View>
           <View style={styles.circleCard}>
-            <Image source={Images.emp1} style={styles.iconUser} />
+            <Image
+              source={{uri: Constants.imageURL + this.state.avatar}}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
           <View
             style={{

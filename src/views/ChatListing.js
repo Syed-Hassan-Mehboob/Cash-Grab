@@ -162,7 +162,7 @@ export default class ChatListing extends Component {
   renderUsersItem = ({item}) => {
     return (
       <View style={[styles.circleCard, {margin: 10}]}>
-        <Image source={item.image} style={styles.iconUser} />
+        <Image source={item.image} style={styles.iconUser} resizeMode="cover" />
       </View>
     );
   };
@@ -181,7 +181,11 @@ export default class ChatListing extends Component {
         }}
         onPress={() => this.props.navigation.navigate(Constants.chat)}>
         <View style={styles.circleCard}>
-          <Image source={item.user.image} style={styles.iconUser} />
+          <Image
+            source={item.user.image}
+            style={styles.iconUser}
+            resizeMode="cover"
+          />
         </View>
         <View style={{marginStart: 10, flex: 1}}>
           <RegularTextCB

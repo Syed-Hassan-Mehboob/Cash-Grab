@@ -125,7 +125,11 @@ export default class Chat extends React.Component {
       <View
         style={{flexDirection: 'row', marginVertical: 5, marginHorizontal: 15}}>
         <View style={styles.circleCard}>
-          <Image source={item.user.image} style={styles.iconUser} />
+          <Image
+            source={item.user.image}
+            style={styles.iconUser}
+            resizeMode="cover"
+          />
         </View>
         <View>
           <View style={{marginStart: 10}}>
@@ -171,7 +175,11 @@ export default class Chat extends React.Component {
             </TouchableOpacity>
             <View style={{flexDirection: 'row', marginStart: 10}}>
               <View style={styles.circleCard}>
-                <Image source={Images.emp1} style={styles.iconUser} />
+                <Image
+                  source={Images.emp1}
+                  style={styles.iconUser}
+                  resizeMode="cover"
+                />
               </View>
               <View style={{marginStart: 10}}>
                 <RegularTextCB style={{fontSize: 18, color: Colors.sickGreen}}>

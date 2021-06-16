@@ -133,6 +133,7 @@ export default class EditProfile extends Component {
       width: 500,
       height: 500,
       cropping: true,
+      cropperCircleOverlay: true,
     }).then((image) => {
       this.setState({avatar: image.path});
     });
@@ -144,6 +145,7 @@ export default class EditProfile extends Component {
       width: 500,
       height: 500,
       cropping: true,
+      cropperCircleOverlay: true,
     }).then((image) => {
       this.setState({avatar: image.path});
     });
@@ -257,6 +259,20 @@ export default class EditProfile extends Component {
 
     console.log('params: ', params);
 
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('country_code', countryCode);
+    formData.append('country_flag', countryFlag);
+    formData.append('phone', phone);
+    formData.append('location', location);
+    formData.append('image', {
+      ...image,
+      uri: Platform.OS === 'android' ? image : image.replace('file:///', ''),
+      name: `image-profile`,
+      type: 'image/jpeg',
+    });
+
     const options = {
       headers: {
         'Content-Type': 'application/json',
@@ -265,7 +281,7 @@ export default class EditProfile extends Component {
     };
 
     this.toggleIsLoading();
-    Axios.post(Constants.updateProfileURL, params, options)
+    Axios.post(Constants.updateProfileURL, formData, options)
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -325,7 +341,11 @@ export default class EditProfile extends Component {
               {justifyContent: 'center', alignItems: 'center'},
             ]}
             onPress={() => this.toggleIsModalVisible()}>
-            <Image source={{uri: this.state.avatar}} style={styles.iconUser} />
+            <Image
+              source={{uri: this.state.avatar}}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
             {console.log(this.state.avatar)}
             <Image
               source={Images.iconCamera}
@@ -334,7 +354,7 @@ export default class EditProfile extends Component {
                 width: 25,
                 position: 'absolute',
                 resizeMode: 'contain',
-                opacity: 0.4,
+                opacity: 0.2,
               }}
             />
           </TouchableOpacity>
@@ -529,7 +549,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 80 / 2,
-    resizeMode: 'contain',
+    overflow: 'hidden',
   },
   container: {
     backgroundColor: Colors.white,
@@ -640,7 +660,7 @@ const styles = StyleSheet.create({
   circleCard: {
     height: 90,
     width: 90,
-    borderRadius: 45,
+    borderRadius: 90 / 2,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.15,

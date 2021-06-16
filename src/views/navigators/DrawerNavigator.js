@@ -24,7 +24,9 @@ export default class DrawerNavigator extends React.Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem('user');
     var userData = JSON.parse(user);
-    this.setState({isVendor: userData === 'vendor'});
+    this.setState({isVendor: userData.type === 'vendor'}, () =>
+      console.log(this.state.isVendor, ' ', userData),
+    );
   };
 
   DrawerScreens = () => {

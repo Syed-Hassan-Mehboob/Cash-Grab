@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   Dimensions,
@@ -10,11 +11,14 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
 import Colors from '../../common/Colors';
 import Constants from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - 10;
@@ -109,7 +113,25 @@ export default class VendorProfile extends React.Component {
     super(props);
   }
 
-  state = {isDescriptionSelected: true, isReviewsSelected: false, review: ''};
+  state = {
+    isLoading: false,
+    isDescriptionSelected: true,
+    isReviewsSelected: false,
+    review: '',
+    accessToken: '',
+    avatar: '',
+    name: '',
+    email: '',
+    countryCode: '',
+    phone: '',
+    location: '',
+  };
+
+  componentDidMount() {
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken();
+    });
+  }
 
   selectIsDescriptionSelected = () => {
     this.setState({
@@ -251,6 +273,46 @@ export default class VendorProfile extends React.Component {
     );
   };
 
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  getUserAccessToken = async () => {
+    console.log('getUserAccessToken');
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getUserProfile());
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({
+        avatar: data.data.records.userProfile.image,
+        name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phone: data.data.records.phone,
+        location: data.data.records.userProfile.location,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -300,7 +362,11 @@ export default class VendorProfile extends React.Component {
           showsVerticalScrollIndicator={false}>
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
-              <Image source={Images.emp1} style={styles.iconUser} />
+              <Image
+                source={Images.emp1}
+                style={styles.iconUser}
+                resizeMode="cover"
+              />
             </View>
             <View
               style={{
@@ -587,6 +653,11 @@ export default class VendorProfile extends React.Component {
             </View>
           )}
         </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -635,5 +706,9 @@ const styles = StyleSheet.create({
     height: 50,
     fontFamily: Constants.fontRegular,
     color: Colors.black,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

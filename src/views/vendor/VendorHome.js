@@ -16,36 +16,12 @@ import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import LightTextCB from '../../components/LightTextCB';
+import utils from '../../utils';
+import Axios from '../../network/APIKit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class VendorHome extends Component {
-  categories = [
-    {
-      id: '1',
-      image: Images.iconElectrician,
-      title: 'Electrician',
-    },
-    {
-      id: '2',
-      image: Images.iconCleaning,
-      title: 'Cleaning',
-    },
-    {
-      id: '3',
-      image: Images.iconRepair,
-      title: 'Repair',
-    },
-    {
-      id: '4',
-      image: Images.iconAutomobile,
-      title: 'Automobile',
-    },
-    // {
-    //   id: '5',
-    //   image: Images.iconMechanic,
-    //   title: 'Mechanic',
-    // },
-  ];
-
   jobs = [
     {
       id: '1',
@@ -115,7 +91,13 @@ export default class VendorHome extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
+      isLoading: false,
+      categories: [],
+      accessToken: '',
+      avatar: '',
+      name: '',
       service: '',
       rateRequested: '',
       location: '',
@@ -126,7 +108,12 @@ export default class VendorHome extends Component {
 
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
 
   renderCategoryItem = ({item}) => {
     return (
@@ -161,7 +148,11 @@ export default class VendorHome extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            <Image source={item.image} style={styles.iconUser} />
+            <Image
+              source={item.image}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB
@@ -273,6 +264,60 @@ export default class VendorHome extends Component {
     );
   };
 
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => {
+      this.getUserProfile();
+      this.getCategories();
+    });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.setState({
+        isLoading: false,
+        avatar: data.data.records.userProfile.image,
+        name: data.data.records.name,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    console.log(this.state.accessToken);
+
+    this.setState({isLoading: true});
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getCategories = () => {
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false, categories: data.data.records});
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    this.setState({isLoading: true});
+    Axios.get(Constants.customerCategoriesURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -295,7 +340,11 @@ export default class VendorHome extends Component {
                   this.props.navigation.navigate(Constants.vendorProfile)
                 }>
                 <View style={styles.circleCard}>
-                  <Image source={Images.emp1} style={styles.iconUser} />
+                  <Image
+                    source={{uri: Constants.imageURL + this.state.avatar}}
+                    style={styles.iconUser}
+                    resizeMode="cover"
+                  />
                 </View>
                 <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
                   Welcome,
@@ -306,7 +355,7 @@ export default class VendorHome extends Component {
                     marginStart: 3,
                     color: Colors.sickGreen,
                   }}>
-                  Damien
+                  {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
               <TouchableOpacity
@@ -374,7 +423,7 @@ export default class VendorHome extends Component {
             </View>
             <FlatList
               horizontal
-              data={this.categories}
+              data={this.state.categories}
               keyExtractor={(item) => item.id}
               renderItem={this.renderCategoryItem}
               showsHorizontalScrollIndicator={false}
@@ -423,6 +472,11 @@ export default class VendorHome extends Component {
             />
           </View>
         </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -478,5 +532,9 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

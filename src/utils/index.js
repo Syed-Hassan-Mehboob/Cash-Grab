@@ -107,6 +107,8 @@ class utils {
     if (errorCode === '400') {
       let errorData = error.response.data;
       this.showToast(errorData.message);
+    } else if (errorCode === '405') {
+      this.showToast('Wrong Api Method');
     } else {
       let errorResData = JSON.parse(error.response.request._response).data;
       for (const [, value] of Object.entries(errorResData)) {

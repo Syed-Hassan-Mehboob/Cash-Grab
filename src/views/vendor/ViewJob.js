@@ -165,6 +165,7 @@ export default class ViewJob extends React.Component {
                   <Image
                     source={this.completedJobs[0].image}
                     style={styles.iconUser}
+                    resizeMode="cover"
                   />
                 </View>
                 <View style={{marginStart: 10}}>

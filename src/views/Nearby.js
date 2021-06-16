@@ -429,7 +429,11 @@ const Nearby = (props) => {
                 props.navigation.navigate(Constants.viewVendorProfile)
               }>
               <View style={styles.circleCard}>
-                <Image source={marker.image} style={styles.iconUser} />
+                <Image
+                  source={marker.image}
+                  style={styles.iconUser}
+                  resizeMode="cover"
+                />
               </View>
               <View style={styles.textContent}>
                 <RegularTextCB style={[styles.cardtitle]}>
