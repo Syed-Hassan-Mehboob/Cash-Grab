@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
   TextInput,
+  Text
 } from 'react-native';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal';
@@ -24,7 +25,7 @@ import Constants from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default class EditProfile extends Component {
   constructor(props) {
@@ -52,17 +53,17 @@ export default class EditProfile extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getUserProfile());
+    this.setState({ accessToken: token }, () => this.getUserProfile());
   };
 
   changePasswordState() {
     if (this.state.secureText)
-      this.setState({secureText: false, eyeIcon: 'eye'});
-    else this.setState({secureText: true, eyeIcon: 'eye-off'});
+      this.setState({ secureText: false, eyeIcon: 'eye' });
+    else this.setState({ secureText: true, eyeIcon: 'eye-off' });
   }
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   toggleIsModalVisible = () => {
@@ -90,8 +91,8 @@ export default class EditProfile extends Component {
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <LightTextCB style={{fontSize: 30}}>Upload Photo</LightTextCB>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <LightTextCB style={{ fontSize: 30 }}>Upload Photo</LightTextCB>
           <TouchableOpacity
             onPress={() => {
               this.toggleIsModalVisible();
@@ -107,22 +108,22 @@ export default class EditProfile extends Component {
             />
           </TouchableOpacity>
         </View>
-        <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
+        <LightTextCB style={{ fontSize: 16, color: Colors.grey }}>
           Upload a photo from
         </LightTextCB>
-        <View style={{marginTop: 30}}>
+        <View style={{ marginTop: 30 }}>
           <ButtonRadius10
             label="CAMERA"
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{ marginTop: 20 }}>
           <ButtonRadius10
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{height: 50}} />
+        <View style={{ height: 50 }} />
       </View>
     );
   };
@@ -135,7 +136,7 @@ export default class EditProfile extends Component {
       cropping: true,
       cropperCircleOverlay: true,
     }).then((image) => {
-      this.setState({avatar: image.path});
+      this.setState({ avatar: image.path });
     });
   };
 
@@ -147,7 +148,7 @@ export default class EditProfile extends Component {
       cropping: true,
       cropperCircleOverlay: true,
     }).then((image) => {
-      this.setState({avatar: image.path});
+      this.setState({ avatar: image.path });
     });
   };
 
@@ -159,7 +160,7 @@ export default class EditProfile extends Component {
   };
 
   getUserProfile = () => {
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       this.toggleIsLoading();
       this.setState({
         avatar: Constants.imageURL + data.data.records.userProfile.image,
@@ -233,7 +234,7 @@ export default class EditProfile extends Component {
       return;
     }
 
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       this.toggleIsLoading();
       utils.showToast(data.message);
 
@@ -288,12 +289,12 @@ export default class EditProfile extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={{ flex: 1, backgroundColor: Colors.white }}>
         <View
           style={{
             borderBottomStartRadius: 30,
             borderBottomEndRadius: 30,
-            height: height / 3.75,
+            height: height / 3.10,
             backgroundColor: Colors.navy,
             alignItems: 'center',
           }}>
@@ -305,18 +306,19 @@ export default class EditProfile extends Component {
               width: '100%',
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : 20,
+              paddingVertical: 10
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: 10}}
+              style={{ position: 'absolute', left: 10 }}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
               <Image
                 source={Images.arrowBack}
-                style={[styles.iconBack, {tintColor: Colors.white}]}
+                style={[styles.iconBack, { tintColor: Colors.white }]}
               />
             </TouchableOpacity>
-            <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
+            <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
               Profile
             </RegularTextCB>
             <TouchableOpacity
@@ -331,18 +333,18 @@ export default class EditProfile extends Component {
               onPress={() => {
                 this.editUserProfile();
               }}>
-              <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
+              <RegularTextCB style={{ color: Colors.white }}>Save</RegularTextCB>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
             activeOpacity={0.5}
             style={[
               styles.circleCard,
-              {justifyContent: 'center', alignItems: 'center'},
+              { justifyContent: 'center', alignItems: 'center' },
             ]}
             onPress={() => this.toggleIsModalVisible()}>
             <Image
-              source={{uri: this.state.avatar}}
+              source={{ uri: this.state.avatar }}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -359,14 +361,17 @@ export default class EditProfile extends Component {
             />
           </TouchableOpacity>
           <RegularTextCB
-            style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
+            style={{ color: Colors.white, fontSize: 20, marginTop: 10 }}>
             {this.state.fullName}
           </RegularTextCB>
+          <View style={{ backgroundColor: Colors.white, paddingHorizontal: 30, borderRadius: 10 }} >
+            <TextInput multiline={true} placeholder="About Me" style={{ fontFamily: Constants.fontRegular, fontSize: 15, }} />
+          </View>
         </View>
         <ScrollView
-          style={[styles.container, {paddingVertical: 20}]}
+          style={[styles.container, { paddingVertical: 20 }]}
           showsVerticalScrollIndicator={false}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -381,12 +386,12 @@ export default class EditProfile extends Component {
               placeholder={'Name'}
               value={this.state.fullName}
               onChangeText={(text) => {
-                this.setState({fullName: text});
+                this.setState({ fullName: text });
               }}
               style={[styles.textInput]}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -402,7 +407,7 @@ export default class EditProfile extends Component {
               placeholder={'Email Address'}
               value={this.state.email}
               onChangeText={(text) => {
-                this.setState({email: text});
+                this.setState({ email: text });
               }}
               style={[styles.textInput]}
             />
@@ -423,7 +428,7 @@ export default class EditProfile extends Component {
               }}>
               Phone No.
             </RegularTextCB>
-            <View style={[styles.card1, {flexDirection: 'row', flex: 0.85}]}>
+            <View style={[styles.card1, { flexDirection: 'row', flex: 0.85 }]}>
               <CountryPicker
                 onSelect={this.onSelect}
                 countryCode={this.state.countryFlag}
@@ -456,7 +461,7 @@ export default class EditProfile extends Component {
               />
             </View>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -471,7 +476,7 @@ export default class EditProfile extends Component {
               placeholder={'Location'}
               value={this.state.location}
               onChangeText={(text) => {
-                this.setState({location: text});
+                this.setState({ location: text });
               }}
               style={[styles.textInput]}
             />
@@ -592,7 +597,7 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 8,
@@ -631,7 +636,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -645,7 +650,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -662,7 +667,7 @@ const styles = StyleSheet.create({
     width: 90,
     borderRadius: 90 / 2,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
