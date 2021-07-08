@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
 import CountryPicker from 'react-native-country-picker-modal';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import LightTextCB from '../components/LightTextCB';
@@ -21,6 +21,8 @@ import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import EditText from '../components/EditText';
 import utils from '../utils';
+import Axios from '../network/APIKit';
+import { MultiDropdownPicker } from '../components/MultiDropDownPicker'
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -38,49 +40,57 @@ export default class SignUp extends Component {
       phone: '12345678',
       password: '',
       confirmPassword: '',
-      selections: [
-        {
-          id: '0',
-          text: 'Service 1',
-          isSelected: false,
-        },
-        {
-          id: '1',
-          text: 'Service 2',
-          isSelected: false,
-        },
-        {
-          id: '2',
-          text: 'Service 3',
-          isSelected: false,
-        },
-        {
-          id: '3',
-          text: 'Service 4',
-          isSelected: false,
-        },
-        {
-          id: '4',
-          text: 'Service 5',
-          isSelected: false,
-        },
-        {
-          id: '5',
-          text: 'Service 6',
-          isSelected: false,
-        },
-      ],
+      selections: [],
+      servies: []
     };
+  }
+
+  data = [
+    {
+      id: "1",
+      name: "patner1"
+    },
+    {
+      id: "2",
+      name: "patner2"
+
+    }
+  ]
+
+  getServies = () => {
+
+
+    console.log("getServies");
+
+
+    const onSuccess = ({ data }) => {
+      console.log("response data", data.data.records)
+      this.setState({
+        selections: data.data.records
+      }, () => {
+        // console.log("shohab", this.state.selections)
+      })
+
+
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+
+    Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
+
   }
 
   componentDidMount() {
     this.getUserType();
+    this.getServies();
   }
 
   getUserType = async () => {
     const value = await AsyncStorage.getItem('isVendor');
     const data = JSON.parse(value);
-    this.setState({isVendor: data});
+    this.setState({ isVendor: data });
   };
 
   toggleIsSelectionModalVisible = () => {
@@ -98,8 +108,8 @@ export default class SignUp extends Component {
   renderSelectionBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
             Select
           </RegularTextCB>
           <TouchableOpacity
@@ -119,7 +129,7 @@ export default class SignUp extends Component {
           </TouchableOpacity>
         </View>
         <FlatList
-          style={{marginTop: 5}}
+          style={{ marginTop: 5 }}
           data={this.state.selections}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
@@ -133,7 +143,7 @@ export default class SignUp extends Component {
     );
   };
 
-  renderSelectionItem = ({item, index}) => {
+  renderSelectionItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
@@ -150,7 +160,7 @@ export default class SignUp extends Component {
             fontSize: 14,
             color: Colors.black,
           }}>
-          {item.text}
+          {item.name}
         </RegularTextCB>
       </TouchableOpacity>
     );
@@ -162,7 +172,8 @@ export default class SignUp extends Component {
       item.isSelected = false;
     });
     mSelection[index].isSelected = true;
-    this.setState({selections: mSelection, service: mSelection[index].text});
+    console.log("data", mSelection[index].name)
+    this.setState({ selections: mSelection, service: mSelection[index].name });
     this.toggleIsSelectionModalVisible();
   };
 
@@ -247,39 +258,39 @@ export default class SignUp extends Component {
 
     const payload = this.state.isVendor
       ? {
-          name,
-          service,
-          email,
-          password,
-          password_confirmation,
-          type: 'vendor',
-          country_code,
-          country_flag,
-          phone,
-        }
+        name,
+        service,
+        email,
+        password,
+        password_confirmation,
+        type: 'vendor',
+        country_code,
+        country_flag,
+        phone,
+      }
       : {
-          name,
-          email,
-          password,
-          password_confirmation,
-          type: 'customer',
-          country_code,
-          country_flag,
-          phone,
-        };
+        name,
+        email,
+        password,
+        password_confirmation,
+        type: 'customer',
+        country_code,
+        country_flag,
+        phone,
+      };
 
-    this.props.navigation.navigate(Constants.verifyVia, {payload});
+    this.props.navigation.navigate(Constants.verifyVia, { payload });
   };
 
   render() {
     return (
       <ImageBackground
         source={Images.loginBgWeb}
-        style={[styles.container, {flex: 1, width: '100%'}]}>
-        <View style={{flex: 1}}>
+        style={[styles.container, { flex: 1, width: '100%' }]}>
+        <View style={{ flex: 1 }}>
           <KeyboardAwareScrollView
-            style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}
-            contentContainerStyle={{flexGrow: 1}}
+            style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20 }}
+            contentContainerStyle={{ flexGrow: 1 }}
             showsVerticalScrollIndicator={false}>
             <View>
               <TouchableOpacity
@@ -292,7 +303,7 @@ export default class SignUp extends Component {
                 }}>
                 <Image source={Images.arrowBack} style={styles.iconBack} />
               </TouchableOpacity>
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <Image
                   source={Images.cashGrabLogoNew2}
                   style={{
@@ -310,13 +321,13 @@ export default class SignUp extends Component {
                   }}>
                   Create an account
                 </BoldTextCB>
-                <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+                <RegularTextCB style={{ fontSize: 18, color: Colors.coolGrey }}>
                   Hello there, sign up to continue!
                 </RegularTextCB>
               </View>
             </View>
             <View style={[styles.childContainer]}>
-              <View style={[styles.textInputContainer, {marginTop: 30}]}>
+              <View style={[styles.textInputContainer, { marginTop: 30 }]}>
                 <EditText
                   ref={'fullName'}
                   placeholder={'Full Name'}
@@ -329,8 +340,22 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              {this.state.isVendor && (
-                <View style={{marginTop: 15, marginHorizontal: 15}}>
+              {this.state.isVendor &&
+                <MultiDropdownPicker
+                  viewProperty="name"
+                  value={this.state.servies}
+                  data={this.state.selections}
+                  onChangeValue={(val) => {
+                    this.setState(
+                      { servies: val }
+                    )
+                    console.log("multidropdown picker ", val)
+                  }}
+                />
+              }
+
+              {/* {this.state.isVendor && (
+                <View style={{ marginTop: 15, marginHorizontal: 15 }}>
                   <TouchableOpacity
                     style={[
                       styles.card,
@@ -343,25 +368,25 @@ export default class SignUp extends Component {
                       },
                     ]}
                     onPress={() => this.toggleIsSelectionModalVisible()}>
-                    <RegularTextCB style={{color: Colors.black}}>
+                    <RegularTextCB style={{ color: Colors.black }}>
                       {this.state.service}
                     </RegularTextCB>
                   </TouchableOpacity>
                 </View>
-              )}
-              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+              )} */}
+              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
                 <EditText
                   ref={'email'}
                   keyboardType="email-address"
                   placeholder={'Email Address'}
                   value={this.state.email}
                   onChangeText={(text) => {
-                    this.setState({email: text});
+                    this.setState({ email: text });
                   }}
                   style={[styles.textInput]}
                 />
               </View>
-              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
                 <TouchableOpacity
                   activeOpacity={0.5}
                   onPress={() => this.toggleIsCountryCodePickerVisible()}
@@ -394,12 +419,12 @@ export default class SignUp extends Component {
                   placeholder={'12345678'}
                   value={this.state.phone}
                   onChangeText={(text) => {
-                    this.setState({phone: text});
+                    this.setState({ phone: text });
                   }}
-                  style={[styles.textInput, {flex: 1}]}
+                  style={[styles.textInput, { flex: 1 }]}
                 />
               </View>
-              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
                 <EditText
                   ref={'password'}
                   placeholder={'Password'}
@@ -413,7 +438,7 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              <View style={[styles.textInputContainer, {marginTop: 15}]}>
+              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
                 <EditText
                   ref={'confirm_password'}
                   placeholder={'Confirm Password'}
@@ -428,7 +453,7 @@ export default class SignUp extends Component {
                 />
               </View>
             </View>
-            <View style={{justifyContent: 'flex-end', marginHorizontal: 15}}>
+            <View style={{ justifyContent: 'flex-end', marginHorizontal: 15 }}>
               <View
                 style={[
                   {
@@ -449,7 +474,7 @@ export default class SignUp extends Component {
                   </LightTextCB>
                 </TouchableOpacity>
               </View>
-              <View style={{marginVertical: 20}}>
+              <View style={{ marginVertical: 20 }}>
                 <ButtonRadius10
                   label="SIGN UP"
                   bgColor={Colors.sickGreen}
@@ -458,12 +483,12 @@ export default class SignUp extends Component {
               </View>
             </View>
           </KeyboardAwareScrollView>
-          <Modal
+          {/* <Modal
             isVisible={this.state.isSelectionModalVisible}
             coverScreen={false}
             style={styles.modal}>
             {this.renderSelectionBottomSheetContent()}
-          </Modal>
+          </Modal> */}
         </View>
       </ImageBackground>
     );
@@ -525,7 +550,7 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     paddingTop: 20,
@@ -563,7 +588,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -591,3 +616,4 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
 });
+

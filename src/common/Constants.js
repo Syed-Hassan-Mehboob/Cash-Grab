@@ -69,6 +69,7 @@ const Constants = {
   contentsURL: 'contents',
   notificationsURL: 'notifications',
   logoutURL: 'auth/sign-out',
+  servies: "auth/services"
 };
 
 export default Constants;
