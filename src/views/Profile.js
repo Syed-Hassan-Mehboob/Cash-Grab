@@ -16,7 +16,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -41,17 +41,16 @@ export default class Profile extends React.Component {
   }
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   getUserAccessToken = async () => {
-    console.log('getUserAccessToken');
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getUserProfile());
+    this.setState({ accessToken: token }, () => this.getUserProfile());
   };
 
   getUserProfile = () => {
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       this.toggleIsLoading();
       this.setState({
         avatar: data.data.records.userProfile.image,
@@ -68,7 +67,7 @@ export default class Profile extends React.Component {
       utils.showResponseError(error);
     };
 
-    console.log(this.state.accessToken);
+
 
     this.toggleIsLoading();
     Axios.get(Constants.getProfileURL, {
@@ -100,11 +99,11 @@ export default class Profile extends React.Component {
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : 20,
             }}>
-            <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
+            <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
               Profile
             </RegularTextCB>
             <TouchableOpacity
-              style={{position: 'absolute', right: 10}}
+              style={{ position: 'absolute', right: 10 }}
               onPress={() => {
                 this.props.navigation.navigate(Constants.editProfile);
               }}>
@@ -120,7 +119,7 @@ export default class Profile extends React.Component {
           </View>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + this.state.avatar}}
+              source={{ uri: Constants.imageURL + this.state.avatar }}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -133,7 +132,7 @@ export default class Profile extends React.Component {
             }}>
             <Image
               source={Images.iconVerified}
-              style={{height: 15, width: 15, resizeMode: 'contain'}}
+              style={{ height: 15, width: 15, resizeMode: 'contain' }}
             />
             <RegularTextCB
               style={{
@@ -145,7 +144,7 @@ export default class Profile extends React.Component {
             </RegularTextCB>
           </View>
           <RegularTextCB
-            style={{color: Colors.white, fontSize: 18, marginTop: 5}}>
+            style={{ color: Colors.white, fontSize: 18, marginTop: 5 }}>
             {this.state.name}
           </RegularTextCB>
           <RegularTextCB
@@ -162,7 +161,7 @@ export default class Profile extends React.Component {
         <View
           style={[
             styles.card,
-            {marginHorizontal: 20, marginTop: -20, padding: 20},
+            { marginHorizontal: 20, marginTop: -20, padding: 20 },
           ]}>
           <View
             style={[
@@ -175,7 +174,7 @@ export default class Profile extends React.Component {
                 borderColor: Colors.sickGreen,
               },
             ]}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               Description
             </RegularTextCB>
           </View>
@@ -186,10 +185,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: 10,
             }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               User Name
             </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {this.state.name}
             </RegularTextCB>
           </View>
@@ -200,10 +199,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: 10,
             }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               Email Address
             </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {this.state.email}
             </RegularTextCB>
           </View>
@@ -214,10 +213,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: 10,
             }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               Phone No.
             </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {this.state.countryCode.concat('', this.state.phone)}
             </RegularTextCB>
           </View>
@@ -228,10 +227,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: 10,
             }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               Location
             </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {this.state.location}
             </RegularTextCB>
           </View>
@@ -261,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 10,
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
     width: 90,
     borderRadius: 45,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,

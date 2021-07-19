@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,12 +6,18 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  LogBox
 } from 'react-native';
 import Colors from '../../common/Colors';
 import Constants from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import ListComponent from '../../components/ListComponent';
 
 export default class VendorSingleCategory extends Component {
   categories = [
@@ -115,110 +121,122 @@ export default class VendorSingleCategory extends Component {
 
   constructor(props) {
     super(props);
-  }
+    this.state = {
+      isLoading: false,
+      accessToken: '',
+      getJobs: []
+    };
 
-  renderSingleCategoriesItem = ({item}) => {
+  }
+  componentDidMount() {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    this.getUserAccessToken()
+    // this.props.navigation.addListener('focus', () => {
+    //   this.getUserAccessToken()
+    // });
+  }
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.getAllJobs();
+    });
+  };
+
+  getAllJobs = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({ isLoading: false, getJobs: data.data });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+    let params = {
+      categoryId: 1,
+    };
+
+    Axios.get(Constants.getJobsByCategory, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+
+  renderSingleCategoriesItem = ({ item }) => {
+    console.log(item.jobs.users.name)
     return (
-      <View
-        style={[
-          styles.card,
-          {padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
-        ]}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },]}
+        onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={styles.circleCard}>
             <Image
-              source={item.image}
+              source={{ uri: Constants.imageURL + item.jobs.users.image }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{marginStart: 10}}>
+          <View style={{ marginStart: 10 }}>
             <RegularTextCB
-              style={{
-                color: Colors.black,
-                fontSize: 16,
-              }}>
-              {item.title}
+              style={{ color: Colors.black, fontSize: 16, }}>
+              {item.jobs.users.name}
             </RegularTextCB>
             <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{height: 15, width: 15, resizeMode: 'contain'}}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 12,
-                  marginStart: 5,
-                }}>
-                Verified
+              style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', }}>
+              <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.jobs.users.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
+              <RegularTextCB style={{ color: item.jobs.users.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
+                {item.jobs.users.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 16,
-            }}>
-            {item.requirement}
+        <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between' }}>
+          <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
+            {item.jobs.title}
           </RegularTextCB>
+
           <LightTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 12,
-            }}>
-            {item.pricing}
+            style={{ color: Colors.black, fontSize: 12, }}>
+            ${item.jobs.price}
           </LightTextCB>
+
         </View>
+
+        {/* <RegularTextCB
+          style={{ color: Colors.sickGreen, fontSize: 12, }}>
+          {item.category.name}
+        </RegularTextCB> */}
         <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {item.type}
-        </RegularTextCB>
-        <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-          }}>
-          {item.desc}
+          style={{ color: Colors.coolGrey, }}>
+          {item.jobs.description}
         </RegularTextCB>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
           <Image
             source={Images.iconLocationPin}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: 'contain' }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.location}
+            {item.jobs.address}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
           <Image
             source={Images.iconStopWatch}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: 'contain' }}
           />
           <View
             style={{
@@ -228,12 +246,12 @@ export default class VendorSingleCategory extends Component {
               flex: 1,
               justifyContent: 'space-between',
             }}>
-            <RegularTextCB
+            {/* <RegularTextCB
               style={{
                 color: Colors.coolGrey,
               }}>
               {item.time}
-            </RegularTextCB>
+            </RegularTextCB> */}
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -242,15 +260,18 @@ export default class VendorSingleCategory extends Component {
             </RegularTextCB>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
+
   };
 
   openNextScreen = (nextScreen) => {
     this.props.navigation.navigate(nextScreen);
   };
 
+
   render() {
+
     return (
       <View style={[styles.container]}>
         <View
@@ -262,28 +283,28 @@ export default class VendorSingleCategory extends Component {
             marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{ position: 'absolute', left: 10 }}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
             <Image
               source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black}]}
+              style={[styles.iconBack, { tintColor: Colors.black }]}
             />
           </TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <Image
-              source={this.props.route.params.item.image}
-              style={{height: 50, width: 50}}
+              source={{ uri: Constants.imageURL + this.props.route.params.item.image }}
+              style={{ height: 50, width: 50 }}
             />
-            <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
-              {this.props.route.params.item.title}
+            <RegularTextCB style={{ fontSize: 30, color: Colors.black }}>
+              {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
         </View>
         <FlatList
-          style={{marginTop: 10}}
-          data={this.categories}
+          style={{ marginTop: 10 }}
+          data={this.state.getJobs}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}
@@ -295,6 +316,11 @@ export default class VendorSingleCategory extends Component {
             // for android
             paddingBottom: 100,
           }}
+        />
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
         />
       </View>
     );
@@ -376,7 +402,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -386,9 +412,13 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

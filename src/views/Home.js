@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
@@ -121,6 +121,7 @@ export default class Home extends Component {
       isLoading: false,
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
+      accessToken: '',
       service: 'Select',
       avatar: '',
       name: '',
@@ -128,6 +129,8 @@ export default class Home extends Component {
       location: '',
       address: '',
       exactTime: '',
+      vendorAround: [],
+      topServices: [],
       selections: [
         {
           id: '0',
@@ -165,12 +168,135 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
+    this.getUserAccessToken()
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.getUserProfile();
+      this.getCategories();
+      this.getVendorAroundYou();
+      this.getTopServices();
+    });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({
+        isLoading: false,
+        avatar: data.data.records.userProfile.image,
+        name: data.data.records.name,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+
+    this.setState({ isLoading: true });
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getCategories = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({ isLoading: false, categories: data.data.records });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+    Axios.get(Constants.customerCategoriesURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getVendorAroundYou = () => {
+    const onSuccess = ({ data }) => {
+
+      this.setState({
+        isLoading: false,
+        vendorAround: data.data
+      }, () => {
+
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    let params = {
+      latitude: "24.90628280557342",
+      longitude: "67.07237028142383",
+      limit: 2,
+
+    };
+    Axios.get(Constants.getvendorAround, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+
+
+  };
+  getTopServices = () => {
+    const onSuccess = ({ data }) => {
+
+      this.setState({
+        isLoading: false,
+        topServices: data.data.records
+      }, () => {
+        // console.log("state update ======>", this.state.topServices)
+
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    let params = {
+      limit: 10,
+    };
+    Axios.get(Constants.getTopSerVices, {
+      params,
+      headers: { Authorization: this.state.accessToken },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+
+
+  };
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   toggleIsQuickServiceModalVisible = () => {
@@ -188,8 +314,8 @@ export default class Home extends Component {
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
             Quick Service
           </RegularTextCB>
           <TouchableOpacity
@@ -207,8 +333,8 @@ export default class Home extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={[styles.textInputContainer, {marginTop: 10}]}>
-          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+        <View style={[styles.textInputContainer, { marginTop: 10 }]}>
+          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Select Service
           </RegularTextCB>
           <TouchableOpacity
@@ -223,13 +349,13 @@ export default class Home extends Component {
               },
             ]}
             onPress={() => this.toggleIsSelectionModalVisible()}>
-            <RegularTextCB style={{color: Colors.black}}>
+            <RegularTextCB style={{ color: Colors.black }}>
               {this.state.service}
             </RegularTextCB>
           </TouchableOpacity>
         </View>
-        <View style={[styles.textInputContainer, {marginTop: 20}]}>
-          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Rate Requested
           </RegularTextCB>
           <EditText
@@ -244,8 +370,8 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={[styles.textInputContainer, {marginTop: 20}]}>
-          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Location
           </RegularTextCB>
           <EditText
@@ -260,8 +386,8 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={[styles.textInputContainer, {marginTop: 20}]}>
-          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Address
           </RegularTextCB>
           <EditText
@@ -276,8 +402,8 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={[styles.textInputContainer, {marginTop: 20}]}>
-          <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Exact Time
           </RegularTextCB>
           <EditText
@@ -292,7 +418,7 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={{marginTop: 30, paddingBottom: 10, marginHorizontal: 10}}>
+        <View style={{ marginTop: 30, paddingBottom: 10, marginHorizontal: 10 }}>
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
@@ -308,8 +434,8 @@ export default class Home extends Component {
   renderSelectionBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
             Select
           </RegularTextCB>
           <TouchableOpacity
@@ -329,7 +455,7 @@ export default class Home extends Component {
           </TouchableOpacity>
         </View>
         <FlatList
-          style={{marginTop: 5}}
+          style={{ marginTop: 5 }}
           data={this.state.selections}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
@@ -343,7 +469,7 @@ export default class Home extends Component {
     );
   };
 
-  renderSelectionItem = ({item, index}) => {
+  renderSelectionItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
@@ -372,7 +498,7 @@ export default class Home extends Component {
       item.isSelected = false;
     });
     mSelection[index].isSelected = true;
-    this.setState({selections: mSelection, service: mSelection[index].text});
+    this.setState({ selections: mSelection, service: mSelection[index].text });
     this.toggleIsSelectionModalVisible();
   };
 
@@ -383,7 +509,7 @@ export default class Home extends Component {
     this.state.service = 'Select';
   }
 
-  renderCategoryItem = ({item}) => {
+  renderCategoryItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() =>
@@ -391,26 +517,26 @@ export default class Home extends Component {
             item: item,
           })
         }
-        style={{alignItems: 'center'}}>
+        style={{ alignItems: 'center' }}>
         <Image
           style={styles.circle}
-          source={{uri: Constants.imageURL + item.image}}
+          source={{ uri: Constants.imageURL + item.image }}
         />
         <RegularTextCB
-          style={{fontSize: 14, marginTop: -20, color: Colors.coolGrey}}>
+          style={{ fontSize: 14, marginTop: -20, color: Colors.coolGrey }}>
           {item.name}
         </RegularTextCB>
       </TouchableOpacity>
     );
   };
 
-  renderVendorsAroundYouItem = ({item}) => {
+  renderVendorsAroundYouItem = ({ item }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         style={[
           styles.card,
-          {padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
+          { padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },
         ]}
         onPress={() =>
           this.props.navigation.navigate(Constants.viewVendorProfile)
@@ -422,7 +548,7 @@ export default class Home extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={item.image}
+              source={{ uri: Constants.imageURL + item.image }}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -443,12 +569,13 @@ export default class Home extends Component {
             marginTop: 10,
             fontSize: 14,
           }}>
-          {item.title}
+          {item.name}
         </RegularTextCB>
-        <View style={{flexDirection: 'row', marginTop: 5}}>
+
+        <View style={{ flexDirection: 'row', marginTop: 5 }}>
           <Image
             source={Images.iconVerified}
-            style={{height: 15, width: 15, resizeMode: 'contain'}}
+            style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }}
           />
           <RegularTextCB
             style={{
@@ -456,7 +583,7 @@ export default class Home extends Component {
               fontSize: 12,
               marginStart: 5,
             }}>
-            Verified
+            {item.email_verified_at !== null ? "Verified" : "Unverified"}
           </RegularTextCB>
         </View>
         <RegularTextCB
@@ -464,7 +591,7 @@ export default class Home extends Component {
             color: Colors.coolGrey,
             marginTop: 5,
           }}>
-          {item.type}
+          Car Wash
         </RegularTextCB>
         <View
           style={{
@@ -486,14 +613,15 @@ export default class Home extends Component {
               color: Colors.orangeYellow,
               marginStart: 2,
             }}>
-            {item.ratings}
+            1.0
           </RegularTextCB>
         </View>
       </TouchableOpacity>
     );
   };
 
-  renderUrgentServicesItem = ({item}) => {
+  renderUrgentServicesItem = ({ item }) => {
+
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -516,11 +644,11 @@ export default class Home extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            <Image
-              source={item.image}
+            {/* <Image
+              source={{ uri: Constants.imageURL + item.userProfile.imag }}
               style={styles.iconUser}
               resizeMode="cover"
-            />
+            /> */}
           </View>
           <RegularTextCB
             style={{
@@ -544,7 +672,7 @@ export default class Home extends Component {
           style={{
             color: Colors.coolGrey,
           }}>
-          {item.title}
+          {item.name}
         </RegularTextCB>
         <View
           style={{
@@ -566,7 +694,7 @@ export default class Home extends Component {
               color: Colors.orangeYellow,
               marginStart: 2,
             }}>
-            {item.ratings}
+            1.0
           </RegularTextCB>
         </View>
         <Image
@@ -583,59 +711,7 @@ export default class Home extends Component {
     );
   };
 
-  getUserAccessToken = async () => {
-    const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
-      this.getUserProfile();
-      this.getCategories();
-    });
-  };
 
-  getUserProfile = () => {
-    const onSuccess = ({data}) => {
-      this.setState({
-        isLoading: false,
-        avatar: data.data.records.userProfile.image,
-        name: data.data.records.name,
-      });
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    console.log(this.state.accessToken);
-
-    this.setState({isLoading: true});
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
-  getCategories = () => {
-    const onSuccess = ({data}) => {
-      this.setState({isLoading: false, categories: data.data.records});
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    this.setState({isLoading: true});
-    Axios.get(Constants.customerCategoriesURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
 
   render() {
     return (
@@ -654,18 +730,18 @@ export default class Home extends Component {
               }}>
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={{flexDirection: 'row', alignItems: 'center'}}
+                style={{ flexDirection: 'row', alignItems: 'center' }}
                 onPress={() =>
                   this.props.navigation.navigate(Constants.profile)
                 }>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri: Constants.imageURL + this.state.avatar}}
+                    source={{ uri: Constants.imageURL + this.state.avatar }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
+                <RegularTextCB style={{ fontSize: 16, marginStart: 10 }}>
                   Welcome,
                 </RegularTextCB>
                 <RegularTextCB
@@ -704,12 +780,12 @@ export default class Home extends Component {
                 alignItems: 'center',
               }}
               onPress={() => this.props.navigation.navigate(Constants.search)}>
-              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+              <RegularTextCB style={{ fontSize: 16, color: Colors.coolGrey }}>
                 Search Service...
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{height: 50, width: 50}}
+                style={{ height: 50, width: 50 }}
               />
             </TouchableOpacity>
             <View
@@ -787,19 +863,19 @@ export default class Home extends Component {
             </View>
             <FlatList
               horizontal
-              data={this.vendors}
+              data={this.state.vendorAround}
               keyExtractor={(item) => item.id}
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
             />
             <RegularTextCB
-              style={{fontSize: 20, marginTop: 10, paddingHorizontal: 20}}>
+              style={{ fontSize: 20, marginTop: 10, paddingHorizontal: 20 }}>
               Top Services
             </RegularTextCB>
             <FlatList
-              style={{paddingBottom: 100}}
+              style={{ paddingBottom: 100 }}
               numColumns={2}
-              data={this.urgentServices}
+              data={this.state.topServices}
               keyExtractor={(item) => item.id}
               renderItem={this.renderUrgentServicesItem}
               showsHorizontalScrollIndicator={false}
@@ -818,7 +894,7 @@ export default class Home extends Component {
           onPress={() => {
             this.toggleIsQuickServiceModalVisible();
           }}>
-          <RegularTextCB style={{color: Colors.white}}>
+          <RegularTextCB style={{ color: Colors.white }}>
             Quick Service
           </RegularTextCB>
         </TouchableOpacity>
@@ -874,7 +950,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
@@ -884,7 +960,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,

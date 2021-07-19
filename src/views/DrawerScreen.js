@@ -1,5 +1,5 @@
 /* @flow */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {CommonActions} from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
@@ -20,7 +20,7 @@ import Axios from '../network/APIKit';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{name: Constants.login}],
+  routes: [{ name: Constants.login }],
 });
 
 export default class DrawerScreen extends Component {
@@ -55,7 +55,7 @@ export default class DrawerScreen extends Component {
   };
 
   getUserProfile = () => {
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       this.setState({
         avatar: data.data.records.userProfile.image,
         location: data.data.records.userProfile.location,
@@ -67,7 +67,7 @@ export default class DrawerScreen extends Component {
       utils.showResponseError(error);
     };
 
-    console.log(this.state.accessToken);
+    // console.log(this.state.accessToken);
 
     Axios.get(Constants.getProfileURL, {
       headers: {
@@ -79,15 +79,15 @@ export default class DrawerScreen extends Component {
   };
 
   logout() {
-    const onSuccess = ({data}) => {
-      this.setState({isLoading: false});
+    const onSuccess = ({ data }) => {
+      this.setState({ isLoading: false });
 
       AsyncStorage.removeItem('user');
       this.props.navigation.dispatch(resetAction);
     };
 
     const onFailure = (error) => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       utils.showResponseError(error);
     };
 
@@ -98,7 +98,7 @@ export default class DrawerScreen extends Component {
       },
     };
 
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     Axios.get(Constants.logoutURL, options).then(onSuccess).catch(onFailure);
   }
 
@@ -109,12 +109,12 @@ export default class DrawerScreen extends Component {
   };
 
   getUserName() {
-    const {userData} = this.state;
+    const { userData } = this.state;
     if (userData != null) {
       return (
         <RegularTextCB
           numberOfLines={1}
-          style={{fontSize: 22, fontFamily: Constants.fontBold, color: '#000'}}>
+          style={{ fontSize: 22, fontFamily: Constants.fontBold, color: '#000' }}>
           {userData.name}
         </RegularTextCB>
       );
@@ -124,7 +124,7 @@ export default class DrawerScreen extends Component {
   render() {
     return (
       <View style={styles.drawerContainer}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate(
@@ -144,22 +144,22 @@ export default class DrawerScreen extends Component {
             }}>
             <View style={styles.circleCard}>
               <Image
-                source={{uri: Constants.imageURL + this.state.avatar}}
+                source={{ uri: Constants.imageURL + this.state.avatar }}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
             </View>
-            <View style={{flex: 1, paddingHorizontal: 10}}>
-              <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
+            <View style={{ flex: 1, paddingHorizontal: 10 }}>
+              <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
                 {this.state.name}
               </RegularTextCB>
-              <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
+              <RegularTextCB style={{ fontSize: 14, color: Colors.coolGrey }}>
                 {this.state.location}
               </RegularTextCB>
             </View>
           </TouchableOpacity>
-          <View style={[styles.formContainer2, {top: 50}]}>
-            <View style={{flex: 1}}>
+          <View style={[styles.formContainer2, { top: 50 }]}>
+            <View style={{ flex: 1 }}>
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -306,12 +306,12 @@ export default class DrawerScreen extends Component {
           animationOutTiming={600}
           backdropTransitionInTiming={600}
           backdropTransitionOutTiming={600}>
-          <View style={{backgroundColor: Colors.navy, padding: 15}}>
-            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
+          <View style={{ backgroundColor: Colors.navy, padding: 15 }}>
+            <BoldTextCB style={[{ color: Colors.white, fontSize: 22 }]}>
               CashGrab
             </BoldTextCB>
             <RegularTextCB
-              style={{marginVertical: 10, fontSize: 16, color: Colors.white}}>
+              style={{ marginVertical: 10, fontSize: 16, color: Colors.white }}>
               Are you sure you want to logout?
             </RegularTextCB>
             <View
@@ -339,7 +339,7 @@ export default class DrawerScreen extends Component {
                   backgroundColor: Colors.white,
                   marginEnd: 5,
                 }}>
-                <RegularTextCB style={{color: Colors.navy}}>Yes</RegularTextCB>
+                <RegularTextCB style={{ color: Colors.navy }}>Yes</RegularTextCB>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -353,7 +353,7 @@ export default class DrawerScreen extends Component {
                   backgroundColor: Colors.white,
                   marginStart: 5,
                 }}>
-                <RegularTextCB style={{color: Colors.navy}}>No</RegularTextCB>
+                <RegularTextCB style={{ color: Colors.navy }}>No</RegularTextCB>
               </TouchableOpacity>
             </View>
           </View>
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,

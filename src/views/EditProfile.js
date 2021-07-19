@@ -178,7 +178,6 @@ export default class EditProfile extends Component {
       utils.showResponseError(error);
     };
 
-    console.log(this.state.accessToken);
 
     this.toggleIsLoading();
     Axios.get(Constants.getProfileURL, {
@@ -258,7 +257,6 @@ export default class EditProfile extends Component {
       location: location,
     };
 
-    console.log('params: ', params);
 
     const formData = new FormData();
     formData.append('name', name);
@@ -348,7 +346,7 @@ export default class EditProfile extends Component {
               style={styles.iconUser}
               resizeMode="cover"
             />
-            {console.log(this.state.avatar)}
+
             <Image
               source={Images.iconCamera}
               style={{

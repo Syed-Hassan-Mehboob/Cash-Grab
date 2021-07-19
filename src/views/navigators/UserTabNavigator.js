@@ -1,7 +1,7 @@
 import React from 'react';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, Platform, View} from 'react-native';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Image, Platform, View } from 'react-native';
 import Constants from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
@@ -136,7 +136,7 @@ const customTabBarStyle = {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowColor: '#000000 ',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     height: Platform.OS === 'android' ? 60 : 80,
@@ -154,10 +154,10 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.home}
         options={{
-          tabBarIcon: ({focused, color}) => (
+          tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barHomeSelected : Images.barHome}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
+              style={{ height: 25, width: 25, resizeMode: 'contain' }}
             />
           ),
         }}
@@ -166,10 +166,10 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.notifications}
         options={{
-          tabBarIcon: ({focused, color}) => (
+          tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barBellSelected : Images.barBell}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
+              style={{ height: 25, width: 25, resizeMode: 'contain' }}
             />
           ),
         }}
@@ -178,7 +178,7 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.plus}
         options={{
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({ color }) => (
             <View
               style={{
                 justifyContent: 'center',
@@ -201,10 +201,10 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.profile}
         options={{
-          tabBarIcon: ({focused, color}) => (
+          tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barProfileSelected : Images.barProfile}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
+              style={{ height: 25, width: 25, resizeMode: 'contain' }}
             />
           ),
         }}
@@ -213,15 +213,15 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.settings}
         options={{
-          tabBarIcon: ({focused, color}) => (
+          tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barMoreSelected : Images.barMore}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
+              style={{ height: 25, width: 25, resizeMode: 'contain' }}
             />
           ),
         }}
         component={Settings}
-        listeners={({navigation}) => ({
+        listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
             navigation.openDrawer();

@@ -269,7 +269,7 @@ export default function Search(props) {
 
   const [searchText, setsearchText] = useState("")
   getData = () => {
-    console.log(searchText)
+
   }
 
 

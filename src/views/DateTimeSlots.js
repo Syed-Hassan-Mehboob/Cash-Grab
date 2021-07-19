@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Image,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
   Switch,
   Platform,
 } from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import Slider from '@react-native-community/slider';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
@@ -19,7 +19,7 @@ import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export default class DateTimeSlots extends Component {
   timeDurations = [
@@ -85,16 +85,16 @@ export default class DateTimeSlots extends Component {
         selected: day.dateString,
       },
       () => {
-        console.log('selected: ' + this.state.selected);
+
       },
     );
   };
 
   selectTimeSlot = (slot) => {
-    this.setState({selectedTimeSlot: slot}, () => console.log(slot));
+    this.setState({ selectedTimeSlot: slot });
   };
 
-  renderTimeSlotItem = ({item}) => {
+  renderTimeSlotItem = ({ item }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -111,7 +111,7 @@ export default class DateTimeSlots extends Component {
   };
 
   toggleIsEnabled = () =>
-    this.setState({isSwitchEnabled: !this.state.isSwitchEnabled});
+    this.setState({ isSwitchEnabled: !this.state.isSwitchEnabled });
 
   render() {
     return (
@@ -126,17 +126,17 @@ export default class DateTimeSlots extends Component {
             marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{ position: 'absolute', left: 10 }}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <View style={styles.circleCard}>
               <Image source={Images.emp1} style={styles.iconUser} />
             </View>
-            <RegularTextCB style={{fontSize: 14}}>Damian Miller</RegularTextCB>
+            <RegularTextCB style={{ fontSize: 14 }}>Damian Miller</RegularTextCB>
           </View>
         </View>
         <View
@@ -147,13 +147,13 @@ export default class DateTimeSlots extends Component {
           }}>
           <Image
             source={Images.iconRepairing}
-            style={{height: 35, width: 35, resizeMode: 'contain'}}
+            style={{ height: 35, width: 35, resizeMode: 'contain' }}
           />
-          <View style={{marginStart: 10}}>
-            <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
+          <View style={{ marginStart: 10 }}>
+            <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
               Repairing
             </RegularTextCB>
-            <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
+            <RegularTextCB style={{ fontSize: 14, color: Colors.coolGrey }}>
               3 AC split units maintenace
             </RegularTextCB>
           </View>
@@ -167,7 +167,7 @@ export default class DateTimeSlots extends Component {
           }}>
           <Image
             source={Images.iconCalendar}
-            style={{width: 25, height: 25, resizeMode: 'contain'}}
+            style={{ width: 25, height: 25, resizeMode: 'contain' }}
           />
           <Calendar
             firstDay={1}
@@ -180,13 +180,13 @@ export default class DateTimeSlots extends Component {
               direction === 'left' ? (
                 <Image
                   source={Images.arrowBack}
-                  style={{height: 20, width: 20, resizeMode: 'contain'}}
+                  style={{ height: 20, width: 20, resizeMode: 'contain' }}
                 />
               ) : (
                 <Image
                   source={Images.arrowBack}
                   style={{
-                    transform: [{scaleX: -1}],
+                    transform: [{ scaleX: -1 }],
                     height: 20,
                     width: 20,
                     resizeMode: 'contain',
@@ -212,7 +212,7 @@ export default class DateTimeSlots extends Component {
               dayTextColor: Colors.navy,
               monthTextColor: Colors.navy,
             }}
-            style={{width: width / 1.15, height: height / 2}}
+            style={{ width: width / 1.15, height: height / 2 }}
           />
         </View>
         <View
@@ -225,7 +225,7 @@ export default class DateTimeSlots extends Component {
           }}>
           <Image
             source={Images.iconStopWatchGrey}
-            style={{width: 25, height: 25, resizeMode: 'contain'}}
+            style={{ width: 25, height: 25, resizeMode: 'contain' }}
           />
           <View
             style={{
@@ -255,7 +255,7 @@ export default class DateTimeSlots extends Component {
             alignSelf: 'flex-end',
             marginTop: 15,
           }}>
-          <RegularTextCB style={{fontSize: 14}}>
+          <RegularTextCB style={{ fontSize: 14 }}>
             {this.state.sliderValue}
           </RegularTextCB>
           <Slider
@@ -270,7 +270,7 @@ export default class DateTimeSlots extends Component {
             maximumTrackTintColor={Colors.silver}
             thumbImage={Images.sliderThumb}
             onValueChange={(number) =>
-              this.setState({sliderValue: parseInt(number)})
+              this.setState({ sliderValue: parseInt(number) })
             }
           />
         </View>
@@ -285,13 +285,13 @@ export default class DateTimeSlots extends Component {
           <View
             style={[
               styles.card,
-              {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+              { borderWidth: 2, borderColor: Colors.sickGreen, flex: 1 },
             ]}>
-            <View style={{alignItems: 'center'}}>
-              <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+            <View style={{ alignItems: 'center' }}>
+              <RegularTextCB style={{ fontSize: 12, color: Colors.coolGrey }}>
                 From
               </RegularTextCB>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <TextInput
                   placeholder={'Hr'}
                   style={styles.textInput}
@@ -299,7 +299,7 @@ export default class DateTimeSlots extends Component {
                   value={this.state.hrFrom}
                   keyboardType={'numeric'}
                   onChangeText={(text) =>
-                    this.setState({hrFrom: text.replace(/[^0-9]/g, '')})
+                    this.setState({ hrFrom: text.replace(/[^0-9]/g, '') })
                   }
                 />
                 <TextInput
@@ -309,7 +309,7 @@ export default class DateTimeSlots extends Component {
                   keyboardType={'numeric'}
                   value={this.state.minFrom}
                   onChangeText={(text) =>
-                    this.setState({minFrom: text.replace(/[^0-9]/g, '')})
+                    this.setState({ minFrom: text.replace(/[^0-9]/g, '') })
                   }
                 />
               </View>
@@ -318,13 +318,13 @@ export default class DateTimeSlots extends Component {
           <View
             style={[
               styles.card,
-              {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+              { borderWidth: 2, borderColor: Colors.sickGreen, flex: 1 },
             ]}>
-            <View style={{alignItems: 'center'}}>
-              <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+            <View style={{ alignItems: 'center' }}>
+              <RegularTextCB style={{ fontSize: 12, color: Colors.coolGrey }}>
                 To
               </RegularTextCB>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <TextInput
                   placeholder={'Hr'}
                   style={styles.textInput}
@@ -332,7 +332,7 @@ export default class DateTimeSlots extends Component {
                   value={this.state.hrTo}
                   keyboardType={'numeric'}
                   onChangeText={(text) =>
-                    this.setState({hrTo: text.replace(/[^0-9]/g, '')})
+                    this.setState({ hrTo: text.replace(/[^0-9]/g, '') })
                   }
                 />
                 <TextInput
@@ -342,7 +342,7 @@ export default class DateTimeSlots extends Component {
                   value={this.state.hrMin}
                   keyboardType={'numeric'}
                   onChangeText={(text) =>
-                    this.setState({hrMin: text.replace(/[^0-9]/g, '')})
+                    this.setState({ hrMin: text.replace(/[^0-9]/g, '') })
                   }
                 />
               </View>
@@ -365,11 +365,11 @@ export default class DateTimeSlots extends Component {
               tintColor: Colors.coolGrey,
             }}
           />
-          <View style={{marginHorizontal: 10, flex: 1}}>
-            <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
+          <View style={{ marginHorizontal: 10, flex: 1 }}>
+            <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
               Get service at home
             </RegularTextCB>
-            <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
+            <RegularTextCB style={{ fontSize: 14, color: Colors.coolGrey }}>
               Set this service at my place
             </RegularTextCB>
           </View>
@@ -386,7 +386,7 @@ export default class DateTimeSlots extends Component {
             value={this.state.isSwitchEnabled}
           />
         </View>
-        <View style={{marginVertical: 30, marginHorizontal: 15}}>
+        <View style={{ marginVertical: 30, marginHorizontal: 15 }}>
           <ButtonRadius10
             label="NEXT"
             bgColor={Colors.sickGreen}
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 25,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.sickGreen,
     borderRadius: 15,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     alignItems: 'center',

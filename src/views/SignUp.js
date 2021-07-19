@@ -5,7 +5,6 @@ import {
   View,
   Image,
   Platform,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
@@ -33,7 +32,6 @@ export default class SignUp extends Component {
       isCountryCodePickerVisible: false,
       isVendor: false,
       fullName: '',
-      service: 'Select',
       email: '',
       countryCode: '+1',
       countryFlag: 'US',
@@ -41,43 +39,18 @@ export default class SignUp extends Component {
       password: '',
       confirmPassword: '',
       selections: [],
-      servies: []
+      services: []
     };
   }
 
-  data = [
-    {
-      id: "1",
-      name: "patner1"
-    },
-    {
-      id: "2",
-      name: "patner2"
-
-    }
-  ]
 
   getServies = () => {
-
-
-    console.log("getServies");
-
-
     const onSuccess = ({ data }) => {
-      console.log("response data", data.data.records)
-      this.setState({
-        selections: data.data.records
-      }, () => {
-        // console.log("shohab", this.state.selections)
-      })
-
-
+      this.setState({ selections: data.data.records })
     };
-
     const onFailure = (error) => {
       utils.showResponseError(error);
     };
-
     Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
 
   }
@@ -105,84 +78,7 @@ export default class SignUp extends Component {
     });
   };
 
-  renderSelectionBottomSheetContent = () => {
-    return (
-      <View style={styles.bottomSheetBody}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
-            Select
-          </RegularTextCB>
-          <TouchableOpacity
-            onPress={() => {
-              this.clearSelection();
-              this.toggleIsSelectionModalVisible();
-            }}>
-            <Image
-              source={Images.iconClose}
-              style={{
-                height: 15,
-                width: 15,
-                tintColor: Colors.coolGrey,
-                resizeMode: 'contain',
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          style={{ marginTop: 5 }}
-          data={this.state.selections}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={this.renderSelectionItem}
-          extraData={this.state.selections}
-          contentContainerStyle={{
-            paddingBottom: 50,
-          }}
-        />
-      </View>
-    );
-  };
 
-  renderSelectionItem = ({ item, index }) => {
-    return (
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={[
-          item.isSelected === false
-            ? styles.unselectedFilter
-            : styles.selectedFilter,
-        ]}
-        onPress={() => {
-          this.handleOnSelectionItemClick(index);
-        }}>
-        <RegularTextCB
-          style={{
-            fontSize: 14,
-            color: Colors.black,
-          }}>
-          {item.name}
-        </RegularTextCB>
-      </TouchableOpacity>
-    );
-  };
-
-  handleOnSelectionItemClick = (index) => {
-    let mSelection = this.state.selections;
-    mSelection.forEach((item) => {
-      item.isSelected = false;
-    });
-    mSelection[index].isSelected = true;
-    console.log("data", mSelection[index].name)
-    this.setState({ selections: mSelection, service: mSelection[index].name });
-    this.toggleIsSelectionModalVisible();
-  };
-
-  clearSelection() {
-    this.state.selections.forEach((item) => {
-      item.isSelected = false;
-    });
-    this.state.service = 'Select';
-  }
 
   onSelect = (country) => {
     this.setState({
@@ -193,13 +89,14 @@ export default class SignUp extends Component {
 
   sendDataToVerifyVia = () => {
     let name = this.state.fullName;
-    let service = this.state.service;
+    let services = this.state.services;
     let country_code = this.state.countryCode;
     let country_flag = this.state.countryFlag;
     let phone = this.state.phone;
     let email = this.state.email;
     let password = this.state.password;
     let password_confirmation = this.state.confirmPassword;
+
 
     if (name === '' || name === undefined) {
       utils.showToast('Invalid Name');
@@ -221,7 +118,7 @@ export default class SignUp extends Component {
       return;
     }
 
-    if (this.state.isVendor && service === 'Select') {
+    if (this.state.isVendor && services.length === 0) {
       utils.showToast('Please Select Any Service');
       return;
     }
@@ -259,7 +156,7 @@ export default class SignUp extends Component {
     const payload = this.state.isVendor
       ? {
         name,
-        service,
+        services,
         email,
         password,
         password_confirmation,
@@ -343,37 +240,17 @@ export default class SignUp extends Component {
               {this.state.isVendor &&
                 <MultiDropdownPicker
                   viewProperty="name"
-                  value={this.state.servies}
+                  value={this.state.services}
                   data={this.state.selections}
                   onChangeValue={(val) => {
                     this.setState(
-                      { servies: val }
+                      { services: val },
+                      // () => { console.log("multidropdown picker ", this.state.services, "value", val) }
                     )
-                    console.log("multidropdown picker ", val)
                   }}
                 />
               }
 
-              {/* {this.state.isVendor && (
-                <View style={{ marginTop: 15, marginHorizontal: 15 }}>
-                  <TouchableOpacity
-                    style={[
-                      styles.card,
-                      {
-                        height: 60,
-                        borderRadius: 10,
-                        justifyContent: 'center',
-                        paddingHorizontal: 20,
-                        paddingVertical: 5,
-                      },
-                    ]}
-                    onPress={() => this.toggleIsSelectionModalVisible()}>
-                    <RegularTextCB style={{ color: Colors.black }}>
-                      {this.state.service}
-                    </RegularTextCB>
-                  </TouchableOpacity>
-                </View>
-              )} */}
               <View style={[styles.textInputContainer, { marginTop: 15 }]}>
                 <EditText
                   ref={'email'}

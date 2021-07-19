@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   Image,
@@ -15,8 +15,34 @@ import LightTextCB from '../../components/LightTextCB';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import BoldTextCB from '../../components/BoldTextCB';
 import Constants from '../../common/Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 
 export default class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      accessToken: '',
+    };
+  }
+  componentDidMount() {
+    this.getUserAccessToken();
+    console.log("componentDidMount===================================>")
+  }
+
+  getUserAccessToken = async () => {
+    console.log("getUserAccessToken=============================>")
+    const token = await AsyncStorage.getItem(Constants.getAllJobs);
+    console.log("Bearer accesstoken =====>", token)
+    // this.setState({ accessToken: token }, () => {
+    //   // this.getAllCategories();
+    //   console.log("state =======>", this.state.accessToken)
+    // });
+
+  };
   completedJobs = [
     {
       id: '1',
@@ -116,16 +142,14 @@ export default class Dashboard extends Component {
     },
   ];
 
-  constructor(props) {
-    super(props);
-  }
 
-  rendercompletedJobsItem = ({item}) => {
+
+  rendercompletedJobsItem = ({ item }) => {
     return (
       <View
         style={[
           styles.card,
-          {padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5},
+          { padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5 },
         ]}>
         <View
           style={{
@@ -139,7 +163,7 @@ export default class Dashboard extends Component {
               resizeMode="cover"
             />
           </View>
-          <View style={{marginStart: 10}}>
+          <View style={{ marginStart: 10 }}>
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -155,7 +179,7 @@ export default class Dashboard extends Component {
               }}>
               <Image
                 source={Images.iconVerified}
-                style={{height: 15, width: 15, resizeMode: 'contain'}}
+                style={{ height: 15, width: 15, resizeMode: 'contain' }}
               />
               <RegularTextCB
                 style={{
@@ -204,10 +228,10 @@ export default class Dashboard extends Component {
           {item.desc}
         </RegularTextCB>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
           <Image
             source={Images.iconLocationPin}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: 'contain' }}
           />
           <RegularTextCB
             style={{
@@ -218,10 +242,10 @@ export default class Dashboard extends Component {
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
           <Image
             source={Images.iconStopWatch}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: 'contain' }}
           />
           <View
             style={{
@@ -262,20 +286,20 @@ export default class Dashboard extends Component {
             padding: 15,
             marginTop: Platform.OS === 'android' ? 0 : 20,
           }}>
-          <RegularTextCB style={{fontSize: 30}}>Dashboard</RegularTextCB>
+          <RegularTextCB style={{ fontSize: 30 }}>Dashboard</RegularTextCB>
           <TouchableOpacity
-            style={{position: 'absolute', right: 10}}
+            style={{ position: 'absolute', right: 10 }}
             onPress={() => {
               this.props.navigation.navigate(Constants.withDraw);
             }}>
             <Image
               source={Images.iconWithDraw}
-              style={{height: 40, width: 40}}
+              style={{ height: 40, width: 40 }}
             />
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{marginTop: 10, marginHorizontal: 15}}>
+          <View style={{ marginTop: 10, marginHorizontal: 15 }}>
             <RegularTextCB
               style={{
                 fontSize: 20,
@@ -283,7 +307,7 @@ export default class Dashboard extends Component {
               }}>
               Quick Job
             </RegularTextCB>
-            <View style={{marginTop: 10}}>
+            <View style={{ marginTop: 10 }}>
               <ButtonRadius10
                 label="1 Job available in your location"
                 bgColor={Colors.sickGreen}
@@ -299,15 +323,15 @@ export default class Dashboard extends Component {
               justifyContent: 'center',
               flexDirection: 'row',
             }}>
-            <RegularTextCB style={{fontSize: 20}}>
+            <RegularTextCB style={{ fontSize: 20 }}>
               Total Earnings:
             </RegularTextCB>
             <RegularTextCB
-              style={{fontSize: 20, marginStart: 5, color: Colors.sickGreen}}>
+              style={{ fontSize: 20, marginStart: 5, color: Colors.sickGreen }}>
               $100
             </RegularTextCB>
           </View>
-          <View style={{marginTop: 15, marginHorizontal: 15}}>
+          <View style={{ marginTop: 15, marginHorizontal: 15 }}>
             <RegularTextCB
               style={{
                 fontSize: 20,
@@ -337,7 +361,7 @@ export default class Dashboard extends Component {
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{marginStart: 10}}>
+                <View style={{ marginStart: 10 }}>
                   <RegularTextCB
                     style={{
                       color: Colors.black,
@@ -353,7 +377,7 @@ export default class Dashboard extends Component {
                     }}>
                     <Image
                       source={Images.iconVerified}
-                      style={{height: 15, width: 15, resizeMode: 'contain'}}
+                      style={{ height: 15, width: 15, resizeMode: 'contain' }}
                     />
                     <RegularTextCB
                       style={{
@@ -409,7 +433,7 @@ export default class Dashboard extends Component {
                 }}>
                 <Image
                   source={Images.iconLocationPin}
-                  style={{height: 17, width: 17, resizeMode: 'contain'}}
+                  style={{ height: 17, width: 17, resizeMode: 'contain' }}
                 />
                 <RegularTextCB
                   style={{
@@ -427,7 +451,7 @@ export default class Dashboard extends Component {
                 }}>
                 <Image
                   source={Images.iconStopWatch}
-                  style={{height: 17, width: 17, resizeMode: 'contain'}}
+                  style={{ height: 17, width: 17, resizeMode: 'contain' }}
                 />
                 <View
                   style={{
@@ -453,7 +477,7 @@ export default class Dashboard extends Component {
               </View>
             </View>
           </View>
-          <View style={{marginTop: 15, marginHorizontal: 15}}>
+          <View style={{ marginTop: 15, marginHorizontal: 15 }}>
             <RegularTextCB
               style={{
                 fontSize: 20,
@@ -462,7 +486,7 @@ export default class Dashboard extends Component {
               Completed Jobs
             </RegularTextCB>
             <FlatList
-              style={{paddingBottom: 100}}
+              style={{ paddingBottom: 100 }}
               data={this.completedJobs}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
@@ -495,7 +519,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -506,7 +530,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -516,7 +540,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,

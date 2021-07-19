@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -24,7 +24,7 @@ import Constants from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default class ChangePassword extends Component {
   constructor(props) {
@@ -46,21 +46,21 @@ export default class ChangePassword extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getUserProfile());
+    this.setState({ accessToken: token }, () => this.getUserProfile());
   };
 
   changePasswordState() {
     if (this.state.secureText)
-      this.setState({secureText: false, eyeIcon: 'eye'});
-    else this.setState({secureText: true, eyeIcon: 'eye-off'});
+      this.setState({ secureText: false, eyeIcon: 'eye' });
+    else this.setState({ secureText: true, eyeIcon: 'eye-off' });
   }
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   getUserProfile = () => {
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       this.toggleIsLoading();
       this.setState({
         fullName: data.data.records.name,
@@ -102,7 +102,7 @@ export default class ChangePassword extends Component {
       return;
     }
 
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       utils.showToast(data.message);
       this.toggleIsLoading();
 
@@ -131,14 +131,12 @@ export default class ChangePassword extends Component {
 
     this.toggleIsLoading();
 
-    Axios.post(Constants.updatePasswordURL, params, options)
-      .then(onSuccess)
-      .catch(onFailure);
+    Axios.post(Constants.updatePasswordURL, params, options).then(onSuccess).catch(onFailure);
   };
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={{ flex: 1, backgroundColor: Colors.white }}>
         <View
           style={{
             borderBottomStartRadius: 30,
@@ -157,16 +155,16 @@ export default class ChangePassword extends Component {
               marginTop: Platform.OS === 'android' ? 0 : 20,
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: 10}}
+              style={{ position: 'absolute', left: 10 }}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
               <Image
                 source={Images.arrowBack}
-                style={[styles.iconBack, {tintColor: Colors.white}]}
+                style={[styles.iconBack, { tintColor: Colors.white }]}
               />
             </TouchableOpacity>
-            <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
+            <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
               Change Password
             </RegularTextCB>
             <TouchableOpacity
@@ -181,14 +179,14 @@ export default class ChangePassword extends Component {
               onPress={() => {
                 this.changePassword();
               }}>
-              <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
+              <RegularTextCB style={{ color: Colors.white }}>Save</RegularTextCB>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
             activeOpacity={1.0}
             style={[
               styles.circleCard,
-              {justifyContent: 'center', alignItems: 'center'},
+              { justifyContent: 'center', alignItems: 'center' },
             ]}>
             <Image
               source={Images.emp1}
@@ -197,14 +195,14 @@ export default class ChangePassword extends Component {
             />
           </TouchableOpacity>
           <RegularTextCB
-            style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
+            style={{ color: Colors.white, fontSize: 20, marginTop: 10 }}>
             {this.state.fullName}
           </RegularTextCB>
         </View>
         <ScrollView
-          style={[styles.container, {paddingVertical: 20}]}
+          style={[styles.container, { paddingVertical: 20 }]}
           showsVerticalScrollIndicator={false}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -219,12 +217,12 @@ export default class ChangePassword extends Component {
               secureTextEntry={true}
               value={this.state.oldPassword}
               onChangeText={(text) => {
-                this.setState({oldPassword: text});
+                this.setState({ oldPassword: text });
               }}
               style={[styles.textInput]}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -240,12 +238,12 @@ export default class ChangePassword extends Component {
               secureTextEntry={true}
               value={this.state.newPassword}
               onChangeText={(text) => {
-                this.setState({newPassword: text});
+                this.setState({ newPassword: text });
               }}
-              style={[styles.textInput, {marginBottom: 20}]}
+              style={[styles.textInput, { marginBottom: 20 }]}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -260,9 +258,9 @@ export default class ChangePassword extends Component {
               secureTextEntry={true}
               value={this.state.newPasswordConfirm}
               onChangeText={(text) => {
-                this.setState({newPasswordConfirm: text});
+                this.setState({ newPasswordConfirm: text });
               }}
-              style={[styles.textInput, {marginBottom: 20}]}
+              style={[styles.textInput, { marginBottom: 20 }]}
             />
           </View>
         </ScrollView>
@@ -336,7 +334,7 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 8,
@@ -375,7 +373,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -389,7 +387,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -406,7 +404,7 @@ const styles = StyleSheet.create({
     width: 90,
     borderRadius: 45,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,

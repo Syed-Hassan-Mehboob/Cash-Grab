@@ -1,5 +1,5 @@
-import {Card} from 'native-base';
-import React, {Component} from 'react';
+import { Card } from 'native-base';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,265 +8,87 @@ import {
   FlatList,
   Platform,
 } from 'react-native';
-import {SwipeListView} from 'react-native-swipe-list-view';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Axios from '../network/APIKit';
+import utils from '../utils';
 
 export default class AllCategories extends Component {
-  bestEmployees = [
-    {
-      id: '1',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '2',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '3',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '4',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '5',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '6',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '7',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '8',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '9',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '10',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '11',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '12',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '13',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '14',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '15',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '16',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-  ];
-
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: false,
+      accessToken: '',
+      getAllCategories: []
+    };
   }
 
-  renderBestEmployeesItem = ({item}) => {
+  componentDidMount() {
+    this.getUserAccessToken();
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.getAllCategories();
+    });
+
+  };
+
+  getAllCategories = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({ isLoading: false, getAllCategories: data.data.records });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    Axios.get(Constants.getAllCustomerCategories, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  renderAllCategoriesItem = ({ item }) => {
+
     return (
-      <View style={[styles.card, {margin: 10}]}>
-        <TouchableOpacity
-          style={styles.itemContainer}
-          onPress={() => {
-            this.openNextScreen(Constants.viewVendorProfile);
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-            }}>
-            <View style={{flex: 1}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <View style={styles.circleCard}>
-                  <Image
-                    source={item.image}
-                    style={styles.iconUser}
-                    resizeMode="cover"
-                  />
-                </View>
-                <View
-                  style={{
-                    marginStart: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexShrink: 1,
-                  }}>
-                  <View style={{flex: 1}}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <RegularTextCB
-                        style={{fontSize: 16, color: Colors.black}}>
-                        {item.name}
-                      </RegularTextCB>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
-                        <Image
-                          source={Images.star}
-                          style={{
-                            height: 15,
-                            width: 15,
-                            resizeMode: 'contain',
-                            tintColor: Colors.orangeYellow,
-                          }}
-                        />
-                        <RegularTextCB
-                          style={{
-                            fontSize: 14,
-                            color: Colors.orangeYellow,
-                            marginStart: 2,
-                          }}>
-                          {item.ratings}
-                        </RegularTextCB>
-                      </View>
-                    </View>
-                    <RegularTextCB
-                      style={{
-                        fontSize: 14,
-                        color: Colors.coolGrey,
-                      }}>
-                      {item.title}
-                    </RegularTextCB>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'flex-end',
-                  flexShrink: 1,
-                  marginTop: 5,
-                }}>
-                <RegularTextCB
-                  style={{flex: 1, fontSize: 16, color: Colors.coolGrey}}>
-                  {item.desc}
-                </RegularTextCB>
-                <Image
-                  source={Images.circularArrowForward}
-                  style={[styles.iconForward]}
-                />
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={[
+          styles.card,
+          { padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5, alignItems: 'center' },
+        ]}>
+
+        <Image
+          source={{ uri: Constants.imageURL + item.image }}
+          // source={item.image}
+          style={{ height: 120, width: 120 }}
+          resizeMode="stretch"
+        />
+
+        <RegularTextCB
+          style={{ fontSize: 16, marginTop: -20, color: Colors.coolGrey }}>
+          {item.name}
+        </RegularTextCB>
+
+
+
+
+      </TouchableOpacity>
     );
   };
+
 
   openNextScreen = (nextScreen) => {
     this.props.navigation.navigate(nextScreen);
@@ -288,7 +110,7 @@ export default class AllCategories extends Component {
             }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: 30, alignSelf: 'center'}}>
+          <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity
@@ -305,20 +127,27 @@ export default class AllCategories extends Component {
             />
           </TouchableOpacity>
         </View>
-        <FlatList
-          style={{marginTop: 10}}
-          data={this.bestEmployees}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={this.renderBestEmployeesItem}
-          contentInset={{
-            // for ios
-            bottom: 100,
-          }}
-          contentContainerStyle={{
-            // for android
-            paddingBottom: 100,
-          }}
+        <View style={{ flex: 1, paddingTop: 10 }} >
+          <FlatList
+            data={this.state.getAllCategories}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            renderItem={this.renderAllCategoriesItem}
+            contentInset={{
+              // for ios
+              bottom: 100,
+            }}
+            contentContainerStyle={{
+              // for android
+              paddingBottom: 100,
+            }}
+          />
+        </View>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
         />
       </View>
     );
@@ -400,7 +229,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -410,9 +239,13 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

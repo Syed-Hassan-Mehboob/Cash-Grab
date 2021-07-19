@@ -12,12 +12,12 @@ import {
 } from "react-native";
 import Colors from "../common/Colors";
 import Images from "../common/Images";
+import RegularTextCB from "../components/RegularTextCB";
 
 
 const { width, height } = Dimensions.get("window");
 
 export function MultiDropdownPicker(props) {
-    const [isFocused, setIsFocus] = useState(false);
     let val = [props.label];
     let ids = [];
     if (props.value != undefined && props.value != "") {
@@ -33,7 +33,6 @@ export function MultiDropdownPicker(props) {
 
     const renderList = ({ item, index }) => (
 
-
         <TouchableOpacity
             onPress={() => {
                 selectMultipleValues(item);
@@ -42,9 +41,7 @@ export function MultiDropdownPicker(props) {
             style={{
                 width: "100%",
                 backgroundColor:
-                    multiIds.filter((x) => x == item.id).length > 0
-                        ? Colors.sickGreen
-                        : null,
+                    multiIds.filter((x) => x == item.id).length > 0 ? Colors.sickGreen : null,
                 alignItems: "center",
                 justifyContent: "center",
                 height: 50,
@@ -52,7 +49,7 @@ export function MultiDropdownPicker(props) {
             }}
         >
 
-            <Text
+            <RegularTextCB
                 style={{
                     fontSize: 16,
                     color:
@@ -60,7 +57,7 @@ export function MultiDropdownPicker(props) {
                 }}
             >
                 {item[props.viewProperty]}
-            </Text>
+            </RegularTextCB>
         </TouchableOpacity>
     );
 
@@ -75,12 +72,12 @@ export function MultiDropdownPicker(props) {
         if (found) {
             setMultiIds(multiIds.filter((x) => x != item.id));
             setMultiValue(multiVal.filter((x) => x != item[props.viewProperty]));
-            props.onChangeValue([...multiIds.filter((x) => x != item.id)]);
+            props.onChangeValue([...multiIds.filter((x) => x != item.id.toString())]);
         } else {
-            console.log("Item not found")
+
             setMultiIds([...multiIds, item.id]);
             setMultiValue([...multiVal, item[props.viewProperty]]);
-            props.onChangeValue([...multiIds.map(item => item.toString()), item.id]);
+            props.onChangeValue([...multiIds.map(item => item.toString()), item.id.toString()]);
         }
     };
     return (
@@ -93,8 +90,8 @@ export function MultiDropdownPicker(props) {
                     justifyContent: 'center',
                     paddingHorizontal: 20,
                     paddingVertical: 5,
-                    marginHorizontal: 15,
-                    marginTop: 11
+                    marginHorizontal: props.screenName === "postJob" ? 0 : 15,
+                    marginTop: props.screenName === "postJob" ? 0 : 11
                 },
             ]}
         >
@@ -132,7 +129,7 @@ export function MultiDropdownPicker(props) {
                         >
                         </TouchableOpacity>
                         <View style={{ width: "100%", alignItems: "center", }}>
-                            <Text style={{ fontSize: 18, color: Colors.sickGreen, }}>Select Services</Text>
+                            <RegularTextCB style={{ fontSize: 18, color: Colors.sickGreen, }}>Select Services</RegularTextCB>
                             <TouchableOpacity style={{ position: 'absolute', right: 10, top: -5, padding: 10 }} onPress={() => { setShowModal(!showModal) }} >
                                 <Image style={{ height: 15, width: 15, }} resizeMode="contain" source={Images.iconClose} />
                             </TouchableOpacity>
@@ -143,7 +140,7 @@ export function MultiDropdownPicker(props) {
                                         <FlatList
                                             data={props.data}
                                             renderItem={renderList}
-                                            keyExtractor={(i, idx) => idx}
+                                            keyExtractor={(i, idx) => idx.toString()}
                                         />
                                     </View>
                                 </View>
@@ -154,7 +151,7 @@ export function MultiDropdownPicker(props) {
             </Modal>
 
             <TouchableOpacity onPress={() => { setShowModal(true); }}>
-                <Text>{multiVal.toString() ? multiVal.toString().substring(1) : "Select"} </Text>
+                <RegularTextCB>{multiVal.toString() ? multiVal.toString().substring(1) : "Select"} </RegularTextCB>
             </TouchableOpacity>
         </View>
     );

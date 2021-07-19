@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   Image,
@@ -8,19 +8,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {CommonActions} from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Axios from '../network/APIKit';
+import utils from '../utils';
+import Constants from '../common/Constants';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [
-    {
-      name: 'BookingConfirmed',
-    },
-  ],
+  routes: [{ name: 'BookingConfirmed' },],
 });
 
 export default class Filter extends Component {
@@ -28,147 +29,120 @@ export default class Filter extends Component {
     super(props);
 
     this.state = {
-      categories: [
-        {
-          id: '1',
-          name: 'Cleaner',
-          isSelected: false,
-        },
-        {
-          id: '2',
-          name: 'Automobile',
-          isSelected: false,
-        },
-        {
-          id: '3',
-          name: 'Plumber',
-          isSelected: false,
-        },
-        {
-          id: '4',
-          name: 'Mechanic',
-          isSelected: false,
-        },
-        {
-          id: '6',
-          name: 'Painter',
-          isSelected: false,
-        },
-        {
-          id: '5',
-          name: 'Electrician',
-          isSelected: false,
-        },
-      ],
-
-      prices: [
-        {
-          id: '1',
-          name: '$1-$50',
-          isSelected: false,
-        },
-        {
-          id: '2',
-          name: '$51-$100',
-          isSelected: false,
-        },
-        {
-          id: '3',
-          name: '$101-$150',
-          isSelected: false,
-        },
-        {
-          id: '4',
-          name: '$151-$200',
-          isSelected: false,
-        },
-        {
-          id: '5',
-          name: '$201-$250',
-          isSelected: false,
-        },
-        {
-          id: '6',
-          name: '$251-$300',
-          isSelected: false,
-        },
-      ],
-
-      locations: [
-        {
-          id: '1',
-          name: '10km',
-          isSelected: false,
-        },
-        {
-          id: '2',
-          name: '20km',
-          isSelected: false,
-        },
-        {
-          id: '3',
-          name: '50km',
-          isSelected: false,
-        },
-        {
-          id: '4',
-          name: '100km',
-          isSelected: false,
-        },
-        {
-          id: '5',
-          name: '150km',
-          isSelected: false,
-        },
-        {
-          id: '6',
-          name: '200km',
-          isSelected: false,
-        },
-      ],
+      categories: [],
+      prices: [],
+      locations: [],
+      selectedCategory: undefined,
+      selectedPrice: undefined,
+      selectedLocation: undefined,
+      isLoading: false,
+      accessToken: '',
     };
   }
 
-  renderDateItem = ({item, index}) => {
+  componentDidMount() {
+    this.getUserAccessToken();
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.getfilters();
+    });
+
+  };
+
+  getfilters = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({
+        isLoading: false, categories: data.data.categories.map((category) => ({
+          ...category,
+          isSelected: false,
+        })),
+        prices: data.data.prices.map((price) => ({
+          ...price,
+          isSelected: false,
+        })),
+        locations: data.data.locations.map((location) => ({
+          ...location,
+          isSelected: false,
+        }))
+      })
+        ;
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    Axios.get(Constants.getFilter, { headers: { Authorization: this.state.accessToken, } })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  setfilters = () => {
+
+    postData = {
+      query: this.state.selectedCategory,
+
+
+    },
+      console.log("post data", postData)
+
+    const onSuccess = ({ data }) => {
+
+      this.setState({ isLoading: false });
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+      this.setState({ isLoading: false });
+    };
+
+    this.setState({ isLoading: true });
+    const options = {
+      headers: { 'Content-Type': 'application/json', Authorization: this.state.accessToken, },
+    };
+
+    Axios.post(Constants.postJob, postData, options).then(onSuccess).catch(onFailure);
+  }
+
+  renderCategoriesItem = ({ item, index }) => {
     return (
       <TouchableOpacity
-        style={
-          item.isSelected === false
-            ? styles.unselectedDate
-            : styles.selectedDate
-        }
-        onPress={() => {
-          this.handleOnDateItemClick(index);
-        }}>
+        style={item.isSelected === false ? styles.unselectedDate : styles.selectedDate}
+        onPress={() => { this.handleCategoriesItemClick(index); }}>
         <View>
-          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{ fontSize: 14 }}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
   };
 
-  handleOnDateItemClick = (index) => {
+  handleCategoriesItemClick = (index) => {
     let mDates = this.state.categories;
     mDates.forEach((item) => {
       item.isSelected = false;
     });
     mDates[index].isSelected = true;
-    this.setState({dates: mDates});
+    this.setState({ categories: mDates, selectedCategory: mDates[index] }, () => {
+
+    });
   };
 
-  renderPriceItem = ({item, index}) => {
+  renderPriceItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         style={
-          item.isSelected === false
-            ? styles.unselectedDate
-            : styles.selectedDate
-        }
+          item.isSelected === false ? styles.unselectedDate : styles.selectedDate}
         onPress={() => {
           this.handleOnPriceItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{ fontSize: 14 }}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
@@ -180,34 +154,34 @@ export default class Filter extends Component {
       item.isSelected = false;
     });
     mPrices[index].isSelected = true;
-    this.setState({prices: mPrices});
+    let name = mPrices[index].name;
+    let price = name.split('$').join('');
+    this.setState({ prices: mPrices, selectedPrice: price });
   };
 
-  renderSlotItem = ({item, index}) => {
+
+
+  renderLocationItem = ({ item, index }) => {
     return (
       <TouchableOpacity
-        style={
-          item.isSelected === false
-            ? styles.unselectedDate
-            : styles.selectedDate
-        }
+        style={item.isSelected === false ? styles.unselectedDate : styles.selectedDate}
         onPress={() => {
-          this.handleOnSlotItemClick(index);
+          this.handleLocationItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{ fontSize: 14 }}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
   };
 
-  handleOnSlotItemClick = (index) => {
-    let mSlots = this.state.locations;
-    mSlots.forEach((item) => {
-      item.isSelected = false;
+  handleLocationItemClick = (index) => {
+    let mLocation = this.state.locations;
+    mLocation.forEach((item) => { item.isSelected = false; });
+    mLocation[index].isSelected = true;
+    this.setState({ slots: mLocation, selectedLocation: mLocation[index] }, () => {
+
     });
-    mSlots[index].isSelected = true;
-    this.setState({slots: mSlots});
   };
 
   render() {
@@ -222,40 +196,32 @@ export default class Filter extends Component {
               marginTop: Platform.OS === 'android' ? 0 : 20,
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: 0}}
+              style={{ position: 'absolute', left: 0 }}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
               <Image source={Images.arrowBack} style={styles.iconBack} />
             </TouchableOpacity>
-            <RegularTextCB style={{fontSize: 30}}>
+            <RegularTextCB style={{ fontSize: 30 }}>
               Furniture service
             </RegularTextCB>
             <TouchableOpacity
-              style={{
-                position: 'absolute',
-                right: 0,
-              }}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}>
+              style={{ position: 'absolute', right: 0, }}
+              onPress={() => { this.props.navigation.goBack(); }}>
               <RegularTextCB
-                style={{
-                  fontSize: 14,
-                  textDecorationLine: 'underline',
-                }}>
+                style={{ fontSize: 14, textDecorationLine: 'underline', }}>
                 RESET
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-          <View style={{marginTop: 20}}>
-            <RegularTextCB style={{fontSize: 18}}>Categories</RegularTextCB>
+          <View style={{ marginTop: 20 }}>
+            <RegularTextCB style={{ fontSize: 18 }}>Categories</RegularTextCB>
             <FlatList
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               data={this.state.categories}
               numColumns={3}
               keyExtractor={(date) => date.id}
-              renderItem={this.renderDateItem}
+              renderItem={this.renderCategoriesItem}
               extraData={this.state}
               contentInset={{
                 // for ios
@@ -267,10 +233,10 @@ export default class Filter extends Component {
               }}
             />
           </View>
-          <View style={{marginTop: 20}}>
-            <RegularTextCB style={{fontSize: 18}}>Price</RegularTextCB>
+          <View style={{ marginTop: 20 }}>
+            <RegularTextCB style={{ fontSize: 18 }}>Price</RegularTextCB>
             <FlatList
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               data={this.state.prices}
               numColumns={3}
               keyExtractor={(date) => date.id}
@@ -286,17 +252,17 @@ export default class Filter extends Component {
               }}
             />
           </View>
-          <View style={{marginTop: 20}}>
-            <RegularTextCB style={{fontSize: 18}}>
+          <View style={{ marginTop: 20 }}>
+            <RegularTextCB style={{ fontSize: 18 }}>
               Location (within)
             </RegularTextCB>
             <FlatList
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               data={this.state.locations}
               numColumns={3}
               keyExtractor={(slot) => slot.id}
               showsVerticalScrollIndicator={false}
-              renderItem={this.renderSlotItem}
+              renderItem={this.renderLocationItem}
               extraData={this.state}
               contentInset={{
                 // for ios
@@ -313,11 +279,16 @@ export default class Filter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-                this.props.navigation.goBack();
+                // this.props.navigation.navigate(Constants.Filtered)
               }}
             />
           </View>
         </View>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </ScrollView>
     );
   }
@@ -344,7 +315,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -359,7 +330,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: Colors.white,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
