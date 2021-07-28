@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {SwipeListView} from 'react-native-swipe-list-view';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
@@ -48,76 +48,80 @@ export default class Notifications extends Component {
     );
   };
 
-  renderNotificationsItem = ({item}) => {
+  renderNotificationsItem = ({ item }) => {
+    console.log("Item  ===============>", item.notifications.map((item) => {
+      console.log(item.content)
+    }))
     return (
-      <View style={{marginHorizontal: 15}}>
-        <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
-          Earlier
+      <View style={{ marginHorizontal: 15 }}>
+        <RegularTextCB style={{ color: Colors.black, fontSize: 18 }}>
+          {item.date}
         </RegularTextCB>
-        <View
-          key={item.id}
-          style={[
-            styles.card,
-            {
-              marginVertical: 10,
-              borderWidth: item.date === 'Latest' ? 1 : 0,
-            },
-          ]}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={styles.itemContainer}
-            onPress={() => {}}>
+
+        {item.notifications.map((notification) => {
+          return (
             <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <View style={styles.circleCard}>
-                <Image
-                  source={item.image}
-                  style={styles.iconUser}
-                  resizeMode="cover"
-                />
-              </View>
-              <View
-                style={{
-                  marginStart: 10,
-                  flex: 1,
-                  flexShrink: 1,
-                }}>
+              key={notification.id}
+              style={[
+                styles.card,
+                {
+                  marginVertical: 10,
+                  borderWidth: item.date === 'Latest' ? 1 : 0,
+                },
+              ]}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.itemContainer}
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}>
-                  <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-                    {item.title}
-                  </RegularTextCB>
-                  <RegularTextCB>{item.time}</RegularTextCB>
+                  <View style={styles.circleCard}>
+                    <Image
+                      source={{ uri: Constants.imageURL + notification.image }}
+                      style={styles.iconUser}
+                      resizeMode="cover"
+                    />
+                  </View>
+                  <View
+                    style={{
+                      marginStart: 10,
+                      flex: 1,
+                      flexShrink: 1,
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
+                        {notification.title}
+                      </RegularTextCB>
+                      <RegularTextCB>{item.time}</RegularTextCB>
+                    </View>
+                    <RegularTextCB
+                      numberOfLines={1}
+                      style={{
+                        fontSize: 14,
+                        color: Colors.coolGrey,
+                        marginTop: 5,
+                      }}>
+                      {notification.content}
+                    </RegularTextCB>
+                  </View>
                 </View>
-                <RegularTextCB
-                  numberOfLines={1}
-                  style={{
-                    fontSize: 14,
-                    color: Colors.coolGrey,
-                    marginTop: 5,
-                  }}>
-                  {item.content}
-                </RegularTextCB>
-              </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
-        {/* {item.notifications.map((notification) => {
-          return (
-            
+
           );
-        })} */}
+        })}
       </View>
     );
   };
 
-  renderDeleteButton = ({item}) => {
+  renderDeleteButton = ({ item }) => {
     return (
       <View
         style={{
@@ -130,27 +134,27 @@ export default class Notifications extends Component {
         }}>
         <Image
           source={Images.iconSwipeToDelete}
-          style={{height: 20, width: 20}}
+          style={{ height: 20, width: 20 }}
         />
       </View>
     );
   };
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   getUserAccessToken = async () => {
-    console.log('getUserAccessToken');
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getNotifications());
+    this.setState({ accessToken: token }, () => this.getNotifications());
   };
 
   getNotifications = () => {
-    const onSuccess = ({data}) => {
-      console.log(data.data);
+    const onSuccess = ({ data }) => {
+      console.log("data============>", data.data)
+
       this.toggleIsLoading();
-      this.setState({notifications: data.data});
+      this.setState({ notifications: data.data });
     };
 
     const onFailure = (error) => {
@@ -158,7 +162,6 @@ export default class Notifications extends Component {
       utils.showResponseError(error);
     };
 
-    console.log(this.state.accessToken);
 
     this.toggleIsLoading();
     Axios.get(Constants.notificationsURL, {
@@ -173,11 +176,11 @@ export default class Notifications extends Component {
   render() {
     return (
       <View style={[styles.container]}>
-        <RegularTextCB style={{fontSize: 30, alignSelf: 'center'}}>
+        <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>
           Notifications
         </RegularTextCB>
         <SwipeListView
-          style={{marginTop: 10}}
+          style={{ marginTop: 10 }}
           data={this.state.notifications}
           renderItem={this.renderNotificationsItem}
           contentInset={{
@@ -274,7 +277,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
@@ -296,7 +299,7 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 15,
     shadowColor: '#999',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 5,
@@ -329,7 +332,7 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 15,
     shadowColor: '#999',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 5,

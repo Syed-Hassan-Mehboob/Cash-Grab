@@ -1,6 +1,6 @@
 import React from 'react';
-import {Toast} from 'native-base';
-import {RefreshControl, Alert, StatusBar, Platform} from 'react-native';
+import { Toast } from 'native-base';
+import { RefreshControl, Alert, StatusBar, Platform } from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,10 +12,10 @@ class utils {
       title,
       msg,
       [
-        {text: 'NO', onPress: () => callback('error')},
-        {text: 'YES', onPress: () => callback('success')},
+        { text: 'NO', onPress: () => callback('error') },
+        { text: 'YES', onPress: () => callback('success') },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   }
 

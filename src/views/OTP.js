@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -29,7 +29,7 @@ export default class OTP extends Component {
   }
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   verifyOTP = () => {
@@ -40,8 +40,8 @@ export default class OTP extends Component {
       return;
     }
 
-    const onSuccess = ({data}) => {
-      console.log(data);
+    const onSuccess = ({ data }) => {
+
       this.toggleIsLoading();
       utils.showToast(data.message);
 
@@ -69,17 +69,17 @@ export default class OTP extends Component {
     return (
       <ImageBackground
         source={Images.loginBgWeb}
-        style={[styles.container, {width: '100%'}]}>
+        style={[styles.container, { width: '100%' }]}>
         <KeyboardAvoidingView
-          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}>
+          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20 }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            style={{ marginStart: 15, alignSelf: 'flex-start' }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
@@ -110,22 +110,20 @@ export default class OTP extends Component {
           <View style={[styles.childContainer]}>
             <View style={[styles.textInputContainer]}>
               <OTPInputView
-                style={{width: '90%', height: 75, marginTop: 30}}
+                style={{ width: '90%', height: 75, marginTop: 30 }}
                 pinCount={4}
                 code={this.state.code}
                 onCodeChanged={(code) => {
-                  this.setState({code});
+                  this.setState({ code });
                 }}
                 autoFocusOnLoad
                 codeInputFieldStyle={styles.card}
                 codeInputHighlightStyle={styles.card}
-                onCodeFilled={(code) => {
-                  console.log(`Code is ${code}, you are good to go!`);
-                }}
+                onCodeFilled={(code) => { }}
               />
             </View>
           </View>
-          <View style={{marginVertical: 50, marginHorizontal: 15}}>
+          <View style={{ marginVertical: 50, marginHorizontal: 15 }}>
             <ButtonRadius10
               label="VERIFY"
               bgColor={Colors.sickGreen}
@@ -186,7 +184,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     shadowColor: '#c5c5c5',
     color: Colors.black,
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,

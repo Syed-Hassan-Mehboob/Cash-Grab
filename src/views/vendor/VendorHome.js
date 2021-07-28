@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   Image,
@@ -21,69 +21,9 @@ import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+
 export default class VendorHome extends Component {
-  jobs = [
-    {
-      id: '1',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '4',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '5',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-  ];
+
 
   openDrawer = () => {
     this.props.navigation.openDrawer();
@@ -91,7 +31,6 @@ export default class VendorHome extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       isLoading: false,
       categories: [],
@@ -103,140 +42,188 @@ export default class VendorHome extends Component {
       location: '',
       address: '',
       exactTime: '',
+      allJobs: []
     };
   }
 
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
+    this.getUserAccessToken()
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken()
+    });
   }
 
-  toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.getUserProfile();
+      this.getCategories();
+      this.getAllJobs();
+    });
   };
 
-  renderCategoryItem = ({item}) => {
+  getAllJobs = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({ isLoading: false, allJobs: data.data.records });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    let params = {
+      limit: 2,
+    };
+
+    Axios.get(Constants.getAllJobs, {
+      params: params,
+      headers: { Authorization: this.state.accessToken },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({ data }) => {
+      this.setState({
+        isLoading: false,
+        avatar: data.data.records.userProfile.image,
+        name: data.data.records.name,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+
+    this.setState({ isLoading: true });
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getCategories = () => {
+    const onSuccess = ({ data }) => {
+
+      this.setState({ isLoading: false, categories: data.data.records }, () => {
+      }, () => {
+        console.log("state data", this.state.categories)
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+    Axios.get(Constants.customerCategoriesURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  toggleIsLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading });
+  };
+
+  renderCategoryItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate(Constants.vendorSingleCategory, {
-            item: item,
-          });
-        }}
-        style={{alignItems: 'center'}}>
-        <Image style={styles.circle} source={item.image} />
+        onPress={() => { this.props.navigation.navigate(Constants.vendorSingleCategory, { item: item, }); }}
+        style={{ alignItems: 'center' }}>
+        <Image style={styles.circle} source={{ uri: Constants.imageURL + item.image }} />
         <RegularTextCB
-          style={{fontSize: 14, marginTop: -20, color: Colors.coolGrey}}>
-          {item.title}
+          style={{ fontSize: 14, marginTop: -20, color: Colors.coolGrey }}>
+          {item.name}
         </RegularTextCB>
       </TouchableOpacity>
     );
   };
 
-  renderJobsForYouItem = ({item}) => {
+  renderJobsForYouItem = ({ item }) => {
+
     return (
       <TouchableOpacity
         activeOpacity={0.5}
-        style={[
-          styles.card,
-          {padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5},
-        ]}
+        style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },]}
         onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={styles.circleCard}>
             <Image
-              source={item.image}
+              source={{ uri: Constants.imageURL + item.user.userProfile.image }}
+              // source={item.image}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{marginStart: 10}}>
+          <View style={{ marginStart: 10 }}>
             <RegularTextCB
-              style={{
-                color: Colors.black,
-                fontSize: 16,
-              }}>
-              {item.title}
+              style={{ color: Colors.black, fontSize: 16, }}>
+              {item.user.name}
             </RegularTextCB>
             <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{height: 15, width: 15, resizeMode: 'contain'}}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 12,
-                  marginStart: 5,
-                }}>
-                Verified
+              style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', }}>
+              <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
+              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
+                {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 16,
-            }}>
-            {item.requirement}
+        <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between' }}>
+          <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
+            {item.title}
           </RegularTextCB>
+
           <LightTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 12,
-            }}>
-            {item.pricing}
+            style={{ color: Colors.black, fontSize: 12, }}>
+            ${item.price}
           </LightTextCB>
+
         </View>
+
         <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {item.type}
+          style={{ color: Colors.sickGreen, fontSize: 12, }}>
+          {item.category.name}
         </RegularTextCB>
         <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-          }}>
-          {item.desc}
+          style={{ color: Colors.coolGrey, }}>
+          {item.description}
         </RegularTextCB>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
           <Image
             source={Images.iconLocationPin}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: 'contain' }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.location}
+            {item.address}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
           <Image
             source={Images.iconStopWatch}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: 'contain' }}
           />
           <View
             style={{
@@ -264,59 +251,7 @@ export default class VendorHome extends Component {
     );
   };
 
-  getUserAccessToken = async () => {
-    const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
-      this.getUserProfile();
-      this.getCategories();
-    });
-  };
 
-  getUserProfile = () => {
-    const onSuccess = ({data}) => {
-      this.setState({
-        isLoading: false,
-        avatar: data.data.records.userProfile.image,
-        name: data.data.records.name,
-      });
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    console.log(this.state.accessToken);
-
-    this.setState({isLoading: true});
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
-  getCategories = () => {
-    const onSuccess = ({data}) => {
-      this.setState({isLoading: false, categories: data.data.records});
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    this.setState({isLoading: true});
-    Axios.get(Constants.customerCategoriesURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
 
   render() {
     return (
@@ -335,46 +270,32 @@ export default class VendorHome extends Component {
               }}>
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={{flexDirection: 'row', alignItems: 'center'}}
+                style={{ flexDirection: 'row', alignItems: 'center' }}
                 onPress={() =>
                   this.props.navigation.navigate(Constants.vendorProfile)
                 }>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri: Constants.imageURL + this.state.avatar}}
+                    source={{ uri: Constants.imageURL + this.state.avatar }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <RegularTextCB style={{fontSize: 16, marginStart: 10}}>
+                <RegularTextCB style={{ fontSize: 16, marginStart: 10 }}>
                   Welcome,
                 </RegularTextCB>
-                <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    marginStart: 3,
-                    color: Colors.sickGreen,
-                  }}>
+                <RegularTextCB style={{ fontSize: 16, marginStart: 3, color: Colors.sickGreen, }}>
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);
-                  // this.openDrawer();
                 }}
-                style={{
-                  position: 'absolute',
-                  right: 20,
-                }}>
+                style={{ position: 'absolute', right: 20, }}>
                 <Image
                   source={Images.iconHamburger}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    resizeMode: 'contain',
-                  }}
-                />
+                  style={{ height: 20, width: 20, resizeMode: 'contain', }} />
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -386,12 +307,12 @@ export default class VendorHome extends Component {
                 alignItems: 'center',
               }}
               onPress={() => this.props.navigation.navigate(Constants.search)}>
-              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+              <RegularTextCB style={{ fontSize: 16, color: Colors.coolGrey }}>
                 Search Service...
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{height: 50, width: 50}}
+                style={{ height: 50, width: 50 }}
               />
             </TouchableOpacity>
             <View
@@ -447,25 +368,16 @@ export default class VendorHome extends Component {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <RegularTextCB
-                style={{
-                  fontSize: 20,
-                  color: Colors.black,
-                }}>
-                Jobs For You
-              </RegularTextCB>
-              <TouchableOpacity onPress={() => {}}>
-                <RegularTextCB
-                  style={{
-                    color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
-                  See All
-                </RegularTextCB>
+
+              <RegularTextCB style={{ fontSize: 20, color: Colors.black, }}>Jobs For You</RegularTextCB>
+
+              <TouchableOpacity onPress={() => { this.props.navigation.navigate(Constants.vendorAllJobs, { accessToken: this.state.accessToken }) }}>
+                <RegularTextCB style={{ color: Colors.black, textDecorationLine: 'underline' }}>See All</RegularTextCB>
               </TouchableOpacity>
+
             </View>
             <FlatList
-              data={this.jobs}
+              data={this.state.allJobs}
               keyExtractor={(item) => item.id}
               renderItem={this.renderJobsForYouItem}
               showsHorizontalScrollIndicator={false}
@@ -512,7 +424,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,
@@ -522,7 +434,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,

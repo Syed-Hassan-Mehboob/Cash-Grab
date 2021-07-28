@@ -12,6 +12,8 @@ pod 'react-native-google-maps', :path => rn_maps_path
   
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'ReactNativeGetLocation', :path => '../node_modules/react-native-get-location'
+
   target 'CashGrabTests' do
     inherit! :complete
     # Pods for testing

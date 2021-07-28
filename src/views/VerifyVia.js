@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -29,9 +29,13 @@ export default class VerifyVia extends Component {
     };
   }
 
+
+
   componentDidMount() {
     this.payload = this.props.route.params.payload;
+    // console.log("payload data =========>", this.props.route.params.payload)
   }
+
 
   signUp = () => {
     let verifyVia = this.state.verifyVia;
@@ -40,51 +44,82 @@ export default class VerifyVia extends Component {
       return;
     }
 
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
+      console.log("data", data)
       this.props.navigation.navigate(Constants.otp, {
         email: this.payload.email,
       });
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     };
 
     const onFailure = (error) => {
       utils.showResponseError(error);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     };
-
+    console.log("user type", this.payload.type)
     // Show spinner when call is made
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
+    var postData = null;
 
-    Axios.post(Constants.signUpURL, {
-      name: this.payload.name,
-      email: this.payload.email,
-      type: this.payload.type,
-      country_code: this.payload.country_code,
-      country_flag: this.payload.country_flag,
-      phone: this.payload.phone,
-      password: this.payload.password,
-      password_confirmation: this.payload.password_confirmation,
-      verified_by: verifyVia,
-    })
+
+
+    if (this.payload.type === "vendor") {
+      postData = {
+        name: this.payload.name,
+        email: this.payload.email,
+        type: this.payload.type,
+        country_code: this.payload.country_code,
+        country_flag: this.payload.country_flag,
+        phone: this.payload.phone,
+        password: this.payload.password,
+        password_confirmation: this.payload.password_confirmation,
+        verified_by: verifyVia,
+        services: this.payload.services
+
+      }
+
+
+    } else {
+      postData = {
+        name: this.payload.name,
+        email: this.payload.email,
+        type: this.payload.type,
+        country_code: this.payload.country_code,
+        country_flag: this.payload.country_flag,
+        phone: this.payload.phone,
+        password: this.payload.password,
+        password_confirmation: this.payload.password_confirmation,
+        verified_by: verifyVia,
+
+
+      }
+
+    }
+    console.log("postData", postData)
+    Axios.post(Constants.signUpURL, postData)
       .then(onSuccess)
       .catch(onFailure);
+
+
+
   };
 
   render() {
+
     return (
       <ImageBackground
         source={Images.loginBgWeb}
-        style={[styles.container, {width: '100%'}]}>
+        style={[styles.container, { width: '100%' }]}>
         <KeyboardAvoidingView
-          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}>
+          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20 }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            style={{ marginStart: 15, alignSelf: 'flex-start' }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
@@ -111,7 +146,7 @@ export default class VerifyVia extends Component {
               Select an option to verify your account with
             </RegularTextCB>
           </View>
-          <View style={{marginHorizontal: 20}}>
+          <View style={{ marginHorizontal: 20 }}>
             <TouchableOpacity
               activeOpacity={0.5}
               style={[
@@ -125,7 +160,7 @@ export default class VerifyVia extends Component {
                       : Colors.white,
                 },
               ]}
-              onPress={() => this.setState({verifyVia: 'email'})}>
+              onPress={() => this.setState({ verifyVia: 'email' })}>
               <RegularTextCB
                 style={{
                   fontSize: 16,
@@ -147,7 +182,7 @@ export default class VerifyVia extends Component {
                       : Colors.white,
                 },
               ]}
-              onPress={() => this.setState({verifyVia: 'phone'})}>
+              onPress={() => this.setState({ verifyVia: 'phone' })}>
               <RegularTextCB
                 style={{
                   fontSize: 16,
@@ -157,7 +192,7 @@ export default class VerifyVia extends Component {
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-          <View style={{marginVertical: 30, marginHorizontal: 15}}>
+          <View style={{ marginVertical: 30, marginHorizontal: 15 }}>
             <ButtonRadius10
               label="CONTINUE"
               bgColor={Colors.sickGreen}
@@ -203,7 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,

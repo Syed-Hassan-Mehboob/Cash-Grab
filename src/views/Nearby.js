@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -7,15 +7,19 @@ import {
   View,
   Animated,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
+import Axios from '../network/APIKit';
+import utils from '../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const {height, width} = Dimensions.get('window');
+
+const { height, width } = Dimensions.get('window');
 const CARD_HEIGHT = 200;
 const CARD_WIDTH = width * 0.5;
 const SPACING_FOR_CARD_INSET = width * 0.08 - 10;
@@ -90,12 +94,16 @@ const Nearby = (props) => {
   };
 
   const [state, setState] = React.useState(initialMapState);
+  const [accessToken, setaccessToken] = React.useState("");
+  const [isLoading, setisLoading] = React.useState();
+  const [vendorAround, setvendorAround] = React.useState([])
 
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
 
   useEffect(() => {
-    mapAnimation.addListener(({value}) => {
+
+    mapAnimation.addListener(({ value }) => {
       let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next
       if (index >= state.markers.length) {
         index = state.markers.length - 1;
@@ -110,7 +118,7 @@ const Nearby = (props) => {
       const regionTimeOut = setTimeout(() => {
         if (mapIndex !== index) {
           mapIndex = index;
-          const {coordinate} = state.markers[index];
+          const { coordinate } = state.markers[index];
           _map.current.animateToRegion(
             {
               ...coordinate,
@@ -123,6 +131,50 @@ const Nearby = (props) => {
       }, 10);
     });
   });
+
+  useEffect(() => {
+    getUserAccessToken();
+  }, [])
+
+  const getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    setaccessToken(token);
+    getVendorAroundYou()
+  };
+
+  console.log("response =============>", vendorAround)
+  getVendorAroundYou = () => {
+    console.log("getVendorAroundYou===============>");
+    const onSuccess = ({ data }) => {
+      setvendorAround(data.data);
+      // setisLoading(false);
+
+
+    };
+
+    const onFailure = (error) => {
+      setisLoading(false);
+      utils.showResponseError(error);
+    };
+
+    setisLoading(true);
+
+    let params = {
+      latitude: "24.90628280557342",
+      longitude: "67.07237028142383",
+    };
+    Axios.get(Constants.getvendorAround, {
+      params,
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+
+
+  };
+
 
   const interpolations = state.markers.map((marker, index) => {
     const inputRange = [
@@ -137,7 +189,7 @@ const Nearby = (props) => {
       extrapolate: 'clamp',
     });
 
-    return {scale};
+    return { scale };
   });
 
   const onMarkerPress = (mapEventData) => {
@@ -145,7 +197,7 @@ const Nearby = (props) => {
     let x = markerId * CARD_WIDTH + markerId * 20;
     if (Platform.OS === 'ios') x = x - SPACING_FOR_CARD_INSET;
 
-    _scrollView.current.scrollTo({x: x, y: 0, animate: true});
+    _scrollView.current.scrollTo({ x: x, y: 0, animate: true });
   };
 
   const _map = React.useRef(null);
@@ -327,20 +379,19 @@ const Nearby = (props) => {
           borderBottomRightRadius: 20,
           padding: 15,
           shadowColor: '#000',
-          shadowOffset: {width: 5, height: 5},
+          shadowOffset: { width: 5, height: 5 },
           shadowOpacity: 1.0,
           shadowRadius: 10,
           alignItems: 'center',
         }}>
-        <View style={{flex: 1}}>
-          <RegularTextCB style={{fontSize: 20}}>102 Electricians</RegularTextCB>
-          <LightTextCB style={{fontSize: 16, color: Colors.black}}>
+        <View style={{ flex: 1 }}>
+          <RegularTextCB style={{ fontSize: 20 }}>102 Electricians</RegularTextCB>
+          <LightTextCB style={{ fontSize: 16, color: Colors.black }}>
             Near by..
           </LightTextCB>
         </View>
         <TouchableOpacity
           onPress={() => {
-            console.log('asd');
             props.navigation.goBack();
           }}>
           <Image source={Images.iconClose} style={styles.iconBack} />
@@ -373,10 +424,10 @@ const Nearby = (props) => {
                     marker.type === 'mechanic'
                       ? Images.markerMechanic
                       : marker.type === 'fire'
-                      ? Images.markerFireman
-                      : marker.type === 'repair'
-                      ? Images.markerRepairer
-                      : Images.markerWash
+                        ? Images.markerFireman
+                        : marker.type === 'repair'
+                          ? Images.markerRepairer
+                          : Images.markerWash
                   }
                   style={styles.marker}
                 />
@@ -418,7 +469,7 @@ const Nearby = (props) => {
               },
             },
           ],
-          {useNativeDriver: true},
+          { useNativeDriver: true },
         )}>
         {state.markers.map((marker, index) => {
           return (
@@ -448,7 +499,7 @@ const Nearby = (props) => {
                   }}>
                   <Image
                     source={Images.iconVerified}
-                    style={{height: 15, width: 15, resizeMode: 'contain'}}
+                    style={{ height: 15, width: 15, resizeMode: 'contain' }}
                   />
                   <RegularTextCB
                     style={{
@@ -460,7 +511,7 @@ const Nearby = (props) => {
                   </RegularTextCB>
                 </View>
                 <RegularTextCB
-                  style={{fontSize: 16, color: Colors.grey, marginTop: 5}}>
+                  style={{ fontSize: 16, color: Colors.grey, marginTop: 5 }}>
                   {marker.location}
                 </RegularTextCB>
                 <RegularTextCB
@@ -510,7 +561,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     height: 35,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -532,7 +583,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     alignItems: 'center',
@@ -558,7 +609,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 5,

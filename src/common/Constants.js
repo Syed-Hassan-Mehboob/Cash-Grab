@@ -18,6 +18,7 @@ const Constants = {
   advanceBooking: 'AdvanceBooking',
   bookingConfirmed: 'BookingConfirmed',
   filter: 'Filter',
+  Filtered: 'Filtered',
   changePassword: 'ChangePassword',
   editProfile: 'EditProfile',
   vendorEditProfile: 'VendorEditProfile',
@@ -25,6 +26,7 @@ const Constants = {
   chat: 'Chat',
   chatListing: 'ChatListing',
   vendorSingleCategory: 'VendorSingleCategory',
+  vendorAllJobs: 'vendorAllJobs',
   viewJob: 'ViewJob',
   faq: 'Faq',
   dateTimeSlots: 'DateTimeSlots',
@@ -69,6 +71,17 @@ const Constants = {
   contentsURL: 'contents',
   notificationsURL: 'notifications',
   logoutURL: 'auth/sign-out',
+  servies: "auth/services",
+  getAllVendorCategories: "vendors/categories",
+  getAllCustomerCategories: "customer/categories",
+  postJob: "customer/jobs/create",
+  getAllJobs: "vendors/getAllJobs",
+  getJobsByCategory: 'vendors/getJobsByCategory?',
+  getFilter: 'vendors/getfilters',
+  getvendorAround: "customer/vendorAroundYou?",
+  getTopSerVices: 'customer/getAllVendors',
+
+
 };
 
 export default Constants;
