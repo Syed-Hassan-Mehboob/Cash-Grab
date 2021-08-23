@@ -20,17 +20,16 @@ import utils from '../utils';
 export default class Notifications extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      isLoading: false,
+      notifications:[]
+    }
   }
-
-  state = {
-    accessToken: '',
-    isLoading: false,
-    notifications: [],
-  };
 
   componentDidMount() {
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
+
 
   renderHiddenItem = (data, rowMap) => {
     const rowActionAnimatedValue = new Animated.Value(75);
@@ -151,8 +150,7 @@ export default class Notifications extends Component {
 
   getNotifications = () => {
     const onSuccess = ({ data }) => {
-      console.log("data============>", data.data)
-
+     
       this.toggleIsLoading();
       this.setState({ notifications: data.data });
     };
@@ -174,6 +172,7 @@ export default class Notifications extends Component {
   };
 
   render() {
+    // console.log('Notifications======',this.state.notifications)
     return (
       <View style={[styles.container]}>
         <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>

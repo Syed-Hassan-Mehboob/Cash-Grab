@@ -120,11 +120,12 @@ export default class VendorProfile extends React.Component {
     review: '',
     accessToken: '',
     avatar: '',
-    name: '',
+    name:'',
     email: '',
     countryCode: '',
     phone: '',
     location: '',
+    image:''
   };
 
   componentDidMount() {
@@ -278,13 +279,13 @@ export default class VendorProfile extends React.Component {
   };
 
   getUserAccessToken = async () => {
-
-    const token = await AsyncStorage.getItem(Constants.accessToken);
+  const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({ accessToken: token }, () => this.getUserProfile());
   };
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
+      console.log('Vender Profile ======',data);
       this.toggleIsLoading();
       this.setState({
         avatar: data.data.records.userProfile.image,
@@ -389,7 +390,7 @@ export default class VendorProfile extends React.Component {
             </View>
             <RegularTextCB
               style={{ color: Colors.white, fontSize: 18, marginTop: 5 }}>
-              Damian Santosa
+              {this.state.name}
             </RegularTextCB>
             <RegularTextCB
               style={{
@@ -458,7 +459,7 @@ export default class VendorProfile extends React.Component {
                     User Name
                   </RegularTextCB>
                   <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
-                    Damian Santosa
+                  {this.state.name}
                   </RegularTextCB>
                 </View>
                 <View
@@ -472,7 +473,7 @@ export default class VendorProfile extends React.Component {
                     Email Address
                   </RegularTextCB>
                   <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
-                    damian@gmail.com
+                    {this.state.email}
                   </RegularTextCB>
                 </View>
                 <View
@@ -486,7 +487,7 @@ export default class VendorProfile extends React.Component {
                     Phone No.
                   </RegularTextCB>
                   <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
-                    +1(239) 555-01089
+                    {'('}{this.state.countryCode}{')'}{this.state.phone}
                   </RegularTextCB>
                 </View>
                 <View
@@ -500,7 +501,7 @@ export default class VendorProfile extends React.Component {
                     Location
                   </RegularTextCB>
                   <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
-                    New York, USA
+                    {this.state.location}
                   </RegularTextCB>
                 </View>
                 <View

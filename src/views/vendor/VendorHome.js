@@ -127,7 +127,7 @@ export default class VendorHome extends Component {
     };
 
     this.setState({ isLoading: true });
-    Axios.get(Constants.customerCategoriesURL, {
+    Axios.get(Constants.getAllVendorCategories, {
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -141,11 +141,12 @@ export default class VendorHome extends Component {
   };
 
   renderCategoryItem = ({ item }) => {
+    // console.log("renderCategoryItem=====================================",item.image)
     return (
       <TouchableOpacity
         onPress={() => { this.props.navigation.navigate(Constants.vendorSingleCategory, { item: item, }); }}
         style={{ alignItems: 'center' }}>
-        <Image style={styles.circle} source={{ uri: Constants.imageURL + item.image }} />
+        <Image style={styles.circle} source={{ uri: Constants.imageURL + "/uploads/category/e237696c743f4e524697907f27019c341623746681.png" }} />
         <RegularTextCB
           style={{ fontSize: 14, marginTop: -20, color: Colors.coolGrey }}>
           {item.name}
@@ -199,7 +200,7 @@ export default class VendorHome extends Component {
 
         <RegularTextCB
           style={{ color: Colors.sickGreen, fontSize: 12, }}>
-          {item.category.name}
+          {item.name}
         </RegularTextCB>
         <RegularTextCB
           style={{ color: Colors.coolGrey, }}>
@@ -342,7 +343,7 @@ export default class VendorHome extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <FlatList
+             <FlatList
               horizontal
               data={this.state.categories}
               keyExtractor={(item) => item.id}

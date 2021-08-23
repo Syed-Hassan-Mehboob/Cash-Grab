@@ -22,7 +22,6 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
   }
-
   state = {
     isLoading: false,
     accessToken: '',

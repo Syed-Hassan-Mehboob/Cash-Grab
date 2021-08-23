@@ -108,8 +108,9 @@ export default class ViewVendorProfile extends React.Component {
 
   constructor(props) {
     super(props);
+    
   }
-
+   
   state = {isDescriptionSelected: true, isReviewsSelected: false, review: ''};
 
   selectIsDescriptionSelected = () => {

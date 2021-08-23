@@ -9,6 +9,7 @@ import RegularTextCB from "./RegularTextCB";
 
 const ListComponent = (props) => {
     const item = props.item;
+    console.log('List Componant=======',item);
     return (
         <TouchableOpacity
             activeOpacity={0.5}
@@ -51,7 +52,7 @@ const ListComponent = (props) => {
 
             <RegularTextCB
                 style={{ color: Colors.sickGreen, fontSize: 12, }}>
-                {item.category.name}
+                {item.service.name}
             </RegularTextCB>
             <RegularTextCB
                 style={{ color: Colors.coolGrey, }}>

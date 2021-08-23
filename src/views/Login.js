@@ -54,6 +54,7 @@ export default class Login extends Component {
     try {
       await AsyncStorage.setItem(Constants.accessToken, 'Bearer ' + user.token);
       var data = JSON.stringify(user);
+      console.log(user)
       await AsyncStorage.setItem('user', data);
       this.setState({isLoading: false});
       setTimeout(() => {

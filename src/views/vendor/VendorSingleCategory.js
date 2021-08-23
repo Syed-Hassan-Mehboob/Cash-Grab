@@ -169,17 +169,18 @@ export default class VendorSingleCategory extends Component {
 
 
   renderSingleCategoriesItem = ({ item }) => {
-    console.log(item.jobs.users.name)
+  console.log('renderSingleCategoriesItem=====',item.image[0])
+    // console.log(item.jobs.users.name)
     return (
       <TouchableOpacity
         activeOpacity={0.5}
-        style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },]}
+        style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5},]}
         onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
         <View
           style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL + item.jobs.users.image }}
+              source={{ uri: Constants.imageURL + item.image[0] }}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -187,25 +188,25 @@ export default class VendorSingleCategory extends Component {
           <View style={{ marginStart: 10 }}>
             <RegularTextCB
               style={{ color: Colors.black, fontSize: 16, }}>
-              {item.jobs.users.name}
+              {item.user.name}
             </RegularTextCB>
             <View
               style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', }}>
-              <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.jobs.users.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
-              <RegularTextCB style={{ color: item.jobs.users.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
-                {item.jobs.users.email_verified_at !== null ? "Verified" : "Unverified"}
+              <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
+              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
+                {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between' }}>
           <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
-            {item.jobs.title}
+            {item.title}
           </RegularTextCB>
 
           <LightTextCB
             style={{ color: Colors.black, fontSize: 12, }}>
-            ${item.jobs.price}
+            ${item.price}
           </LightTextCB>
 
         </View>
@@ -216,7 +217,7 @@ export default class VendorSingleCategory extends Component {
         </RegularTextCB> */}
         <RegularTextCB
           style={{ color: Colors.coolGrey, }}>
-          {item.jobs.description}
+          {item.description}
         </RegularTextCB>
         <View
           style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
@@ -229,7 +230,7 @@ export default class VendorSingleCategory extends Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.jobs.address}
+            {item.address}
           </RegularTextCB>
         </View>
         <View

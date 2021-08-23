@@ -38,7 +38,7 @@ const Constants = {
   home: 'Home',
   vendorHome: 'VendorHome',
   nearby: 'Nearby',
-  notifications: 'Notifications',
+  notifications: 'notifications',
   plus: 'Plus',
   dashboard: 'Dashboard',
   profile: 'Profile',
@@ -80,8 +80,7 @@ const Constants = {
   getFilter: 'vendors/getfilters',
   getvendorAround: "customer/vendorAroundYou?",
   getTopSerVices: 'customer/getAllVendors',
-
-
+  
 };
 
 export default Constants;
