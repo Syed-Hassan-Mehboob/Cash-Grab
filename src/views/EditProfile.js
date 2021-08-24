@@ -161,6 +161,7 @@ export default class EditProfile extends Component {
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
+    console.log('Edite profile Data========',data)
       this.toggleIsLoading();
       this.setState({
         avatar: Constants.imageURL + data.data.records.userProfile.image,
@@ -180,7 +181,7 @@ export default class EditProfile extends Component {
 
 
     this.toggleIsLoading();
-    Axios.get(Constants.getProfileURL, {
+    Axios.get(Constants.getProfileURL,{
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -188,6 +189,8 @@ export default class EditProfile extends Component {
       .then(onSuccess)
       .catch(onFailure);
   };
+
+
 
   editUserProfile = () => {
     let name = this.state.fullName;
@@ -280,7 +283,7 @@ export default class EditProfile extends Component {
     };
 
     this.toggleIsLoading();
-    Axios.post(Constants.updateProfileURL, formData, options)
+    Axios.post(Constants.updateProfileURL,formData, options)
       .then(onSuccess)
       .catch(onFailure);
   };

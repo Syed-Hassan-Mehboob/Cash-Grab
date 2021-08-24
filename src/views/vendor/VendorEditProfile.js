@@ -16,7 +16,10 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import EditText from '../../components/EditText';
-
+import Constants from '../../common/Constants';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width, height} = Dimensions.get('window');
 
 export default class VendorEditProfile extends Component {
@@ -24,15 +27,27 @@ export default class VendorEditProfile extends Component {
     super(props);
     this.state = {
       avatar: '',
-      fullName: '',
-      email: '',
-      phoneNumber: '',
-      location: '',
+      fullName:this.props.route.params.name,
+      email:this.props.route.params.email,
+      phoneNumber:this.props.route.params.phone,
+      location:this.props.route.params.location,
+      countryCode:this.props.route.params.countryCode,
       oldPassword: '',
       newPassword: '',
       isModalVisible: false,
+      isLoading: false,
+      accessToken: '',
     };
   }
+
+  componentDidMount() {
+    this.getUserAccessToken();
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token });
+  };
 
   changePasswordState() {
     if (this.state.secureText)
@@ -51,11 +66,102 @@ export default class VendorEditProfile extends Component {
     }
   };
 
+  toggleIsLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading });
+  };
+
   toggleIsModalVisible = () => {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
     });
   };
+
+   editUserProfile = () => {
+    let name = this.state.fullName;
+    let email = this.state.email;
+    let countryCode = this.state.countryCode;
+    let phone = this.state.phoneNumber;
+    let image = this.state.avatar;
+    let location = this.state.location;
+
+    if (utils.isEmpty(name)) {
+      utils.showToast('Invalid Name');
+      return;
+    }
+
+    if (name.length < 3) {
+      utils.showToast('Name Should Not Be Less Than 3 Characters');
+      return;
+    }
+
+    if (name.length > 55) {
+      utils.showToast('Name Should Not Be Greater Than 55 Characters');
+      return;
+    }
+
+    if (this.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (utils.isEmpty(phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
+
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+
+    if (phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
+
+    const onSuccess = ({ data }) => {
+     console.log('upload======',data)
+      this.toggleIsLoading();
+      utils.showToast(data.message);
+
+      setTimeout(() => {
+        this.props.navigation.goBack();
+      }, 1000);
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+  
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('country_code', countryCode);
+    formData.append('phone', phone);
+    formData.append('location', location);
+    formData.append('image', {
+      ...image,
+      uri: Platform.OS === 'android' ? image : image.replace('file:///', ''),
+      name: `image-profile`,
+      type: 'image/jpeg',
+    });
+
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
+    };
+
+    this.toggleIsLoading();
+    Axios.post(Constants.updateProfileURL,formData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+
 
   renderBottomSheetContent = () => {
     return (
@@ -105,7 +211,7 @@ export default class VendorEditProfile extends Component {
       height: 500,
       cropping: true,
     }).then((image) => {
-      this.setState({avatar: image.path});
+      this.setState({avatar:image.path});
     });
   };
 
@@ -116,7 +222,9 @@ export default class VendorEditProfile extends Component {
       height: 500,
       cropping: true,
     }).then((image) => {
-      this.setState({avatar: image.path});
+      console.log('=====Image',image.path)
+      this.setState({avatar:image.path});
+      console.log('Avator===',this.state.avatar)
     });
   };
 
@@ -162,9 +270,8 @@ export default class VendorEditProfile extends Component {
                 backgroundColor: Colors.sickGreen,
                 borderRadius: 5,
               }}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}>
+              onPress={() => this.editUserProfile()}
+              >
               <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
             </TouchableOpacity>
           </View>
@@ -176,7 +283,7 @@ export default class VendorEditProfile extends Component {
             ]}
             onPress={() => this.toggleIsModalVisible()}>
             <Image
-              source={Images.emp1}
+              source={{uri:this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -193,7 +300,7 @@ export default class VendorEditProfile extends Component {
           </TouchableOpacity>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
-            Damian Santosa
+            {this.props.route.params.name}
           </RegularTextCB>
         </View>
         <ScrollView

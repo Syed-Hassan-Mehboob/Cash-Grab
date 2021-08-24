@@ -20,6 +20,7 @@ class utils {
   }
 
   isEmpty(obj) {
+   console.log('isempty started',obj)
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) return false;
     }
@@ -27,6 +28,7 @@ class utils {
   }
 
   validateEmail(str) {
+    console.log('this.validateEmail ', str)
     var pattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return pattern.test(str);
   }

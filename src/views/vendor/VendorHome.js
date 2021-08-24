@@ -103,7 +103,7 @@ export default class VendorHome extends Component {
 
 
     this.setState({ isLoading: true });
-    Axios.get(Constants.getProfileURL, {
+    Axios.get(Constants.getProfileURL,{
       headers: {
         Authorization: this.state.accessToken,
       },

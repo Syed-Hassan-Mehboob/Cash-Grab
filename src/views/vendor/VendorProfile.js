@@ -125,7 +125,7 @@ export default class VendorProfile extends React.Component {
     countryCode: '',
     phone: '',
     location: '',
-    image:''
+    image:'',
   };
 
   componentDidMount() {
@@ -285,10 +285,10 @@ export default class VendorProfile extends React.Component {
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
-      console.log('Vender Profile ======',data);
+      // console.log('Vender Profile ======',data);
       this.toggleIsLoading();
       this.setState({
-        avatar: data.data.records.userProfile.image,
+        avatar:Constants.imageURL+data.data.records.userProfile.image,
         name: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
@@ -344,7 +344,14 @@ export default class VendorProfile extends React.Component {
             <TouchableOpacity
               style={{ position: 'absolute', right: 10 }}
               onPress={() => {
-                this.props.navigation.navigate(Constants.vendorEditProfile);
+                this.props.navigation.navigate(Constants.vendorEditProfile,{
+                  avatar: this.state.image,
+                  name: this.state.name,
+                  email: this.state.email,
+                  countryCode: this.state.countryCode,
+                  phone: this.state.phone,
+                  location:this.state.location,
+                   });
               }}>
               <Image
                 source={Images.iconEdit}
@@ -364,7 +371,7 @@ export default class VendorProfile extends React.Component {
           <View style={{ alignItems: 'center' }}>
             <View style={styles.circleCard}>
               <Image
-                source={Images.emp1}
+                source={this.state.avatar}
                 style={styles.iconUser}
                 resizeMode="cover"
               />

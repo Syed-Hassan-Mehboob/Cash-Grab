@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import Colors from '../common/Colors';
-import Constants from '../common/Constants';
-import Images from '../common/Images';
-import RegularTextCB from '../components/RegularTextCB';
-import Axios from '../network/APIKit';
-import utils from '../utils';
+import Colors from '../../common/Colors';
+import Constants from '../../common/Constants';
+import Images from '../../common/Images';
+import RegularTextCB from '../../components/RegularTextCB';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 
-export default class Notifications extends Component {
+export default class VenderNotifications extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -49,7 +49,7 @@ export default class Notifications extends Component {
 
   renderNotificationsItem = ({ item }) => {
     console.log("Item  ===============>", item.notifications.map((item) => {
-      console.log(item)
+      console.log(item.content)
     }))
     return (
       <View style={{ marginHorizontal: 15 }}>
@@ -172,7 +172,7 @@ export default class Notifications extends Component {
   };
 
   render() {
-    console.log('Notifications======',this.state.notifications)
+    // console.log('Notifications======',this.state.notifications)
     return (
       <View style={[styles.container]}>
         <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>

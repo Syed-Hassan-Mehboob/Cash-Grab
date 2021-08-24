@@ -6,7 +6,7 @@ import Constants from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import Filter from '../Filter';
-import Notifications from '../Notifications';
+import VenderNotifications from '../vendor/VenderNotifications';
 import Settings from '../Settings';
 import TermsAndConditions from '../TermsAndConditions';
 import VendorHome from '../vendor/VendorHome';
@@ -65,7 +65,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.support} component={Support} />
       <HomeStack.Screen
         name={Constants.notifications}
-        component={Notifications}
+        component={VenderNotifications}
       />
       <HomeStack.Screen name={Constants.settings} component={Settings} />
       <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
@@ -125,7 +125,7 @@ const SettingsNavigator = () => {
       <SettingsStack.Screen name={Constants.settings} component={Settings} />
       <SettingsStack.Screen
         name={Constants.notifications}
-        component={Notifications}
+        component={VenderNotifications}
       />
       <SettingsStack.Screen
         name={Constants.chatListing}
@@ -182,7 +182,7 @@ const Tabs = () => {
             />
           ),
         }}
-        component={Notifications}
+        component={VenderNotifications}
       />
       <Tab.Screen
         name={Constants.plus}
