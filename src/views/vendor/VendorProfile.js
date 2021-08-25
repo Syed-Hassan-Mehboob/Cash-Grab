@@ -285,7 +285,7 @@ export default class VendorProfile extends React.Component {
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
-      // console.log('Vender Profile ======',data);
+      console.log('Vender Profile ======',data);
       this.toggleIsLoading();
       this.setState({
         avatar:Constants.imageURL+data.data.records.userProfile.image,

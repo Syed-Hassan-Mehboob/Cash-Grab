@@ -84,7 +84,6 @@ export default class Filter extends Component {
   };
 
   setfilters = () => {
-
     postData = {
       query: this.state.selectedCategory,
 

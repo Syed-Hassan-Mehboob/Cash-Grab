@@ -30,7 +30,7 @@ export default class Profile extends React.Component {
     email: '',
     countryCode: '',
     phone: '',
-    location: '',
+    location: '', 
   };
 
   componentDidMount() {
@@ -45,6 +45,7 @@ export default class Profile extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
+    console.log('Token===========',token)
     this.setState({ accessToken: token }, () => this.getUserProfile());
   };
 
@@ -58,6 +59,7 @@ export default class Profile extends React.Component {
         countryCode: data.data.records.country_code,
         phone: data.data.records.phone,
         location: data.data.records.userProfile.location,
+
       });
     };
 
@@ -104,7 +106,14 @@ export default class Profile extends React.Component {
             <TouchableOpacity
               style={{ position: 'absolute', right: 10 }}
               onPress={() => {
-                this.props.navigation.navigate(Constants.editProfile);
+                this.props.navigation.navigate(Constants.editProfile,{
+                  avatar:Constants.imageURL+this.state.avatar,
+                  name: this.state.name,
+                  email: this.state.email,
+                  countryCode: this.state.countryCode,
+                  phone: this.state.phone,
+                  location:this.state.location,
+                });
               }}>
               <Image
                 source={Images.iconEdit}
@@ -118,7 +127,7 @@ export default class Profile extends React.Component {
           </View>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL + this.state.avatar }}
+              source={{ uri: Constants.imageURL+this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />

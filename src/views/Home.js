@@ -230,7 +230,6 @@ export default class Home extends Component {
 
   getVendorAroundYou = () => {
     const onSuccess = ({ data }) => {
-
       this.setState({
         isLoading: false,
         vendorAround: data.data
@@ -263,14 +262,16 @@ export default class Home extends Component {
 
 
   };
+
+
   getTopServices = () => {
     const onSuccess = ({ data }) => {
-
+ 
       this.setState({
         isLoading: false,
         topServices: data.data.records
       }, () => {
-        // console.log("state update ======>", this.state.topServices)
+        
 
       });
     };
@@ -539,7 +540,14 @@ export default class Home extends Component {
           { padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.viewVendorProfile)
+          this.props.navigation.navigate(Constants.viewVendorProfile,{
+                username:item.name,
+                  email:item.email,
+                  phoneNumber:item.phone,
+                  countrycode:item.country_code,
+                  location:item.location,
+                  avator:item.image
+          })
         }>
         <View
           style={{
@@ -621,7 +629,7 @@ export default class Home extends Component {
   };
 
   renderUrgentServicesItem = ({ item }) => {
-
+   
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -636,8 +644,14 @@ export default class Home extends Component {
           },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.viewVendorProfile)
-        }>
+          this.props.navigation.navigate(Constants.viewVendorProfile,{
+            username:item.name,
+            email:item.email,
+            phoneNumber:item.phone,
+            countrycode:item.country_code,
+            location:item.location,
+            avator:item.image
+          })}>
         <View
           style={{
             flexDirection: 'row',

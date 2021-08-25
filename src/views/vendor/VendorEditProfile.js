@@ -83,7 +83,6 @@ export default class VendorEditProfile extends Component {
     let phone = this.state.phoneNumber;
     let image = this.state.avatar;
     let location = this.state.location;
-
     if (utils.isEmpty(name)) {
       utils.showToast('Invalid Name');
       return;
@@ -143,14 +142,14 @@ export default class VendorEditProfile extends Component {
     formData.append('location', location);
     formData.append('image', {
       ...image,
-      uri: Platform.OS === 'android' ? image : image.replace('file:///', ''),
+      uri: Platform.OS === 'android' ? image : image.replace('file:///',''),
       name: `image-profile`,
       type: 'image/jpeg',
     });
 
     const options = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type':'application/x-www-form-urlencoded',
         Authorization: this.state.accessToken,
       },
     };

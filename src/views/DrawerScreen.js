@@ -35,6 +35,9 @@ export default class DrawerScreen extends Component {
     accessToken: '',
     avatar: '',
     name: '',
+    email: '',
+    countryCode: '',
+    phone: '',
     location: '',
   };
 
@@ -58,8 +61,11 @@ export default class DrawerScreen extends Component {
     const onSuccess = ({ data }) => {
       this.setState({
         avatar: data.data.records.userProfile.image,
-        location: data.data.records.userProfile.location,
         name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phone: data.data.records.phone,
+        location: data.data.records.userProfile.location,
       });
     };
 
@@ -131,6 +137,14 @@ export default class DrawerScreen extends Component {
                 this.state.isVendor
                   ? Constants.vendorEditProfile
                   : Constants.editProfile,
+                  {
+                  avatar:Constants.imageURL+this.state.avatar,
+                  name: this.state.name,
+                  email: this.state.email,
+                  countryCode: this.state.countryCode,
+                  phone: this.state.phone,
+                  location:this.state.location,
+                  }
               )
             }
             style={{

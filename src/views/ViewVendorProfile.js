@@ -110,7 +110,8 @@ export default class ViewVendorProfile extends React.Component {
     super(props);
     
   }
-   
+
+
   state = {isDescriptionSelected: true, isReviewsSelected: false, review: ''};
 
   selectIsDescriptionSelected = () => {
@@ -322,7 +323,7 @@ export default class ViewVendorProfile extends React.Component {
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
               <Image
-                source={Images.emp1}
+                source={{uri:Constants.imageURL+this.props.route.params.avator}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
@@ -348,7 +349,7 @@ export default class ViewVendorProfile extends React.Component {
             </View>
             <RegularTextCB
               style={{color: Colors.white, fontSize: 18, marginTop: 5}}>
-              Damian Santosa
+              {this.props.route.params.username}
             </RegularTextCB>
             <RegularTextCB
               style={{
@@ -417,7 +418,7 @@ export default class ViewVendorProfile extends React.Component {
                     User Name
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    Damian Santosa
+                    {this.props.route.params.username}
                   </RegularTextCB>
                 </View>
                 <View
@@ -431,7 +432,7 @@ export default class ViewVendorProfile extends React.Component {
                     Email Address
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    damian@gmail.com
+                    {this.props.route.params.email}
                   </RegularTextCB>
                 </View>
                 <View
@@ -442,10 +443,10 @@ export default class ViewVendorProfile extends React.Component {
                     paddingVertical: 10,
                   }}>
                   <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
-                    Email Address
+                    Phone Number 
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    +1(239) 555-01089
+                  {this.props.route.params.countrycode}  {this.props.route.params.phoneNumber}
                   </RegularTextCB>
                 </View>
                 <View
@@ -459,7 +460,7 @@ export default class ViewVendorProfile extends React.Component {
                     Location
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    New York, USA
+                    {this.props.route.params.location}
                   </RegularTextCB>
                 </View>
                 <View

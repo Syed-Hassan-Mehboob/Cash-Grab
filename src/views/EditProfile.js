@@ -28,6 +28,7 @@ import utils from '../utils';
 const { width, height } = Dimensions.get('window');
 
 export default class EditProfile extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -35,13 +36,13 @@ export default class EditProfile extends Component {
       isModalVisible: false,
       isCountryCodePickerVisible: false,
       accessToken: '',
-      avatar: '',
-      fullName: '',
-      email: '',
+      avatar:this.props.route.params.avatar,
+      fullName: this.props.route.params.name,
+      email:this.props.route.params.email,
       countryCode: '',
       countryFlag: '',
-      phoneNumber: '',
-      location: '',
+      phoneNumber:this.props.route.params.phone,
+      location:this.props.route.params.location,
       oldPassword: '',
       newPassword: '',
     };
@@ -53,7 +54,7 @@ export default class EditProfile extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getUserProfile());
+    this.setState({ accessToken: token });
   };
 
   changePasswordState() {
@@ -159,37 +160,36 @@ export default class EditProfile extends Component {
     });
   };
 
-  getUserProfile = () => {
-    const onSuccess = ({ data }) => {
-    console.log('Edite profile Data========',data)
-      this.toggleIsLoading();
-      this.setState({
-        avatar: Constants.imageURL + data.data.records.userProfile.image,
-        fullName: data.data.records.name,
-        email: data.data.records.email,
-        countryCode: data.data.records.country_code,
-        countryFlag: data.data.records.country_flag,
-        phoneNumber: data.data.records.phone,
-        location: data.data.records.userProfile.location,
-      });
-    };
+  // getUserProfile = () => {
+  //   const onSuccess = ({ data }) => {
+  //   console.log('Edite profile Data========',data)
+  //     this.toggleIsLoading();
+  //     this.setState({
+  //       avatar: Constants.imageURL + data.data.records.userProfile.image,
+  //       fullName: data.data.records.name,
+  //       email: data.data.records.email,
+  //       countryCode: data.data.records.country_code,
+  //       countryFlag: data.data.records.country_flag,
+  //       phoneNumber: data.data.records.phone,
+  //       location: data.data.records.userProfile.location,
+  //     });
+  //   };
 
-    const onFailure = (error) => {
-      this.toggleIsLoading();
-      utils.showResponseError(error);
-    };
+  //   const onFailure = (error) => {
+  //     this.toggleIsLoading();
+  //     utils.showResponseError(error);
+  //   };
 
 
-    this.toggleIsLoading();
-    Axios.get(Constants.getProfileURL,{
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
+  //   this.toggleIsLoading();
+  //   Axios.get(Constants.getProfileURL,{
+  //     headers: {
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
 
 
   editUserProfile = () => {
@@ -250,15 +250,15 @@ export default class EditProfile extends Component {
       utils.showResponseError(error);
     };
 
-    const params = {
-      name: name,
-      email: email,
-      country_code: countryCode,
-      country_flag: countryFlag,
-      phone: phone,
-      image: image,
-      location: location,
-    };
+    // const params = {
+    //   name: name,
+    //   email: email,
+    //   country_code: countryCode,
+    //   country_flag: countryFlag,
+    //   phone: phone,
+    //   image: image,
+    //   location: location,
+    // };
 
 
     const formData = new FormData();
@@ -345,7 +345,7 @@ export default class EditProfile extends Component {
             ]}
             onPress={() => this.toggleIsModalVisible()}>
             <Image
-              source={{ uri: this.state.avatar }}
+              source={{ uri:this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -363,7 +363,7 @@ export default class EditProfile extends Component {
           </TouchableOpacity>
           <RegularTextCB
             style={{ color: Colors.white, fontSize: 20, marginTop: 10 }}>
-            {this.state.fullName}
+            {this.props.route.params.name}
           </RegularTextCB>
           <View style={{ backgroundColor: Colors.white, paddingHorizontal: 30, borderRadius: 10 }} >
             <TextInput multiline={true} placeholder="About Me" style={{ fontFamily: Constants.fontRegular, fontSize: 15, }} />

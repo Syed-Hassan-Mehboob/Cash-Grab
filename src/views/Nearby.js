@@ -82,6 +82,7 @@ const Nearby = (props) => {
       rating: '3.8 ratings',
     },
   ];
+  
 
   const initialMapState = {
     markers,
@@ -144,6 +145,7 @@ const Nearby = (props) => {
 
   console.log("response =============>", vendorAround)
   getVendorAroundYou = () => {
+    
     console.log("getVendorAroundYou===============>");
     const onSuccess = ({ data }) => {
       setvendorAround(data.data);
@@ -403,7 +405,7 @@ const Nearby = (props) => {
         initialRegion={state.region}
         customMapStyle={mapStyle}
         style={[styles.container]}>
-        {state.markers.map((marker, index) => {
+        {vendorAround.map((marker, index) => {
           const scaleStyle = {
             transform: [
               {
@@ -414,14 +416,14 @@ const Nearby = (props) => {
           return (
             <MapView.Marker
               key={index}
-              coordinate={marker.coordinate}
+              coordinate={{ latitude :parseFloat(marker.latitude),longitude :parseFloat(marker.longitude)}}
               onPress={(e) => {
                 onMarkerPress(e);
               }}>
               <Animated.View style={[styles.markerWrap, scaleStyle]}>
                 <Animated.Image
                   source={
-                    marker.type === 'mechanic'
+                    marker.type === 'customer'
                       ? Images.markerMechanic
                       : marker.type === 'fire'
                         ? Images.markerFireman
@@ -471,24 +473,31 @@ const Nearby = (props) => {
           ],
           { useNativeDriver: true },
         )}>
-        {state.markers.map((marker, index) => {
+        {vendorAround.map((marker, index) => {
           return (
             <TouchableOpacity
               style={styles.card}
               key={index}
               onPress={() =>
-                props.navigation.navigate(Constants.viewVendorProfile)
+                props.navigation.navigate(Constants.viewVendorProfile,{
+                  username:marker.name,
+                  email:marker.email,
+                  phoneNumber:marker.phone,
+                  countrycode:marker.country_code,
+                  location:marker.location,
+                  avator:marker.image
+                })
               }>
               <View style={styles.circleCard}>
                 <Image
-                  source={marker.image}
+                  source={{uri:Constants.imageURL+marker.image}}
                   style={styles.iconUser}
                   resizeMode="cover"
                 />
               </View>
               <View style={styles.textContent}>
                 <RegularTextCB style={[styles.cardtitle]}>
-                  {marker.title}
+                  {marker.name}
                 </RegularTextCB>
                 <View
                   style={{
