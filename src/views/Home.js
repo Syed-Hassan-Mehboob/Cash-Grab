@@ -16,7 +16,7 @@ import Modal from 'react-native-modal';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,7 +52,7 @@ export default class Home extends Component {
       ratings: '1.3',
     },
     {
-      id: '5',
+      id: 'SIZES.five',
       image: Images.emp1,
       title: 'Ray Hammond',
       type: 'Bike Electrician, NY (0.5km)',
@@ -94,7 +94,7 @@ export default class Home extends Component {
       ratings: '1.0',
     },
     {
-      id: '5',
+      id: 'SIZES.five',
       image: Images.emp2,
       name: 'Ray Hammond',
       title: 'Home Renovation',
@@ -154,11 +154,11 @@ export default class Home extends Component {
         },
         {
           id: '4',
-          text: 'Service 5',
+          text: 'Service SIZES.five',
           isSelected: false,
         },
         {
-          id: '5',
+          id: 'SIZES.five',
           text: 'Service 6',
           isSelected: false,
         },
@@ -284,7 +284,7 @@ export default class Home extends Component {
     this.setState({ isLoading: true });
 
     let params = {
-      limit: 10,
+      limit: SIZES.ten,
     };
     Axios.get(Constants.getTopSerVices, {
       params,
@@ -326,15 +326,15 @@ export default class Home extends Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: 15,
-                width: 15,
+                height: SIZES.fifteen,
+                width: SIZES.fifteen,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
         </View>
-        <View style={[styles.textInputContainer, { marginTop: 10 }]}>
+        <View style={[styles.textInputContainer, { marginTop: SIZES.ten }]}>
           <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Select Service
           </RegularTextCB>
@@ -342,11 +342,11 @@ export default class Home extends Component {
             style={[
               styles.card,
               {
-                height: 60,
-                borderRadius: 10,
+                height: SIZES.ten*6,
+                borderRadius: SIZES.ten,
                 justifyContent: 'center',
-                paddingHorizontal: 20,
-                paddingVertical: 5,
+                paddingHorizontal: SIZES.twenty,
+                paddingVertical: SIZES.five,
               },
             ]}
             onPress={() => this.toggleIsSelectionModalVisible()}>
@@ -355,7 +355,7 @@ export default class Home extends Component {
             </RegularTextCB>
           </TouchableOpacity>
         </View>
-        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
           <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Rate Requested
           </RegularTextCB>
@@ -371,7 +371,7 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
           <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Location
           </RegularTextCB>
@@ -387,7 +387,7 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
           <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Address
           </RegularTextCB>
@@ -403,7 +403,7 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={[styles.textInputContainer, { marginTop: 20 }]}>
+        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
           <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Exact Time
           </RegularTextCB>
@@ -419,7 +419,7 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
-        <View style={{ marginTop: 30, paddingBottom: 10, marginHorizontal: 10 }}>
+        <View style={{ marginTop: SIZES.ten*3, paddingBottom: SIZES.ten, marginHorizontal: SIZES.ten }}>
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
@@ -447,8 +447,8 @@ export default class Home extends Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: 15,
-                width: 15,
+                height: SIZES.fifteen,
+                width: SIZES.fifteen,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
@@ -456,14 +456,14 @@ export default class Home extends Component {
           </TouchableOpacity>
         </View>
         <FlatList
-          style={{ marginTop: 5 }}
+          style={{ marginTop: SIZES.five }}
           data={this.state.selections}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
           renderItem={this.renderSelectionItem}
           extraData={this.state.selections}
           contentContainerStyle={{
-            paddingBottom: 50,
+            paddingBottom: SIZES.fifty,
           }}
         />
       </View>
@@ -524,7 +524,7 @@ export default class Home extends Component {
           source={{ uri: Constants.imageURL + item.image }}
         />
         <RegularTextCB
-          style={{ fontSize: 14, marginTop: -20, color: Colors.coolGrey }}>
+          style={{ fontSize: 14, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
           {item.name}
         </RegularTextCB>
       </TouchableOpacity>
@@ -537,7 +537,7 @@ export default class Home extends Component {
         activeOpacity={0.8}
         style={[
           styles.card,
-          { padding: 10, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },
+          { padding: SIZES.ten, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five },
         ]}
         onPress={() =>
           this.props.navigation.navigate(Constants.viewVendorProfile,{
@@ -565,7 +565,7 @@ export default class Home extends Component {
             style={{
               color: Colors.black,
               textDecorationLine: 'underline',
-              marginStart: 5,
+              marginStart: SIZES.five,
               fontSize: 14,
             }}>
             View Profile
@@ -574,22 +574,22 @@ export default class Home extends Component {
         <RegularTextCB
           style={{
             color: Colors.black,
-            marginTop: 10,
+            marginTop: SIZES.ten,
             fontSize: 14,
           }}>
           {item.name}
         </RegularTextCB>
 
-        <View style={{ flexDirection: 'row', marginTop: 5 }}>
+        <View style={{ flexDirection: 'row', marginTop: SIZES.five }}>
           <Image
             source={Images.iconVerified}
-            style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }}
+            style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain', tintColor: item.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }}
           />
           <RegularTextCB
             style={{
               color: Colors.turqoiseGreen,
               fontSize: 12,
-              marginStart: 5,
+              marginStart: SIZES.five,
             }}>
             {item.email_verified_at !== null ? "Verified" : "Unverified"}
           </RegularTextCB>
@@ -597,7 +597,7 @@ export default class Home extends Component {
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
-            marginTop: 5,
+            marginTop: SIZES.five,
           }}>
           Car Wash
         </RegularTextCB>
@@ -609,8 +609,8 @@ export default class Home extends Component {
           <Image
             source={Images.star}
             style={{
-              height: 15,
-              width: 15,
+              height: SIZES.fifteen,
+              width: SIZES.fifteen,
               resizeMode: 'contain',
               tintColor: Colors.orangeYellow,
             }}
@@ -636,10 +636,10 @@ export default class Home extends Component {
         style={[
           styles.card,
           {
-            padding: 10,
+            padding: SIZES.ten,
             paddingBottom: 20,
-            marginHorizontal: 15,
-            marginTop: 5,
+            marginHorizontal: SIZES.fifteen,
+            marginTop: SIZES.five,
             marginBottom: 40,
           },
         ]}
@@ -668,7 +668,7 @@ export default class Home extends Component {
             style={{
               color: Colors.black,
               textDecorationLine: 'underline',
-              marginStart: 5,
+              marginStart: SIZES.five,
               fontSize: 14,
             }}>
             View Profile
@@ -677,7 +677,7 @@ export default class Home extends Component {
         <RegularTextCB
           style={{
             color: Colors.black,
-            marginTop: 10,
+            marginTop: SIZES.ten,
             fontSize: 14,
           }}>
           {item.name}
@@ -696,8 +696,8 @@ export default class Home extends Component {
           <Image
             source={Images.star}
             style={{
-              height: 15,
-              width: 15,
+              height: SIZES.fifteen,
+              width: SIZES.fifteen,
               resizeMode: 'contain',
               tintColor: Colors.orangeYellow,
             }}
@@ -714,10 +714,10 @@ export default class Home extends Component {
         <Image
           source={Images.circularArrowForward}
           style={{
-            height: 50,
-            width: 50,
+            height: SIZES.fifty,
+            width: SIZES.fifty,
             position: 'absolute',
-            bottom: -25,
+            bottom: -SIZES.twentyFive,
             alignSelf: 'center',
           }}
         />
@@ -739,11 +739,11 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 width: '100%',
                 alignItems: 'center',
-                paddingHorizontal: 20,
-                marginTop: Platform.OS === 'android' ? 20 : 60,
+                paddingHorizontal: SIZES.twenty,
+                marginTop: Platform.OS === 'android' ? SIZES.twenty : SIZES.ten*6,
               }}>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.6}
                 style={{ flexDirection: 'row', alignItems: 'center' }}
                 onPress={() =>
                   this.props.navigation.navigate(Constants.profile)
@@ -755,7 +755,7 @@ export default class Home extends Component {
                     resizeMode="cover"
                   />
                 </View>
-                <RegularTextCB style={{ fontSize: 16, marginStart: 10 }}>
+                <RegularTextCB style={{ fontSize: 16, marginStart: SIZES.ten }}>
                   Welcome,
                 </RegularTextCB>
                 <RegularTextCB
@@ -773,13 +773,13 @@ export default class Home extends Component {
                 }}
                 style={{
                   position: 'absolute',
-                  right: 20,
+                  right: SIZES.twenty,
                 }}>
                 <Image
                   source={Images.iconHamburger}
                   style={{
-                    height: 20,
-                    width: 20,
+                    height: SIZES.twenty,
+                    width: SIZES.twenty,
                     resizeMode: 'contain',
                   }}
                 />
@@ -787,8 +787,8 @@ export default class Home extends Component {
             </View>
             <TouchableOpacity
               style={{
-                marginVertical: 10,
-                paddingHorizontal: 20,
+                marginVertical: SIZES.ten,
+                paddingHorizontal: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -799,19 +799,19 @@ export default class Home extends Component {
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{ height: 50, width: 50 }}
+                style={{ height: SIZES.fifty, width: SIZES.fifty }}
               />
             </TouchableOpacity>
             <View
               style={{
-                paddingHorizontal: 20,
+                paddingHorizontal: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
               <RegularTextCB
                 style={{
-                  fontSize: 20,
+                  fontSize: SIZES.twenty,
                   color: Colors.black,
                 }}>
                 Browse categories
@@ -839,25 +839,25 @@ export default class Home extends Component {
                 // for ios
                 top: 0,
                 bottom: 0,
-                left: 10,
-                right: 10,
+                left: SIZES.ten,
+                right: SIZES.ten,
               }}
               contentContainerStyle={{
                 // for android
-                paddingHorizontal: Platform.OS === 'android' ? 10 : 0,
+                paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
               }}
             />
             <View
               style={{
-                paddingHorizontal: 20,
-                paddingTop: 20,
+                paddingHorizontal: SIZES.twenty,
+                paddingTop: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
               <RegularTextCB
                 style={{
-                  fontSize: 20,
+                  fontSize: SIZES.twenty,
                   color: Colors.black,
                 }}>
                 Vendors Around You
@@ -883,11 +883,11 @@ export default class Home extends Component {
               showsHorizontalScrollIndicator={false}
             />
             <RegularTextCB
-              style={{ fontSize: 20, marginTop: 10, paddingHorizontal: 20 }}>
+              style={{ fontSize: SIZES.twenty, marginTop: SIZES.ten, paddingHorizontal: SIZES.twenty }}>
               Top Services
             </RegularTextCB>
             <FlatList
-              style={{ paddingBottom: 100 }}
+              style={{ paddingBottom:SIZES.ten*10 }}
               numColumns={2}
               data={this.state.topServices}
               keyExtractor={(item) => item.id}
@@ -898,12 +898,12 @@ export default class Home extends Component {
         </ScrollView>
         <TouchableOpacity
           style={{
-            padding: 10,
+            padding: SIZES.ten,
             backgroundColor: Colors.navy,
-            borderRadius: 10,
+            borderRadius: SIZES.ten,
             position: 'absolute',
-            bottom: 15,
-            right: 15,
+            bottom: SIZES.fifteen,
+            right: SIZES.fifteen,
           }}
           onPress={() => {
             this.toggleIsQuickServiceModalVisible();
@@ -940,8 +940,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   textInputContainer: {
-    marginHorizontal: 10,
-    height: 70,
+    marginHorizontal: SIZES.ten,
+    height: SIZES.ten*7,
   },
   textInput: {
     fontSize: 16,
@@ -949,41 +949,41 @@ const styles = StyleSheet.create({
     color: Colors.black1,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
   circle: {
-    height: 120,
-    width: 120,
+    height: SIZES.ten*12,
+    width: SIZES.ten*12,
     resizeMode: 'stretch',
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    padding: SIZES.twenty,
+    borderTopLeftRadius: SIZES.twenty,
+    borderTopRightRadius: SIZES.twenty,
   },
   modal: {
     justifyContent: 'flex-end',
@@ -991,21 +991,21 @@ const styles = StyleSheet.create({
   },
   selectedFilter: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 2,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.five-3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.sickGreen,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen-3,
   },
   unselectedFilter: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 2,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.five-3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.white,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen-3,
   },
   spinnerTextStyle: {
     color: '#FFF',

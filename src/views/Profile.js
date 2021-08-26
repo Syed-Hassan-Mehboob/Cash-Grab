@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
@@ -45,7 +45,6 @@ export default class Profile extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    console.log('Token===========',token)
     this.setState({ accessToken: token }, () => this.getUserProfile());
   };
 
@@ -59,7 +58,6 @@ export default class Profile extends React.Component {
         countryCode: data.data.records.country_code,
         phone: data.data.records.phone,
         location: data.data.records.userProfile.location,
-
       });
     };
 
@@ -85,8 +83,8 @@ export default class Profile extends React.Component {
       <View style={styles.container}>
         <View
           style={{
-            borderBottomStartRadius: 30,
-            borderBottomEndRadius: 30,
+            borderBottomStartRadius: SIZES.ten*3,
+            borderBottomEndRadius: SIZES.ten*3,
             height: height / 2.15,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -98,13 +96,13 @@ export default class Profile extends React.Component {
               justifyContent: 'center',
               width: '100%',
               padding: 15,
-              marginTop: Platform.OS === 'android' ? 0 : 20,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
               Profile
             </RegularTextCB>
             <TouchableOpacity
-              style={{ position: 'absolute', right: 10 }}
+              style={{ position: 'absolute', right: SIZES.ten }}
               onPress={() => {
                 this.props.navigation.navigate(Constants.editProfile,{
                   avatar:Constants.imageURL+this.state.avatar,
@@ -118,8 +116,8 @@ export default class Profile extends React.Component {
               <Image
                 source={Images.iconEdit}
                 style={{
-                  height: 20,
-                  width: 20,
+                  height: SIZES.twenty,
+                  width: SIZES.twenty,
                   resizeMode: 'contain',
                 }}
               />
@@ -136,23 +134,23 @@ export default class Profile extends React.Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginTop: 5,
+              marginTop: SIZES.five,
             }}>
             <Image
               source={Images.iconVerified}
-              style={{ height: 15, width: 15, resizeMode: 'contain' }}
+              style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
             />
             <RegularTextCB
               style={{
                 color: Colors.turqoiseGreen,
                 fontSize: 14,
-                marginStart: 5,
+                marginStart: SIZES.five,
               }}>
               Verified
             </RegularTextCB>
           </View>
           <RegularTextCB
-            style={{ color: Colors.white, fontSize: 18, marginTop: 5 }}>
+            style={{ color: Colors.white, fontSize: 18, marginTop: SIZES.five }}>
             {this.state.name}
           </RegularTextCB>
           <RegularTextCB
@@ -160,7 +158,7 @@ export default class Profile extends React.Component {
               color: Colors.coolGrey,
               fontSize: 16,
               textAlign: 'center',
-              marginTop: 5,
+              marginTop: SIZES.five,
             }}>
             Hello there i am a professional car mechanic,{'\n'}I have 8 years of
             experience so feel free{'\n'}to contact me.
@@ -169,15 +167,15 @@ export default class Profile extends React.Component {
         <View
           style={[
             styles.card,
-            { marginHorizontal: 20, marginTop: -20, padding: 20 },
+            { marginHorizontal: SIZES.twenty, marginTop: -SIZES.twenty, padding: SIZES.twenty },
           ]}>
           <View
             style={[
               styles.card,
               {
-                marginTop: -40,
-                paddingVertical: 10,
-                paddingHorizontal: 20,
+                marginTop: -SIZES.ten*4,
+                paddingVertical: SIZES.ten,
+                paddingHorizontal: SIZES.twenty,
                 borderWidth: 1,
                 borderColor: Colors.sickGreen,
               },
@@ -191,7 +189,7 @@ export default class Profile extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
-              paddingVertical: 10,
+              paddingVertical: SIZES.ten,
             }}>
             <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               User Name
@@ -205,7 +203,7 @@ export default class Profile extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
-              paddingVertical: 10,
+              paddingVertical: SIZES.ten,
             }}>
             <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               Email Address
@@ -219,7 +217,7 @@ export default class Profile extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
-              paddingVertical: 10,
+              paddingVertical: SIZES.ten,
             }}>
             <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               Phone No.
@@ -233,7 +231,7 @@ export default class Profile extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
-              paddingVertical: 10,
+              paddingVertical: SIZES.ten,
             }}>
             <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
               Location
@@ -259,36 +257,36 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: SIZES.ten,
+    padding: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   iconUser: {
-    height: 90,
-    width: 90,
-    borderRadius: 90 / 2,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius: SIZES.ten*9 / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: 90,
-    width: 90,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
     borderRadius: 45,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   spinnerTextStyle: {
     color: '#FFF',

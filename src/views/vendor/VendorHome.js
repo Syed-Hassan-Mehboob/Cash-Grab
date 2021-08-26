@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
@@ -40,6 +40,8 @@ export default class VendorHome extends Component {
       service: '',
       rateRequested: '',
       location: '',
+      countryCode: '',
+      phone: '',
       address: '',
       exactTime: '',
       allJobs: []
@@ -89,10 +91,15 @@ export default class VendorHome extends Component {
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
+    //  console.log(' Profile=====',data.userProfile)
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phone: data.data.records.phone,
+        location: data.data.records.userProfile.location,
       });
     };
 
@@ -111,6 +118,7 @@ export default class VendorHome extends Component {
       .then(onSuccess)
       .catch(onFailure);
   };
+
 
   getCategories = () => {
     const onSuccess = ({ data }) => {
@@ -148,7 +156,7 @@ export default class VendorHome extends Component {
         style={{ alignItems: 'center' }}>
         <Image style={styles.circle} source={{ uri: Constants.imageURL + "/uploads/category/e237696c743f4e524697907f27019c341623746681.png" }} />
         <RegularTextCB
-          style={{ fontSize: 14, marginTop: -20, color: Colors.coolGrey }}>
+          style={{ fontSize: 14, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
           {item.name}
         </RegularTextCB>
       </TouchableOpacity>
@@ -160,7 +168,7 @@ export default class VendorHome extends Component {
     return (
       <TouchableOpacity
         activeOpacity={0.5}
-        style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },]}
+        style={[styles.card, { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom:SIZES.twenty, marginTop: SIZES.five },]}
         onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
         <View
           style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -172,21 +180,21 @@ export default class VendorHome extends Component {
               resizeMode="cover"
             />
           </View>
-          <View style={{ marginStart: 10 }}>
+          <View style={{ marginStart:SIZES.ten }}>
             <RegularTextCB
-              style={{ color: Colors.black, fontSize: 16, }}>
+              style={{ color: Colors.black, fontSize:SIZES.fifteen+1, }}>
               {item.user.name}
             </RegularTextCB>
             <View
-              style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', }}>
-              <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
-              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
+              style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center', }}>
+              <Image source={Images.iconVerified} style={{ height: SIZES.fifteen, width:SIZES.fifteen, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
+              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart:SIZES.fifteen, }}>
                 {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', marginTop:SIZES.fifteen, alignItems: 'center', justifyContent: 'space-between' }}>
           <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
             {item.title}
           </RegularTextCB>
@@ -207,29 +215,29 @@ export default class VendorHome extends Component {
           {item.description}
         </RegularTextCB>
         <View
-          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+          style={{ flexDirection: 'row', marginTop:SIZES.five, alignItems: 'center' }}>
           <Image
             source={Images.iconLocationPin}
-            style={{ height: 17, width: 17, resizeMode: 'contain' }}
+            style={{ height:SIZES.fifteen+2, width:SIZES.fifteen+2, resizeMode: 'contain' }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
-              marginStart: 5,
+              marginStart:SIZES.five,
             }}>
             {item.address}
           </RegularTextCB>
         </View>
         <View
-          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
           <Image
             source={Images.iconStopWatch}
-            style={{ height: 17, width: 17, resizeMode: 'contain' }}
+            style={{ height:SIZES.fifteen+2, width:SIZES.fifteen+2, resizeMode: 'contain' }}
           />
           <View
             style={{
               flexDirection: 'row',
-              marginStart: 5,
+              marginStart: SIZES.five,
               alignItems: 'center',
               flex: 1,
               justifyContent: 'space-between',
@@ -266,8 +274,8 @@ export default class VendorHome extends Component {
                 flexDirection: 'row',
                 width: '100%',
                 alignItems: 'center',
-                paddingHorizontal: 20,
-                marginTop: Platform.OS === 'android' ? 20 : 60,
+                paddingHorizontal: SIZES.twenty,
+                marginTop: Platform.OS === 'android' ? SIZES.twenty :SIZES.fifty+SIZES.ten,
               }}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -282,10 +290,10 @@ export default class VendorHome extends Component {
                     resizeMode="cover"
                   />
                 </View>
-                <RegularTextCB style={{ fontSize: 16, marginStart: 10 }}>
+                <RegularTextCB style={{ fontSize: 16, marginStart:SIZES.ten }}>
                   Welcome,
                 </RegularTextCB>
-                <RegularTextCB style={{ fontSize: 16, marginStart: 3, color: Colors.sickGreen, }}>
+                <RegularTextCB style={{ fontSize: 16, marginStart:SIZES.five-2, color: Colors.sickGreen, }}>
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
@@ -293,16 +301,16 @@ export default class VendorHome extends Component {
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);
                 }}
-                style={{ position: 'absolute', right: 20, }}>
+                style={{ position: 'absolute', right: SIZES.twenty, }}>
                 <Image
                   source={Images.iconHamburger}
-                  style={{ height: 20, width: 20, resizeMode: 'contain', }} />
+                  style={{ height:SIZES.twenty, width:SIZES.twenty, resizeMode: 'contain', }} />
               </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={{
-                marginVertical: 10,
-                paddingHorizontal: 20,
+                marginVertical:SIZES.ten,
+                paddingHorizontal: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -313,19 +321,19 @@ export default class VendorHome extends Component {
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{ height: 50, width: 50 }}
+                style={{ height:SIZES.twenty, width:SIZES.twenty }}
               />
             </TouchableOpacity>
             <View
               style={{
-                paddingHorizontal: 20,
+                paddingHorizontal: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
               <RegularTextCB
                 style={{
-                  fontSize: 20,
+                  fontSize:SIZES.twenty,
                   color: Colors.black,
                 }}>
                 Browse categories
@@ -353,24 +361,24 @@ export default class VendorHome extends Component {
                 // for ios
                 top: 0,
                 bottom: 0,
-                left: 10,
-                right: 10,
+                left: SIZES.ten,
+                right: SIZES.ten,
               }}
               contentContainerStyle={{
                 // for android
-                paddingHorizontal: Platform.OS === 'android' ? 10 : 0,
+                paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
               }}
             />
             <View
               style={{
-                paddingHorizontal: 20,
-                paddingTop: 20,
+                paddingHorizontal: SIZES.twenty,
+                paddingTop: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
 
-              <RegularTextCB style={{ fontSize: 20, color: Colors.black, }}>Jobs For You</RegularTextCB>
+              <RegularTextCB style={{ fontSize:SIZES.twenty, color: Colors.black, }}>Jobs For You</RegularTextCB>
 
               <TouchableOpacity onPress={() => { this.props.navigation.navigate(Constants.vendorAllJobs, { accessToken: this.state.accessToken }) }}>
                 <RegularTextCB style={{ color: Colors.black, textDecorationLine: 'underline' }}>See All</RegularTextCB>
@@ -401,50 +409,50 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   textInputContainer: {
-    marginHorizontal: 10,
-    height: 70,
+    marginHorizontal:SIZES.ten,
+    height:SIZES.fifty+SIZES.twenty,
   },
   textInput: {
-    fontSize: 16,
+    fontSize:SIZES.fifteen+1,
     flex: 1,
     color: Colors.black1,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.fifty+SIZES.ten,
+    width:SIZES.fifty+SIZES.ten,
+    borderRadius: SIZES.fifty+SIZES.ten / 2,
     resizeMode: 'contain',
   },
   circle: {
-    height: 120,
-    width: 120,
+    height:SIZES.ten*12,
+    width:SIZES.ten*12,
     resizeMode: 'stretch',
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height:SIZES.fifty+SIZES.ten,
+    width:SIZES.fifty+SIZES.ten,
+    borderRadius:SIZES.twenty+SIZES.ten,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius:SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation:SIZES.ten,
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    padding:SIZES.twenty,
+    borderTopLeftRadius:SIZES.twenty,
+    borderTopRightRadius:SIZES.twenty,
   },
   spinnerTextStyle: {
     color: '#FFF',

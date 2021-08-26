@@ -12,7 +12,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
@@ -71,12 +71,12 @@ export default class OTP extends Component {
         source={Images.loginBgWeb}
         style={[styles.container, { width: '100%' }]}>
         <KeyboardAvoidingView
-          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20 }}>
+          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{ marginStart: 15, alignSelf: 'flex-start' }}>
+            style={{ marginStart: SIZES.fifteen, alignSelf: 'flex-start' }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
@@ -86,14 +86,14 @@ export default class OTP extends Component {
                 height: 70,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 40,
+                marginTop: SIZES.ten*4,
               }}
             />
             <BoldTextCB
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: 30,
+                marginTop: SIZES.ten*3,
               }}>
               Verification
             </BoldTextCB>
@@ -110,7 +110,7 @@ export default class OTP extends Component {
           <View style={[styles.childContainer]}>
             <View style={[styles.textInputContainer]}>
               <OTPInputView
-                style={{ width: '90%', height: 75, marginTop: 30 }}
+                style={{ width: '90%', height: SIZES.ten*7, marginTop: SIZES.ten*3 }}
                 pinCount={4}
                 code={this.state.code}
                 onCodeChanged={(code) => {
@@ -123,7 +123,7 @@ export default class OTP extends Component {
               />
             </View>
           </View>
-          <View style={{ marginVertical: 50, marginHorizontal: 15 }}>
+          <View style={{ marginVertical: SIZES.fifty, marginHorizontal: SIZES.fifteen }}>
             <ButtonRadius10
               label="VERIFY"
               bgColor={Colors.sickGreen}
@@ -143,15 +143,15 @@ export default class OTP extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
@@ -172,22 +172,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: SIZES.fifteen,
   },
   card: {
-    height: 65,
-    width: 65,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
     backgroundColor: Colors.white,
     borderColor: Colors.sickGreen,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    borderRadius: SIZES.ten,
+    paddingHorizontal: SIZES.twenty,
+    paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
     color: Colors.black,
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
     fontFamily: Constants.fontRegular,
     fontSize: 24,

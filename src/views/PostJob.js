@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
@@ -28,6 +28,7 @@ const {height, width} = Dimensions.get('window');
 import axios from 'axios';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import RNFetchBlob from 'react-native-fetch-blob';
+
 export default class postJob extends Component {
   constructor(props) {
     super(props);
@@ -95,12 +96,12 @@ export default class postJob extends Component {
             shadowColor: '#000',
             shadowOffset: {
               width: 0,
-              height: 5,
+              height: SIZES.five,
             },
             shadowOpacity: 0.36,
             shadowRadius: 6.68,
             elevation: 11,
-            paddingHorizontal: 5,
+            paddingHorizontal: SIZES.five,
             borderRadius: 8,
           },
           textInput: {
@@ -110,7 +111,7 @@ export default class postJob extends Component {
             marginRight: 0,
           },
           listView: {
-            marginTop: 10,
+            marginTop: SIZES.ten,
             borderRadius: 8,
             overflow: 'hidden',
             backgroundColor: '#fff',
@@ -224,7 +225,7 @@ export default class postJob extends Component {
     // formData.append("title", "shohab");
     // formData.append("price", 100);
     // formData.append("description", "test");
-    // formData.append("expiry_date", "2021 - 07 - 30");
+    // formData.append("expiry_date", "2021 - 07 - SIZES.ten*3");
     // formData.append("address", "test");
     // // formData.append("image", "file:///data/user/0/com.cashgrab/cache/rn_image_picker_lib_temp_7362e0f2-90b9-413c-8dfb-c481f32f4559.jpg");
     // // formData.append("services", this.state.services);
@@ -238,7 +239,7 @@ export default class postJob extends Component {
       title: 'shohab',
       price: '100',
       description: 'test',
-      expiry_date: '2021 - 07 - 30',
+      expiry_date: '2021 - 07 - SIZES.ten*3',
       address: 'test',
       // image: this.state.jobImages,
       services: this.state.services,
@@ -275,7 +276,7 @@ export default class postJob extends Component {
     formData.append('title', 'shohab');
     formData.append('price', 100);
     formData.append('description', 'test');
-    formData.append('expiry_date', '2021 - 07 - 30');
+    formData.append('expiry_date', '2021 - 07 - SIZES.ten*3');
     formData.append('address', 'test');
     formData.append(
       'image',
@@ -374,15 +375,15 @@ export default class postJob extends Component {
               direction === 'left' ? (
                 <Image
                   source={Images.arrowBack}
-                  style={{height: 20, width: 20, resizeMode: 'contain'}}
+                  style={{height: SIZES.twenty, width: SIZES.twenty, resizeMode: 'contain'}}
                 />
               ) : (
                 <Image
                   source={Images.arrowBack}
                   style={{
                     transform: [{scaleX: -1}],
-                    height: 20,
-                    width: 20,
+                    height: SIZES.twenty,
+                    width: SIZES.twenty,
                     resizeMode: 'contain',
                   }}
                 />
@@ -425,14 +426,14 @@ export default class postJob extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: 15,
-              marginTop: Platform.OS === 'android' ? 0 : 20,
+              padding: SIZES.fifteen,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
-            <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
+            <RegularTextCB style={{fontSize: SIZES.ten*3, color: Colors.black}}>
               Post a Job
             </RegularTextCB>
           </View>
-          <View style={{paddingHorizontal: 20, paddingTop: 10}}>
+          <View style={{paddingHorizontal: SIZES.twenty, paddingTop: SIZES.ten}}>
             <View>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Service Caption
@@ -449,7 +450,7 @@ export default class postJob extends Component {
                 style={[styles.textInput]}
               />
             </View>
-            <View style={{marginTop: 20}}>
+            <View style={{marginTop: SIZES.twenty}}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Select Service
               </RegularTextCB>
@@ -464,7 +465,7 @@ export default class postJob extends Component {
               />
             </View>
 
-            <View style={[{marginTop: 20}]}>
+            <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Rate Requested
               </RegularTextCB>
@@ -478,23 +479,23 @@ export default class postJob extends Component {
                 style={[styles.textInput]}
               />
             </View>
-            <View style={[{marginTop: 20}]}>
+            <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Location
               </RegularTextCB>
               <View
                 style={[
                   {
-                    height: 60,
+                    height: SIZES.ten*6,
                     backgroundColor: Colors.white,
-                    borderRadius: 10,
+                    borderRadius: SIZES.ten,
                     shadowColor: '#c5c5c5',
-                    shadowOffset: {width: 5, height: 5},
+                    shadowOffset: {width: SIZES.five, height: SIZES.five},
                     shadowOpacity: 1.0,
-                    shadowRadius: 10,
-                    elevation: 10,
+                    shadowRadius: SIZES.ten,
+                    elevation: SIZES.ten,
                     justifyContent: 'center',
-                    paddingLeft: 20,
+                    paddingLeft: SIZES.twenty,
                   },
                 ]}>
                 <TouchableOpacity
@@ -516,7 +517,7 @@ export default class postJob extends Component {
                 }}
               /> */}
             </View>
-            <View style={[{marginTop: 20}]}>
+            <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Address
               </RegularTextCB>
@@ -530,7 +531,7 @@ export default class postJob extends Component {
                 style={[styles.textInput]}
               />
             </View>
-            <View style={{marginTop: 20}}>
+            <View style={{marginTop: SIZES.twenty}}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Expiry date
               </RegularTextCB>
@@ -547,7 +548,7 @@ export default class postJob extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={[{marginTop: 20}]}>
+            <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Job Description
               </RegularTextCB>
@@ -556,7 +557,7 @@ export default class postJob extends Component {
                   ref={'job_desc'}
                   placeholder={'Enter Job Description'}
                   multiline={true}
-                  numberOfLines={5}
+                  numberOfLines={SIZES.five}
                   value={this.state.jobDesc}
                   onChangeText={(text) => {
                     this.setState({jobDesc: text});
@@ -564,8 +565,8 @@ export default class postJob extends Component {
                   style={[
                     styles.textInput,
                     {
-                      height: 120,
-                      paddingTop: 10,
+                      height: SIZES.ten*12,
+                      paddingTop: SIZES.ten,
                       alignItems: 'flex-start',
                       textAlignVertical: 'top',
                     },
@@ -577,13 +578,13 @@ export default class postJob extends Component {
               onPress={() => {
                 this.openGallery();
               }}
-              style={[styles.dashBorder, {marginTop: 30, padding: 25}]}>
+              style={[styles.dashBorder, {marginTop: SIZES.ten*3, padding: 25}]}>
               <Image
                 source={Images.cloud}
-                style={{height: 50, width: 80, resizeMode: 'contain'}}
+                style={{height: SIZES.fifty, width: SIZES.ten*8, resizeMode: 'contain'}}
               />
               <RegularTextCB
-                style={{marginTop: 10, color: Colors.black, fontSize: 16}}>
+                style={{marginTop: SIZES.ten, color: Colors.black, fontSize: 16}}>
                 Upload Photo
               </RegularTextCB>
               <RegularTextCB style={{color: Colors.coolGrey}}>
@@ -591,7 +592,7 @@ export default class postJob extends Component {
               </RegularTextCB>
             </TouchableOpacity>
             {this.state.jobImages.length > 0 ? (
-              <View style={{height: '8%', marginVertical: 30}}>
+              <View style={{height: '8%', marginVertical: SIZES.ten*3}}>
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
@@ -601,10 +602,10 @@ export default class postJob extends Component {
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image
                           style={{
-                            height: 90,
-                            width: 90,
-                            marginHorizontal: 10,
-                            borderRadius: 10,
+                            height: SIZES.ten*9,
+                            width: SIZES.ten*9,
+                            marginHorizontal: SIZES.ten,
+                            borderRadius: SIZES.ten,
                           }}
                           source={{uri: item}}
                           resizeMode="cover"
@@ -612,9 +613,9 @@ export default class postJob extends Component {
                         <View
                           style={{
                             position: 'absolute',
-                            padding: 5,
-                            top: 3,
-                            right: 10,
+                            padding: SIZES.five,
+                            top: SIZES.five-2,
+                            right: SIZES.ten,
                           }}>
                           <TouchableOpacity
                             onPress={() => {
@@ -622,10 +623,10 @@ export default class postJob extends Component {
                             }}
                             style={{
                               padding: 4,
-                              height: 17,
-                              width: 17,
+                              height: SIZES.fifteen+2,
+                              width: SIZES.fifteen+2,
                               backgroundColor: Colors.white,
-                              borderRadius: 10,
+                              borderRadius: SIZES.ten,
                               overflow: 'hidden',
                             }}>
                             <Image
@@ -644,8 +645,8 @@ export default class postJob extends Component {
 
             <View
               style={{
-                marginVertical: this.state.jobImages.length > 0 ? 0 : 30,
-                paddingBottom: this.state.jobImages.length > 0 ? 40 : 0,
+                marginVertical: this.state.jobImages.length > 0 ? 0 : SIZES.ten*3,
+                paddingBottom: this.state.jobImages.length > 0 ? SIZES.ten*4 : 0,
               }}>
               <ButtonRadius10
                 bgColor={Colors.sickGreen}
@@ -667,18 +668,18 @@ export default class postJob extends Component {
           <View
             style={{
               flex: 1,
-              padding: 20,
-              backgroundColor: 'rgba(52, 52, 52, 0.5)',
+              padding: SIZES.twenty,
+              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
             }}>
-            <View style={{flex: 1, padding: 5, flexDirection: 'row'}}>
+            <View style={{flex: 1, padding: SIZES.five, flexDirection: 'row'}}>
               {this.GooglePlacesInput()}
               <TouchableOpacity
-                style={{marginTop: 12, marginLeft: 5}}
+                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
                 onPress={() => {
                   this.setState({showModal: false});
                 }}>
                 <Image
-                  style={{height: 15, width: 15}}
+                  style={{height: SIZES.fifteen, width: SIZES.fifteen}}
                   resizeMode="contain"
                   source={Images.iconClose}
                 />
@@ -703,8 +704,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   textInput: {
@@ -715,30 +716,30 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    height: 120,
+    height: SIZES.ten*12,
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: SIZES.ten,
+    padding: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   dashBorder: {
     borderWidth: 2,
     borderStyle: 'dashed',
     borderColor: Colors.sickGreen,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     alignItems: 'center',
     justifyContent: 'center',
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    padding: SIZES.twenty,
+    borderTopLeftRadius: SIZES.twenty,
+    borderTopRightRadius: SIZES.twenty,
   },
   modal: {
     justifyContent: 'flex-end',
@@ -746,34 +747,34 @@ const styles = StyleSheet.create({
   },
   selectedFilter: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 2,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.five-3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.sickGreen,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen,
   },
   unselectedFilter: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 2,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.five-3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.white,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen,
   },
   selectedDateBG: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     backgroundColor: Colors.sickGreen,
-    borderRadius: 15,
+    borderRadius: SIZES.fifteen,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   bottomSheetBody: {
     flex: 1,
@@ -784,15 +785,15 @@ const styles = StyleSheet.create({
   },
   dateButton: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    borderRadius: SIZES.ten,
+    paddingHorizontal: SIZES.twenty,
+    paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
-    height: 60,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
+    height: SIZES.ten*6,
     justifyContent: 'center',
   },
 });

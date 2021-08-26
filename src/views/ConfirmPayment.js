@@ -7,11 +7,10 @@ import {
   View,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
-
 export default class ConfirmPayment extends Component {
   constructor(props) {
     super(props);
@@ -28,24 +27,24 @@ export default class ConfirmPayment extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            padding: SIZES.fifteen,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: 30}}>Confirm Payment</RegularTextCB>
+          <RegularTextCB style={{fontSize: SIZES.ten*3}}>Confirm Payment</RegularTextCB>
         </View>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            paddingHorizontal: 15,
-            marginTop: 15,
+            paddingHorizontal: SIZES.fifteen,
+            marginTop: SIZES.fifteen,
           }}>
           <View style={styles.circleCard}>
             <Image source={Images.emp1} style={styles.iconUser} />
@@ -55,7 +54,7 @@ export default class ConfirmPayment extends Component {
               fontSize: 16,
               color: Colors.sickGreen,
               flex: 1,
-              marginHorizontal: 10,
+              marginHorizontal: SIZES.ten,
             }}>
             Damian Santosa
           </RegularTextCB>
@@ -70,30 +69,30 @@ export default class ConfirmPayment extends Component {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            paddingHorizontal: 15,
-            marginTop: 15,
+            paddingHorizontal: SIZES.fifteen,
+            marginTop: SIZES.fifteen,
           }}>
           <Image
             source={Images.iconRepairing}
-            style={{height: 30, width: 30, resizeMode: 'contain'}}
+            style={{height: SIZES.ten*3, width: SIZES.ten*3, resizeMode: 'contain'}}
           />
-          <View style={{marginStart: 10}}>
+          <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16}}>Repairing</RegularTextCB>
             <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
               3 AC split units maintenace
             </RegularTextCB>
           </View>
         </View>
-        <View style={{padding: 15}}>
+        <View style={{padding: SIZES.fifteen}}>
           <RegularTextCB
-            style={{color: Colors.black, fontSize: 18, marginTop: 20}}>
+            style={{color: Colors.black, fontSize: 18, marginTop: SIZES.twenty}}>
             Payment Details
           </RegularTextCB>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginTop: 20,
+              marginTop: SIZES.twenty,
             }}>
             <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
               Credit Card Number
@@ -106,7 +105,7 @@ export default class ConfirmPayment extends Component {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginTop: 15,
+              marginTop: SIZES.fifteen,
             }}>
             <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
               Amount
@@ -119,7 +118,7 @@ export default class ConfirmPayment extends Component {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginTop: 15,
+              marginTop: SIZES.fifteen,
             }}>
             <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
               Phone No.
@@ -132,7 +131,7 @@ export default class ConfirmPayment extends Component {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginTop: 15,
+              marginTop: SIZES.fifteen,
             }}>
             <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
               Address
@@ -144,7 +143,7 @@ export default class ConfirmPayment extends Component {
         </View>
         <View
           style={{
-            padding: 15,
+            padding: SIZES.fifteen,
             position: 'absolute',
             bottom: 0,
             start: 0,
@@ -169,8 +168,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   textInput: {
@@ -180,39 +179,39 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   card: {
     flexDirection: 'row',
-    height: 120,
+    height: SIZES.ten*12,
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: SIZES.ten,
+    padding: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
   dashBorder: {
     borderWidth: 2,
     borderStyle: 'dashed',
     borderColor: Colors.sickGreen,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import RegularTextCB from '../components/RegularTextCB';
 
 export default class Settings extends React.Component {
@@ -84,19 +84,19 @@ export default class Settings extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            padding: SIZES.fifteen,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
             Settings
           </RegularTextCB>
         </View>
-        <View style={{margin: 10}}>
+        <View style={{margin: SIZES.ten}}>
           <TouchableOpacity
             style={[
               styles.card,
               {
-                padding: 15,
+                padding: SIZES.fifteen,
                 borderWidth: this.state.isGeneralSettingsSelected ? 2 : 0,
               },
             ]}
@@ -111,7 +111,7 @@ export default class Settings extends React.Component {
             style={[
               styles.card,
               {
-                padding: 15,
+                padding: SIZES.fifteen,
                 borderWidth: this.state.isAccountSettingsSelected ? 2 : 0,
               },
             ]}
@@ -126,7 +126,7 @@ export default class Settings extends React.Component {
             style={[
               styles.card,
               {
-                padding: 15,
+                padding: SIZES.fifteen,
                 borderWidth: this.state.isNotificationsSelected ? 2 : 0,
               },
             ]}
@@ -140,7 +140,7 @@ export default class Settings extends React.Component {
           <TouchableOpacity
             style={[
               styles.card,
-              {padding: 15, borderWidth: this.state.isChatSelected ? 2 : 0},
+              {padding: SIZES.fifteen, borderWidth: this.state.isChatSelected ? 2 : 0},
             ]}
             onPress={() => {
               this.selectChat();
@@ -161,20 +161,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
-    margin: 10,
+    borderRadius: SIZES.ten,
+    padding: SIZES.twenty,
+    margin: SIZES.ten,
     borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
 });

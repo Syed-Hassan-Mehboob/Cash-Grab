@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
@@ -161,7 +161,7 @@ export default class ChatListing extends Component {
 
   renderUsersItem = ({item}) => {
     return (
-      <View style={[styles.circleCard, {margin: 10}]}>
+      <View style={[styles.circleCard, {margin: SIZES.ten}]}>
         <Image source={item.image} style={styles.iconUser} resizeMode="cover" />
       </View>
     );
@@ -172,12 +172,12 @@ export default class ChatListing extends Component {
       <TouchableOpacity
         activeOpacity={0.5}
         style={{
-          margin: 10,
+          margin: SIZES.ten,
           flexDirection: 'row',
           alignItems: 'center',
           borderBottomWidth: 0.2,
           borderColor: Colors.coolGrey,
-          paddingBottom: 10,
+          paddingBottom: SIZES.ten,
         }}
         onPress={() => this.props.navigation.navigate(Constants.chat)}>
         <View style={styles.circleCard}>
@@ -187,7 +187,7 @@ export default class ChatListing extends Component {
             resizeMode="cover"
           />
         </View>
-        <View style={{marginStart: 10, flex: 1}}>
+        <View style={{marginStart: SIZES.ten, flex: 1}}>
           <RegularTextCB
             style={{
               fontSize: 16,
@@ -229,8 +229,8 @@ export default class ChatListing extends Component {
       <View style={styles.container}>
         <View
           style={{
-            borderBottomStartRadius: 30,
-            borderBottomEndRadius: 30,
+            borderBottomStartRadius: SIZES.ten*3,
+            borderBottomEndRadius: SIZES.ten*3,
             height: height / 3.75,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -241,11 +241,11 @@ export default class ChatListing extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              marginTop: Platform.OS === 'android' ? 10 : 20,
-              padding: 15,
+              marginTop: Platform.OS === 'android' ? SIZES.ten : SIZES.twenty,
+              padding: SIZES.fifteen,
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: 10}}
+              style={{position: 'absolute', left: SIZES.ten}}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
@@ -254,13 +254,13 @@ export default class ChatListing extends Component {
                 style={[styles.iconBack, {tintColor: Colors.white}]}
               />
             </TouchableOpacity>
-            <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
+            <RegularTextCB style={{fontSize: SIZES.ten*3, color: Colors.white}}>
               Chat
             </RegularTextCB>
             <View
               style={{
                 position: 'absolute',
-                right: 10,
+                right: SIZES.ten,
               }}>
               <Image
                 source={Images.emp1}
@@ -275,7 +275,7 @@ export default class ChatListing extends Component {
           </View>
           <View>
             <RegularTextCB
-              style={{fontSize: 20, color: Colors.white, marginStart: 15}}>
+              style={{fontSize: SIZES.twenty, color: Colors.white, marginStart: SIZES.fifteen}}>
               Favorites
             </RegularTextCB>
             <FlatList
@@ -293,7 +293,7 @@ export default class ChatListing extends Component {
           renderItem={this.renderChatListingItem}
           keyExtractor={(chat) => chat.id}
           contentContainerStyle={{
-            paddingBottom: 100,
+            paddingBottom:SIZES.ten*10,
           }}
         />
       </View>
@@ -307,30 +307,30 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     resizeMode: 'contain',
   },
   greenCirclrCard: {
-    height: 20,
-    width: 20,
-    borderRadius: 10,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    borderRadius: SIZES.ten,
     backgroundColor: Colors.sickGreen,
   },
 });

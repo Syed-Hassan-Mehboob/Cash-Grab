@@ -11,7 +11,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
@@ -111,29 +111,29 @@ export default class VerifyVia extends Component {
         source={Images.loginBgWeb}
         style={[styles.container, { width: '100%' }]}>
         <KeyboardAvoidingView
-          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20 }}>
+          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{ marginStart: 15, alignSelf: 'flex-start' }}>
+            style={{ marginStart: SIZES.fifteen, alignSelf: 'flex-start' }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: 70,
+                height: SIZES.ten*7,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 40,
+                marginTop: SIZES.ten*4,
               }}
             />
             <BoldTextCB
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: 30,
+                marginTop: SIZES.ten*3,
               }}>
               Verification
             </BoldTextCB>
@@ -146,14 +146,14 @@ export default class VerifyVia extends Component {
               Select an option to verify your account with
             </RegularTextCB>
           </View>
-          <View style={{ marginHorizontal: 20 }}>
+          <View style={{ marginHorizontal: SIZES.twenty }}>
             <TouchableOpacity
               activeOpacity={0.5}
               style={[
                 styles.card,
                 {
-                  marginTop: 50,
-                  height: 60,
+                  marginTop: SIZES.fifty,
+                  height: SIZES.ten*6,
                   borderColor:
                     this.state.verifyVia === 'email'
                       ? Colors.sickGreen
@@ -174,8 +174,8 @@ export default class VerifyVia extends Component {
               style={[
                 styles.card,
                 {
-                  marginTop: 20,
-                  height: 60,
+                  marginTop: SIZES.twenty,
+                  height: SIZES.ten*6,
                   borderColor:
                     this.state.verifyVia === 'phone'
                       ? Colors.sickGreen
@@ -192,7 +192,7 @@ export default class VerifyVia extends Component {
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-          <View style={{ marginVertical: 30, marginHorizontal: 15 }}>
+          <View style={{ marginVertical: SIZES.ten*3, marginHorizontal: SIZES.fifteen }}>
             <ButtonRadius10
               label="CONTINUE"
               bgColor={Colors.sickGreen}
@@ -214,15 +214,15 @@ export default class VerifyVia extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
@@ -236,14 +236,14 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: SIZES.twenty,
     borderWidth: 2,
   },
   underlineText: {

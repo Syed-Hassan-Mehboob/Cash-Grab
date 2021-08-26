@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {SafeAreaView, View, StyleSheet, Image} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 
@@ -116,14 +116,14 @@ export default class Categories extends Component {
           }}>
           <Image source={Images.arrowBack} style={styles.iconBack} />
         </TouchableOpacity>
-        <LightTextCB style={{fontSize: 30, marginTop: 30}}>
+        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten*3}}>
           Filter Categories
         </LightTextCB>
-        <LightTextCB style={{fontSize: 18, marginTop: 30}}>
+        <LightTextCB style={{fontSize: 18, marginTop: SIZES.ten*3}}>
           Categories
         </LightTextCB>
         <FlatList
-          style={{marginTop: 10}}
+          style={{marginTop: SIZES.ten}}
           data={this.categories}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
@@ -136,9 +136,9 @@ export default class Categories extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconForward: {
@@ -147,24 +147,24 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    padding: 20,
+    padding: SIZES.twenty,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: SIZES.twenty,
+    paddingBottom: SIZES.twenty,
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',

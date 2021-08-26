@@ -11,7 +11,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Colors from '../../common/Colors';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
@@ -52,7 +52,7 @@ export default class VenderNotifications extends Component {
       console.log(item.content)
     }))
     return (
-      <View style={{ marginHorizontal: 15 }}>
+      <View style={{ marginHorizontal:SIZES.fifteen }}>
         <RegularTextCB style={{ color: Colors.black, fontSize: 18 }}>
           {item.date}
         </RegularTextCB>
@@ -64,7 +64,7 @@ export default class VenderNotifications extends Component {
               style={[
                 styles.card,
                 {
-                  marginVertical: 10,
+                  marginVertical:SIZES.ten,
                   borderWidth: item.date === 'Latest' ? 1 : 0,
                 },
               ]}>
@@ -86,7 +86,7 @@ export default class VenderNotifications extends Component {
                   </View>
                   <View
                     style={{
-                      marginStart: 10,
+                      marginStart: SIZES.ten,
                       flex: 1,
                       flexShrink: 1,
                     }}>
@@ -105,7 +105,7 @@ export default class VenderNotifications extends Component {
                       style={{
                         fontSize: 14,
                         color: Colors.coolGrey,
-                        marginTop: 5,
+                        marginTop: SIZES.five,
                       }}>
                       {notification.content}
                     </RegularTextCB>
@@ -124,16 +124,16 @@ export default class VenderNotifications extends Component {
     return (
       <View
         style={{
-          borderTopLeftRadius: 20,
-          borderBottomLeftRadius: 20,
+          borderTopLeftRadius: SIZES.twenty,
+          borderBottomLeftRadius:SIZES.twenty,
           backgroundColor: Colors.sickGreen,
-          padding: 20,
+          padding:SIZES.twenty,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
         <Image
           source={Images.iconSwipeToDelete}
-          style={{ height: 20, width: 20 }}
+          style={{ height:SIZES.twenty, width:SIZES.twenty }}
         />
       </View>
     );
@@ -179,16 +179,16 @@ export default class VenderNotifications extends Component {
           Notifications
         </RegularTextCB>
         <SwipeListView
-          style={{ marginTop: 10 }}
+          style={{ marginTop: SIZES.ten }}
           data={this.state.notifications}
           renderItem={this.renderNotificationsItem}
           contentInset={{
             // for ios
-            bottom: 100,
+            bottom: SIZES.ten*10,
           }}
           contentContainerStyle={{
             // for android
-            paddingBottom: 100,
+            paddingBottom:SIZES.ten*10,
           }}
         />
         <Spinner
@@ -203,44 +203,44 @@ export default class VenderNotifications extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 100,
-    width: 100,
+    height: SIZES.ten*10,
+    width: SIZES.ten*10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
+    borderRadius: SIZES.ten*3 / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
     fontSize: 20,
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 20 : 40,
+    paddingTop: Platform.OS === 'android' ? SIZES.twenty :SIZES.ten*4,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding: 15,
+    padding: SIZES.fifteen,
     flex: 1,
   },
   formLabel: {
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -273,42 +273,42 @@ const styles = StyleSheet.create({
   card: {
     borderColor: Colors.sickGreen,
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width:SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation:SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
+    borderRadius:SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   rowFront: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
-    height: 60,
-    margin: 5,
-    marginBottom: 15,
+    borderRadius: SIZES.five,
+    height: SIZES.ten*6,
+    margin: SIZES.five,
+    marginBottom: SIZES.fifteen,
     shadowColor: '#999',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.five,
   },
   rowFrontVisible: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
-    height: 60,
-    padding: 10,
-    marginBottom: 15,
+    borderRadius: SIZES.five,
+    height: SIZES.ten*6,
+    padding: SIZES.ten,
+    marginBottom: SIZES.fifteen,
   },
   rowBack: {
     alignItems: 'center',
@@ -316,32 +316,32 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15,
-    margin: 5,
-    marginBottom: 15,
-    borderRadius: 5,
+    paddingLeft:SIZES.fifteen,
+    margin: SIZES.five,
+    marginBottom:SIZES.fifteen,
+    borderRadius: SIZES.five,
   },
   backTextWhite: {
     color: '#FFF',
   },
   rowFront: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
-    height: 60,
-    margin: 5,
-    marginBottom: 15,
+    borderRadius: SIZES.five,
+    height:SIZES.ten*6,
+    margin: SIZES.five,
+    marginBottom: SIZES.fifteen,
     shadowColor: '#999',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width:SIZES.five, height:SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.five,
   },
   rowFrontVisible: {
     backgroundColor: '#FFF',
-    borderRadius: 5,
-    height: 60,
-    padding: 10,
-    marginBottom: 15,
+    borderRadius: SIZES.five,
+    height: SIZES.ten*6,
+    padding: SIZES.ten,
+    marginBottom: SIZES.fifteen,
   },
   rowBack: {
     alignItems: 'center',
@@ -349,10 +349,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 15,
-    margin: 5,
-    marginBottom: 15,
-    borderRadius: 5,
+    paddingLeft:SIZES.fifteen,
+    margin: SIZES.five,
+    marginBottom:SIZES.fifteen,
+    borderRadius: SIZES.five,
   },
   backRightBtn: {
     alignItems: 'flex-end',
@@ -360,28 +360,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
-    width: 75,
-    paddingRight: 17,
+    width: SIZES.ten*8,
+    paddingRight: SIZES.twenty-3,
   },
   backRightBtnLeft: {
     backgroundColor: '#1f65ff',
-    right: 75,
+    right: SIZES.twenty-3,
   },
   backRightBtnRight: {
     backgroundColor: 'red',
     right: 0,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
+    borderTopRightRadius: SIZES.five,
+    borderBottomRightRadius: SIZES.five,
   },
   trash: {
-    height: 25,
-    width: 25,
-    marginRight: 7,
+    height: SIZES.twenty,
+    width: SIZES.twentyFive,
+    marginRight: SIZES.ten-7,
   },
   title: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: SIZES.five,
     color: '#666',
   },
   details: {

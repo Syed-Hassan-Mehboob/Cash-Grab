@@ -9,7 +9,7 @@ import {
   LogBox
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
@@ -174,7 +174,7 @@ export default class VendorSingleCategory extends Component {
     return (
       <TouchableOpacity
         activeOpacity={0.5}
-        style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5},]}
+        style={[styles.card, { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five},]}
         onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
         <View
           style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -185,21 +185,21 @@ export default class VendorSingleCategory extends Component {
               resizeMode="cover"
             />
           </View>
-          <View style={{ marginStart: 10 }}>
+          <View style={{ marginStart: SIZES.ten }}>
             <RegularTextCB
               style={{ color: Colors.black, fontSize: 16, }}>
               {item.user.name}
             </RegularTextCB>
             <View
-              style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', }}>
-              <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
-              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
+              style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center', }}>
+              <Image source={Images.iconVerified} style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
+              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: SIZES.five, }}>
                 {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center', justifyContent: 'space-between' }}>
           <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
             {item.title}
           </RegularTextCB>
@@ -220,7 +220,7 @@ export default class VendorSingleCategory extends Component {
           {item.description}
         </RegularTextCB>
         <View
-          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
           <Image
             source={Images.iconLocationPin}
             style={{ height: 17, width: 17, resizeMode: 'contain' }}
@@ -228,13 +228,13 @@ export default class VendorSingleCategory extends Component {
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
-              marginStart: 5,
+              marginStart: SIZES.five,
             }}>
             {item.address}
           </RegularTextCB>
         </View>
         <View
-          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
           <Image
             source={Images.iconStopWatch}
             style={{ height: 17, width: 17, resizeMode: 'contain' }}
@@ -242,7 +242,7 @@ export default class VendorSingleCategory extends Component {
           <View
             style={{
               flexDirection: 'row',
-              marginStart: 5,
+              marginStart: SIZES.five,
               alignItems: 'center',
               flex: 1,
               justifyContent: 'space-between',
@@ -281,10 +281,10 @@ export default class VendorSingleCategory extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{ position: 'absolute', left: 10 }}
+            style={{ position: 'absolute', left: SIZES.ten }}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
@@ -296,26 +296,26 @@ export default class VendorSingleCategory extends Component {
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={{ uri: Constants.imageURL + this.props.route.params.item.image }}
-              style={{ height: 50, width: 50 }}
+              style={{ height: SIZES.fifty, width: SIZES.fifty }}
             />
-            <RegularTextCB style={{ fontSize: 30, color: Colors.black }}>
+            <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>
               {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
         </View>
         <FlatList
-          style={{ marginTop: 10 }}
+          style={{ marginTop: SIZES.ten }}
           data={this.state.getJobs}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}
           contentInset={{
             // for ios
-            bottom: 100,
+            bottom: SIZES.ten*10,
           }}
           contentContainerStyle={{
             // for android
-            paddingBottom: 100,
+            paddingBottom: SIZES.ten*10,
           }}
         />
         <Spinner
@@ -330,45 +330,45 @@ export default class VendorSingleCategory extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 100,
-    width: 100,
+    height: SIZES.ten*10,
+    width: SIZES.ten*10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 15,
-    paddingHorizontal: 5,
+    paddingTop: SIZES.fifteen,
+    paddingHorizontal: SIZES.five,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding: 20,
+    padding: SIZES.twenty,
     flex: 1,
   },
   formLabel: {
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -400,23 +400,23 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   spinnerTextStyle: {
     color: '#FFF',

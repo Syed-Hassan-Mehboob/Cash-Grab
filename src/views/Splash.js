@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {StyleSheet, ImageBackground, Image, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 
 const Auth = CommonActions.reset({
@@ -47,7 +47,7 @@ export default class Splash extends Component {
         <ImageBackground source={Images.splashBgWeb} style={styles.splashBg}>
           <Image
             source={Images.cashGrabLogoNew}
-            style={{height: 70, width: '80%', resizeMode: 'contain'}}
+            style={{height: SIZES.ten*7, width: '80%', resizeMode: 'contain'}}
           />
         </ImageBackground>
       </LinearGradient>

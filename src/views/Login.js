@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
@@ -120,7 +120,7 @@ export default class Login extends Component {
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: 70,
+                height: SIZES.ten*7,
                 width: '60%',
                 resizeMode: 'contain',
                 marginTop: 85,
@@ -130,7 +130,7 @@ export default class Login extends Component {
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: 20,
+                marginTop: SIZES.twenty,
               }}>
               Welcome Back
             </BoldTextCB>
@@ -139,7 +139,7 @@ export default class Login extends Component {
             </RegularTextCB>
           </View>
           <View>
-            <View style={[styles.textInputContainer, {marginTop: 50}]}>
+            <View style={[styles.textInputContainer, {marginTop: SIZES.fifty}]}>
               <EditText
                 ref={'email'}
                 keyboardType="email-address"
@@ -151,7 +151,7 @@ export default class Login extends Component {
                 style={[styles.textInput]}
               />
             </View>
-            <View style={[styles.textInputContainer, {marginTop: 30}]}>
+            <View style={[styles.textInputContainer, {marginTop: SIZES.ten*3}]}>
               <EditText
                 ref={'password'}
                 placeholder={'Password'}
@@ -166,12 +166,12 @@ export default class Login extends Component {
               />
             </View>
           </View>
-          <View style={{marginHorizontal: 15}}>
+          <View style={{marginHorizontal: SIZES.fifteen}}>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginTop: 30,
+                marginTop: SIZES.ten*3,
               }}>
               <RegularTextCB style={styles.noUnderlineText}>
                 Rember Me
@@ -196,7 +196,7 @@ export default class Login extends Component {
                 />
               </TouchableOpacity>
             </View>
-            <View style={{marginVertical: 30}}>
+            <View style={{marginVertical: SIZES.ten*3}}>
               <ButtonRadius10
                 label="LOGIN"
                 bgColor={Colors.sickGreen}
@@ -204,7 +204,7 @@ export default class Login extends Component {
               />
             </View>
             <TouchableOpacity
-              style={{marginTop: 10, alignSelf: 'center'}}
+              style={{marginTop: SIZES.ten, alignSelf: 'center'}}
               onPress={() =>
                 this.props.navigation.navigate(Constants.forgetPassword)
               }>
@@ -218,7 +218,7 @@ export default class Login extends Component {
               flexDirection: 'row',
               alignSelf: 'center',
               position: 'absolute',
-              bottom: 20,
+              bottom: SIZES.twenty,
             }}
             onPress={() => {
               this.props.navigation.navigate(Constants.createAccount);
@@ -241,19 +241,19 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconTick: {
-    height: 15,
-    width: 15,
+    height: SIZES.fifteen,
+    width: SIZES.fifteen,
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: SIZES.fifteen,
   },
   underlineText: {
     color: Colors.black1,

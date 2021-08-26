@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../network/APIKit';
 import utils from '../utils';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -192,7 +192,7 @@ export default class Filter extends Component {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              marginTop: Platform.OS === 'android' ? 0 : 20,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
               style={{ position: 'absolute', left: 0 }}
@@ -213,10 +213,10 @@ export default class Filter extends Component {
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-          <View style={{ marginTop: 20 }}>
+          <View style={{ marginTop: SIZES.twenty }}>
             <RegularTextCB style={{ fontSize: 18 }}>Categories</RegularTextCB>
             <FlatList
-              style={{ marginTop: 10 }}
+              style={{ marginTop: SIZES.ten }}
               data={this.state.categories}
               numColumns={3}
               keyExtractor={(date) => date.id}
@@ -224,18 +224,18 @@ export default class Filter extends Component {
               extraData={this.state}
               contentInset={{
                 // for ios
-                bottom: 10,
+                bottom: SIZES.ten,
               }}
               contentContainerStyle={{
                 // for android
-                paddingBottom: 10,
+                paddingBottom: SIZES.ten,
               }}
             />
           </View>
-          <View style={{ marginTop: 20 }}>
+          <View style={{ marginTop: SIZES.twenty }}>
             <RegularTextCB style={{ fontSize: 18 }}>Price</RegularTextCB>
             <FlatList
-              style={{ marginTop: 10 }}
+              style={{ marginTop: SIZES.ten }}
               data={this.state.prices}
               numColumns={3}
               keyExtractor={(date) => date.id}
@@ -243,20 +243,20 @@ export default class Filter extends Component {
               extraData={this.state}
               contentInset={{
                 // for ios
-                bottom: 10,
+                bottom: SIZES.ten,
               }}
               contentContainerStyle={{
                 // for android
-                paddingBottom: 10,
+                paddingBottom: SIZES.ten,
               }}
             />
           </View>
-          <View style={{ marginTop: 20 }}>
+          <View style={{ marginTop: SIZES.twenty }}>
             <RegularTextCB style={{ fontSize: 18 }}>
               Location (within)
             </RegularTextCB>
             <FlatList
-              style={{ marginTop: 10 }}
+              style={{ marginTop: SIZES.ten }}
               data={this.state.locations}
               numColumns={3}
               keyExtractor={(slot) => slot.id}
@@ -265,11 +265,11 @@ export default class Filter extends Component {
               extraData={this.state}
               contentInset={{
                 // for ios
-                bottom: 10,
+                bottom: SIZES.ten,
               }}
               contentContainerStyle={{
                 // for android
-                paddingBottom: 10,
+                paddingBottom: SIZES.ten,
               }}
             />
           </View>
@@ -298,16 +298,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
     paddingHorizontal: 15,
-    paddingTop: 20,
+    paddingTop: SIZES.twenty,
   },
   childContainer: {
-    marginTop: 40,
+    marginTop: SIZES.ten*4,
     paddingBottom: 100,
   },
   selectedDate: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 10,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.ten,
     flex: 1 / 3,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
@@ -316,27 +316,27 @@ const styles = StyleSheet.create({
     shadowColor: '#c5c5c5',
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   unselectedDate: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 10,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.ten,
     flex: 1 / 3,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen-3,
     borderColor: Colors.white,
     shadowColor: '#c5c5c5',
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
 });

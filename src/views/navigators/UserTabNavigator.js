@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, Platform, View } from 'react-native';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import Home from '../Home';
@@ -133,13 +133,13 @@ const customTabBarStyle = {
   backgroundColor: Colors.white,
   style: {
     backgroundColor: Colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: SIZES.twenty,
+    borderTopRightRadius: SIZES.twenty,
     shadowColor: '#000000 ',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    height: Platform.OS === 'android' ? 60 : 80,
+    shadowRadius: SIZES.ten,
+    height: Platform.OS === 'android' ? SIZES.ten*6 :SIZES.ten*8,
     marginTop: 2,
     elevation: 4,
     borderTopWidth: 0,
@@ -157,7 +157,7 @@ const Tabs = () => {
           tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barHomeSelected : Images.barHome}
-              style={{ height: 25, width: 25, resizeMode: 'contain' }}
+              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
             />
           ),
         }}
@@ -169,7 +169,7 @@ const Tabs = () => {
           tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barBellSelected : Images.barBell}
-              style={{ height: 25, width: 25, resizeMode: 'contain' }}
+              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
             />
           ),
         }}
@@ -183,13 +183,13 @@ const Tabs = () => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                bottom: 10,
+                bottom: SIZES.ten,
               }}>
               <Image
                 source={Images.barPlus}
                 style={{
-                  height: 90,
-                  width: 90,
+                  height: SIZES.ten*9,
+                  width: SIZES.ten*9,
                   resizeMode: 'contain',
                 }}
               />
@@ -204,7 +204,7 @@ const Tabs = () => {
           tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barProfileSelected : Images.barProfile}
-              style={{ height: 25, width: 25, resizeMode: 'contain' }}
+              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
             />
           ),
         }}
@@ -216,7 +216,7 @@ const Tabs = () => {
           tabBarIcon: ({ focused, color }) => (
             <Image
               source={focused ? Images.barMoreSelected : Images.barMore}
-              style={{ height: 25, width: 25, resizeMode: 'contain' }}
+              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
             />
           ),
         }}

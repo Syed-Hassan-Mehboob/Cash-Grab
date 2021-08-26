@@ -16,7 +16,7 @@ import Slider from '@react-native-community/slider';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 
 const { height, width } = Dimensions.get('window');
@@ -122,11 +122,11 @@ export default class DateTimeSlots extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            padding: SIZES.fifteen,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{ position: 'absolute', left: 10 }}
+            style={{ position: 'absolute', left: SIZES.ten }}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
@@ -142,14 +142,14 @@ export default class DateTimeSlots extends Component {
         <View
           style={{
             flexDirection: 'row',
-            paddingHorizontal: 15,
+            paddingHorizontal: SIZES.fifteen,
             alignItems: 'center',
           }}>
           <Image
             source={Images.iconRepairing}
             style={{ height: 35, width: 35, resizeMode: 'contain' }}
           />
-          <View style={{ marginStart: 10 }}>
+          <View style={{ marginStart: SIZES.ten }}>
             <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
               Repairing
             </RegularTextCB>
@@ -163,11 +163,11 @@ export default class DateTimeSlots extends Component {
             flexDirection: 'row',
             width: '100%',
             alignItems: 'center',
-            marginHorizontal: 15,
+            marginHorizontal: SIZES.fifteen,
           }}>
           <Image
             source={Images.iconCalendar}
-            style={{ width: 25, height: 25, resizeMode: 'contain' }}
+            style={{ width: SIZES.twentyFive, height: SIZES.twentyFive, resizeMode: 'contain' }}
           />
           <Calendar
             firstDay={1}
@@ -180,15 +180,15 @@ export default class DateTimeSlots extends Component {
               direction === 'left' ? (
                 <Image
                   source={Images.arrowBack}
-                  style={{ height: 20, width: 20, resizeMode: 'contain' }}
+                  style={{ height: SIZES.twenty, width: SIZES.twenty, resizeMode: 'contain' }}
                 />
               ) : (
                 <Image
                   source={Images.arrowBack}
                   style={{
                     transform: [{ scaleX: -1 }],
-                    height: 20,
-                    width: 20,
+                    height: SIZES.twenty,
+                    width: SIZES.twenty,
                     resizeMode: 'contain',
                   }}
                 />
@@ -220,18 +220,18 @@ export default class DateTimeSlots extends Component {
             flexDirection: 'row',
             width: '100%',
             alignItems: 'center',
-            marginHorizontal: 15,
-            marginTop: 30,
+            marginHorizontal: SIZES.fifteen,
+            marginTop: SIZES.ten*3,
           }}>
           <Image
             source={Images.iconStopWatchGrey}
-            style={{ width: 25, height: 25, resizeMode: 'contain' }}
+            style={{ width: SIZES.twentyFive, height: SIZES.twentyFive, resizeMode: 'contain' }}
           />
           <View
             style={{
               borderWidth: 2,
-              borderRadius: 10,
-              marginStart: 20,
+              borderRadius: SIZES.ten,
+              marginStart: SIZES.twenty,
               borderColor: Colors.sickGreen,
             }}>
             <FlatList
@@ -242,7 +242,7 @@ export default class DateTimeSlots extends Component {
               renderItem={this.renderTimeSlotItem}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
-                paddingEnd: 50,
+                paddingEnd: SIZES.fifty,
               }}
             />
           </View>
@@ -251,9 +251,9 @@ export default class DateTimeSlots extends Component {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginHorizontal: 15,
+            marginHorizontal: SIZES.fifteen,
             alignSelf: 'flex-end',
-            marginTop: 15,
+            marginTop: SIZES.fifteen,
           }}>
           <RegularTextCB style={{ fontSize: 14 }}>
             {this.state.sliderValue}
@@ -262,7 +262,7 @@ export default class DateTimeSlots extends Component {
             style={{
               width: width / 1.3,
               height: 55,
-              marginStart: 10,
+              marginStart: SIZES.ten,
             }}
             minimumValue={0}
             maximumValue={340}
@@ -278,9 +278,9 @@ export default class DateTimeSlots extends Component {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginHorizontal: 15,
+            marginHorizontal: SIZES.fifteen,
             flex: 1,
-            marginTop: 15,
+            marginTop: SIZES.fifteen,
           }}>
           <View
             style={[
@@ -353,19 +353,19 @@ export default class DateTimeSlots extends Component {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginHorizontal: 15,
-            marginTop: 15,
+            marginHorizontal: SIZES.fifteen,
+            marginTop: SIZES.fifteen,
           }}>
           <Image
             source={Images.barHome}
             style={{
-              height: 25,
-              width: 25,
+              height: SIZES.twentyFive,
+              width: SIZES.twentyFive,
               resizeMode: 'contain',
               tintColor: Colors.coolGrey,
             }}
           />
-          <View style={{ marginHorizontal: 10, flex: 1 }}>
+          <View style={{ marginHorizontal: SIZES.ten, flex: 1 }}>
             <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
               Get service at home
             </RegularTextCB>
@@ -386,7 +386,7 @@ export default class DateTimeSlots extends Component {
             value={this.state.isSwitchEnabled}
           />
         </View>
-        <View style={{ marginVertical: 30, marginHorizontal: 15 }}>
+        <View style={{ marginVertical: SIZES.ten*3, marginHorizontal: SIZES.fifteen }}>
           <ButtonRadius10
             label="NEXT"
             bgColor={Colors.sickGreen}
@@ -406,72 +406,72 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
-    margin: 10,
+    borderRadius: SIZES.ten,
+    padding: SIZES.twenty,
+    margin: SIZES.ten,
     borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: SIZES.fifty,
+    width: SIZES.fifty,
+    borderRadius: SIZES.twentyFive,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   selectedDateBG: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     backgroundColor: Colors.sickGreen,
-    borderRadius: 15,
+    borderRadius: SIZES.fifteen,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   selectedTimeBG: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginHorizontal: 5,
+    paddingHorizontal: SIZES.fifteen,
+    paddingVertical: SIZES.fifteen,
+    marginHorizontal: SIZES.five,
     backgroundColor: Colors.sickGreen,
-    borderRadius: 15,
+    borderRadius: SIZES.fifteen,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
+    shadowRadius: SIZES.ten,
     alignItems: 'center',
-    elevation: 10,
-    marginBottom: 15,
+    elevation: SIZES.ten,
+    marginBottom: SIZES.fifteen,
   },
   unSelectedTimeBG: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderRadius: 15,
-    marginHorizontal: 5,
+    paddingHorizontal: SIZES.fifteen,
+    paddingVertical: SIZES.fifteen,
+    borderRadius: SIZES.fifteen,
+    marginHorizontal: SIZES.five,
     alignItems: 'center',
     backgroundColor: Colors.white,
-    marginBottom: 15,
+    marginBottom: SIZES.fifteen,
   },
   iconUser: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: SIZES.fifty,
+    width: SIZES.fifty,
+    borderRadius: SIZES.twentyFive,
     resizeMode: 'contain',
   },
   textInput: {
@@ -479,19 +479,19 @@ const styles = StyleSheet.create({
     fontFamily: Constants.fontRegular,
     color: Colors.black,
     borderColor: Colors.sickGreen,
-    borderBottomWidth: 5,
-    margin: 5,
+    borderBottomWidth: SIZES.five,
+    margin: SIZES.five,
     flex: 1,
     textAlign: 'center',
   },
   selector: {
     backgroundColor: Colors.sickGreen,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     flex: 1,
   },
   unselector: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     flex: 1,
   },
 });

@@ -9,7 +9,7 @@ import {
     LogBox,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
@@ -84,10 +84,10 @@ export default class FileredScreen extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                         width: '100%',
-                        marginTop: Platform.OS === 'android' ? 0 : 20,
+                        marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
                     }}>
                     <TouchableOpacity
-                        style={{ position: 'absolute', left: 10 }}
+                        style={{ position: 'absolute', left: SIZES.ten }}
                         onPress={() => {
                             this.props.navigation.goBack();
                         }}>
@@ -98,23 +98,23 @@ export default class FileredScreen extends Component {
                     </TouchableOpacity>
 
 
-                    <RegularTextCB style={{ fontSize: 30, color: Colors.black }}>All Jobs</RegularTextCB>
+                    <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>All Jobs</RegularTextCB>
 
                 </View>
 
                 <FlatList
-                    style={{ marginTop: 10 }}
+                    style={{ marginTop: SIZES.ten }}
                     data={this.state.allJobs}
                     keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
                     renderItem={this.renderSingleCategoriesItem}
                     contentInset={{
                         // for ios
-                        bottom: 100,
+                        bottom: SIZES.ten,
                     }}
                     contentContainerStyle={{
                         // for android
-                        paddingBottom: 100,
+                        paddingBottom: SIZES.ten,
                     }}
                 />
                 <Spinner
@@ -129,45 +129,45 @@ export default class FileredScreen extends Component {
 
 const styles = StyleSheet.create({
     iconBack: {
-        height: 20,
-        width: 20,
+        height: SIZES.twenty,
+        width: SIZES.twenty,
         resizeMode: 'contain',
     },
     iconFilter: {
-        height: 30,
-        width: 30,
+        height: SIZES.ten*3,
+        width: SIZES.ten*3,
         resizeMode: 'contain',
     },
     iconForward: {
-        height: 100,
-        width: 100,
+        height: SIZES.ten,
+        width: SIZES.ten,
         resizeMode: 'contain',
     },
     iconUser: {
-        height: 60,
-        width: 60,
-        borderRadius: 60 / 2,
+        height: SIZES.ten*6,
+        width: SIZES.ten*6,
+        borderRadius: SIZES.ten*6 / 2,
         resizeMode: 'contain',
     },
     iconPassword: {
-        fontSize: 20,
-        height: 20,
-        width: 20,
+        fontSize: SIZES.twenty,
+        height: SIZES.twenty,
+        width: SIZES.twenty,
         alignSelf: 'center',
         color: Colors.orange,
     },
     container: {
         backgroundColor: Colors.white,
         flex: 1,
-        paddingTop: 15,
-        paddingHorizontal: 5,
+        paddingTop: SIZES.fifteen,
+        paddingHorizontal: SIZES.five,
     },
     childContainer: {
         flex: 1,
         justifyContent: 'flex-end',
     },
     itemContainer: {
-        padding: 20,
+        padding: SIZES.twenty,
         flex: 1,
     },
     formLabel: {
@@ -199,23 +199,23 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#fff',
-        borderRadius: 20,
+        borderRadius: SIZES.twenty,
         flex: 1,
         shadowColor: '#c5c5c5',
-        shadowOffset: { width: 5, height: 5 },
+        shadowOffset: { width: SIZES.five, height: SIZES.five },
         shadowOpacity: 1.0,
-        shadowRadius: 10,
-        elevation: 10,
+        shadowRadius: SIZES.ten,
+        elevation: SIZES.ten,
     },
     circleCard: {
-        height: 60,
-        width: 60,
-        borderRadius: 30,
+        height: SIZES.ten*6,
+        width: SIZES.ten*6,
+        borderRadius: SIZES.ten*3,
         shadowColor: '#c5c5c5',
-        shadowOffset: { width: 5, height: 5 },
+        shadowOffset: { width: SIZES.five, height: SIZES.five },
         shadowOpacity: 0.15,
-        shadowRadius: 5,
-        elevation: 5,
+        shadowRadius: SIZES.five,
+        elevation: SIZES.five,
     },
     spinnerTextStyle: {
         color: '#FFF',

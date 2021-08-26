@@ -9,12 +9,11 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../../common/Colors';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
-
 export default class ViewJob extends React.Component {
   completedJobs = [
     {
@@ -66,7 +65,7 @@ export default class ViewJob extends React.Component {
       time: '12:00-3:00',
     },
     {
-      id: '5',
+      id: 'SIZES.five',
       image: Images.emp1,
       title: 'Ray Hammond',
       desc:
@@ -142,20 +141,20 @@ export default class ViewJob extends React.Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: 30}}>View Job</RegularTextCB>
+          <RegularTextCB style={{fontSize: SIZES.ten*3}}>View Job</RegularTextCB>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{marginBottom: 5}}>
-            <View style={{padding: 20}}>
+          <View style={{marginBottom: SIZES.five}}>
+            <View style={{padding: SIZES.twenty}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -168,7 +167,7 @@ export default class ViewJob extends React.Component {
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{marginStart: 10}}>
+                <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
                     style={{
                       color: Colors.black,
@@ -179,7 +178,7 @@ export default class ViewJob extends React.Component {
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginTop: 5,
+                      marginTop: SIZES.five,
                       alignItems: 'center',
                     }}>
                     <Image
@@ -190,7 +189,7 @@ export default class ViewJob extends React.Component {
                       style={{
                         color: Colors.turqoiseGreen,
                         fontSize: 12,
-                        marginStart: 5,
+                        marginStart: SIZES.five,
                       }}>
                       Verified
                     </RegularTextCB>
@@ -200,7 +199,7 @@ export default class ViewJob extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 }}>
@@ -235,7 +234,7 @@ export default class ViewJob extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
@@ -245,7 +244,7 @@ export default class ViewJob extends React.Component {
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
-                    marginStart: 5,
+                    marginStart: SIZES.five,
                   }}>
                   {this.completedJobs[0].location}
                 </RegularTextCB>
@@ -253,7 +252,7 @@ export default class ViewJob extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
@@ -263,7 +262,7 @@ export default class ViewJob extends React.Component {
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
-                    marginStart: 5,
+                    marginStart: SIZES.five,
                   }}>
                   {this.completedJobs[0].time}
                 </RegularTextCB>
@@ -292,7 +291,7 @@ export default class ViewJob extends React.Component {
               zoomEnabled={false}
               style={styles.mapStyle}
             />
-            <View style={{marginVertical: 30, marginHorizontal: 20}}>
+            <View style={{marginVertical: SIZES.ten*3, marginHorizontal: SIZES.twenty}}>
               <ButtonRadius10
                 label="CONTACT"
                 bgColor={Colors.sickGreen}
@@ -314,50 +313,50 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   mapStyle: {
-    height: 400,
+    height:SIZES.ten*40,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
-    elevation: 10,
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   carImage: {
-    height: 150,
-    width: 150,
+    height: SIZES.fifty*3,
+    width: SIZES.fifty*3,
     resizeMode: 'contain',
   },
   carImageShadow: {
-    height: 80,
-    width: 80,
-    borderRadius: 10,
+    height: SIZES.ten*8,
+    width: SIZES.ten*8,
+    borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
 });

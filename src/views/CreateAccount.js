@@ -10,11 +10,10 @@ import {
   Platform,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
-
 export default class CreateAccount extends React.Component {
   constructor(props) {
     super(props);
@@ -41,26 +40,26 @@ export default class CreateAccount extends React.Component {
           style={{
             flex: 1,
             alignItems: 'center',
-            paddingTop: Platform.OS === 'android' ? 0 : 20,
+            paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            style={{marginStart: SIZES.fifteen, alignSelf: 'flex-start'}}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
           <Image
             source={Images.cashGrabLogoNew2}
             style={{
-              height: 70,
+              height: SIZES.ten*7,
               width: '60%',
               resizeMode: 'contain',
-              marginTop: 100,
+              marginTop: SIZES.ten*10,
             }}
           />
           <BoldTextCB
-            style={{fontSize: 28, color: Colors.black, marginTop: 50}}>
+            style={{fontSize: 28, color: Colors.black, marginTop: SIZES.fifty}}>
             Create an account
           </BoldTextCB>
           <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
@@ -77,14 +76,14 @@ export default class CreateAccount extends React.Component {
             style={[
               styles.card,
               {
-                paddingVertical: 15,
-                marginTop: 20,
-                paddingHorizontal: 15,
+                paddingVertical: SIZES.fifteen,
+                marginTop: SIZES.twenty,
+                paddingHorizontal: SIZES.fifteen,
                 borderWidth: this.state.isUserSelected ? 2 : 0,
               },
             ]}>
             <Image source={Images.becomeAUser} style={styles.circularImage} />
-            <View style={{marginHorizontal: 10, flexShrink: 1}}>
+            <View style={{marginHorizontal: SIZES.ten, flexShrink: 1}}>
               <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
                 Become a user
               </RegularTextCB>
@@ -104,14 +103,14 @@ export default class CreateAccount extends React.Component {
             style={[
               styles.card,
               {
-                paddingVertical: 15,
-                marginTop: 20,
-                paddingHorizontal: 15,
+                paddingVertical: SIZES.fifteen,
+                marginTop: SIZES.twenty,
+                paddingHorizontal: SIZES.fifteen,
                 borderWidth: this.state.isVendorSelected ? 2 : 0,
               },
             ]}>
             <Image source={Images.becomeAVendor} style={styles.circularImage} />
-            <View style={{marginHorizontal: 10, flexShrink: 1}}>
+            <View style={{marginHorizontal:SIZES.ten, flexShrink: 1}}>
               <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
                 Become a vendor
               </RegularTextCB>
@@ -132,28 +131,28 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: '#fff',
     borderColor: Colors.sickGreen,
-    borderRadius: 15,
+    borderRadius: SIZES.fifteen,
     width: '90%',
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: 10,
-    padding: 15,
+    padding: SIZES.fifteen,
     elevation: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
   circularImage: {
-    height: 90,
-    width: 90,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
     borderRadius: 45,
   },
 });

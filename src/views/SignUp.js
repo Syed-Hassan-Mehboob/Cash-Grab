@@ -14,7 +14,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import LightTextCB from '../components/LightTextCB';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
@@ -22,7 +22,6 @@ import EditText from '../components/EditText';
 import utils from '../utils';
 import Axios from '../network/APIKit';
 import { MultiDropdownPicker } from '../components/MultiDropDownPicker'
-
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
@@ -186,7 +185,7 @@ export default class SignUp extends Component {
         style={[styles.container, { flex: 1, width: '100%' }]}>
         <View style={{ flex: 1 }}>
           <KeyboardAwareScrollView
-            style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20 }}
+            style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty }}
             contentContainerStyle={{ flexGrow: 1 }}
             showsVerticalScrollIndicator={false}>
             <View>
@@ -195,7 +194,7 @@ export default class SignUp extends Component {
                   this.props.navigation.goBack();
                 }}
                 style={{
-                  marginStart: 15,
+                  marginStart: SIZES.fifteen,
                   alignSelf: 'flex-start',
                 }}>
                 <Image source={Images.arrowBack} style={styles.iconBack} />
@@ -204,17 +203,17 @@ export default class SignUp extends Component {
                 <Image
                   source={Images.cashGrabLogoNew2}
                   style={{
-                    height: 50,
+                    height: SIZES.fifty,
                     width: '60%',
                     resizeMode: 'contain',
-                    marginTop: 40,
+                    marginTop: SIZES.ten*4,
                   }}
                 />
                 <BoldTextCB
                   style={{
                     fontSize: 28,
                     color: Colors.black,
-                    marginTop: 20,
+                    marginTop: SIZES.twenty,
                   }}>
                   Create an account
                 </BoldTextCB>
@@ -224,7 +223,7 @@ export default class SignUp extends Component {
               </View>
             </View>
             <View style={[styles.childContainer]}>
-              <View style={[styles.textInputContainer, { marginTop: 30 }]}>
+              <View style={[styles.textInputContainer, { marginTop: SIZES.ten*3 }]}>
                 <EditText
                   ref={'fullName'}
                   placeholder={'Full Name'}
@@ -251,7 +250,7 @@ export default class SignUp extends Component {
                 />
               }
 
-              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
+              <View style={[styles.textInputContainer, { marginTop: SIZES.fifteen }]}>
                 <EditText
                   ref={'email'}
                   keyboardType="email-address"
@@ -263,17 +262,17 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
+              <View style={[styles.textInputContainer, { marginTop: SIZES.fifteen }]}>
                 <TouchableOpacity
                   activeOpacity={0.5}
                   onPress={() => this.toggleIsCountryCodePickerVisible()}
                   style={[
                     styles.card,
                     {
-                      borderRadius: 10,
+                      borderRadius: SIZES.ten,
                       height: 60,
-                      padding: 10,
-                      marginEnd: 10,
+                      padding: SIZES.ten,
+                      marginEnd: SIZES.ten,
                       flex: 0,
                       justifyContent: 'center',
                       alignContent: 'center',
@@ -301,7 +300,7 @@ export default class SignUp extends Component {
                   style={[styles.textInput, { flex: 1 }]}
                 />
               </View>
-              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
+              <View style={[styles.textInputContainer, { marginTop: SIZES.fifteen }]}>
                 <EditText
                   ref={'password'}
                   placeholder={'Password'}
@@ -315,7 +314,7 @@ export default class SignUp extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              <View style={[styles.textInputContainer, { marginTop: 15 }]}>
+              <View style={[styles.textInputContainer, { marginTop: SIZES.fifteen }]}>
                 <EditText
                   ref={'confirm_password'}
                   placeholder={'Confirm Password'}
@@ -330,13 +329,13 @@ export default class SignUp extends Component {
                 />
               </View>
             </View>
-            <View style={{ justifyContent: 'flex-end', marginHorizontal: 15 }}>
+            <View style={{ justifyContent: 'flex-end', marginHorizontal: SIZES.fifteen }}>
               <View
                 style={[
                   {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    marginTop: 30,
+                    marginTop: SIZES.ten*3,
                   },
                 ]}>
                 <LightTextCB style={styles.noUnderlineText}>
@@ -351,7 +350,7 @@ export default class SignUp extends Component {
                   </LightTextCB>
                 </TouchableOpacity>
               </View>
-              <View style={{ marginVertical: 20 }}>
+              <View style={{ marginVertical: SIZES.twenty }}>
                 <ButtonRadius10
                   label="SIGN UP"
                   bgColor={Colors.sickGreen}
@@ -374,22 +373,22 @@ export default class SignUp extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   iconUser: {
-    height: 120,
-    width: 120,
-    borderRadius: 120 / 2,
+    height: SIZES.ten*12,
+    width: SIZES.ten*12,
+    borderRadius: SIZES.ten*12 / 2,
     resizeMode: 'contain',
   },
   container: {
@@ -412,7 +411,7 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: SIZES.fifteen,
   },
   underlineText: {
     color: Colors.black1,
@@ -429,46 +428,46 @@ const styles = StyleSheet.create({
     shadowColor: '#333333',
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    paddingTop: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    shadowRadius: SIZES.ten,
+    paddingTop: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
   panelHeader: {
     alignItems: 'center',
   },
   panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
+    width: SIZES.ten*4,
+    height: SIZES.ten-2,
+    borderRadius: SIZES.five-1,
     backgroundColor: '#00000040',
-    marginBottom: 10,
+    marginBottom: SIZES.ten,
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    padding: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
   orangeCircle: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 30 / 2,
+    borderRadius: SIZES.ten*3 / 2,
     alignSelf: 'flex-end',
-    right: 10,
+    right: SIZES.ten,
     backgroundColor: Colors.orange,
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   modal: {
     justifyContent: 'flex-end',
@@ -476,21 +475,21 @@ const styles = StyleSheet.create({
   },
   selectedFilter: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 2,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.five-3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.sickGreen,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen-3,
   },
   unselectedFilter: {
     alignItems: 'center',
-    paddingVertical: 10,
-    margin: 2,
+    paddingVertical: SIZES.ten,
+    margin: SIZES.five-3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.white,
-    borderRadius: 12,
+    borderRadius: SIZES.fifteen-3,
   },
 });
 

@@ -11,7 +11,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
@@ -74,19 +74,19 @@ export default class ForgetPassword extends Component {
         source={Images.loginBgWeb}
         style={[styles.container, {width: '100%'}]}>
         <KeyboardAvoidingView
-          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : 20}}>
+          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty}}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{marginStart: 15, alignSelf: 'flex-start'}}>
+            style={{marginStart: SIZES.fifteen, alignSelf: 'flex-start'}}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
           <View style={{alignItems: 'center'}}>
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: 70,
+                height: SIZES.ten*7,
                 width: '60%',
                 resizeMode: 'contain',
                 marginTop: 40,
@@ -96,7 +96,7 @@ export default class ForgetPassword extends Component {
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: 30,
+                marginTop: SIZES.ten*3,
               }}>
               Forgot Password
             </BoldTextCB>
@@ -123,7 +123,7 @@ export default class ForgetPassword extends Component {
               />
             </View>
           </View>
-          <View style={{marginVertical: 30, marginHorizontal: 15}}>
+          <View style={{marginVertical: SIZES.ten*3, marginHorizontal: SIZES.fifteen}}>
             <ButtonRadius10
               label="CONTINUE"
               bgColor={Colors.sickGreen}
@@ -143,15 +143,15 @@ export default class ForgetPassword extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: SIZES.fifteen,
   },
   underlineText: {
     color: Colors.black1,

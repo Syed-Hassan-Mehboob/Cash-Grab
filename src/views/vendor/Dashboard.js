@@ -14,7 +14,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import BoldTextCB from '../../components/BoldTextCB';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../../network/APIKit';
@@ -149,7 +149,7 @@ export default class Dashboard extends Component {
       <View
         style={[
           styles.card,
-          { padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5 },
+          { padding: SIZES.fifteen, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five },
         ]}>
         <View
           style={{
@@ -163,7 +163,7 @@ export default class Dashboard extends Component {
               resizeMode="cover"
             />
           </View>
-          <View style={{ marginStart: 10 }}>
+          <View style={{ marginStart: SIZES.ten }}>
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -174,18 +174,18 @@ export default class Dashboard extends Component {
             <View
               style={{
                 flexDirection: 'row',
-                marginTop: 5,
+                marginTop: SIZES.five,
                 alignItems: 'center',
               }}>
               <Image
                 source={Images.iconVerified}
-                style={{ height: 15, width: 15, resizeMode: 'contain' }}
+                style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
               />
               <RegularTextCB
                 style={{
                   color: Colors.turqoiseGreen,
                   fontSize: 12,
-                  marginStart: 5,
+                  marginStart: SIZES.five,
                 }}>
                 Verified
               </RegularTextCB>
@@ -195,7 +195,7 @@ export default class Dashboard extends Component {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 5,
+            marginTop: SIZES.five,
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
@@ -228,29 +228,29 @@ export default class Dashboard extends Component {
           {item.desc}
         </RegularTextCB>
         <View
-          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
           <Image
             source={Images.iconLocationPin}
-            style={{ height: 17, width: 17, resizeMode: 'contain' }}
+            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
-              marginStart: 5,
+              marginStart: SIZES.five,
             }}>
             {item.location}
           </RegularTextCB>
         </View>
         <View
-          style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
           <Image
             source={Images.iconStopWatch}
-            style={{ height: 17, width: 17, resizeMode: 'contain' }}
+            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
           />
           <View
             style={{
               flexDirection: 'row',
-              marginStart: 5,
+              marginStart: SIZES.five,
               alignItems: 'center',
               flex: 1,
               justifyContent: 'space-between',
@@ -283,31 +283,31 @@ export default class Dashboard extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            padding: SIZES.fifteen,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
-          <RegularTextCB style={{ fontSize: 30 }}>Dashboard</RegularTextCB>
+          <RegularTextCB style={{ fontSize: SIZES.ten*3 }}>Dashboard</RegularTextCB>
           <TouchableOpacity
-            style={{ position: 'absolute', right: 10 }}
+            style={{ position: 'absolute', right: SIZES.ten }}
             onPress={() => {
               this.props.navigation.navigate(Constants.withDraw);
             }}>
             <Image
               source={Images.iconWithDraw}
-              style={{ height: 40, width: 40 }}
+              style={{ height: SIZES.ten*4, width: SIZES.ten*4 }}
             />
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ marginTop: 10, marginHorizontal: 15 }}>
+          <View style={{ marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen }}>
             <RegularTextCB
               style={{
-                fontSize: 20,
+                fontSize: SIZES.twenty,
                 color: Colors.black,
               }}>
               Quick Job
             </RegularTextCB>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: SIZES.ten }}>
               <ButtonRadius10
                 label="1 Job available in your location"
                 bgColor={Colors.sickGreen}
@@ -319,22 +319,25 @@ export default class Dashboard extends Component {
           </View>
           <View
             style={{
-              marginTop: 20,
+              marginTop: SIZES.twenty,
               justifyContent: 'center',
               flexDirection: 'row',
             }}>
-            <RegularTextCB style={{ fontSize: 20 }}>
+            <RegularTextCB style={{ fontSize: SIZES.twenty
+             }}>
               Total Earnings:
             </RegularTextCB>
             <RegularTextCB
-              style={{ fontSize: 20, marginStart: 5, color: Colors.sickGreen }}>
+              style={{ fontSize: SIZES.twenty
+              , marginStart: SIZES.five, color: Colors.sickGreen }}>
               $100
             </RegularTextCB>
           </View>
-          <View style={{ marginTop: 15, marginHorizontal: 15 }}>
+          <View style={{ marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen }}>
             <RegularTextCB
               style={{
-                fontSize: 20,
+                fontSize: SIZES.twenty
+                ,
                 color: Colors.black,
               }}>
               Job In Progress
@@ -343,10 +346,10 @@ export default class Dashboard extends Component {
               style={[
                 styles.card,
                 {
-                  padding: 15,
-                  marginHorizontal: 5,
-                  marginBottom: 5,
-                  marginTop: 5,
+                  padding: SIZES.fifteen,
+                  marginHorizontal: SIZES.five,
+                  marginBottom: SIZES.five,
+                  marginTop: SIZES.five,
                 },
               ]}>
               <View
@@ -361,7 +364,7 @@ export default class Dashboard extends Component {
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{ marginStart: 10 }}>
+                <View style={{ marginStart: SIZES.ten }}>
                   <RegularTextCB
                     style={{
                       color: Colors.black,
@@ -372,18 +375,18 @@ export default class Dashboard extends Component {
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginTop: 5,
+                      marginTop: SIZES.five,
                       alignItems: 'center',
                     }}>
                     <Image
                       source={Images.iconVerified}
-                      style={{ height: 15, width: 15, resizeMode: 'contain' }}
+                      style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
                     />
                     <RegularTextCB
                       style={{
                         color: Colors.turqoiseGreen,
                         fontSize: 12,
-                        marginStart: 5,
+                        marginStart: SIZES.five,
                       }}>
                       Verified
                     </RegularTextCB>
@@ -393,7 +396,7 @@ export default class Dashboard extends Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 }}>
@@ -428,17 +431,17 @@ export default class Dashboard extends Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
                   source={Images.iconLocationPin}
-                  style={{ height: 17, width: 17, resizeMode: 'contain' }}
+                  style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
                 />
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
-                    marginStart: 5,
+                    marginStart: SIZES.five,
                   }}>
                   {this.completedJobs[0].location}
                 </RegularTextCB>
@@ -446,17 +449,17 @@ export default class Dashboard extends Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
                   source={Images.iconStopWatch}
-                  style={{ height: 17, width: 17, resizeMode: 'contain' }}
+                  style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
                 />
                 <View
                   style={{
                     flexDirection: 'row',
-                    marginStart: 5,
+                    marginStart: SIZES.five,
                     alignItems: 'center',
                     flex: 1,
                     justifyContent: 'space-between',
@@ -477,16 +480,17 @@ export default class Dashboard extends Component {
               </View>
             </View>
           </View>
-          <View style={{ marginTop: 15, marginHorizontal: 15 }}>
+          <View style={{ marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen }}>
             <RegularTextCB
               style={{
-                fontSize: 20,
+                fontSize: SIZES.twenty
+                ,
                 color: Colors.black,
               }}>
               Completed Jobs
             </RegularTextCB>
             <FlatList
-              style={{ paddingBottom: 100 }}
+              style={{ paddingBottom: SIZES.ten*10 }}
               data={this.completedJobs}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
@@ -505,50 +509,53 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty
+    ,
+    width: SIZES.twenty
+    ,
     resizeMode: 'contain',
   },
   quickJobCard: {
     flexDirection: 'row',
-    height: 50,
+    height: SIZES.fifty,
     borderColor: Colors.sickGreen,
     borderWidth: 1.5,
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+    borderRadius: SIZES.ten,
+    paddingHorizontal: SIZES.fifteen,
+    paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty
+    ,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius:SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOpacity: 0.5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
 });

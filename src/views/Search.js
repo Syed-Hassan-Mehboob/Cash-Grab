@@ -12,7 +12,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import EditText from '../components/EditText';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 
 export default function Search(props) {
 
@@ -27,7 +27,7 @@ export default function Search(props) {
       ratings: '1.0',
     },
     {
-      id: '2',
+      id: 'SIZES.five-3',
       title: 'Electrician',
       name: 'Mark Ruffalo',
       image: Images.emp2,
@@ -54,7 +54,7 @@ export default function Search(props) {
       ratings: '1.0',
     },
     {
-      id: '5',
+      id: 'SIZES.five',
       title: 'Home Renovation',
       name: 'Mark Ruffalo',
       image: Images.emp1,
@@ -99,7 +99,7 @@ export default function Search(props) {
       ratings: '1.0',
     },
     {
-      id: '10',
+      id: 'SIZES.ten',
       title: 'Home Cleaner',
       name: 'Mark Ruffalo',
       image: Images.emp2,
@@ -165,7 +165,7 @@ export default function Search(props) {
 
   const renderBestEmployeesItem = ({ item }) => {
     return (
-      <View style={[styles.card, { margin: 10 }]}>
+      <View style={[styles.card, { margin: SIZES.ten }]}>
         <TouchableOpacity
           style={styles.itemContainer}
           onPress={() => {
@@ -192,7 +192,7 @@ export default function Search(props) {
                 </View>
                 <View
                   style={{
-                    marginStart: 10,
+                    marginStart: SIZES.ten,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -216,8 +216,8 @@ export default function Search(props) {
                         <Image
                           source={Images.star}
                           style={{
-                            height: 15,
-                            width: 15,
+                            height: SIZES.fifteen,
+                            width: SIZES.fifteen,
                             resizeMode: 'contain',
                             tintColor: Colors.orangeYellow,
                           }}
@@ -226,7 +226,7 @@ export default function Search(props) {
                           style={{
                             fontSize: 14,
                             color: Colors.orangeYellow,
-                            marginStart: 2,
+                            marginStart: SIZES.five-3,
                           }}>
                           {item.ratings}
                         </RegularTextCB>
@@ -247,7 +247,7 @@ export default function Search(props) {
                   flexDirection: 'row',
                   alignItems: 'flex-end',
                   flexShrink: 1,
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                 }}>
                 <RegularTextCB
                   style={{ flex: 1, fontSize: 16, color: Colors.coolGrey }}>
@@ -280,7 +280,7 @@ export default function Search(props) {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: Platform.OS === 'android' ? 0 : 20,
+          marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
 
         }}>
         <TouchableOpacity
@@ -290,7 +290,7 @@ export default function Search(props) {
           }}>
           <Image source={Images.arrowBack} style={styles.iconBack} />
         </TouchableOpacity>
-        <RegularTextCB style={{ fontSize: 30 }}>Search</RegularTextCB>
+        <RegularTextCB style={{ fontSize: SIZES.ten*3 }}>Search</RegularTextCB>
       </View>
       <View
         style={{
@@ -310,23 +310,23 @@ export default function Search(props) {
         <TouchableOpacity>
           <Image
             source={Images.iconSearch}
-            style={{ height: 50, width: 50, resizeMode: 'stretch' }}
+            style={{ height: SIZES.fifty, width: SIZES.fifty, resizeMode: 'stretch' }}
           />
         </TouchableOpacity>
       </View>
       <FlatList
-        style={{ marginTop: 10 }}
+        style={{ marginTop: SIZES.ten }}
         data={bestEmployees}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={renderBestEmployeesItem}
         contentInset={{
           // for ios
-          bottom: 100,
+          bottom: SIZES.ten*10,
         }}
         contentContainerStyle={{
           // for android
-          paddingBottom: 100,
+          paddingBottom: SIZES.ten*10,
         }}
       />
     </View>
@@ -338,17 +338,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: SIZES.twenty,
+    paddingTop: SIZES.twenty,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     resizeMode: 'contain',
   },
   textInput: {
@@ -358,38 +358,38 @@ const styles = StyleSheet.create({
     color: Colors.black1,
   },
   itemContainer: {
-    padding: 20,
+    padding: SIZES.twenty,
     flex: 1,
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / SIZES.five-3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 50,
-    width: 50,
+    height: SIZES.fifty,
+    width: SIZES.fifty,
     resizeMode: 'contain',
   },
 });

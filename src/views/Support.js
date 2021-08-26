@@ -11,7 +11,7 @@ import {
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
@@ -66,8 +66,8 @@ export default class Support extends React.Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: 15,
-                width: 15,
+                height: SIZES.fifteen,
+                width: SIZES.fifteen,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
@@ -84,13 +84,13 @@ export default class Support extends React.Component {
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: SIZES.twenty}}>
           <ButtonRadius10
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{height: 50}} />
+        <View style={{height: SIZES.fifty}} />
       </View>
     );
   };
@@ -98,8 +98,8 @@ export default class Support extends React.Component {
   choosePhotoFromGallery = () => {
     this.toggleIsModalVisible();
     ImagePicker.openPicker({
-      width: 500,
-      height: 500,
+      width: SIZES.ten*50,
+      height: SIZES.ten*50,
       cropping: true,
     }).then((image) => {
       this.setState({avatar: image.path});
@@ -109,8 +109,8 @@ export default class Support extends React.Component {
   takePhotoFromCamera = () => {
     this.toggleIsModalVisible();
     ImagePicker.openCamera({
-      width: 500,
-      height: 500,
+      width: SIZES.ten*50,
+      height: SIZES.ten*50,
       cropping: true,
     }).then((image) => {
       this.setState({avatar: image.path});
@@ -120,7 +120,7 @@ export default class Support extends React.Component {
   renderChatItem = ({item}) => {
     return (
       <View
-        style={{flexDirection: 'row', marginVertical: 5, marginHorizontal: 15}}>
+        style={{flexDirection: 'row', marginVertical: SIZES.five, marginHorizontal: SIZES.fifteen}}>
         <View style={styles.circleCard}>
           <Image
             source={item.user.image}
@@ -129,7 +129,7 @@ export default class Support extends React.Component {
           />
         </View>
         <View>
-          <View style={{marginStart: 10}}>
+          <View style={{marginStart: SIZES.ten}}>
             <View style={[styles.chatContainer]}>
               <RegularTextCB>{item.message.text}</RegularTextCB>
             </View>
@@ -151,11 +151,11 @@ export default class Support extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            padding: SIZES.fifteen,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
@@ -178,13 +178,13 @@ export default class Support extends React.Component {
               bottom: 0,
               left: 0,
               right: 0,
-              padding: 10,
+              padding: SIZES.ten,
             },
           ]}>
           <TouchableOpacity onPress={() => this.toggleIsModalVisible()}>
             <Image
               source={Images.iconCamera}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
+              style={{height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain'}}
             />
           </TouchableOpacity>
           <TextInput
@@ -194,7 +194,7 @@ export default class Support extends React.Component {
             onChangeText={(text) => this.setState({message: text})}
           />
           <TouchableOpacity onPress={() => {}}>
-            <Image source={Images.iconSend} style={{height: 40, width: 40}} />
+            <Image source={Images.iconSend} style={{height: SIZES.ten*4, width: SIZES.ten*4}} />
           </TouchableOpacity>
         </View>
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
@@ -211,36 +211,36 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   chatContainer: {
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     backgroundColor: Colors.paleGrey,
-    padding: 10,
+    padding: SIZES.ten,
   },
   circleCard: {
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+    height: SIZES.ten*4,
+    width: SIZES.ten*4,
+    borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   iconUser: {
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+    height: SIZES.ten*4,
+    width: SIZES.ten*4,
+    borderRadius: SIZES.twenty,
     resizeMode: 'contain',
   },
   textInput: {
     fontSize: 16,
     flex: 1,
-    marginHorizontal: 10,
-    height: 50,
+    marginHorizontal: SIZES.ten,
+    height: SIZES.fifty,
     fontFamily: Constants.fontRegular,
     color: Colors.black,
   },
@@ -250,8 +250,8 @@ const styles = StyleSheet.create({
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    padding: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
 });
