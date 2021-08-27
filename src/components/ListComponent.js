@@ -5,24 +5,28 @@ import Constants from "../common/Constants";
 import Images from "../common/Images";
 import LightTextCB from "./LightTextCB";
 import RegularTextCB from "./RegularTextCB";
-
+import { useNavigation } from '@react-navigation/native';
 
 const ListComponent = (props) => {
+    const navigation = useNavigation();
     const item = props.item;
-    console.log('List Componant=======',item);
+    // console.log('List Componant=======',item.user.userProfile);
     return (
         <TouchableOpacity
             activeOpacity={0.5}
             style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },]}
-            onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
+            onPress={() => navigation.navigate(Constants.viewJob,{
+                item:item
+            })}>
             <View
                 style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={styles.circleCard}>
-                    {/* <Image
-                        source={{ uri: Constants.imageURL + props.screenName ? item.category.image : item.user.userProfile.image }}
+                    <Image
+                        // source={{ uri: Constants.imageURL + props.screenName ? item.category.image : item.user.userProfile.image }}
+                        source={{uri: Constants.imageURL+item.user.userProfile.image}}
                         style={styles.iconUser}
                         resizeMode="cover"
-                    /> */}
+                    />
                 </View>
                 <View style={{ marginStart: 10 }}>
                     <RegularTextCB

@@ -511,6 +511,8 @@ export default class Home extends Component {
   }
 
   renderCategoryItem = ({ item }) => {
+
+    // console.log('Catagory Item ====',item)
     return (
       <TouchableOpacity
         onPress={() =>
@@ -629,7 +631,6 @@ export default class Home extends Component {
   };
 
   renderUrgentServicesItem = ({ item }) => {
-   
     return (
       <TouchableOpacity
         activeOpacity={0.8}

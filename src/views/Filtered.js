@@ -65,7 +65,8 @@ export default class FileredScreen extends Component {
 
     renderSingleCategoriesItem = ({ item }) => {
         return (
-
+        //    console.log('=====Item',item['user']['userProfile']),
+        //    console.log('=====Item',item.user.userProfile),
             <ListComponent item={item} />
         )
 
@@ -104,7 +105,7 @@ export default class FileredScreen extends Component {
 
                 <FlatList
                     style={{ marginTop: SIZES.ten }}
-                    data={this.state.allJobs}
+                    data={(this.state.allJobs)}
                     keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
                     renderItem={this.renderSingleCategoriesItem}

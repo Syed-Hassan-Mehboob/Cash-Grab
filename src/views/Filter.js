@@ -278,7 +278,7 @@ export default class Filter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-                // this.props.navigation.navigate(Constants.Filtered)
+                this.props.navigation.navigate(Constants.Filtered)
               }}
             />
           </View>

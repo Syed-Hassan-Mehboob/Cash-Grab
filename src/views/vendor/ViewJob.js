@@ -114,6 +114,8 @@ export default class ViewJob extends React.Component {
     },
   ];
 
+
+
   initialMapState = {
     region: {
       latitude: 24.9050562,
@@ -125,7 +127,11 @@ export default class ViewJob extends React.Component {
 
   constructor(props) {
     super(props);
+
+    // console.log('props Data ======',this.props.route.params.item.user.name);
   }
+
+  
 
   state = {
     region: this.initialMapState.region,
@@ -162,7 +168,7 @@ export default class ViewJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={this.completedJobs[0].image}
+                    source={{uri:Constants.imageURL+this.props.route.params.item.user.userProfile.image}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -173,7 +179,7 @@ export default class ViewJob extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.completedJobs[0].title}
+                    {this.props.route.params.item.user.name}
                   </RegularTextCB>
                   <View
                     style={{
@@ -208,14 +214,14 @@ export default class ViewJob extends React.Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.completedJobs[0].requirement}
+                  {this.props.route.params.item.title}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  {this.completedJobs[0].pricing}
+                  {this.props.route.params.item.price+'/'+this.props.route.params.item.time}
                 </LightTextCB>
               </View>
               <RegularTextCB
@@ -223,13 +229,13 @@ export default class ViewJob extends React.Component {
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
-                {this.completedJobs[0].type}
+                {this.props.route.params.item.user.type}
               </RegularTextCB>
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                {this.completedJobs[0].desc}
+                {this.props.route.params.item.description}
               </RegularTextCB>
               <View
                 style={{
@@ -246,7 +252,7 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.completedJobs[0].location}
+                  {this.props.route.params.item.location}
                 </RegularTextCB>
               </View>
               <View
@@ -264,7 +270,7 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.completedJobs[0].time}
+                  {this.props.route.params.item.time}
                 </RegularTextCB>
               </View>
               <View

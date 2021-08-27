@@ -20,10 +20,8 @@ import utils from '../../utils';
 import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-
-
+import ListComponent from '../../components/ListComponent';
 export default class VendorHome extends Component {
-
 
   openDrawer = () => {
     this.props.navigation.openDrawer();
@@ -91,7 +89,7 @@ export default class VendorHome extends Component {
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
-    //  console.log(' Profile=====',data.userProfile)
+    //  console.log(' Profile=====',data.data.records.userProfile)
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
@@ -125,7 +123,7 @@ export default class VendorHome extends Component {
 
       this.setState({ isLoading: false, categories: data.data.records }, () => {
       }, () => {
-        console.log("state data", this.state.categories)
+        // console.log("state data", this.state.categories)
       });
     };
 
@@ -149,7 +147,7 @@ export default class VendorHome extends Component {
   };
 
   renderCategoryItem = ({ item }) => {
-    // console.log("renderCategoryItem=====================================",item.image)
+
     return (
       <TouchableOpacity
         onPress={() => { this.props.navigation.navigate(Constants.vendorSingleCategory, { item: item, }); }}
@@ -164,99 +162,10 @@ export default class VendorHome extends Component {
   };
 
   renderJobsForYouItem = ({ item }) => {
-
     return (
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={[styles.card, { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom:SIZES.twenty, marginTop: SIZES.five },]}
-        onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
-        <View
-          style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{ uri: Constants.imageURL + item.user.userProfile.image }}
-              // source={item.image}
-              style={styles.iconUser}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{ marginStart:SIZES.ten }}>
-            <RegularTextCB
-              style={{ color: Colors.black, fontSize:SIZES.fifteen+1, }}>
-              {item.user.name}
-            </RegularTextCB>
-            <View
-              style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center', }}>
-              <Image source={Images.iconVerified} style={{ height: SIZES.fifteen, width:SIZES.fifteen, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
-              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart:SIZES.fifteen, }}>
-                {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', marginTop:SIZES.fifteen, alignItems: 'center', justifyContent: 'space-between' }}>
-          <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
-            {item.title}
-          </RegularTextCB>
 
-          <LightTextCB
-            style={{ color: Colors.black, fontSize: 12, }}>
-            ${item.price}
-          </LightTextCB>
-
-        </View>
-
-        <RegularTextCB
-          style={{ color: Colors.sickGreen, fontSize: 12, }}>
-          {item.name}
-        </RegularTextCB>
-        <RegularTextCB
-          style={{ color: Colors.coolGrey, }}>
-          {item.description}
-        </RegularTextCB>
-        <View
-          style={{ flexDirection: 'row', marginTop:SIZES.five, alignItems: 'center' }}>
-          <Image
-            source={Images.iconLocationPin}
-            style={{ height:SIZES.fifteen+2, width:SIZES.fifteen+2, resizeMode: 'contain' }}
-          />
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              marginStart:SIZES.five,
-            }}>
-            {item.address}
-          </RegularTextCB>
-        </View>
-        <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{ height:SIZES.fifteen+2, width:SIZES.fifteen+2, resizeMode: 'contain' }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: SIZES.five,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-              }}>
-              {item.time}
-            </RegularTextCB>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <ListComponent item={item} />
+ 
     );
   };
 
@@ -321,7 +230,7 @@ export default class VendorHome extends Component {
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{ height:SIZES.twenty, width:SIZES.twenty }}
+                style={{ height:SIZES.twenty, width:SIZES.twentyFive }}
               />
             </TouchableOpacity>
             <View

@@ -84,6 +84,7 @@ export default class VendorEditProfile extends Component {
     let phone = this.state.phoneNumber;
     let image = this.state.avatar;
     let location = this.state.location;
+    
     if (utils.isEmpty(name)) {
       utils.showToast('Invalid Name');
       return;
@@ -222,9 +223,9 @@ export default class VendorEditProfile extends Component {
       height:SIZES.five*100,
       cropping: true,
     }).then((image) => {
-      console.log('=====Image',image.path)
+      // console.log('=====Image',image.path)
       this.setState({avatar:image.path});
-      console.log('Avator===',this.state.avatar)
+      // console.log('Avator===',this.state.avatar)
     });
   };
 

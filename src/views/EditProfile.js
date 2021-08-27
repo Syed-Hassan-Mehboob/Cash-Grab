@@ -540,8 +540,8 @@ export default class EditProfile extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: SIZES.five,
-    width: SIZES.five,
+    height: SIZES.fifteen,
+    width: SIZES.fifteen,
     resizeMode: 'contain',
   },
   iconPassword: {

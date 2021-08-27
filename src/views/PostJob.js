@@ -25,10 +25,9 @@ import {LocationPicker} from '../components/LocationPicker';
 import {Calendar} from 'react-native-calendars';
 import GetLocation from 'react-native-get-location';
 const {height, width} = Dimensions.get('window');
-import axios from 'axios';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import RNFetchBlob from 'react-native-fetch-blob';
-
+import axios from 'axios';
 export default class postJob extends Component {
   constructor(props) {
     super(props);
@@ -182,83 +181,8 @@ export default class postJob extends Component {
     Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
   };
 
-  // checkValidation = () => {
-  //   let serviceCaption = this.state.serviceCaption;
-  //   let services = this.state.services;
-  //   let rateRequested = this.state.rateRequested;
-  //   let location = this.state.location;
-  //   let expirydate = this.state.expirydate;
-  //   let jobDesc = this.state.jobDesc;
-  //   let jobImages = this.state.jobImages;
-
-  //   // if (serviceCaption === '' || serviceCaption === undefined) {
-  //   //   utils.showToast('Invalid serviceCaption');
-  //   //   return;
-  //   // }
-  //   // if (services.length === 0 || services === undefined) {
-  //   //   utils.showToast('Invalid services');
-  //   //   return;
-  //   // }
-
-  //   // if (rateRequested === '' || rateRequested === undefined) {
-  //   //   utils.showToast('Invalid rateRequested');
-  //   //   return;
-  //   // }
-  //   // if (location === '' || location === undefined) {
-  //   //   utils.showToast('Invalid location');
-  //   //   return;
-  //   // }
-  //   // if (expirydate === '' || expirydate === undefined) {
-  //   //   utils.showToast('Invalid availability');
-  //   //   return;
-  //   // }
-  //   // if (jobDesc === '' || jobDesc === undefined) {
-  //   //   utils.showToast('Invalid Job Description');
-  //   //   return;
-  //   // }
-  //   this.postJob()
-
-  // }
-
-  checkValidation = async () => {
-    // var formData = new FormData();
-    // formData.append("title", "shohab");
-    // formData.append("price", 100);
-    // formData.append("description", "test");
-    // formData.append("expiry_date", "2021 - 07 - SIZES.ten*3");
-    // formData.append("address", "test");
-    // // formData.append("image", "file:///data/user/0/com.cashgrab/cache/rn_image_picker_lib_temp_7362e0f2-90b9-413c-8dfb-c481f32f4559.jpg");
-    // // formData.append("services", this.state.services);
-    // formData.append("services", this.state.services.map((item) => {
-    //   return item
-    // }))
-    // console.log("============>", formData._parts[0])
-
-    console.log('images ======>', typeof this.state.jobImages[0]);
-    const postData = {
-      title: 'shohab',
-      price: '100',
-      description: 'test',
-      expiry_date: '2021 - 07 - SIZES.ten*3',
-      address: 'test',
-      // image: this.state.jobImages,
-      services: this.state.services,
-    };
-
-    // Please change file upload URL
-    let res = await fetch(
-      'https://cash-grab.reignsol.net/api/v1/customer/jobs/create',
-      {
-        method: 'post',
-        body: JSON.stringify(postData),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: this.state.accessToken,
-        },
-      },
-    );
-    let responseJson = await res.json();
-    console.log(responseJson);
+  toggleIsLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   postJob = () => {
@@ -272,53 +196,71 @@ export default class postJob extends Component {
     //   services: this.state.services,
     // };
 
-    var formData = new FormData();
-    formData.append('title', 'shohab');
-    formData.append('price', 100);
-    formData.append('description', 'test');
-    formData.append('expiry_date', '2021 - 07 - SIZES.ten*3');
-    formData.append('address', 'test');
+    let title = this.state.serviceCaption;
+    let price =this.state.rateRequested ;
+    let expiry_date=this.state.expirydate;
+    let address= this.state.location
+    let images = this.state.jobImages;
+    let services = this.state.services;
+    let description=this.state.jobDesc;
+    let location=this.state.location;
+
+//  console.log('Iamges========',images);
+   
+ const formData = new FormData();
+    formData.append('title',title);
+    formData.append('price',price);
+    formData.append('description',description);
+    formData.append('expiry_date', expiry_date);
+    formData.append('address', address);
+    formData.append('location', location);
     formData.append(
-      'image',
-      'file:///data/user/0/com.cashgrab/cache/rn_image_picker_lib_temp_7362e0f2-90b9-413c-8dfb-c481f32f4559.jpg',
+      'image',{
+        ...images,
+      uri: Platform.OS === 'android' ? images : images.replace('file:///',''),
+      type: 'image/jpeg',
+      }  
     );
-    formData.append('services', '6');
-    console.log(formData._parts);
+    formData.append('services', services);
 
-    axios({
-      method: 'post',
-      url: 'https://cash-grab.reignsol.net/api/v1/customer/jobs/create',
-      data: formData,
-      headers: {
-        Authorization: this.state.accessToken,
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((error) => {
-        console.log('error ======>', error);
-      });
+    // console.log('Formate Data=====',formData._parts);
 
-    // const onSuccess = ({ data }) => {
-    //   console.log("data =============>", data)
-    //   this.setState({ isLoading: false });
-    // };
+    const onSuccess = ({ data }) => {
+      utils.showToast(data.message);
+      this.toggleIsLoading()
+    };
 
-    // const onFailure = (error) => {
-    //   console.log("error =====================================================================>", error)
-    //   utils.showResponseError(error);
-    //   this.setState({ isLoading: false });
-    // };
+    const onFailure = (error) => {
+      console.log("error =====================================================================>", error)
+      utils.showResponseError(error);
+      this.setState({ isLoading: false });
+    };
 
-    // this.setState({ isLoading: true });
-    // const options = {
+    // axios({
+    //   method: 'post',
+    //   url: 'https://cash-grab.reignsol.net/api/v1/customer/jobs/create',
+    //   data: formData,
     //   headers: {
-    //     "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>",
     //     Authorization: this.state.accessToken,
+    //     'Content-Type': 'multipart/form-data',
     //   },
-    // };
+    // })
+    //   .then((res) => console.log('=========',res))
+    //   .catch((error) => {
+    //     console.log('error ======>', error);
+    //   });
 
-    // Axios.post(Constants.postJob, formData, options).then(onSuccess).catch(onFailure);
+    const options = {
+      headers: {
+        // "Content-Type": "multipart/form-data",
+        // 'Content-Type':'application/x-www-form-urlencoded',
+        "content-type": "application/json",
+        Authorization: this.state.accessToken,
+      },
+    };
+    Axios.post(Constants.postJob, formData, options)
+    .then(onSuccess)
+    .catch(onFailure);
   };
 
   openGallery = () => {
@@ -330,7 +272,7 @@ export default class postJob extends Component {
       } else if (response.errorMessage) {
         console.log('Image Picker Error', response.errorMessage);
       } else if (response.assets) {
-        console.log(response);
+        console.log('=======responce',response);
         var imageuri = [];
         response.assets.map((item) => {
           imageuri.push(item.uri);
@@ -340,6 +282,7 @@ export default class postJob extends Component {
       }
     });
   };
+
   remove(image) {
     let images = [];
     this.state.jobImages.filter((item) => {
@@ -516,6 +459,7 @@ export default class postJob extends Component {
                   this.setState({ services: val })
                 }}
               /> */}
+
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
@@ -652,7 +596,7 @@ export default class postJob extends Component {
                 bgColor={Colors.sickGreen}
                 label="POST"
                 onPress={() => {
-                  this.checkValidation();
+                  this.postJob();
                 }}
               />
             </View>

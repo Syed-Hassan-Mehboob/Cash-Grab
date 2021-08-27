@@ -284,7 +284,7 @@ export default class VendorProfile extends React.Component {
 
   getUserProfile = () => {
     const onSuccess = ({ data }) => {
-      console.log('Vender Profile ======',data);
+      console.log('Vender Profile ======',data.data.records.userProfile.image);
       this.toggleIsLoading();
       this.setState({
         avatar:Constants.imageURL+data.data.records.userProfile.image,
@@ -344,7 +344,7 @@ export default class VendorProfile extends React.Component {
               style={{ position: 'absolute', right:SIZES.ten }}
               onPress={() => {
                 this.props.navigation.navigate(Constants.vendorEditProfile,{
-                  avatar: this.state.image,
+                  avatar: this.state.avatar,
                   name: this.state.name,
                   email: this.state.email,
                   countryCode: this.state.countryCode,
@@ -370,7 +370,7 @@ export default class VendorProfile extends React.Component {
           <View style={{ alignItems: 'center' }}>
             <View style={styles.circleCard}>
               <Image
-                source={this.state.avatar}
+                source={{ uri:this.state.avatar}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
