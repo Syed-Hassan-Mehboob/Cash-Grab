@@ -179,6 +179,7 @@ export default class SingleCategory extends Component {
 
   getCategoryData = () => {
     const onSuccess = ({ data }) => {
+      console.log('====',data)
       this.toggleIsLoading();
       this.setState({ vendors: data.data.jobs });
     };

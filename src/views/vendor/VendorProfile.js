@@ -200,7 +200,7 @@ export default class VendorProfile extends React.Component {
           borderBottomWidth: 1,
           borderColor: Colors.pinkishGrey,
         }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row',paddingHorizontal:SIZES.ten}}>
           <View
             style={{
               height:SIZES.ten*6,
@@ -223,10 +223,11 @@ export default class VendorProfile extends React.Component {
               source={Images.like}
               style={{
                 position: 'absolute',
-                right:SIZES.ten*8,
+                right:SIZES.ten*11,
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
                 resizeMode: 'contain',
+                
               }}
             />
             <RegularTextCB
@@ -262,7 +263,7 @@ export default class VendorProfile extends React.Component {
                 position: 'absolute',
                 height:SIZES.twentyFive,
                 width:SIZES.twentyFive,
-                right:SIZES.ten*8,
+                right:SIZES.ten*11,
                 bottom: 0,
                 resizeMode: 'contain',
               }}

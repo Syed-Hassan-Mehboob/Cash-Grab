@@ -15,106 +15,7 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 export default class ViewJob extends React.Component {
-  completedJobs = [
-    {
-      id: '1',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '4',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: 'SIZES.five',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '6',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '7',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '8',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-  ];
-
-
+  
 
   initialMapState = {
     region: {
@@ -125,10 +26,11 @@ export default class ViewJob extends React.Component {
     },
   };
 
+
   constructor(props) {
     super(props);
 
-    // console.log('props Data ======',this.props.route.params.item.user.name);
+    // console.log('props Data ======',this.props.route.params.item.userProfile.image);
   }
 
   
@@ -168,7 +70,7 @@ export default class ViewJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri:Constants.imageURL+this.props.route.params.item.user.userProfile.image}}
+                    source={{uri:Constants.imageURL+this.props.route.params.item.userProfile.image}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />

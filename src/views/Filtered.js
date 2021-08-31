@@ -42,7 +42,6 @@ export default class FileredScreen extends Component {
             this.getAllJobs();
         });
     };
-
     getAllJobs = () => {
         const onSuccess = ({ data }) => {
             this.setState({ isLoading: false, allJobs: data.data.records });

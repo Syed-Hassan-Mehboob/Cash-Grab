@@ -21,7 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height, width } = Dimensions.get('window');
 const CARD_HEIGHT = 200;
-const CARD_WIDTH = width * 0.5;
+const CARD_WIDTH = width * 0.4;
 const SPACING_FOR_CARD_INSET = width * 0.08 - SIZES.ten;
 
 const Nearby = (props) => {
@@ -173,8 +173,6 @@ const Nearby = (props) => {
     })
       .then(onSuccess)
       .catch(onFailure);
-
-
   };
 
 
@@ -379,7 +377,7 @@ const Nearby = (props) => {
           backgroundColor: Colors.white,
           borderBottomLeftRadius: SIZES.twenty,
           borderBottomRightRadius: SIZES.twenty,
-          padding: SIZES.fifteen,
+          padding: SIZES.twenty,
           shadowColor: '#000',
           shadowOffset: { width: SIZES.five, height: SIZES.five },
           shadowOpacity: 1.0,
@@ -387,8 +385,8 @@ const Nearby = (props) => {
           alignItems: 'center',
         }}>
         <View style={{ flex: 1 }}>
-          <RegularTextCB style={{ fontSize: SIZES.twenty }}>102 Electricians</RegularTextCB>
-          <LightTextCB style={{ fontSize: 16, color: Colors.black }}>
+          <RegularTextCB style={[{ fontSize: SIZES.twenty,fontWeight:'bold' }]}>102 Electricians</RegularTextCB>
+          <LightTextCB style={{ fontSize: 14, color: Colors.black }}>
             Near by..
           </LightTextCB>
         </View>
@@ -590,14 +588,14 @@ const styles = StyleSheet.create({
     elevation: 2,
     backgroundColor: '#FFF',
     borderRadius: SIZES.twenty,
-    marginHorizontal: SIZES.ten,
+    // marginHorizontal: SIZES.five,
     shadowColor: '#000',
     shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     alignItems: 'center',
     width: CARD_WIDTH,
-    paddingVertical: SIZES.twenty,
+    // paddingVertical: SIZES.five-3,
     overflow: 'hidden',
   },
   cardImage: {

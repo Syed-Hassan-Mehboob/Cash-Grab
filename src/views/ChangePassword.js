@@ -64,6 +64,7 @@ export default class ChangePassword extends Component {
       this.toggleIsLoading();
       this.setState({
         fullName: data.data.records.name,
+        avatar:Constants.imageURL+data.data.records.userProfile.image
       });
     };
 
@@ -189,7 +190,7 @@ export default class ChangePassword extends Component {
               { justifyContent: 'center', alignItems: 'center' },
             ]}>
             <Image
-              source={Images.emp1}
+              source={{uri:this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />

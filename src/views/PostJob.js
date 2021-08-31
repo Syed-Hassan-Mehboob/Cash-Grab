@@ -185,16 +185,8 @@ export default class postJob extends Component {
     this.setState({ isLoading: !this.state.isLoading });
   };
 
+
   postJob = () => {
-    // const postData = {
-    //   title: this.state.serviceCaption,
-    //   price: this.state.rateRequested,
-    //   description: this.state.jobDesc,
-    //   expiry_date: this.state.expirydate,
-    //   address: this.state.location,
-    //   image: this.state.jobImages,
-    //   services: this.state.services,
-    // };
 
     let title = this.state.serviceCaption;
     let price =this.state.rateRequested ;
@@ -223,9 +215,10 @@ export default class postJob extends Component {
     );
     formData.append('services', services);
 
-    // console.log('Formate Data=====',formData._parts);
+    console.log('Formate Data=====',formData._parts);
 
     const onSuccess = ({ data }) => {
+      console.log('Post Jobe Data ======',data);
       utils.showToast(data.message);
       this.toggleIsLoading()
     };
@@ -239,29 +232,35 @@ export default class postJob extends Component {
     // axios({
     //   method: 'post',
     //   url: 'https://cash-grab.reignsol.net/api/v1/customer/jobs/create',
-    //   data: formData,
+  
+    //   data:formData,
+
     //   headers: {
     //     Authorization: this.state.accessToken,
     //     'Content-Type': 'multipart/form-data',
     //   },
     // })
-    //   .then((res) => console.log('=========',res))
+    //   .then((res) => console.log('res=========',res))
     //   .catch((error) => {
     //     console.log('error ======>', error);
     //   });
 
+
     const options = {
       headers: {
         // "Content-Type": "multipart/form-data",
-        // 'Content-Type':'application/x-www-form-urlencoded',
-        "content-type": "application/json",
+        // "content-type": "application/json",
         Authorization: this.state.accessToken,
       },
     };
-    Axios.post(Constants.postJob, formData, options)
+    Axios.post(Constants.postJob, formData,options)
     .then(onSuccess)
     .catch(onFailure);
+
   };
+
+
+
 
   openGallery = () => {
     launchImageLibrary({mediaType: 'photo', selectionLimit: 4}, (response) => {

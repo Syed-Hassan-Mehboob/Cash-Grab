@@ -138,12 +138,13 @@ export default class VendorSingleCategory extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({ accessToken: token }, () => {
-      this.getAllJobs();
+      this.getJobsByCategory();
     });
   };
 
-  getAllJobs = () => {
+  getJobsByCategory = () => {
     const onSuccess = ({ data }) => {
+      // console.log('Data==========',data.userProfile)
       this.setState({ isLoading: false, getJobs: data.data });
     };
 
@@ -169,18 +170,22 @@ export default class VendorSingleCategory extends Component {
 
 
   renderSingleCategoriesItem = ({ item }) => {
-  console.log('renderSingleCategoriesItem=====',item.image[0])
-    // console.log(item.jobs.users.name)
+    
     return (
       <TouchableOpacity
         activeOpacity={0.5}
         style={[styles.card, { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five},]}
-        onPress={() => this.props.navigation.navigate(Constants.viewJob)}>
+        onPress={() => 
+        this.props.navigation.navigate(Constants.viewJob,{
+          item:item })   
+          } 
+          >
+
         <View
           style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL + item.image[0] }}
+              source={{ uri: Constants.imageURL +item.userProfile.image }}
               style={styles.iconUser}
               resizeMode="cover"
             />

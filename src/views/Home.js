@@ -516,7 +516,7 @@ export default class Home extends Component {
     return (
       <TouchableOpacity
         onPress={() =>
-          this.props.navigation.navigate(Constants.singleCategory, {
+          this.props.navigation.navigate(Constants.singleCategory,{
             item: item,
           })
         }

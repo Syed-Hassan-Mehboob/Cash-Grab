@@ -65,7 +65,8 @@ export default class VendorHome extends Component {
 
   getAllJobs = () => {
     const onSuccess = ({ data }) => {
-      this.setState({ isLoading: false, allJobs: data.data.records });
+
+    this.setState({ isLoading: false, allJobs: data.data.records });
     };
 
     const onFailure = (error) => {
@@ -150,9 +151,11 @@ export default class VendorHome extends Component {
 
     return (
       <TouchableOpacity
-        onPress={() => { this.props.navigation.navigate(Constants.vendorSingleCategory, { item: item, }); }}
+        onPress={() => { 
+          this.props.navigation.navigate(Constants.vendorSingleCategory,{ item: item, });
+           }}
         style={{ alignItems: 'center' }}>
-        <Image style={styles.circle} source={{ uri: Constants.imageURL + "/uploads/category/e237696c743f4e524697907f27019c341623746681.png" }} />
+        <Image style={styles.circle} source={{ uri: Constants.imageURL +item.image }} />
         <RegularTextCB
           style={{ fontSize: 14, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
           {item.name}
@@ -163,9 +166,7 @@ export default class VendorHome extends Component {
 
   renderJobsForYouItem = ({ item }) => {
     return (
-
       <ListComponent item={item} />
- 
     );
   };
 
@@ -230,7 +231,7 @@ export default class VendorHome extends Component {
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{ height:SIZES.twenty, width:SIZES.twentyFive }}
+                style={{ height:SIZES.ten*4, width:SIZES.ten*4 }}
               />
             </TouchableOpacity>
             <View
