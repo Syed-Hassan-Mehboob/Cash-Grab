@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,164 +6,25 @@ import {
   View,
   TextInput,
   Platform,
-  FlatList
+  FlatList,Text,ActivityIndicator
 } from 'react-native';
 import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import EditText from '../components/EditText';
 import Constants, { SIZES } from '../common/Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from '../network/APIKit';
+import utils from '../utils';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Search(props) {
 
-  bestEmployees = [
-    {
-      id: '1',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: 'SIZES.five-3',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '3',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '4',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: 'SIZES.five',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '6',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '7',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '8',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '9',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: 'SIZES.ten',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '11',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '12',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '13',
-      title: 'Home Cleaner',
-      name: 'Mark Ruffalo',
-      image: Images.emp1,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '14',
-      title: 'Automobile',
-      name: 'Mark Ruffalo',
-      image: Images.emp2,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '15',
-      title: 'Home Renovation',
-      name: 'Mark Ruffalo',
-      image: Images.emp3,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-    {
-      id: '16',
-      title: 'Electrician',
-      name: 'Mark Ruffalo',
-      image: Images.emp4,
-      desc:
-        'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
-      ratings: '1.0',
-    },
-  ];
-
+  const[allVender,setAllVender]=useState(null);
+  const[isLoading,setIsloading]=useState(false);
   const renderBestEmployeesItem = ({ item }) => {
+    // console.log("sdsadsadsadsa",item.services)
+
     return (
       <View style={[styles.card, { margin: SIZES.ten }]}>
         <TouchableOpacity
@@ -185,7 +46,7 @@ export default function Search(props) {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={item.image}
+                    source={{uri:Constants.imageURL+item.user_profiles.image}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -237,7 +98,7 @@ export default function Search(props) {
                         fontSize: 14,
                         color: Colors.coolGrey,
                       }}>
-                      {item.title}
+                     {item.services.length > 0 ? item.services[0]['name']  : 'no service registered'}
                     </RegularTextCB>
                   </View>
                 </View>
@@ -251,7 +112,7 @@ export default function Search(props) {
                 }}>
                 <RegularTextCB
                   style={{ flex: 1, fontSize: 16, color: Colors.coolGrey }}>
-                  {item.desc}
+                  {item.user_profiles.bio}
                 </RegularTextCB>
                 <Image
                   source={Images.circularArrowForward}
@@ -261,17 +122,43 @@ export default function Search(props) {
             </View>
           </View>
         </TouchableOpacity>
+      
+
       </View>
     );
   };
 
 
 
-  const [searchText, setsearchText] = useState("")
-  getData = () => {
+// console.log('All Venders======',allVender.data.records.name);
 
-  }
+const [searchText, setSearchText] = useState('')
+  
+const getData = async () => {
 
+  const token = await AsyncStorage.getItem(Constants.accessToken);
+      // console.log('=======',token);
+      setIsloading(true);
+    const onSuccess = ({data}) => {
+      setIsloading(false);
+      let data1=data.data;
+      setAllVender(data1);
+      console.log('data========',data);
+    
+    };
+    const onFailure = error => {
+      utils.showResponseError(error);
+      setIsloading(false);
+    };
+
+    Axios.post(Constants.customerFilterservice,{name:searchText},
+      {
+      headers: { Authorization: token },
+    }).
+    then(onSuccess).
+    catch(onFailure);
+
+}
 
   return (
     <View style={styles.container}>
@@ -303,20 +190,21 @@ export default function Search(props) {
           returnKeyType="search"
           placeholder={'Search Here'}
           value={searchText}
-          onSubmitEditing={() => { getData() }}
-          onChangeText={(text) => { setsearchText(text) }}
+          onChange={(txt)=>{setSearchText(txt)}}
+          onChangeText={(txt)=>{setSearchText(txt)}}
+
           style={styles.textInput}
         />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>getData(searchText)}>
           <Image
             source={Images.iconSearch}
             style={{ height: SIZES.fifty, width: SIZES.fifty, resizeMode: 'stretch' }}
           />
         </TouchableOpacity>
       </View>
-      <FlatList
+        <FlatList
         style={{ marginTop: SIZES.ten }}
-        data={bestEmployees}
+        data={allVender}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={renderBestEmployeesItem}
@@ -329,6 +217,12 @@ export default function Search(props) {
           paddingBottom: SIZES.ten*10,
         }}
       />
+     <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
+    
     </View>
   );
 }
@@ -392,4 +286,156 @@ const styles = StyleSheet.create({
     width: SIZES.fifty,
     resizeMode: 'contain',
   },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
+  },
 });
+
+
+const bestEmployees = [
+  {
+    id: '1',
+    title: 'Home Renovation',
+    name: 'Mark Ruffalo',
+    image: Images.emp1,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: 'SIZES.five-3',
+    title: 'Electrician',
+    name: 'Mark Ruffalo',
+    image: Images.emp2,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '3',
+    title: 'Home Cleaner',
+    name: 'Mark Ruffalo',
+    image: Images.emp3,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '4',
+    title: 'Automobile',
+    name: 'Mark Ruffalo',
+    image: Images.emp4,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: 'SIZES.five',
+    title: 'Home Renovation',
+    name: 'Mark Ruffalo',
+    image: Images.emp1,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '6',
+    title: 'Electrician',
+    name: 'Mark Ruffalo',
+    image: Images.emp2,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '7',
+    title: 'Home Cleaner',
+    name: 'Mark Ruffalo',
+    image: Images.emp3,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '8',
+    title: 'Automobile',
+    name: 'Mark Ruffalo',
+    image: Images.emp4,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '9',
+    title: 'Home Renovation',
+    name: 'Mark Ruffalo',
+    image: Images.emp1,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: 'SIZES.ten',
+    title: 'Home Cleaner',
+    name: 'Mark Ruffalo',
+    image: Images.emp2,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '11',
+    title: 'Automobile',
+    name: 'Mark Ruffalo',
+    image: Images.emp3,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '12',
+    title: 'Electrician',
+    name: 'Mark Ruffalo',
+    image: Images.emp4,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '13',
+    title: 'Home Cleaner',
+    name: 'Mark Ruffalo',
+    image: Images.emp1,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '14',
+    title: 'Automobile',
+    name: 'Mark Ruffalo',
+    image: Images.emp2,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '15',
+    title: 'Home Renovation',
+    name: 'Mark Ruffalo',
+    image: Images.emp3,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+  {
+    id: '16',
+    title: 'Electrician',
+    name: 'Mark Ruffalo',
+    image: Images.emp4,
+    desc:
+      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    ratings: '1.0',
+  },
+];

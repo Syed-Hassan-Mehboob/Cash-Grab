@@ -74,7 +74,7 @@ const Constants = {
   notificationsURL: 'notifications',
   logoutURL: 'auth/sign-out',
   servies: "auth/services",
-  getAllVendorCategories: "vendors/categories",
+  getAllVendorCategories: "customer/getAllVendors",
   getAllCustomerCategories: "customer/categories",
   postJob: "customer/jobs/create",
   getAllJobs: "vendors/getAllJobs",
@@ -82,7 +82,7 @@ const Constants = {
   getFilter: 'vendors/getfilters',
   getvendorAround: "customer/vendorAroundYou?",
   getTopSerVices: 'customer/getAllVendors',
-  
+  customerFilterservice:'customer/filter-services' 
 };
 
 export const SIZES = {

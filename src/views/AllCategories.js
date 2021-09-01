@@ -61,9 +61,22 @@ export default class AllCategories extends Component {
       .catch(onFailure);
   };
 
-  renderAllCategoriesItem = ({ item }) => {
+   formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+  
+    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+      numberOfElementsLastRow++;
+    }
+  
+    return data;
+  };
+
+  renderAllCategoriesItem = ({ item, index }) => {
 
     return (
+
       <TouchableOpacity
         style={[
           styles.card,
@@ -128,8 +141,9 @@ export default class AllCategories extends Component {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1, paddingTop: SIZES.ten }} >
+
           <FlatList
-            data={this.state.getAllCategories}
+            data={this.formatData(this.state.getAllCategories,2)}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             numColumns={2}

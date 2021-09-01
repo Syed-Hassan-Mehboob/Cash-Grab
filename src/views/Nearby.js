@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const { height, width } = Dimensions.get('window');
-const CARD_HEIGHT = 200;
+const CARD_HEIGHT =SIZES.ten*20;
 const CARD_WIDTH = width * 0.4;
 const SPACING_FOR_CARD_INSET = width * 0.08 - SIZES.ten;
 
@@ -584,18 +584,19 @@ const styles = StyleSheet.create({
     paddingRight: width - CARD_WIDTH,
   },
   card: {
-    // padding: SIZES.ten,
+    padding: SIZES.ten,
     elevation: 2,
     backgroundColor: '#FFF',
     borderRadius: SIZES.twenty,
-    // marginHorizontal: SIZES.five,
+    marginHorizontal: SIZES.five,
     shadowColor: '#000',
     shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     alignItems: 'center',
     width: CARD_WIDTH,
-    // paddingVertical: SIZES.five-3,
+    height:CARD_HEIGHT,
+    paddingVertical: SIZES.five-3,
     overflow: 'hidden',
   },
   cardImage: {
