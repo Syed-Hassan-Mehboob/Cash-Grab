@@ -82,7 +82,8 @@ const Constants = {
   getFilter: 'vendors/getfilters',
   getvendorAround: "customer/vendorAroundYou?",
   getTopSerVices: 'customer/getAllVendors',
-  customerFilterservice:'customer/filter-services' 
+  customerFilterservice:'customer/filter-services' ,
+  quickOrder:'order/quick-order'
 };
 
 export const SIZES = {

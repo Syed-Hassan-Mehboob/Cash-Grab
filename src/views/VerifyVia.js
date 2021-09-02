@@ -53,6 +53,7 @@ export default class VerifyVia extends Component {
     };
 
     const onFailure = (error) => {
+      console.log('eeeeeeeeeeeeeeeeeeeeeeeee', error)
       utils.showResponseError(error);
       this.setState({ isLoading: false });
     };
@@ -75,18 +76,19 @@ export default class VerifyVia extends Component {
         password_confirmation: this.payload.password_confirmation,
         verified_by: verifyVia,
         services: this.payload.services
-
       }
+
+
 
 
     } else {
       postData = {
         name: this.payload.name,
         email: this.payload.email,
-        type: this.payload.type,
-        country_code: this.payload.country_code,
         country_flag: this.payload.country_flag,
+        country_code: this.payload.country_code,
         phone: this.payload.phone,
+        type: this.payload.type,
         password: this.payload.password,
         password_confirmation: this.payload.password_confirmation,
         verified_by: verifyVia,
@@ -94,8 +96,9 @@ export default class VerifyVia extends Component {
 
       }
 
+
     }
-    console.log("postData", postData)
+    console.log("postData=============>", postData)
     Axios.post(Constants.signUpURL, postData)
       .then(onSuccess)
       .catch(onFailure);

@@ -20,96 +20,12 @@ import Constants, { SIZES } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TimePicker from "../components/TimePicker";
+import Moment from 'moment';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 export default class Home extends Component {
-  vendors = [
-    {
-      id: '1',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      type: 'Car Mechanic, NY (2km)',
-      ratings: '1.0',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      type: 'Car Wash, NY (1km)',
-      ratings: '1.1',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      type: 'Puncture, NY (1.2km)',
-      ratings: '1.2',
-    },
-    {
-      id: '4',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      type: 'Plumber, NY (0.2km)',
-      ratings: '1.3',
-    },
-    {
-      id: 'SIZES.five',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      type: 'Bike Electrician, NY (0.5km)',
-      ratings: '1.4',
-    },
-  ];
-
-  urgentServices = [
-    {
-      id: '1',
-      image: Images.emp1,
-      name: 'Ray Hammond',
-      title: 'Home Renovation',
-      type: 'Lorem ipsum',
-      ratings: '1.0',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      name: 'Ray Hammond',
-      title: 'Car Mechanic',
-      type: 'Lorem ipsum',
-      ratings: '1.0',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      name: 'Ray Hammond',
-      title: 'Home Renovation',
-      type: 'Lorem ipsum',
-      ratings: '1.0',
-    },
-    {
-      id: '4',
-      image: Images.emp1,
-      name: 'Ray Hammond',
-      title: 'Car Mechanic',
-      type: 'Lorem ipsum',
-      ratings: '1.0',
-    },
-    {
-      id: 'SIZES.five',
-      image: Images.emp2,
-      name: 'Ray Hammond',
-      title: 'Home Renovation',
-      type: 'Lorem ipsum',
-      ratings: '1.0',
-    },
-    {
-      id: '6',
-      image: Images.emp1,
-      name: 'Ray Hammond',
-      title: 'Car Mechanic',
-      type: 'Lorem ipsum',
-      ratings: '1.0',
-    },
-  ];
+ 
 
   openDrawer = () => {
     this.props.navigation.openDrawer();
@@ -122,7 +38,7 @@ export default class Home extends Component {
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
       accessToken: '',
-      service: 'Select',
+      service:'Select',
       avatar: '',
       name: '',
       rateRequested: '',
@@ -131,39 +47,14 @@ export default class Home extends Component {
       exactTime: '',
       vendorAround: [],
       topServices: [],
-      selections: [
-        {
-          id: '0',
-          text: 'Service 1',
-          isSelected: false,
-        },
-        {
-          id: '1',
-          text: 'Service 2',
-          isSelected: false,
-        },
-        {
-          id: '2',
-          text: 'Service 3',
-          isSelected: false,
-        },
-        {
-          id: '3',
-          text: 'Service 4',
-          isSelected: false,
-        },
-        {
-          id: '4',
-          text: 'Service SIZES.five',
-          isSelected: false,
-        },
-        {
-          id: 'SIZES.five',
-          text: 'Service 6',
-          isSelected: false,
-        },
-      ],
+      selections: [],
       categories: [],
+      startTime:'08:55',
+      isDatePickerVisible:false,
+      showModal:false,
+      lat:'',
+      long:'',
+      servicesid:[]
     };
   }
 
@@ -180,6 +71,7 @@ export default class Home extends Component {
       this.getCategories();
       this.getVendorAroundYou();
       this.getTopServices();
+      this.getServies();
     });
   };
 
@@ -307,10 +199,155 @@ export default class Home extends Component {
   };
 
   toggleIsSelectionModalVisible = () => {
-    this.setState({
-      isSelectionModalVisible: !this.state.isSelectionModalVisible,
-    });
+    if(this.state.selections.length>0){
+      this.setState({
+        isSelectionModalVisible: !this.state.isSelectionModalVisible,
+      });
+    }
+
   };
+
+  getServies = () => {
+ 
+    this.setState({isLoading:true});
+    const onSuccess = ({data}) => {
+
+      this.setState({selections: data.data.records});
+      this.setState({isLoading:false});
+    };
+    const onFailure = (error) => {
+      this.setState({isLoading:false});
+      utils.showResponseError(error);
+    };
+    Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
+  };
+
+  
+
+   handleConfirm = date => {
+ const newTime=Moment(date).format('LT');
+  this.setState({startTime:newTime})
+  this.hideDatePicker();
+};
+
+ showDatePicker = () => {
+  this.setState({isDatePickerVisible:true})
+};
+
+ hideDatePicker = () => {
+  this.setState({isDatePickerVisible:false})
+};
+
+
+postQuickOrder = () => {
+
+  const formData=new FormData();
+  formData.append('address',this.state.location)
+  formData.append('services',this.state.servicesid)
+  formData.append('time',this.state.startTime)
+  formData.append('lat',this.state.lat)
+  formData.append('lng',this.state.long)
+  formData.append('price',this.state.rateRequested)
+  const onSuccess = ({ data }) => {
+    console.log('Post Jobe Data ======',data);
+  
+    utils.showToast(data.message);
+    this.toggleIsLoading();
+    this.toggleIsQuickServiceModalVisible();
+  };
+
+  const onFailure = (error) => {
+    console.log("error =====================================================================>", error)
+    utils.showResponseError(error);
+    this.setState({ isLoading: false });
+  };
+  const options = {
+    headers: {
+      Authorization: this.state.accessToken,
+     'Content-Type':'application/x-www-form-urlencoded'
+    },
+  };
+  Axios.post(Constants.quickOrder, formData,options)
+  .then(onSuccess)
+  .catch(onFailure);
+
+};
+  
+
+GooglePlacesInput = (props) => {
+  return (
+    <GooglePlacesAutocomplete
+      placeholder={'Search'}
+      //   renderLeftButton={() => }
+      minLength={2}
+      keyboardKeyType={'search'}
+      fetchDetails={true}
+      onPress={(data, details = null) => {
+     
+        this.setState(
+          {
+            location: details.formatted_address,
+            lat:details.geometry.location.lat,
+            long:details.geometry.location.lng
+            
+          },
+          () => {
+            setTimeout(() => {
+              this.setState({showModal: false});
+            }, 400);
+          },
+        );
+      }}
+      query={{
+        key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
+        language: 'en',
+        types: '',
+      }}
+      enablePoweredByContainer={false}
+      styles={{
+        textInputContainer: {
+          backgroundColor: '#fff',
+          marginTop: 0,
+          marginBottom: 0,
+          marginLeft: 0,
+          marginRight: 0,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: SIZES.five,
+          },
+          shadowOpacity: 0.36,
+          shadowRadius: 6.68,
+          elevation: 11,
+          paddingHorizontal: SIZES.five,
+          borderRadius: 8,
+        },
+        textInput: {
+          marginTop: 0,
+          marginBottom: 0,
+          marginLeft: 0,
+          marginRight: 0,
+        },
+        listView: {
+          marginTop: SIZES.ten,
+          borderRadius: 8,
+          overflow: 'hidden',
+          backgroundColor: '#fff',
+        },
+        row: {borderRadius: 8},
+      }}
+      GooglePlacesSearchQuery={{rankby: 'distance'}}
+      GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
+      renderDescription={(row) => row.description}
+      currentLocation={true}
+      currentLocationLabel="Current location"
+      nearbyPlacesAPI="GooglePlacesSearch"
+      predefinedPlaces={[]}
+      debounce={200}
+      google
+    />
+  );
+};
 
   renderBottomSheetContent = () => {
     return (
@@ -355,6 +392,8 @@ export default class Home extends Component {
             </RegularTextCB>
           </TouchableOpacity>
         </View>
+
+
         <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
           <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
             Rate Requested
@@ -371,60 +410,100 @@ export default class Home extends Component {
             style={[styles.textInput]}
           />
         </View>
+        <View style={[{marginTop: SIZES.twenty}]}>
+              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+                Location
+              </RegularTextCB>
+              <View
+                style={[
+                  {
+                    height: SIZES.ten*6,
+                    backgroundColor: Colors.white,
+                    borderRadius: SIZES.ten,
+                    shadowColor: '#c5c5c5',
+                    shadowOffset: {width: SIZES.five, height: SIZES.five},
+                    shadowOpacity: 1.0,
+                    shadowRadius: SIZES.ten,
+                    elevation: SIZES.ten,
+                    justifyContent: 'center',
+                    paddingLeft: SIZES.twenty,
+                  },
+                ]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      showModal: true,
+                    });
+                  }}>
+                  <RegularTextCB>
+                    {this.state.location ? this.state.location :'Get Location'}
+                  </RegularTextCB>
+                </TouchableOpacity>
+              </View>
+
+              {/* <LocationPicker
+                viewProperty="name"
+                onChangeValue={(val) => {
+                  this.setState({ services: val })
+                }}
+              /> */}
+
+            </View>
+
+            <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.showModal}
+          onRequestClose={() => {
+            this.setState({showModal: false});
+          }}>
+          <View
+            style={{
+              flex: 1,
+              padding: SIZES.twenty,
+              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+            }}>
+            <View style={{flex: 1, padding: SIZES.five, flexDirection: 'row'}}>
+              {this.GooglePlacesInput()}
+              <TouchableOpacity
+                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                onPress={() => {
+                  this.setState({showModal: false});
+                }}>
+                <Image
+                  style={{height: SIZES.fifteen, width: SIZES.fifteen}}
+                  resizeMode="contain"
+                  source={Images.iconClose}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+       
         <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
-          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
-            Location
-          </RegularTextCB>
-          <EditText
-            ref={'location'}
-            placeholder={'Enter Location'}
-            value={this.state.location}
-            onChangeText={(text) => {
-              this.setState({
-                location: text,
-              });
-            }}
-            style={[styles.textInput]}
-          />
-        </View>
-        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
-          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
-            Address
-          </RegularTextCB>
-          <EditText
-            ref={'address'}
-            placeholder={'Enter Address'}
-            value={this.state.address}
-            onChangeText={(text) => {
-              this.setState({
-                address: text,
-              });
-            }}
-            style={[styles.textInput]}
-          />
-        </View>
-        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
-          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
+          <RegularTextCB style={{ fontSize: 14, color:'#000' }}>
             Exact Time
           </RegularTextCB>
-          <EditText
-            ref={'exact_time'}
-            placeholder={'Enter Exact Time'}
-            value={this.state.exactTime}
-            onChangeText={(text) => {
-              this.setState({
-                exactTime: text,
-              });
-            }}
-            style={[styles.textInput]}
+
+         <TimePicker
+         onPress={this.showDatePicker}
+         isVisible={this.state.isDatePickerVisible}
+          mode='time'
+          onConfirm={this.handleConfirm}
+          onCancel={this.hideDatePicker}
+          is24Hour={false}
+          hideTitleContainerIOS={true}
+          time={this.state.startTime}
           />
+        
         </View>
         <View style={{ marginTop: SIZES.ten*3, paddingBottom: SIZES.ten, marginHorizontal: SIZES.ten }}>
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
-            onPress={() => {
-              this.toggleIsQuickServiceModalVisible();
+            onPress={() => {   
+              this.postQuickOrder();
             }}
           />
         </View>
@@ -474,12 +553,17 @@ export default class Home extends Component {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        style={
-          item.isSelected === false
-            ? styles.unselectedFilter
-            : styles.selectedFilter
-        }
+        style={[
+          // item.isSelected === false
+          //   ? styles.unselectedFilter
+          //   : styles.selectedFilter
+          styles.unselectedFilter
+        ]}
         onPress={() => {
+          
+          this.setState({
+         servicesid:ite
+       })
           this.handleOnSelectionItemClick(index);
         }}>
         <RegularTextCB
@@ -487,7 +571,7 @@ export default class Home extends Component {
             fontSize: 14,
             color: Colors.black,
           }}>
-          {item.text}
+          {item.name}
         </RegularTextCB>
       </TouchableOpacity>
     );
@@ -499,7 +583,7 @@ export default class Home extends Component {
       item.isSelected = false;
     });
     mSelection[index].isSelected = true;
-    this.setState({ selections: mSelection, service: mSelection[index].text });
+    this.setState({ selections: mSelection, service: mSelection[index].name });
     this.toggleIsSelectionModalVisible();
   };
 
@@ -919,6 +1003,7 @@ export default class Home extends Component {
           style={styles.modal}>
           {this.renderBottomSheetContent()}
         </Modal>
+
         <Modal
           isVisible={this.state.isSelectionModalVisible}
           coverScreen={false}
@@ -1013,3 +1098,93 @@ const styles = StyleSheet.create({
     fontFamily: Constants.fontRegular,
   },
 });
+
+
+vendors = [
+  {
+    id: '1',
+    image: Images.emp1,
+    title: 'Ray Hammond',
+    type: 'Car Mechanic, NY (2km)',
+    ratings: '1.0',
+  },
+  {
+    id: '2',
+    image: Images.emp2,
+    title: 'Jay Almond',
+    type: 'Car Wash, NY (1km)',
+    ratings: '1.1',
+  },
+  {
+    id: '3',
+    image: Images.emp3,
+    title: 'Ray Hammond',
+    type: 'Puncture, NY (1.2km)',
+    ratings: '1.2',
+  },
+  {
+    id: '4',
+    image: Images.emp4,
+    title: 'Jay Almond',
+    type: 'Plumber, NY (0.2km)',
+    ratings: '1.3',
+  },
+  {
+    id: 'SIZES.five',
+    image: Images.emp1,
+    title: 'Ray Hammond',
+    type: 'Bike Electrician, NY (0.5km)',
+    ratings: '1.4',
+  },
+];
+
+urgentServices = [
+  {
+    id: '1',
+    image: Images.emp1,
+    name: 'Ray Hammond',
+    title: 'Home Renovation',
+    type: 'Lorem ipsum',
+    ratings: '1.0',
+  },
+  {
+    id: '2',
+    image: Images.emp2,
+    name: 'Ray Hammond',
+    title: 'Car Mechanic',
+    type: 'Lorem ipsum',
+    ratings: '1.0',
+  },
+  {
+    id: '3',
+    image: Images.emp3,
+    name: 'Ray Hammond',
+    title: 'Home Renovation',
+    type: 'Lorem ipsum',
+    ratings: '1.0',
+  },
+  {
+    id: '4',
+    image: Images.emp1,
+    name: 'Ray Hammond',
+    title: 'Car Mechanic',
+    type: 'Lorem ipsum',
+    ratings: '1.0',
+  },
+  {
+    id: 'SIZES.five',
+    image: Images.emp2,
+    name: 'Ray Hammond',
+    title: 'Home Renovation',
+    type: 'Lorem ipsum',
+    ratings: '1.0',
+  },
+  {
+    id: '6',
+    image: Images.emp1,
+    name: 'Ray Hammond',
+    title: 'Car Mechanic',
+    type: 'Lorem ipsum',
+    ratings: '1.0',
+  },
+];

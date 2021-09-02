@@ -63,7 +63,6 @@ export default class AllCategories extends Component {
 
    formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
-  
     let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
     while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
       data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
@@ -74,7 +73,6 @@ export default class AllCategories extends Component {
   };
 
   renderAllCategoriesItem = ({ item, index }) => {
-
     return (
 
       <TouchableOpacity
@@ -143,9 +141,9 @@ export default class AllCategories extends Component {
         <View style={{ flex: 1, paddingTop: SIZES.ten }} >
 
           <FlatList
-            data={this.formatData(this.state.getAllCategories,2)}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
+            data={this.formatData(this.state.getAllCategories,2)}
             numColumns={2}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
