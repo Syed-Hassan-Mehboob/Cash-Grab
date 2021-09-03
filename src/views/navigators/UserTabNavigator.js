@@ -28,7 +28,7 @@ import SingleCategory from '../SingleCategory';
 import ChangePassword from '../ChangePassword';
 import Filtered from '../Filtered';
 import ViewJob from '../vendor/ViewJob';
-
+import QuickNotify from '../../components/QuickNotify';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -56,6 +56,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.Filtered} component={Filtered} />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
       <HomeStack.Screen name={Constants.nearby} component={Nearby} />
+      <HomeStack.Screen name={Constants.QuickNotify} component={QuickNotify} />
       <HomeStack.Screen
         name={Constants.bookingConfirmed}
         component={BookingConfirmed}
@@ -68,6 +69,7 @@ const HomeNavigator = () => {
         name={Constants.confirmPayment}
         component={ConfirmPayment}
       />
+      
       <HomeStack.Screen
         name={Constants.dateTimeSlots}
         component={DateTimeSlots}

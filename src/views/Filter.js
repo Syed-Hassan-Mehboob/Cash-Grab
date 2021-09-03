@@ -54,6 +54,7 @@ export default class Filter extends Component {
 
   getfilters = () => {
     const onSuccess = ({ data }) => {
+      console.log('filter data ====',data.data)
       this.setState({
         isLoading: false, categories: data.data.categories.map((category) => ({
           ...category,
@@ -84,10 +85,9 @@ export default class Filter extends Component {
   };
 
   setfilters = () => {
+
     postData = {
       query: this.state.selectedCategory,
-
-
     },
       console.log("post data", postData)
 
@@ -278,7 +278,13 @@ export default class Filter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-                this.props.navigation.navigate(Constants.Filtered)
+               
+                this.props.navigation.navigate(Constants.Filtered,{
+                  catagoryid:this.state.selectedCategory.id,
+                  price: this.state.selectedPrice,
+                  location:this.state.selectedLocation.name
+                })
+
               }}
             />
           </View>

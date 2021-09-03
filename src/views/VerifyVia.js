@@ -92,8 +92,6 @@ export default class VerifyVia extends Component {
         password: this.payload.password,
         password_confirmation: this.payload.password_confirmation,
         verified_by: verifyVia,
-
-
       }
 
 
@@ -102,9 +100,6 @@ export default class VerifyVia extends Component {
     Axios.post(Constants.signUpURL, postData)
       .then(onSuccess)
       .catch(onFailure);
-
-
-
   };
 
   render() {

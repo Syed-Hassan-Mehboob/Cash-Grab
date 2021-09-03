@@ -21,98 +21,18 @@ const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
 export default class ViewVendorProfile extends React.Component {
-  services = [
-    {
-      id: '1',
-      image: Images.iconUserCleaning,
-      icon: Images.iconCleaning1,
-      name: 'Cleaning',
-      desc: 'Car indoor & outdoor cleaning',
-    },
-    {
-      id: '2',
-      image: Images.iconUserRepairing,
-      icon: Images.iconRepairing,
-      name: 'Repairing',
-      desc: '3 AC split units maintenance',
-    },
-    {
-      id: '3',
-      image: Images.iconUserCleaning,
-      icon: Images.iconCleaning1,
-      name: 'Cleaning',
-      desc: 'Car indoor & outdoor cleaning',
-    },
-    {
-      id: '4',
-      image: Images.iconUserRepairing,
-      icon: Images.iconRepairing,
-      name: 'Repairing',
-      desc: '3 AC split units maintenance',
-    },
-  ];
-  reviews = [
-    {
-      id: '1',
-      user: {
-        name: 'Peachey',
-        image: Images.emp1,
-      },
-      review: {
-        date: '05-12-2020',
-        rating: '4.4',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
-      },
-    },
-    {
-      id: '2',
-      user: {
-        name: 'Jordan',
-        image: Images.emp2,
-      },
-      review: {
-        date: '03-SIZES.ten-2019',
-        rating: '4.0',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
-      },
-    },
-    {
-      id: '3',
-      user: {
-        name: 'Smith',
-        image: Images.emp3,
-      },
-      review: {
-        date: '15-11-2020',
-        rating: '3.4',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
-      },
-    },
-    {
-      id: '4',
-      user: {
-        name: 'Sean',
-        image: Images.emp4,
-      },
-      review: {
-        date: '18-01-2021',
-        rating: 'SIZES.five.',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
-      },
-    },
-  ];
-
+ 
   constructor(props) {
     super(props);
-    
+    this.state = {
+      isDescriptionSelected: true, 
+      isReviewsSelected: false,
+       review: '',
+      item:this.props.route.params.item};
   }
 
 
-  state = {isDescriptionSelected: true, isReviewsSelected: false, review: ''};
+ 
 
   selectIsDescriptionSelected = () => {
     this.setState({
@@ -135,17 +55,16 @@ export default class ViewVendorProfile extends React.Component {
           styles.card,
           {
             borderRadius: SIZES.fifteen,
-            padding: SIZES.ten,
             margin: SIZES.five,
             flexDirection: 'row',
-            width: width / 1.65,
+            width: width / 2,
             backgroundColor: Colors.white,
             marginBottom: SIZES.twenty,
           },
         ]}
         onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
         <Image
-          source={item.image}
+          source={{uri:item.image}}
           style={{height: SIZES.ten*9, width: SIZES.ten*9, borderRadius: SIZES.fifteen}}
         />
         <View
@@ -154,7 +73,7 @@ export default class ViewVendorProfile extends React.Component {
             flex: 1,
           }}>
           <Image
-            source={item.icon}
+            source={{uri:item.icon}}
             style={{height: SIZES.twenty, width: 20, justifyContent: 'space-evenly'}}
           />
           <RegularTextCB
@@ -176,7 +95,7 @@ export default class ViewVendorProfile extends React.Component {
                 color: Colors.coolGrey,
                 flex:1
               }}>
-              {item.desc}
+              {item.price}
             </RegularTextCB>
           </View>
         </View>
@@ -268,6 +187,8 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   render() {
+
+    console.log('item=======',this.state.item.name);
     return (
       <View style={styles.container}>
         <View
@@ -323,7 +244,7 @@ export default class ViewVendorProfile extends React.Component {
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
               <Image
-                source={{uri:Constants.imageURL+this.props.route.params.avator}}
+                source={{uri:Constants.imageURL+this.state.item.userProfile.image}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
@@ -349,7 +270,7 @@ export default class ViewVendorProfile extends React.Component {
             </View>
             <RegularTextCB
               style={{color: Colors.white, fontSize: 18, marginTop: SIZES.five}}>
-              {this.props.route.params.username}
+              {this.state.item.name}
             </RegularTextCB>
             <RegularTextCB
               style={{
@@ -418,7 +339,7 @@ export default class ViewVendorProfile extends React.Component {
                     User Name
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {this.props.route.params.username}
+                    {this.state.item.name}
                   </RegularTextCB>
                 </View>
                 <View
@@ -432,7 +353,7 @@ export default class ViewVendorProfile extends React.Component {
                     Email Address
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {this.props.route.params.email}
+                    {this.state.item.email}
                   </RegularTextCB>
                 </View>
                 <View
@@ -446,7 +367,7 @@ export default class ViewVendorProfile extends React.Component {
                     Phone Number 
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                  {this.props.route.params.countrycode}  {this.props.route.params.phoneNumber}
+                  {this.state.item.phone}
                   </RegularTextCB>
                 </View>
                 <View
@@ -460,7 +381,7 @@ export default class ViewVendorProfile extends React.Component {
                     Location
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {this.props.route.params.location}
+                    {this.state.item.userProfile.location}
                   </RegularTextCB>
                 </View>
                 <View
@@ -528,7 +449,7 @@ export default class ViewVendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                      4.9 Rating
+                       {this.state.item.ratings} Rating
                     </RegularTextCB>
                   </LinearGradient>
                   <LinearGradient
@@ -618,7 +539,7 @@ export default class ViewVendorProfile extends React.Component {
                   style={{paddingBottom:SIZES.ten*10}}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={this.services}
+                  data={this.state.item.service}
                   renderItem={this.renderServicesItem}
                   keyExtractor={(item) => item.id}
                   contentInset={{
@@ -691,3 +612,88 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
 });
+
+services = [
+  {
+    id: '1',
+    image: Images.iconUserCleaning,
+    icon: Images.iconCleaning1,
+    name: 'Cleaning',
+    desc: 'Car indoor & outdoor cleaning',
+  },
+  {
+    id: '2',
+    image: Images.iconUserRepairing,
+    icon: Images.iconRepairing,
+    name: 'Repairing',
+    desc: '3 AC split units maintenance',
+  },
+  {
+    id: '3',
+    image: Images.iconUserCleaning,
+    icon: Images.iconCleaning1,
+    name: 'Cleaning',
+    desc: 'Car indoor & outdoor cleaning',
+  },
+  {
+    id: '4',
+    image: Images.iconUserRepairing,
+    icon: Images.iconRepairing,
+    name: 'Repairing',
+    desc: '3 AC split units maintenance',
+  },
+];
+reviews = [
+  {
+    id: '1',
+    user: {
+      name: 'Peachey',
+      image: Images.emp1,
+    },
+    review: {
+      date: '05-12-2020',
+      rating: '4.4',
+      text:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+    },
+  },
+  {
+    id: '2',
+    user: {
+      name: 'Jordan',
+      image: Images.emp2,
+    },
+    review: {
+      date: '03-SIZES.ten-2019',
+      rating: '4.0',
+      text:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+    },
+  },
+  {
+    id: '3',
+    user: {
+      name: 'Smith',
+      image: Images.emp3,
+    },
+    review: {
+      date: '15-11-2020',
+      rating: '3.4',
+      text:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+    },
+  },
+  {
+    id: '4',
+    user: {
+      name: 'Sean',
+      image: Images.emp4,
+    },
+    review: {
+      date: '18-01-2021',
+      rating: 'SIZES.five.',
+      text:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+    },
+  },
+];

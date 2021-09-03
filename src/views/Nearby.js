@@ -151,6 +151,7 @@ const Nearby = (props) => {
       setvendorAround(data.data);
       // setisLoading(false);
 
+      console.log('==============Vender Around ',data);
 
     };
 
@@ -420,15 +421,7 @@ const Nearby = (props) => {
               }}>
               <Animated.View style={[styles.markerWrap, scaleStyle]}>
                 <Animated.Image
-                  source={
-                    marker.type === 'customer'
-                      ? Images.markerMechanic
-                      : marker.type === 'fire'
-                        ? Images.markerFireman
-                        : marker.type === 'repair'
-                          ? Images.markerRepairer
-                          : Images.markerWash
-                  }
+                  source={{uri:Constants.imageURL+marker.image}}
                   style={styles.marker}
                 />
               </Animated.View>
@@ -476,16 +469,11 @@ const Nearby = (props) => {
             <TouchableOpacity
               style={styles.card}
               key={index}
-              onPress={() =>
-                props.navigation.navigate(Constants.viewVendorProfile,{
-                  username:marker.name,
-                  email:marker.email,
-                  phoneNumber:marker.phone,
-                  countrycode:marker.country_code,
-                  location:marker.location,
-                  avator:marker.image
-                })
-              }>
+              onPress={() =>{
+                // props.navigation.navigate(Constants.viewVendorProfile,{
+               
+                // })
+              }}>
               <View style={styles.circleCard}>
                 <Image
                   source={{uri:Constants.imageURL+marker.image}}

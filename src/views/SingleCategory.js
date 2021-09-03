@@ -20,18 +20,63 @@ SIZES
 export default class SingleCategory extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: false,
+      vendors:[],
+    };
   }
-  state = {
-    isLoading: false,
-    vendors: [],
-  };
+
 
   componentDidMount() {
     this.getUserAccessToken();
   }
 
+  openNextScreen = (nextScreen) => {
+    this.props.navigation.navigate(nextScreen);
+  };
+
+  toggleIsLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading });
+  };
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => this.getCategoryData());
+    this.getCategoryData();
+  };
+
+  getCategoryData = () => {
+    const onSuccess = ({ data }) => {
+      console.log('==== catagory data ====',data);
+      this.toggleIsLoading();
+      this.setState({ vendors: data.data });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    let params = {
+      categoryId: this.props.route.params.item.id,
+    };
+
+    this.toggleIsLoading();
+
+    Axios.get(Constants.customerViewCategoriesURL, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+
   renderSingleCategoriesItem = ({ item }) => {
 
+    console.log('Single Category Item======',item)
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -48,7 +93,7 @@ export default class SingleCategory extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL + item.user.image }}
+              source={{ uri: Constants.imageURL + item.image }}
               // source={item.image}
               style={{ height: '100%', width: '100%' }}
               resizeMode="stretch"
@@ -60,7 +105,7 @@ export default class SingleCategory extends Component {
                 color: Colors.black,
                 fontSize: 16,
               }}>
-              {item.user.name}
+              {item.name}
             </RegularTextCB>
             <View
               style={{
@@ -164,46 +209,7 @@ export default class SingleCategory extends Component {
     )
   };
 
-  openNextScreen = (nextScreen) => {
-    this.props.navigation.navigate(nextScreen);
-  };
-
-  toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
-  };
-
-  getUserAccessToken = async () => {
-    const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getCategoryData());
-  };
-
-  getCategoryData = () => {
-    const onSuccess = ({ data }) => {
-      console.log('====',data)
-      this.toggleIsLoading();
-      this.setState({ vendors: data.data.jobs });
-    };
-
-    const onFailure = (error) => {
-      this.toggleIsLoading();
-      utils.showResponseError(error);
-    };
-
-    let params = {
-      categoryId: this.props.route.params.item.id,
-    };
-
-    this.toggleIsLoading();
-
-    Axios.get(Constants.customerViewCategoriesURL, {
-      params,
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
+ 
 
   render() {
     return (
@@ -226,19 +232,19 @@ export default class SingleCategory extends Component {
               style={[styles.iconBack, { tintColor: Colors.black }]}
             />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row',justifyContent:'center',alignItems:'center' }}>
             <Image
               source={{
                 uri: Constants.imageURL + this.props.route.params.item.image,
               }}
-              style={{ height: 50, width: 50 }}
+              style={{ height:SIZES.ten*8, width:SIZES.ten*8}}
             />
             <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>
               {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
         </View>
-        <FlatList
+        {/* <FlatList
           style={{ marginTop: SIZES.ten }}
           data={this.state.vendors}
           keyExtractor={(item) => item.id}
@@ -252,7 +258,8 @@ export default class SingleCategory extends Component {
             // for android
             paddingBottom: SIZES.ten*10,
           }}
-        />
+        /> */}
+
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}

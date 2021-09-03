@@ -188,34 +188,18 @@ export default class postJob extends Component {
 
   postJob = () => {
 
-    let title = this.state.serviceCaption;
-    let price =this.state.rateRequested ;
-    let expiry_date=this.state.expirydate;
-    let address= this.state.location
-    let images = this.state.jobImages;
-    let services = this.state.services;
-    let description=this.state.jobDesc;
-    let location=this.state.location;
+    const PostData={
+       title : this.state.serviceCaption,
+       price :this.state.rateRequested, 
+       description:this.state.jobDesc,
+       expiry_date:this.state.expirydate,
+       address: this.state.location,
+       location:this.state.location,
+       images :this.state.jobImages,
+       services : this.state.services,
+    }
 
-//  console.log('Iamges========',images);
-   
- const formData = new FormData();
-    formData.append('title',title);
-    formData.append('price',price);
-    formData.append('description',description);
-    formData.append('expiry_date', expiry_date);
-    formData.append('address', address);
-    formData.append('location', location);
-    formData.append(
-      'image',{
-        ...images,
-      uri: Platform.OS === 'android' ? images : images.replace('file:///',''),
-      type: 'image/jpeg',
-      }  
-    );
-    formData.append('services', services);
-
-    console.log('Formate Data=====',formData._parts);
+    console.log('============',PostData);
 
     const onSuccess = ({ data }) => {
       console.log('Post Jobe Data ======',data);
@@ -229,31 +213,13 @@ export default class postJob extends Component {
       this.setState({ isLoading: false });
     };
 
-    // axios({
-    //   method: 'post',
-    //   url: 'https://cash-grab.reignsol.net/api/v1/customer/jobs/create',
-  
-    //   data:formData,
-
-    //   headers: {
-    //     Authorization: this.state.accessToken,
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // })
-    //   .then((res) => console.log('res=========',res))
-    //   .catch((error) => {
-    //     console.log('error ======>', error);
-    //   });
-
 
     const options = {
       headers: {
-        // "Content-Type": "multipart/form-data",
-        // "content-type": "application/json",
         Authorization: this.state.accessToken,
       },
     };
-    Axios.post(Constants.postJob, formData,options)
+    Axios.post(Constants.postJob,PostData,options)
     .then(onSuccess)
     .catch(onFailure);
 
@@ -274,6 +240,7 @@ export default class postJob extends Component {
         console.log('=======responce',response);
         var imageuri = [];
         response.assets.map((item) => {
+          console.log('Image Uri ==== ==== ',item.uri)
           imageuri.push(item.uri);
         });
         this.setState({jobImages: imageuri, showImages: true});
@@ -596,6 +563,7 @@ export default class postJob extends Component {
                 label="POST"
                 onPress={() => {
                   this.postJob();
+                  this.props.navigation.navigate(Constants.home)
                 }}
               />
             </View>

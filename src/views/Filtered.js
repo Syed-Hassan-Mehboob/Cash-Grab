@@ -28,6 +28,7 @@ export default class FileredScreen extends Component {
             allJobs: []
         };
 
+        console.log('==========',this.props.route.params)
     }
     componentDidMount() {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -40,6 +41,7 @@ export default class FileredScreen extends Component {
         const token = await AsyncStorage.getItem(Constants.accessToken);
         this.setState({ accessToken: token }, () => {
             this.getAllJobs();
+            this.getFilterData();
         });
     };
     getAllJobs = () => {
@@ -60,6 +62,40 @@ export default class FileredScreen extends Component {
             .then(onSuccess)
             .catch(onFailure);
     };
+
+    getFilterData = () => {
+   
+        const postData={
+          
+            type:'customer',
+            categoryId:this.props.route.params.catagoryid,
+            min_price:'50',
+            max_price:'40',
+            location:this.props.route.params.location
+       }
+     
+      this.setState({ isLoading: true });
+         const onSuccess = ({ data }) => {
+             console.log('========================Filter Data==',data)
+           utils.showToast(data.message);
+           this.setState({ isLoading: false });
+         };
+         const onFailure = (error) => {
+           console.log("error =============",error)
+           utils.showResponseError(error.massage);
+           this.setState({ isLoading: false });
+         };
+         const options = {
+           headers: {
+             Authorization: this.state.accessToken,
+         //    'Content-Type':'application/x-www-form-urlencoded'
+           },
+         };
+         Axios.post(Constants.customerFilter,postData,options)
+         .then(onSuccess)
+         .catch(onFailure);
+       };
+     
 
 
     renderSingleCategoriesItem = ({ item }) => {
@@ -102,7 +138,7 @@ export default class FileredScreen extends Component {
 
                 </View>
 
-                <FlatList
+                {/* <FlatList
                     style={{ marginTop: SIZES.ten }}
                     data={(this.state.allJobs)}
                     keyExtractor={(item) => item.id}
@@ -116,7 +152,7 @@ export default class FileredScreen extends Component {
                         // for android
                         paddingBottom: SIZES.ten,
                     }}
-                />
+                /> */}
                 <Spinner
                     visible={this.state.isLoading}
                     textContent={'Loading...'}

@@ -45,6 +45,7 @@ const Constants = {
   dashboard: 'Dashboard',
   profile: 'Profile',
   vendorProfile: 'VendorProfile',
+  QuickNotify:'QuickNotify',
   more: 'More',
   settings: 'Settings',
   /* * drawer * */
@@ -83,7 +84,8 @@ const Constants = {
   getvendorAround: "customer/vendorAroundYou?",
   getTopSerVices: 'customer/getAllVendors',
   customerFilterservice:'customer/filter-services' ,
-  quickOrder:'order/quick-order'
+  quickOrder:'order/quick-order',
+  customerFilter:'customer/filter?'
 };
 
 export const SIZES = {

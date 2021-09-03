@@ -12,21 +12,16 @@ import {
   View,
   Platform,
 } from 'react-native';
-import Modal from 'react-native-modal';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ButtonRadius10 from '../components/ButtonRadius10';
-import EditText from '../components/EditText';
 import Constants, { SIZES } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import TimePicker from "../components/TimePicker";
-import Moment from 'moment';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+
+
 
 export default class Home extends Component {
  
-
   openDrawer = () => {
     this.props.navigation.openDrawer();
   };
@@ -71,7 +66,6 @@ export default class Home extends Component {
       this.getCategories();
       this.getVendorAroundYou();
       this.getTopServices();
-      this.getServies();
     });
   };
 
@@ -158,13 +152,11 @@ export default class Home extends Component {
 
   getTopServices = () => {
     const onSuccess = ({ data }) => {
- 
       this.setState({
         isLoading: false,
         topServices: data.data.records
       }, () => {
         
-
       });
     };
 
@@ -192,407 +184,6 @@ export default class Home extends Component {
     this.setState({ isLoading: !this.state.isLoading });
   };
 
-  toggleIsQuickServiceModalVisible = () => {
-    this.setState({
-      isQuickServiceModalVisible: !this.state.isQuickServiceModalVisible,
-    });
-  };
-
-  toggleIsSelectionModalVisible = () => {
-    if(this.state.selections.length>0){
-      this.setState({
-        isSelectionModalVisible: !this.state.isSelectionModalVisible,
-      });
-    }
-
-  };
-
-  getServies = () => {
- 
-    this.setState({isLoading:true});
-    const onSuccess = ({data}) => {
-
-      this.setState({selections: data.data.records});
-      this.setState({isLoading:false});
-    };
-    const onFailure = (error) => {
-      this.setState({isLoading:false});
-      utils.showResponseError(error);
-    };
-    Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
-  };
-
-  
-
-   handleConfirm = date => {
- const newTime=Moment(date).format('LT');
-  this.setState({startTime:newTime})
-  this.hideDatePicker();
-};
-
- showDatePicker = () => {
-  this.setState({isDatePickerVisible:true})
-};
-
- hideDatePicker = () => {
-  this.setState({isDatePickerVisible:false})
-};
-
-
-postQuickOrder = () => {
-
-  const formData=new FormData();
-  formData.append('address',this.state.location)
-  formData.append('services',this.state.servicesid)
-  formData.append('time',this.state.startTime)
-  formData.append('lat',this.state.lat)
-  formData.append('lng',this.state.long)
-  formData.append('price',this.state.rateRequested)
-  const onSuccess = ({ data }) => {
-    console.log('Post Jobe Data ======',data);
-  
-    utils.showToast(data.message);
-    this.toggleIsLoading();
-    this.toggleIsQuickServiceModalVisible();
-  };
-
-  const onFailure = (error) => {
-    console.log("error =====================================================================>", error)
-    utils.showResponseError(error);
-    this.setState({ isLoading: false });
-  };
-  const options = {
-    headers: {
-      Authorization: this.state.accessToken,
-     'Content-Type':'application/x-www-form-urlencoded'
-    },
-  };
-  Axios.post(Constants.quickOrder, formData,options)
-  .then(onSuccess)
-  .catch(onFailure);
-
-};
-  
-
-GooglePlacesInput = (props) => {
-  return (
-    <GooglePlacesAutocomplete
-      placeholder={'Search'}
-      //   renderLeftButton={() => }
-      minLength={2}
-      keyboardKeyType={'search'}
-      fetchDetails={true}
-      onPress={(data, details = null) => {
-     
-        this.setState(
-          {
-            location: details.formatted_address,
-            lat:details.geometry.location.lat,
-            long:details.geometry.location.lng
-            
-          },
-          () => {
-            setTimeout(() => {
-              this.setState({showModal: false});
-            }, 400);
-          },
-        );
-      }}
-      query={{
-        key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
-        language: 'en',
-        types: '',
-      }}
-      enablePoweredByContainer={false}
-      styles={{
-        textInputContainer: {
-          backgroundColor: '#fff',
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: SIZES.five,
-          },
-          shadowOpacity: 0.36,
-          shadowRadius: 6.68,
-          elevation: 11,
-          paddingHorizontal: SIZES.five,
-          borderRadius: 8,
-        },
-        textInput: {
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-        },
-        listView: {
-          marginTop: SIZES.ten,
-          borderRadius: 8,
-          overflow: 'hidden',
-          backgroundColor: '#fff',
-        },
-        row: {borderRadius: 8},
-      }}
-      GooglePlacesSearchQuery={{rankby: 'distance'}}
-      GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
-      renderDescription={(row) => row.description}
-      currentLocation={true}
-      currentLocationLabel="Current location"
-      nearbyPlacesAPI="GooglePlacesSearch"
-      predefinedPlaces={[]}
-      debounce={200}
-      google
-    />
-  );
-};
-
-  renderBottomSheetContent = () => {
-    return (
-      <View style={styles.bottomSheetBody}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
-            Quick Service
-          </RegularTextCB>
-          <TouchableOpacity
-            onPress={() => {
-              this.toggleIsQuickServiceModalVisible();
-            }}>
-            <Image
-              source={Images.iconClose}
-              style={{
-                height: SIZES.fifteen,
-                width: SIZES.fifteen,
-                tintColor: Colors.coolGrey,
-                resizeMode: 'contain',
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={[styles.textInputContainer, { marginTop: SIZES.ten }]}>
-          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
-            Select Service
-          </RegularTextCB>
-          <TouchableOpacity
-            style={[
-              styles.card,
-              {
-                height: SIZES.ten*6,
-                borderRadius: SIZES.ten,
-                justifyContent: 'center',
-                paddingHorizontal: SIZES.twenty,
-                paddingVertical: SIZES.five,
-              },
-            ]}
-            onPress={() => this.toggleIsSelectionModalVisible()}>
-            <RegularTextCB style={{ color: Colors.black }}>
-              {this.state.service}
-            </RegularTextCB>
-          </TouchableOpacity>
-        </View>
-
-
-        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
-          <RegularTextCB style={{ fontSize: 14, color: Colors.black }}>
-            Rate Requested
-          </RegularTextCB>
-          <EditText
-            ref={'rate'}
-            placeholder={'Enter Rate'}
-            value={this.state.rateRequested}
-            onChangeText={(text) => {
-              this.setState({
-                rateRequested: text,
-              });
-            }}
-            style={[styles.textInput]}
-          />
-        </View>
-        <View style={[{marginTop: SIZES.twenty}]}>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
-                Location
-              </RegularTextCB>
-              <View
-                style={[
-                  {
-                    height: SIZES.ten*6,
-                    backgroundColor: Colors.white,
-                    borderRadius: SIZES.ten,
-                    shadowColor: '#c5c5c5',
-                    shadowOffset: {width: SIZES.five, height: SIZES.five},
-                    shadowOpacity: 1.0,
-                    shadowRadius: SIZES.ten,
-                    elevation: SIZES.ten,
-                    justifyContent: 'center',
-                    paddingLeft: SIZES.twenty,
-                  },
-                ]}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({
-                      showModal: true,
-                    });
-                  }}>
-                  <RegularTextCB>
-                    {this.state.location ? this.state.location :'Get Location'}
-                  </RegularTextCB>
-                </TouchableOpacity>
-              </View>
-
-              {/* <LocationPicker
-                viewProperty="name"
-                onChangeValue={(val) => {
-                  this.setState({ services: val })
-                }}
-              /> */}
-
-            </View>
-
-            <Modal
-          animationType="fade"
-          transparent={true}
-          visible={this.state.showModal}
-          onRequestClose={() => {
-            this.setState({showModal: false});
-          }}>
-          <View
-            style={{
-              flex: 1,
-              padding: SIZES.twenty,
-              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
-            }}>
-            <View style={{flex: 1, padding: SIZES.five, flexDirection: 'row'}}>
-              {this.GooglePlacesInput()}
-              <TouchableOpacity
-                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
-                onPress={() => {
-                  this.setState({showModal: false});
-                }}>
-                <Image
-                  style={{height: SIZES.fifteen, width: SIZES.fifteen}}
-                  resizeMode="contain"
-                  source={Images.iconClose}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
-       
-        <View style={[styles.textInputContainer, { marginTop: SIZES.twenty }]}>
-          <RegularTextCB style={{ fontSize: 14, color:'#000' }}>
-            Exact Time
-          </RegularTextCB>
-
-         <TimePicker
-         onPress={this.showDatePicker}
-         isVisible={this.state.isDatePickerVisible}
-          mode='time'
-          onConfirm={this.handleConfirm}
-          onCancel={this.hideDatePicker}
-          is24Hour={false}
-          hideTitleContainerIOS={true}
-          time={this.state.startTime}
-          />
-        
-        </View>
-        <View style={{ marginTop: SIZES.ten*3, paddingBottom: SIZES.ten, marginHorizontal: SIZES.ten }}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="QUICK NOTIFY"
-            onPress={() => {   
-              this.postQuickOrder();
-            }}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  renderSelectionBottomSheetContent = () => {
-    return (
-      <View style={styles.bottomSheetBody}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
-            Select
-          </RegularTextCB>
-          <TouchableOpacity
-            onPress={() => {
-              this.clearSelection();
-              this.toggleIsSelectionModalVisible();
-            }}>
-            <Image
-              source={Images.iconClose}
-              style={{
-                height: SIZES.fifteen,
-                width: SIZES.fifteen,
-                tintColor: Colors.coolGrey,
-                resizeMode: 'contain',
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          style={{ marginTop: SIZES.five }}
-          data={this.state.selections}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={this.renderSelectionItem}
-          extraData={this.state.selections}
-          contentContainerStyle={{
-            paddingBottom: SIZES.fifty,
-          }}
-        />
-      </View>
-    );
-  };
-
-  renderSelectionItem = ({ item, index }) => {
-    return (
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={[
-          // item.isSelected === false
-          //   ? styles.unselectedFilter
-          //   : styles.selectedFilter
-          styles.unselectedFilter
-        ]}
-        onPress={() => {
-          
-          this.setState({
-         servicesid:ite
-       })
-          this.handleOnSelectionItemClick(index);
-        }}>
-        <RegularTextCB
-          style={{
-            fontSize: 14,
-            color: Colors.black,
-          }}>
-          {item.name}
-        </RegularTextCB>
-      </TouchableOpacity>
-    );
-  };
-
-  handleOnSelectionItemClick = (index) => {
-    let mSelection = this.state.selections;
-    mSelection.forEach((item) => {
-      item.isSelected = false;
-    });
-    mSelection[index].isSelected = true;
-    this.setState({ selections: mSelection, service: mSelection[index].name });
-    this.toggleIsSelectionModalVisible();
-  };
-
-  clearSelection() {
-    this.state.selections.forEach((item) => {
-      item.isSelected = false;
-    });
-    this.state.service = 'Select';
-  }
 
   renderCategoryItem = ({ item }) => {
 
@@ -618,6 +209,7 @@ GooglePlacesInput = (props) => {
   };
 
   renderVendorsAroundYouItem = ({ item }) => {
+// console.log('Vender item ======',item)
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -625,16 +217,12 @@ GooglePlacesInput = (props) => {
           styles.card,
           { padding: SIZES.ten, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five },
         ]}
-        onPress={() =>
-          this.props.navigation.navigate(Constants.viewVendorProfile,{
-                username:item.name,
-                  email:item.email,
-                  phoneNumber:item.phone,
-                  countrycode:item.country_code,
-                  location:item.location,
-                  avator:item.image
-          })
-        }>
+        onPress={() =>{
+          // this.props.navigation.navigate(Constants.viewVendorProfile,{
+          //      item:item
+          // }
+          // )
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -715,27 +303,31 @@ GooglePlacesInput = (props) => {
   };
 
   renderUrgentServicesItem = ({ item }) => {
+
+    // console.log('Urgent Services =======',item.userProfile)
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         style={[
           styles.card,
           {
-            padding: SIZES.ten,
-            paddingBottom: 20,
-            marginHorizontal: SIZES.fifteen,
+            height:SIZES.ten*20,
+            padding:SIZES.ten,
+            marginHorizontal: SIZES.ten,
             marginTop: SIZES.five,
-            marginBottom: 40,
+            marginBottom:SIZES.ten*4,
           },
         ]}
         onPress={() =>
           this.props.navigation.navigate(Constants.viewVendorProfile,{
-            username:item.name,
-            email:item.email,
-            phoneNumber:item.phone,
-            countrycode:item.country_code,
-            location:item.location,
-            avator:item.image
+            // username:item.name,
+            // email:item.email,
+            // phoneNumber:item.phone,
+            // countrycode:item.country_code,
+            // location:item.location,
+            // avator:item.image,
+            item:item
+            
           })}>
         <View
           style={{
@@ -743,11 +335,11 @@ GooglePlacesInput = (props) => {
             alignItems: 'center',
           }}>
           <View style={styles.circleCard}>
-            {/* <Image
-              source={{ uri: Constants.imageURL + item.userProfile.imag }}
+            <Image
+              source={{ uri: Constants.imageURL + item.userProfile.image }}
               style={styles.iconUser}
               resizeMode="cover"
-            /> */}
+            />
           </View>
           <RegularTextCB
             style={{
@@ -771,7 +363,7 @@ GooglePlacesInput = (props) => {
           style={{
             color: Colors.coolGrey,
           }}>
-          {item.name}
+          {item.userProfile.bio}
         </RegularTextCB>
         <View
           style={{
@@ -793,7 +385,7 @@ GooglePlacesInput = (props) => {
               color: Colors.orangeYellow,
               marginStart: 2,
             }}>
-            1.0
+            {item.ratings}
           </RegularTextCB>
         </View>
         <Image
@@ -991,25 +583,12 @@ GooglePlacesInput = (props) => {
             right: SIZES.fifteen,
           }}
           onPress={() => {
-            this.toggleIsQuickServiceModalVisible();
+            this.props.navigation.navigate(Constants.QuickNotify)
           }}>
           <RegularTextCB style={{ color: Colors.white }}>
             Quick Service
           </RegularTextCB>
         </TouchableOpacity>
-        <Modal
-          isVisible={this.state.isQuickServiceModalVisible}
-          coverScreen={false}
-          style={styles.modal}>
-          {this.renderBottomSheetContent()}
-        </Modal>
-
-        <Modal
-          isVisible={this.state.isSelectionModalVisible}
-          coverScreen={false}
-          style={styles.modal}>
-          {this.renderSelectionBottomSheetContent()}
-        </Modal>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
