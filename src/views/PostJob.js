@@ -188,23 +188,48 @@ export default class postJob extends Component {
 
   postJob = () => {
 
-    const PostData={
-       title : this.state.serviceCaption,
-       price :this.state.rateRequested, 
-       description:this.state.jobDesc,
-       expiry_date:this.state.expirydate,
-       address: this.state.location,
-       location:this.state.location,
-       images :this.state.jobImages,
-       services : this.state.services,
-    }
+    // const PostData={
+    //    title : this.state.serviceCaption,
+    //    price :this.state.rateRequested, 
+    //    description:this.state.jobDesc,
+    //    expiry_date:this.state.expirydate,
+    //    address: this.state.location,
+    //    location:this.state.location,
+    //    images :this.state.jobImages,
+    //    services : this.state.services,
+    // }
 
-    console.log('============',PostData);
+    const formData = new FormData();
+    formData.append('title', this.state.serviceCaption);
+    formData.append('price' ,this.state.rateRequested);
+    formData.append('description',this.state.jobDesc);
+    formData.append('expiry_date',this.state.expirydate);
+    formData.append('address', this.state.location);
+    formData.append('location',this.state.location);
+    // formData.append('image', {
+    //   ...this.state.jobImages,
+    //   uri: Platform.OS === 'android' ? this.state.jobImages : this.state.jobImages.replace('file:///',''),
+    //   name: `image-profile`,
+    //   type: 'image/jpeg',
+    // });
+    
+    this.state.jobImages.forEach((element, i) => {
+      const newFile = {
+        uri: element, type: 'image/jpg'
+      }
+      formData.append('image', newFile)
+    });
+       
+    formData.append('services',this.state.services);
 
+console.log('========',formData._parts)
+
+    this.setState({ isLoading: true });
     const onSuccess = ({ data }) => {
       console.log('Post Jobe Data ======',data);
       utils.showToast(data.message);
-      this.toggleIsLoading()
+      this.setState({ isLoading: false });
+    
     };
 
     const onFailure = (error) => {
@@ -219,7 +244,7 @@ export default class postJob extends Component {
         Authorization: this.state.accessToken,
       },
     };
-    Axios.post(Constants.postJob,PostData,options)
+    Axios.post(Constants.postJob,formData._parts,options)
     .then(onSuccess)
     .catch(onFailure);
 
@@ -562,8 +587,10 @@ export default class postJob extends Component {
                 bgColor={Colors.sickGreen}
                 label="POST"
                 onPress={() => {
-                  this.postJob();
-                  this.props.navigation.navigate(Constants.home)
+                  this.postJob()
+                  setTimeout(() => {
+              this.props.navigation.navigate(Constants.home);
+             }, 5000);
                 }}
               />
             </View>
