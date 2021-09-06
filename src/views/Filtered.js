@@ -66,8 +66,7 @@ export default class FileredScreen extends Component {
     getFilterData = () => {
    
         const postData={
-          
-            type:'customer',
+            // type:'vender',
             categoryId:this.props.route.params.catagoryid,
             min_price:'50',
             max_price:'40',
@@ -88,7 +87,7 @@ export default class FileredScreen extends Component {
          const options = {
            headers: {
              Authorization: this.state.accessToken,
-         //    'Content-Type':'application/x-www-form-urlencoded'
+            // 'Content-Type':'application/x-www-form-urlencoded'
            },
          };
          Axios.post(Constants.customerFilter,postData,options)

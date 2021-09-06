@@ -59,14 +59,16 @@ export default class VendorHome extends Component {
     this.setState({ accessToken: token }, () => {
       this.getUserProfile();
       this.getCategories();
-      this.getAllJobs();
+      // this.getAllJobs();
     });
   };
 
-  getAllJobs = () => {
+  getCategories = () => {
     const onSuccess = ({ data }) => {
 
-    this.setState({ isLoading: false, allJobs: data.data.records });
+      // console.log('All Job ================',data.data.records)
+
+    this.setState({ isLoading: false, categories: data.data.records });
     };
 
     const onFailure = (error) => {
@@ -80,8 +82,8 @@ export default class VendorHome extends Component {
       limit: 2,
     };
 
-    Axios.get(Constants.getAllJobs, {
-      params: params,
+    Axios.get(Constants.getVenderAllCategory, {
+      // params: params,
       headers: { Authorization: this.state.accessToken },
     })
       .then(onSuccess)
@@ -119,29 +121,26 @@ export default class VendorHome extends Component {
   };
 
 
-  getCategories = () => {
-    const onSuccess = ({ data }) => {
+  // getCategories = () => {
+  //   const onSuccess = ({ data }) => {
 
-      this.setState({ isLoading: false, categories: data.data.records }, () => {
-      }, () => {
-        // console.log("state data", this.state.categories)
-      });
-    };
+  //     this.setState({ isLoading: false, categories: data.data.records });
+  //   };
 
-    const onFailure = (error) => {
-      this.setState({ isLoading: false });
-      utils.showResponseError(error);
-    };
+  //   const onFailure = (error) => {
+  //     this.setState({ isLoading: false });
+  //     utils.showResponseError(error);
+  //   };
 
-    this.setState({ isLoading: true });
-    Axios.get(Constants.getAllVendorCategories, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
+  //   this.setState({ isLoading: true });
+  //   Axios.get(Constants.getAllVendorCategories, {
+  //     headers: {
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
 
   toggleIsLoading = () => {
     this.setState({ isLoading: !this.state.isLoading });
@@ -149,10 +148,12 @@ export default class VendorHome extends Component {
 
   renderCategoryItem = ({ item }) => {
 
+    // console.log('All Catagory======',item);
+
     return (
       <TouchableOpacity
         onPress={() => { 
-          this.props.navigation.navigate(Constants.vendorSingleCategory,{ item: item, });
+          this.props.navigation.navigate(Constants.vendorSingleCategory,{ item: item });
            }}
         style={{ alignItems: 'center' }}>
         <Image style={styles.circle} source={{ uri: Constants.imageURL +item.image }} />
@@ -295,12 +296,12 @@ export default class VendorHome extends Component {
               </TouchableOpacity>
 
             </View>
-            <FlatList
+            {/* <FlatList
               data={this.state.allJobs}
               keyExtractor={(item) => item.id}
               renderItem={this.renderJobsForYouItem}
               showsHorizontalScrollIndicator={false}
-            />
+            /> */}
           </View>
         </ScrollView>
         <Spinner

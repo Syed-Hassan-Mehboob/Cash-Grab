@@ -33,8 +33,6 @@ export default class ViewJob extends React.Component {
     // console.log('props Data ======',this.props.route.params.item.userProfile.image);
   }
 
-  
-
   state = {
     region: this.initialMapState.region,
   };
@@ -70,7 +68,7 @@ export default class ViewJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri:Constants.imageURL+this.props.route.params.item.userProfile.image}}
+                    source={{uri:Constants.imageURL+this.props.route.params.item.user.userProfile.image}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -116,14 +114,16 @@ export default class ViewJob extends React.Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.props.route.params.item.title}
+                  Tittle
+                  {/* {this.props.route.params.item.title} */}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  {this.props.route.params.item.price+'/'+this.props.route.params.item.time}
+                  Price
+                  {/* {this.props.route.params.item.price+'/'+this.props.route.params.item.time} */}
                 </LightTextCB>
               </View>
               <RegularTextCB
@@ -131,13 +131,15 @@ export default class ViewJob extends React.Component {
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
-                {this.props.route.params.item.user.type}
+                User Type
+                {/* {this.props.route.params.item.user.type} */}
               </RegularTextCB>
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                {this.props.route.params.item.description}
+                Description
+                {/* {this.props.route.params.item.description} */}
               </RegularTextCB>
               <View
                 style={{
@@ -154,7 +156,8 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.props.route.params.item.location}
+                  Location
+                  {/* {this.props.route.params.item.location} */}
                 </RegularTextCB>
               </View>
               <View

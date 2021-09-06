@@ -125,6 +125,11 @@ export default class VendorProfile extends React.Component {
     phone: '',
     location: '',
     image:'',
+    rating:'',
+    year:'',
+    customer:'',
+    services:[],
+    review:[]
   };
 
   componentDidMount() {
@@ -147,9 +152,56 @@ export default class VendorProfile extends React.Component {
     });
   };
 
+  toggleIsLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading });
+  };
+
+  getUserAccessToken = async () => {
+  const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => this.getUserProfile());
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({ data }) => {
+      console.log('Vender Profile =========',data.data.records);
+      this.toggleIsLoading();
+      this.setState({
+        avatar:Constants.imageURL+data.data.records.userProfile.image,
+        name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phone: data.data.records.phone,
+        location: data.data.records.userProfile.location,
+        rating:data.data.records.ratings,
+        year:data.data.records.year,
+        services:data.data.records.services,
+        review:data.data.records.comments,
+        customer:data.data.records.customer
+
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+
+
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   renderServicesItem = ({ item }) => {
+    console.log('Services=============',item)
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.card,
           {
@@ -157,11 +209,12 @@ export default class VendorProfile extends React.Component {
             padding: SIZES.ten,
             margin:SIZES.five,
             flexDirection: 'row',
-            width: width / 1.65,
+            width: width / 2,
+            height:SIZES.ten*7,
             backgroundColor: Colors.white,
             marginBottom:SIZES.twenty,
           },
-        ]}>
+        ]} activeOpacity={0.6} >
         <Image
           source={item.image}
           style={{ height:SIZES.ten*9, width:SIZES.ten*9, borderRadius:SIZES.fifteen }}
@@ -188,11 +241,13 @@ export default class VendorProfile extends React.Component {
             {item.desc}
           </RegularTextCB>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   renderReviewsItem = ({ item }) => {
+
+    console.log('Reviews ====================',item)
     return (
       <View
         style={{
@@ -274,45 +329,7 @@ export default class VendorProfile extends React.Component {
     );
   };
 
-  toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
-  };
 
-  getUserAccessToken = async () => {
-  const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getUserProfile());
-  };
-
-  getUserProfile = () => {
-    const onSuccess = ({ data }) => {
-      console.log('Vender Profile ======',data.data.records.userProfile.image);
-      this.toggleIsLoading();
-      this.setState({
-        avatar:Constants.imageURL+data.data.records.userProfile.image,
-        name: data.data.records.name,
-        email: data.data.records.email,
-        countryCode: data.data.records.country_code,
-        phone: data.data.records.phone,
-        location: data.data.records.userProfile.location,
-      });
-    };
-
-    const onFailure = (error) => {
-      this.toggleIsLoading();
-      utils.showResponseError(error);
-    };
-
-
-
-    this.toggleIsLoading();
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
 
   render() {
     return (
@@ -494,7 +511,7 @@ export default class VendorProfile extends React.Component {
                     Phone No.
                   </RegularTextCB>
                   <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
-                    {'('}{this.state.countryCode}{')'}{this.state.phone}
+                     {this.state.countryCode}  {this.state.phone}
                   </RegularTextCB>
                 </View>
                 <View
@@ -545,7 +562,7 @@ export default class VendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                      8 Years
+                      {this.state.year} Years
                     </RegularTextCB>
                   </LinearGradient>
                   <LinearGradient
@@ -576,7 +593,7 @@ export default class VendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                      4.9 Rating
+                      {this.state.rating} Rating
                     </RegularTextCB>
                   </LinearGradient>
                   <LinearGradient
@@ -606,7 +623,7 @@ export default class VendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                      350 Client
+                      {this.state.customer} Client
                     </RegularTextCB>
                   </LinearGradient>
                 </View>
@@ -614,10 +631,11 @@ export default class VendorProfile extends React.Component {
             )}
             {this.state.isReviewsSelected && (
               <View>
+              {console.log('this reviews ======',this.state.review)}
                 <FlatList
                   style={{ paddingBottom:SIZES.fifty }}
                   showsVerticalScrollIndicator={false}
-                  data={this.reviews}
+                  data={this.state.review}
                   renderItem={this.renderReviewsItem}
                   keyExtractor={(item) => item.id}
                 />
@@ -639,7 +657,7 @@ export default class VendorProfile extends React.Component {
                   style={{ paddingBottom:SIZES.ten*10 }}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={this.services}
+                  data={this.state.services}
                   renderItem={this.renderServicesItem}
                   keyExtractor={(item) => item.id}
                   contentInset={{

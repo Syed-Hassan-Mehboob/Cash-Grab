@@ -37,6 +37,9 @@ export default class Filter extends Component {
       selectedLocation: undefined,
       isLoading: false,
       accessToken: '',
+      minPrice:'',
+      maxPrice:'',
+     
     };
   }
 
@@ -79,7 +82,7 @@ export default class Filter extends Component {
 
     this.setState({ isLoading: true });
 
-    Axios.get(Constants.getFilter, { headers: { Authorization: this.state.accessToken, } })
+    Axios.get(Constants.customerFilterservice, { headers: { Authorization: this.state.accessToken, } })
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -133,6 +136,7 @@ export default class Filter extends Component {
   };
 
   renderPriceItem = ({ item, index }) => {
+    
     return (
       <TouchableOpacity
         style={
@@ -154,8 +158,8 @@ export default class Filter extends Component {
     });
     mPrices[index].isSelected = true;
     let name = mPrices[index].name;
-    let price = name.split('$').join('');
-    this.setState({ prices: mPrices, selectedPrice: price });
+    let price = name.split('-');
+    this.setState({ prices: mPrices, minPrice:price[0],maxPrice:price[1] });
   };
 
 
@@ -182,6 +186,42 @@ export default class Filter extends Component {
 
     });
   };
+
+  getFilterData = () => {
+   
+    const postData={
+      type:'vender',
+      categoryId:this.state.selectedCategory.id,
+      min_price:this.state.minPrice,
+      max_price:this.state.maxPrice,
+      location:this.state.selectedLocation.name
+      
+    }
+
+    console.log('==========',postData)
+
+this.setState({ isLoading: true });
+const onSuccess = ({ data }) => {
+  console.log('========================Filter Data==',data)
+utils.showToast(data.message);
+this.setState({ isLoading: false });
+};
+const onFailure = (error) => {
+console.log("error =============",error)
+utils.showResponseError(error.massage);
+this.setState({ isLoading: false });
+};
+const options = {
+headers: {
+  Authorization: this.state.accessToken,
+ // 'Content-Type':'application/x-www-form-urlencoded'
+},
+};
+Axios.post(Constants.customerFilter,postData,options)
+.then(onSuccess)
+.catch(onFailure);
+
+};
 
   render() {
     return (
@@ -278,14 +318,8 @@ export default class Filter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-               
-                this.props.navigation.navigate(Constants.Filtered,{
-                  catagoryid:this.state.selectedCategory.id,
-                  price: this.state.selectedPrice,
-                  location:this.state.selectedLocation.name
-                })
-
-              }}
+               this.getFilterData()
+                }}
             />
           </View>
         </View>

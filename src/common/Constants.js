@@ -69,7 +69,7 @@ const Constants = {
   updateProfileURL: 'auth/update-profile',
   signOutURL: 'auth/sign-out',
   customerCategoriesURL: 'customer/categories',
-  customerViewCategoriesURL: 'customer/view-category?',
+  customerViewCategoriesURL: 'customer/getVendorsByCategory?',
   customerRatingsURL: 'customer/ratings',
   contentsURL: 'contents',
   notificationsURL: 'notifications',
@@ -83,9 +83,11 @@ const Constants = {
   getFilter: 'vendors/getfilters',
   getvendorAround: "customer/vendorAroundYou?",
   getTopSerVices: 'customer/getAllVendors',
-  customerFilterservice:'customer/filter-services' ,
+  customerFilterservice:'customer/getfilters' ,
   quickOrder:'order/quick-order',
-  customerFilter:'customer/filter?'
+  customerFilter:'customer/filter?',
+  getVenderByCatagory:'customer/get-vendor-profile?',
+  getVenderAllCategory:'vendors/categories'
 };
 
 export const SIZES = {

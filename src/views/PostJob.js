@@ -206,21 +206,17 @@ export default class postJob extends Component {
     formData.append('expiry_date',this.state.expirydate);
     formData.append('address', this.state.location);
     formData.append('location',this.state.location);
-    // formData.append('image', {
-    //   ...this.state.jobImages,
-    //   uri: Platform.OS === 'android' ? this.state.jobImages : this.state.jobImages.replace('file:///',''),
-    //   name: `image-profile`,
-    //   type: 'image/jpeg',
-    // });
-    
-    this.state.jobImages.forEach((element, i) => {
-      const newFile = {
-        uri: element, type: 'image/jpg'
-      }
-      formData.append('image', newFile)
+    // formData.append('image',this.state.jobImages);
+
+    this.state.jobImages.forEach((item, i) => {
+      formData.append("image", {
+        uri:Platform.OS === 'android' ? item : item.replace('file:///', ''),
+        name: `image-profile`,
+        type: 'image/jpeg',
+      });
     });
        
-    formData.append('services',this.state.services);
+    formData.append('services[]',this.state.services);
 
 console.log('========',formData._parts)
 
@@ -241,6 +237,7 @@ console.log('========',formData._parts)
 
     const options = {
       headers: {
+        Accept: "application/x-www-form-urlencoded",
         Authorization: this.state.accessToken,
       },
     };
@@ -268,7 +265,9 @@ console.log('========',formData._parts)
           console.log('Image Uri ==== ==== ',item.uri)
           imageuri.push(item.uri);
         });
+
         this.setState({jobImages: imageuri, showImages: true});
+
       } else {
       }
     });
@@ -542,7 +541,7 @@ console.log('========',formData._parts)
                             marginHorizontal: SIZES.ten,
                             borderRadius: SIZES.ten,
                           }}
-                          source={{uri: item}}
+                          source={{uri:item}}
                           resizeMode="cover"
                         />
                         <View
@@ -588,9 +587,9 @@ console.log('========',formData._parts)
                 label="POST"
                 onPress={() => {
                   this.postJob()
-                  setTimeout(() => {
-              this.props.navigation.navigate(Constants.home);
-             }, 5000);
+            //       setTimeout(() => {
+            //   this.props.navigation.navigate(Constants.home);
+            //  }, 5000);
                 }}
               />
             </View>

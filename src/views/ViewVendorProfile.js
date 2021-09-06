@@ -16,7 +16,10 @@ import Colors from '../common/Colors';
 import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from '../network/APIKit';
+import utils from '../utils';
+import { Spinner } from 'native-base';
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
@@ -27,12 +30,26 @@ export default class ViewVendorProfile extends React.Component {
     this.state = {
       isDescriptionSelected: true, 
       isReviewsSelected: false,
-       review: '',
-      item:this.props.route.params.item};
+       review: [],
+      isLoading: false,
+      accessToken: '',
+      services:[],
+      name:'',
+      email:'',
+      phone:'',
+      ratings:'',
+      countryCode:'',
+      image:'',
+      location:'',
+      customer:''
+
+    };
   }
 
 
- 
+  componentDidMount() {
+    this.getUserAccessToken();
+  }
 
   selectIsDescriptionSelected = () => {
     this.setState({
@@ -48,7 +65,62 @@ export default class ViewVendorProfile extends React.Component {
     });
   };
 
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.getVenderProfile();
+    });
+
+  };
+
+  getVenderProfile = () => {
+    // console.log('======', this.props.route.params.item)
+
+
+    const onSuccess = ({ data }) => {
+      console.log('Vender By catagory =======',data);
+      this.setState({  
+     name:data.data.records.name,email:data.data.records.email,
+      phone:data.data.records.phone,
+     ratings:data.data.records.ratings,
+     year:data.data.records.year,
+     image:data.data.records.userProfile.image ,
+     location:data.data.records.userProfile.location,
+     customer:data.data.records.customer,
+     services:data.data.records.services,
+     review:data.data.records.comments,
+     isLoading: false,
+  });
+  this.setState({
+    isLoading:false
+  })
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    let params = {
+      id: this.props.route.params.item,
+    };
+
+    Axios.post(Constants.getVenderByCatagory, params,{
+     
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+
   renderServicesItem = ({item}) => {
+    console.log('Services =========',item)
     return (
       <TouchableOpacity
         style={[
@@ -104,6 +176,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
+    console.log('Item==========',item);
     return (
       <View
         style={{
@@ -124,13 +197,14 @@ export default class ViewVendorProfile extends React.Component {
               elevation: SIZES.ten,
             }}>
             <Image
-              source={item.user.image}
+              source={{uri:item.image}}
               style={{height: SIZES.ten*6, width: SIZES.ten*6, borderRadius: SIZES.ten*3}}
             />
           </View>
           <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-              {item.user.name}
+            Name
+              {/* {item.user.name} */}
             </RegularTextCB>
             <Image
               source={Images.like}
@@ -149,7 +223,7 @@ export default class ViewVendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 width: width - 80,
               }}>
-              {item.review.text}
+              {item.comments}
             </RegularTextCB>
             <View style={{alignSelf: 'baseline', marginTop: SIZES.five}}>
               <StarRating
@@ -159,7 +233,7 @@ export default class ViewVendorProfile extends React.Component {
                 halfStar={Images.starHalf}
                 emptyStar={Images.starHalf}
                 starSize={SIZES.fifteen}
-                rating={parseInt(item.review.rating)}
+                rating={parseInt(item.ratings)}
               />
             </View>
             <RegularTextCB
@@ -167,7 +241,7 @@ export default class ViewVendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.review.date}
+              {item.created_at}
             </RegularTextCB>
             <Image
               source={Images.moreDots}
@@ -188,7 +262,8 @@ export default class ViewVendorProfile extends React.Component {
 
   render() {
 
-    console.log('item=======',this.state.item.name);
+    // console.log('User Data=============',this.state.userData);
+
     return (
       <View style={styles.container}>
         <View
@@ -231,7 +306,7 @@ export default class ViewVendorProfile extends React.Component {
                 this.props.navigation.navigate(Constants.chat);
               }}>
               <Image
-                source={Images.iconDrawerChat}
+                source={{uri:Constants.imageURL+this.state.image}}
                 style={[styles.iconBack, {tintColor: Colors.white}]}
               />
             </TouchableOpacity>
@@ -244,7 +319,7 @@ export default class ViewVendorProfile extends React.Component {
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
               <Image
-                source={{uri:Constants.imageURL+this.state.item.userProfile.image}}
+                source={{uri:Constants.imageURL+this.state.image}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
@@ -270,7 +345,7 @@ export default class ViewVendorProfile extends React.Component {
             </View>
             <RegularTextCB
               style={{color: Colors.white, fontSize: 18, marginTop: SIZES.five}}>
-              {this.state.item.name}
+              {this.state.name}
             </RegularTextCB>
             <RegularTextCB
               style={{
@@ -325,6 +400,7 @@ export default class ViewVendorProfile extends React.Component {
                   Reviews
                 </RegularTextCB>
               </TouchableOpacity>
+            
             </View>
             {this.state.isDescriptionSelected && (
               <View style={{width: '100%'}}>
@@ -339,7 +415,7 @@ export default class ViewVendorProfile extends React.Component {
                     User Name
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {this.state.item.name}
+                    {this.state.name}
                   </RegularTextCB>
                 </View>
                 <View
@@ -353,7 +429,7 @@ export default class ViewVendorProfile extends React.Component {
                     Email Address
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {this.state.item.email}
+                    {this.state.email}
                   </RegularTextCB>
                 </View>
                 <View
@@ -367,7 +443,7 @@ export default class ViewVendorProfile extends React.Component {
                     Phone Number 
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                  {this.state.item.phone}
+                  {this.state.phone}
                   </RegularTextCB>
                 </View>
                 <View
@@ -381,7 +457,7 @@ export default class ViewVendorProfile extends React.Component {
                     Location
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {this.state.item.userProfile.location}
+                    {this.state.location}
                   </RegularTextCB>
                 </View>
                 <View
@@ -418,7 +494,7 @@ export default class ViewVendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                      8 Years
+                      {this.state.year} Years
                     </RegularTextCB>
                   </LinearGradient>
                   <LinearGradient
@@ -449,7 +525,7 @@ export default class ViewVendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                       {this.state.item.ratings} Rating
+                       {this.state.ratings} Rating
                     </RegularTextCB>
                   </LinearGradient>
                   <LinearGradient
@@ -479,7 +555,8 @@ export default class ViewVendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                      350 Client
+                      {this.state.customer} Client
+                      {console.log('=====',this.state.customer)}
                     </RegularTextCB>
                   </LinearGradient>
                 </View>
@@ -489,7 +566,7 @@ export default class ViewVendorProfile extends React.Component {
               <View>
                 <FlatList
                   showsVerticalScrollIndicator={false}
-                  data={this.reviews}
+                  data={this.state.review}
                   renderItem={this.renderReviewsItem}
                   keyExtractor={(item) => item.id}
                 />
@@ -539,7 +616,7 @@ export default class ViewVendorProfile extends React.Component {
                   style={{paddingBottom:SIZES.ten*10}}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={this.state.item.service}
+                  data={this.state.services}
                   renderItem={this.renderServicesItem}
                   keyExtractor={(item) => item.id}
                   contentInset={{
@@ -559,8 +636,17 @@ export default class ViewVendorProfile extends React.Component {
                 />
               </View>
             </View>
-          )}
+            
+          )
+          }
+     
         </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFFf',
+          fontFamily: Constants.fontRegular,}}
+        />
       </View>
     );
   }

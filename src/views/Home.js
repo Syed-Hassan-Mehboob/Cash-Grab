@@ -192,7 +192,7 @@ export default class Home extends Component {
       <TouchableOpacity
         onPress={() =>
           this.props.navigation.navigate(Constants.singleCategory,{
-            item: item,
+            item: item
           })
         }
         style={{ alignItems: 'center' }}>
@@ -218,10 +218,10 @@ export default class Home extends Component {
           { padding: SIZES.ten, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five },
         ]}
         onPress={() =>{
-          // this.props.navigation.navigate(Constants.viewVendorProfile,{
-          //      item:item
-          // }
-          // )
+          this.props.navigation.navigate(Constants.viewVendorProfile,{
+               item:item.id
+          }
+          )
         }}>
         <View
           style={{
@@ -318,17 +318,14 @@ export default class Home extends Component {
             marginBottom:SIZES.ten*4,
           },
         ]}
-        onPress={() =>
+        onPress={() =>{
           this.props.navigation.navigate(Constants.viewVendorProfile,{
-            // username:item.name,
-            // email:item.email,
-            // phoneNumber:item.phone,
-            // countrycode:item.country_code,
-            // location:item.location,
-            // avator:item.image,
-            item:item
-            
-          })}>
+               item:item.id
+          }
+          )
+        }} 
+         
+          >
         <View
           style={{
             flexDirection: 'row',

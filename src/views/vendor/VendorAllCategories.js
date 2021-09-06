@@ -42,6 +42,7 @@ export default class VendorSingleCategory extends Component {
   getAllCategories = () => {
 
     const onSuccess = ({ data }) => {
+      console.log('All Catagor==========',data.data.records)
       this.setState({ isLoading: false, getAllCategories: data.data.records });
     };
 
@@ -52,13 +53,24 @@ export default class VendorSingleCategory extends Component {
 
     this.setState({ isLoading: true });
 
-    Axios.get(Constants.getAllVendorCategories, {
+    Axios.get(Constants.getVenderAllCategory, {
       headers: {
         Authorization: this.state.accessToken,
       },
     })
       .then(onSuccess)
       .catch(onFailure);
+  };
+
+  formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+      numberOfElementsLastRow++;
+    }
+  
+    return data;
   };
 
   renderAllCategoriesItem = ({ item }) => {
@@ -68,7 +80,14 @@ export default class VendorSingleCategory extends Component {
         style={[
           styles.card,
           { padding:SIZES.fifteen, marginHorizontal:SIZES.five, marginBottom:SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
-        ]}>
+        ]}   
+        onPress={() =>{
+          this.props.navigation.navigate(Constants.vendorSingleCategory,{
+               item:item.id
+          }
+          )
+        }}
+        >
 
         <Image
           source={{ uri: Constants.imageURL + item.image }}
@@ -128,7 +147,7 @@ export default class VendorSingleCategory extends Component {
         </View>
         <View style={{ flex: 1, paddingTop:SIZES.ten }} >
           <FlatList
-            data={this.state.getAllCategories}
+           data={this.formatData(this.state.getAllCategories,2)}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             numColumns={2}

@@ -470,9 +470,10 @@ const Nearby = (props) => {
               style={styles.card}
               key={index}
               onPress={() =>{
-                // props.navigation.navigate(Constants.viewVendorProfile,{
-               
-                // })
+                props.navigation.navigate(Constants.viewVendorProfile,{
+               item:marker.id
+          }
+          )
               }}>
               <View style={styles.circleCard}>
                 <Image

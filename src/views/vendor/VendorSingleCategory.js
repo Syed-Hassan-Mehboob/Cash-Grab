@@ -124,7 +124,7 @@ export default class VendorSingleCategory extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      getJobs: []
+      getJobsByCatagory: []
     };
 
   }
@@ -143,9 +143,11 @@ export default class VendorSingleCategory extends Component {
   };
 
   getJobsByCategory = () => {
+    console.log('==================',this.props.route.params.item.id)
     const onSuccess = ({ data }) => {
-      // console.log('Data==========',data.userProfile)
-      this.setState({ isLoading: false, getJobs: data.data });
+      console.log('Single category Data==========',data.data)
+      utils.showToast(data.message)
+      this.setState({ isLoading: false,  getJobsByCatagory: data.data });
     };
 
     const onFailure = (error) => {
@@ -155,9 +157,8 @@ export default class VendorSingleCategory extends Component {
 
     this.setState({ isLoading: true });
     let params = {
-      categoryId: 1,
+      categoryId: this.props.route.params.item.id,
     };
-
     Axios.get(Constants.getJobsByCategory, {
       params,
       headers: {
@@ -170,6 +171,8 @@ export default class VendorSingleCategory extends Component {
 
 
   renderSingleCategoriesItem = ({ item }) => {
+
+    // console.log('======================single ',item)
     
     return (
       <TouchableOpacity
@@ -185,7 +188,7 @@ export default class VendorSingleCategory extends Component {
           style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL +item.userProfile.image }}
+              source={{ uri: Constants.imageURL +item.user.userProfile.image }}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -216,10 +219,10 @@ export default class VendorSingleCategory extends Component {
 
         </View>
 
-        {/* <RegularTextCB
+        <RegularTextCB
           style={{ color: Colors.sickGreen, fontSize: 12, }}>
-          {item.category.name}
-        </RegularTextCB> */}
+          {item.service[0]['name']}
+        </RegularTextCB>
         <RegularTextCB
           style={{ color: Colors.coolGrey, }}>
           {item.description}
@@ -235,7 +238,7 @@ export default class VendorSingleCategory extends Component {
               color: Colors.coolGrey,
               marginStart: SIZES.five,
             }}>
-            {item.address}
+            {item.location}
           </RegularTextCB>
         </View>
         <View
@@ -298,7 +301,7 @@ export default class VendorSingleCategory extends Component {
               style={[styles.iconBack, { tintColor: Colors.black }]}
             />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row',alignItems:"center",justifyContent:'center' }}>
             <Image
               source={{ uri: Constants.imageURL + this.props.route.params.item.image }}
               style={{ height: SIZES.fifty, width: SIZES.fifty }}
@@ -310,7 +313,7 @@ export default class VendorSingleCategory extends Component {
         </View>
         <FlatList
           style={{ marginTop: SIZES.ten }}
-          data={this.state.getJobs}
+          data={this.state.getJobsByCatagory}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}

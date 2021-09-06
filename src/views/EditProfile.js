@@ -274,6 +274,7 @@ export default class EditProfile extends Component {
       name: `image-profile`,
       type: 'image/jpeg',
     });
+    
 
     const options = {
       headers: {

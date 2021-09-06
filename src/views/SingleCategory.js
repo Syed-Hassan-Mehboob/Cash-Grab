@@ -50,11 +50,12 @@ export default class SingleCategory extends Component {
       console.log('==== catagory data ====',data);
       this.toggleIsLoading();
       this.setState({ vendors: data.data });
+      utils.showToast(data.message)
     };
 
     const onFailure = (error) => {
       this.toggleIsLoading();
-      utils.showResponseError(error);
+      utils.showResponseError(error.massage);
     };
 
     let params = {
@@ -76,7 +77,7 @@ export default class SingleCategory extends Component {
 
   renderSingleCategoriesItem = ({ item }) => {
 
-    console.log('Single Category Item======',item)
+    console.log('Single Category Item======',item.userProfile)
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -135,33 +136,27 @@ export default class SingleCategory extends Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 16,
-            }}>
-            {item.title}
-          </RegularTextCB>
+         <RegularTextCB
+          style={{
+            color: Colors.sickGreen,
+            fontSize: 12,
+          }}>
+          {item.services[0]['name']}
+        </RegularTextCB>
           <LightTextCB
             style={{
               color: Colors.black,
               fontSize: 12,
             }}>
-            ${item.price}
+             ${item.services[0]['price']}
           </LightTextCB>
         </View>
-        <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {item.category.name}
-        </RegularTextCB>
+       
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
           }}>
-          {item.description}
+          {item.bio}
         </RegularTextCB>
         <View
           style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
@@ -176,6 +171,7 @@ export default class SingleCategory extends Component {
             }}>
             {item.address}
           </RegularTextCB>
+
         </View>
         <View
           style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
@@ -191,12 +187,7 @@ export default class SingleCategory extends Component {
               flex: 1,
               justifyContent: 'space-between',
             }}>
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-              }}>
-              {item.time}
-            </RegularTextCB>
+        
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -244,7 +235,7 @@ export default class SingleCategory extends Component {
             </RegularTextCB>
           </View>
         </View>
-        {/* <FlatList
+        <FlatList
           style={{ marginTop: SIZES.ten }}
           data={this.state.vendors}
           keyExtractor={(item) => item.id}
@@ -258,7 +249,7 @@ export default class SingleCategory extends Component {
             // for android
             paddingBottom: SIZES.ten*10,
           }}
-        /> */}
+        />
 
         <Spinner
           visible={this.state.isLoading}

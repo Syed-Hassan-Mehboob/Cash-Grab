@@ -79,7 +79,13 @@ export default class AllCategories extends Component {
         style={[
           styles.card,
           { padding: 15, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
-        ]}>
+        ]} 
+        onPress={() =>
+          this.props.navigation.navigate(Constants.singleCategory,{
+            item: item
+          })
+        }
+        >
 
         <Image
           source={{ uri: Constants.imageURL + item.image }}

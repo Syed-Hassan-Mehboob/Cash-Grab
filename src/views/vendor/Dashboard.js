@@ -312,7 +312,7 @@ export default class Dashboard extends Component {
                 label="1 Job available in your location"
                 bgColor={Colors.sickGreen}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.viewJob);
+                  // this.props.navigation.navigate(Constants.viewJob);
                 }}
               />
             </View>
@@ -340,7 +340,7 @@ export default class Dashboard extends Component {
                 ,
                 color: Colors.black,
               }}>
-              Job In Progress
+              Order In Progress
             </RegularTextCB>
             <View
               style={[
@@ -487,7 +487,7 @@ export default class Dashboard extends Component {
                 ,
                 color: Colors.black,
               }}>
-              Completed Jobs
+              Completed Order
             </RegularTextCB>
             <FlatList
               style={{ paddingBottom: SIZES.ten*10 }}
