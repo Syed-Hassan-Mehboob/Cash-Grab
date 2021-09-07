@@ -87,7 +87,9 @@ const Constants = {
   quickOrder:'order/quick-order',
   customerFilter:'customer/filter?',
   getVenderByCatagory:'customer/get-vendor-profile?',
-  getVenderAllCategory:'vendors/categories'
+  getVenderAllCategory:'vendors/categories',
+  getJobAround:'vendors/get-around-job?',
+  viewJob:'customer/jobs/detail?'
 };
 
 export const SIZES = {

@@ -180,7 +180,7 @@ export default class VendorSingleCategory extends Component {
         style={[styles.card, { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five},]}
         onPress={() => 
         this.props.navigation.navigate(Constants.viewJob,{
-          item:item })   
+          item:item.id })   
           } 
           >
 

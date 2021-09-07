@@ -1,19 +1,25 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Spinner } from 'native-base';
 import React from 'react';
 import {
   Image,
+  LogBox,
   Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
+  FlatList
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../../common/Colors';
-import Constants, { SIZES } from '../../common/Constants';
+import Constants, { height, SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 export default class ViewJob extends React.Component {
   
 
@@ -29,15 +35,87 @@ export default class ViewJob extends React.Component {
 
   constructor(props) {
     super(props);
-
-    // console.log('props Data ======',this.props.route.params.item.userProfile.image);
+    this.state = {
+      isLoading: false,
+      accessToken: '',
+      viewJob: [],
+      images:[],
+      userData:{},
+      region: this.initialMapState.region,
+    };
   }
 
-  state = {
-    region: this.initialMapState.region,
+  componentDidMount() {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    this.getUserAccessToken()
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken()
+    });
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.viewJob();
+    });
   };
 
+  
+
+  viewJob = () => {
+    console.log('==================',this.props.route.params.item)
+
+    this.setState({isLoading:true})
+    const onSuccess = ({ data }) => {
+     
+      this.setState({isLoading:false})
+      this.setState({
+     userImage:data.data.records.user.userProfile.image,
+     title:data.data.records.title,
+     location:data.data.records.location,
+     time:data.data.records.time,
+     images:data.data.records.images,
+     username:data.data.records.user.name,
+     lat:data.data.records.user.userProfile.latitude,
+     lng:data.data.records.user.userProfile.longitude,
+     price:data.data.records.price,
+     description:data.data.records.description
+
+      })
+
+      utils.showToast(data.message)
+
+      // this.setState({ isLoading: false,  getJobsByCatagory: data.data });
+
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+    let params = {
+      jobId: this.props.route.params.item,
+    };
+    Axios.get(Constants.viewJob, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+
+  };
+
+ 
+
   render() {
+    // this.state.images.map((item)=>{console.log('==========',item)})
+  
+    console.log('=====',this.state.images)
+
     return (
       <View style={styles.container}>
         <View
@@ -68,7 +146,7 @@ export default class ViewJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri:Constants.imageURL+this.props.route.params.item.user.userProfile.image}}
+                    source={{uri:Constants.imageURL+this.state.userImage}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -79,7 +157,7 @@ export default class ViewJob extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.props.route.params.item.user.name}
+                    {this.state.username}
                   </RegularTextCB>
                   <View
                     style={{
@@ -115,31 +193,31 @@ export default class ViewJob extends React.Component {
                     fontSize: 16,
                   }}>
                   Tittle
-                  {/* {this.props.route.params.item.title} */}
+                  {this.state.title}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  Price
-                  {/* {this.props.route.params.item.price+'/'+this.props.route.params.item.time} */}
+                  $
+                  {this.state.price}
                 </LightTextCB>
               </View>
-              <RegularTextCB
+              {/* <RegularTextCB
                 style={{
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
                 User Type
-                {/* {this.props.route.params.item.user.type} */}
-              </RegularTextCB>
+                {this.props.route.params.item.user.type}
+              </RegularTextCB> */}
+
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                Description
-                {/* {this.props.route.params.item.description} */}
+                {this.state.description}
               </RegularTextCB>
               <View
                 style={{
@@ -156,8 +234,7 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  Location
-                  {/* {this.props.route.params.item.location} */}
+                  {this.state.location}
                 </RegularTextCB>
               </View>
               <View
@@ -175,28 +252,35 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.props.route.params.item.time}
+                  {this.state.time}
                 </RegularTextCB>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                }}>
-                <View>
-                  <Image source={Images.car1} style={styles.carImage} />
-                </View>
-                <View>
-                  <Image source={Images.car2} style={styles.carImage} />
-                </View>
-                <View>
-                  <Image source={Images.car3} style={styles.carImage} />
-                </View>
               </View>
-            </View>
+
+          <FlatList
+              horizontal
+              data={this.state.images}
+              keyExtractor={(item) => item.id}
+              renderItem={({item})=>{
+                console.log('images===',item.images)
+                return(
+                    <Image source={Images.car1} style={styles.carImage}/>
+          
+                )
+              }}
+              showsHorizontalScrollIndicator={false}
+            />
+
             <MapView
               provider={PROVIDER_GOOGLE}
-              initialRegion={this.state.region}
+          
+              initialRegion={{
+                latitude:24.90628280557342,
+                longitude:67.07237028142383,
+                latitudeDelta: 0.04864195044303443,
+               longitudeDelta: 0.04014281769006
+              }}
+
               showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
@@ -213,6 +297,7 @@ export default class ViewJob extends React.Component {
             </View>
           </View>
         </ScrollView>
+
       </View>
     );
   }
@@ -252,9 +337,8 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   carImage: {
-    height: SIZES.fifty*3,
-    width: SIZES.fifty*3,
-    resizeMode: 'contain',
+    height: SIZES.fifty*2,
+    width: SIZES.fifty*2,
   },
   carImageShadow: {
     height: SIZES.ten*8,
@@ -269,5 +353,9 @@ const styles = StyleSheet.create({
     width: SIZES.ten*6,
     borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });
