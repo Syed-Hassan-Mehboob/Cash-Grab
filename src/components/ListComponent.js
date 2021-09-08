@@ -1,7 +1,7 @@
 import React from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import Colors from "../common/Colors";
-import Constants from "../common/Constants";
+import Constants, { SIZES } from "../common/Constants";
 import Images from "../common/Images";
 import LightTextCB from "./LightTextCB";
 import RegularTextCB from "./RegularTextCB";
@@ -14,16 +14,15 @@ const ListComponent = (props) => {
     return (
         <TouchableOpacity
             activeOpacity={0.5}
-            style={[styles.card, { padding: 15, marginHorizontal: 15, marginBottom: 20, marginTop: 5 },]}
+            style={[styles.card, { padding:SIZES.fifteen,margin:SIZES.five },]}
             onPress={() => navigation.navigate(Constants.viewJob,{
-                item:item
+                item:item.id
             })}>
             <View
                 style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={styles.circleCard}>
                     <Image
-                        // source={{ uri: Constants.imageURL + props.screenName ? item.category.image : item.user.userProfile.image }}
-                        source={{uri: Constants.imageURL+item.user.userProfile.image}}
+                        source={{ uri: Constants.imageURL + item.image }}
                         style={styles.iconUser}
                         resizeMode="cover"
                     />
@@ -31,13 +30,18 @@ const ListComponent = (props) => {
                 <View style={{ marginStart: 10 }}>
                     <RegularTextCB
                         style={{ color: Colors.black, fontSize: 16, }}>
-                        {item.user.name}
+                        {item.name}
                     </RegularTextCB>
                     <View
                         style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center', }}>
-                        <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
-                        <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: 5, }}>
-                            {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
+                        <Image source={Images.iconVerified} style={{ height: 15, width: 15, resizeMode: 'contain',
+                         tintColor: item.email_verified_at !== null ? Colors.turqoiseGreen : 'red'    
+                         }} 
+                         />
+                        <RegularTextCB style={{ 
+                            color: item.email_verified_at !== null ? Colors.turqoiseGreen : 'red', 
+                        fontSize: 12, marginStart: 5, }}>
+                            {item.email_verified_at !== null ? "Verified" : "Unverified"}
                         </RegularTextCB>
                     </View>
                 </View>
@@ -53,15 +57,12 @@ const ListComponent = (props) => {
                 </LightTextCB>
 
             </View>
-
-            <RegularTextCB
-                style={{ color: Colors.sickGreen, fontSize: 12, }}>
-                {item.service.name}
-            </RegularTextCB>
+            <View style={{width:'70%'}}>
             <RegularTextCB
                 style={{ color: Colors.coolGrey, }}>
                 {item.description}
             </RegularTextCB>
+            </View>
             <View
                 style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
                 <Image
@@ -128,7 +129,8 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
         borderRadius: 20,
-        flex: 1,
+        // flex: 1,
+        width:'90%',
         shadowColor: '#c5c5c5',
         shadowOffset: { width: 5, height: 5 },
         shadowOpacity: 1.0,

@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Spinner } from 'native-base';
 import React from 'react';
 import {
   Image,
@@ -11,7 +10,7 @@ import {
   View,
   FlatList
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE,Marker} from 'react-native-maps';
 import Colors from '../../common/Colors';
 import Constants, { height, SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
@@ -20,6 +19,7 @@ import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
+import Spinner from 'react-native-loading-spinner-overlay';
 export default class ViewJob extends React.Component {
   
 
@@ -41,7 +41,15 @@ export default class ViewJob extends React.Component {
       viewJob: [],
       images:[],
       userData:{},
+      userImage:'',
+      username:'',
+      title:'',
+      price:'',
+      location:'',
+      time:'',
       region: this.initialMapState.region,
+      latitude:'',
+      longitude:''
     };
   }
 
@@ -63,10 +71,11 @@ export default class ViewJob extends React.Component {
   
 
   viewJob = () => {
-    console.log('==================',this.props.route.params.item)
-
-    this.setState({isLoading:true})
+    
+    this.setState({isLoading:true}) 
     const onSuccess = ({ data }) => {
+
+      console.log
      
       this.setState({isLoading:false})
       this.setState({
@@ -79,13 +88,14 @@ export default class ViewJob extends React.Component {
      lat:data.data.records.user.userProfile.latitude,
      lng:data.data.records.user.userProfile.longitude,
      price:data.data.records.price,
-     description:data.data.records.description
-
+     description:data.data.records.description,
+    latitude:data.data.records.user.userProfile.latitude,
+    longitude:data.data.records.user.userProfile.longitude
       })
 
       utils.showToast(data.message)
 
-      // this.setState({ isLoading: false,  getJobsByCatagory: data.data });
+      this.setState({ isLoading: false,  });
 
     };
 
@@ -106,15 +116,13 @@ export default class ViewJob extends React.Component {
     })
       .then(onSuccess)
       .catch(onFailure);
-
+    
   };
 
  
 
   render() {
     // this.state.images.map((item)=>{console.log('==========',item)})
-  
-    console.log('=====',this.state.images)
 
     return (
       <View style={styles.container}>
@@ -192,7 +200,6 @@ export default class ViewJob extends React.Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  Tittle
                   {this.state.title}
                 </RegularTextCB>
                 <LightTextCB
@@ -285,7 +292,12 @@ export default class ViewJob extends React.Component {
               showsMyLocationButton={false}
               zoomEnabled={false}
               style={styles.mapStyle}
-            />
+            >
+             <Marker coordinate={{ latitude:Number(this.state.latitude),longitude:Number(this.state.longitude)}} 
+               title={this.state.title}
+             />
+
+            </MapView>
             <View style={{marginVertical: SIZES.ten*3, marginHorizontal: SIZES.twenty}}>
               <ButtonRadius10
                 label="CONTACT"
@@ -297,7 +309,12 @@ export default class ViewJob extends React.Component {
             </View>
           </View>
         </ScrollView>
-
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF',
+         fontFamily: Constants.fontRegular,}}
+        />
       </View>
     );
   }

@@ -205,18 +205,19 @@ export default class postJob extends Component {
     formData.append('description',this.state.jobDesc);
     formData.append('expiry_date',this.state.expirydate);
     formData.append('address', this.state.location);
-    formData.append('location',this.state.location);
-    // formData.append('image',this.state.jobImages);
-
-    this.state.jobImages.forEach((item, i) => {
-      formData.append("image", {
-        uri:Platform.OS === 'android' ? item : item.replace('file:///', ''),
-        name: `image-profile`,
-        type: 'image/jpeg',
-      });
-    });
+    formData.append('location',this.state.location);;
+    formData.append('image[]',this.state.jobImages)
+    // this.state.jobImages.forEach((item, i) => {
+    //   formData.append("image[]", {
+    //     uri:Platform.OS === 'android' ? item : item.replace('file:///', ''),
+    //     name: `image-profile`,
+    //     type: 'image/jpeg',
+    //   });
+    // });
        
     formData.append('services[]',this.state.services);
+
+
 
 console.log('========',formData._parts)
 
@@ -229,7 +230,7 @@ console.log('========',formData._parts)
     };
 
     const onFailure = (error) => {
-      console.log("error =====================================================================>", error)
+      // console.log("error =====================================================================>", error)
       utils.showResponseError(error);
       this.setState({ isLoading: false });
     };
@@ -237,7 +238,8 @@ console.log('========',formData._parts)
 
     const options = {
       headers: {
-        Accept: "application/x-www-form-urlencoded",
+        // Accept: "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: this.state.accessToken,
       },
     };

@@ -25,7 +25,7 @@ export default class VendorAllJobs extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      allJobs: []
+      allJobsAround: []
     };
 
   }
@@ -39,29 +39,68 @@ export default class VendorAllJobs extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({ accessToken: token }, () => {
-      this.getAllJobs();
+      this.getUserProfile()
     });
   };
 
-  getAllJobs = () => {
-    const onSuccess = ({ data }) => {
-      console.log("data ===========>", data.data.records)
-      this.setState({ isLoading: false, allJobs: data.data.records });
+  getUserProfile = async () => {
+
+    const onSuccess = ({data}) => {
+      // console.log('Data============',data.data.records)
+      const latitude = data.data.records.userProfile.latitude;
+      const longitude=data.data.records.userProfile.longitude;
+        this.getJobAroundYou(latitude,longitude);   
     };
 
+    // console.log('lat',this.state.lat)
+
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
-
-    Axios.get(Constants.getAllJobs, {
-      headers: { Authorization: this.state.accessToken },
+    this.setState({isLoading: true});
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
     })
       .then(onSuccess)
       .catch(onFailure);
   };
+
+  getJobAroundYou = async (latitude,longitude) => {
+
+    let params = {
+      lat:latitude,
+      lng: longitude,
+    }; 
+    this.setState({isLoading:true})
+
+    const onSuccess = ({data}) => {
+      // console.log(' Job All Job Around you =====', data);
+
+      utils.showToast(data.message)
+      this.setState({
+        isLoading:false,
+        allJobsAround:data.data
+      })
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+    this.setState({isLoading: true});
+    Axios.post(Constants.getJobAround, params, {
+      headers: {
+        Authorization:this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
 
 
   renderSingleCategoriesItem = ({ item }) => {
@@ -76,7 +115,6 @@ export default class VendorAllJobs extends Component {
   };
 
   render() {
-    console.log("accessToken===================>", this.props.route.params.accessToken)
     return (
       <View style={[styles.container]}>
         <View
@@ -104,10 +142,11 @@ export default class VendorAllJobs extends Component {
           </RegularTextCB>
 
         </View>
-
-        <FlatList
+       
+       <View style={{marginLeft:SIZES.twenty,}}>
+       <FlatList
           style={{ marginTop:SIZES.ten }}
-          data={this.state.allJobs}
+          data={this.state.allJobsAround}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}
@@ -117,13 +156,16 @@ export default class VendorAllJobs extends Component {
           }}
           contentContainerStyle={{
             // for android
-            paddingBottom:SIZES.ten*10,
+            paddingBottom:SIZES.ten*10, 
           }}
         />
-        <Spinner
+       </View>
+       
+     <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
+          textStyle={{ color: '#FFF',
+         fontFamily: Constants.fontRegular,}}
         />
       </View>
     );

@@ -32,7 +32,6 @@ export default class VendorHome extends Component {
       isLoading: false,
       categories: [],
       accessToken: '',
-      allJobs: [],
       jobAround: [],
     };
   }
@@ -60,7 +59,7 @@ export default class VendorHome extends Component {
 
   getCategories = () => {
     const onSuccess = ({data}) => {
-      console.log('All Job ================',data.data.records)
+      // console.log('All Job ================',data.data.records)
 
       this.setState({isLoading: false, categories: data.data.records});
     };
@@ -98,7 +97,7 @@ export default class VendorHome extends Component {
     
     };
 
-    console.log('lat',this.state.lat)
+    // console.log('lat',this.state.lat)
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
@@ -119,7 +118,6 @@ export default class VendorHome extends Component {
 
   getJobAroundYou = async (latitude,longitude,token) => {
 
-
     let params = {
       lat:latitude,
       lng: longitude,
@@ -127,11 +125,11 @@ export default class VendorHome extends Component {
 
 
     const onSuccess = ({data}) => {
-      // console.log(' Job Around You =====', data);
+      console.log(' Job Around You =====', data);
       utils.showToast(data.message)
       this.setState({
         isLoading:false,
-        jobAround:data
+        jobAround:data.data
       })
     };
 
@@ -186,6 +184,7 @@ export default class VendorHome extends Component {
   };
 
   renderJobsForYouItem = ({item}) => {
+    console.log('Job Around data ======',item)
     return <ListComponent item={item} />;
   };
 
@@ -337,12 +336,17 @@ export default class VendorHome extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
+            <View style={{marginLeft:SIZES.five-2}}>
             <FlatList
-              data={this.state.allJobs}
+              data={this.state.jobAround}
+              horizontal
               keyExtractor={(item) => item.id}
               renderItem={this.renderJobsForYouItem}
               showsHorizontalScrollIndicator={false}
+              // contentContainerStyle={{paddingHorizontal:50}}
             />
+            </View>
+           
           </View>
         </ScrollView>
         <Spinner

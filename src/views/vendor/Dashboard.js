@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   FlatList,
   Image,
+  LogBox,
   Platform,
   ScrollView,
   StyleSheet,
@@ -26,23 +27,56 @@ export default class Dashboard extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
+      completeJob:[],
+      jobProcess:{}
     };
   }
   componentDidMount() {
+
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
-    console.log("componentDidMount===================================>")
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken();
+    });
+  
   }
 
   getUserAccessToken = async () => {
     console.log("getUserAccessToken=============================>")
-    const token = await AsyncStorage.getItem(Constants.getAllJobs);
-    console.log("Bearer accesstoken =====>", token)
-    // this.setState({ accessToken: token }, () => {
-    //   // this.getAllCategories();
-    //   console.log("state =======>", this.state.accessToken)
-    // });
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token });
+    this.getCompleteJob();
 
   };
+
+  getCompleteJob = () => {
+
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {  
+      
+      this.setState({
+        completeJob:data?.data.process,
+        jobProcess:data?.process
+      })
+
+      this.setState({isLoading: false});
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    this.setState({isLoading: true});
+    Axios.get(Constants.getCompleteJob, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   completedJobs = [
     {
       id: '1',
@@ -145,136 +179,141 @@ export default class Dashboard extends Component {
 
 
   rendercompletedJobsItem = ({ item }) => {
-    return (
-      <View
-        style={[
-          styles.card,
-          { padding: SIZES.fifteen, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five },
-        ]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={item.image}
-              style={styles.iconUser}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{ marginStart: SIZES.ten }}>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-                fontSize: 16,
-              }}>
-              {item.title}
-            </RegularTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: SIZES.five,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 12,
-                  marginStart: SIZES.five,
-                }}>
-                Verified
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 16,
-            }}>
-            {item.requirement}
-          </RegularTextCB>
-          <LightTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 12,
-            }}>
-            {item.pricing}
-          </LightTextCB>
-        </View>
-        <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {item.type}
-        </RegularTextCB>
-        <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-          }}>
-          {item.desc}
-        </RegularTextCB>
-        <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
-          <Image
-            source={Images.iconLocationPin}
-            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
-          />
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              marginStart: SIZES.five,
-            }}>
-            {item.location}
-          </RegularTextCB>
-        </View>
-        <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: SIZES.five,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-              }}>
-              {item.time}
-            </RegularTextCB>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB>
-          </View>
-        </View>
-      </View>
-    );
+
+    console.log('COmplete job item   =========',item)
+
+    // return (
+    //   <View
+    //     style={[
+    //       styles.card,
+    //       { padding: SIZES.fifteen, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five },
+    //     ]}>
+    //     <View
+    //       style={{
+    //         flexDirection: 'row',
+    //         alignItems: 'center',
+    //       }}>
+    //       <View style={styles.circleCard}>
+    //         <Image
+    //           source={item.image}
+    //           style={styles.iconUser}
+    //           resizeMode="cover"
+    //         />
+    //       </View>
+    //       <View style={{ marginStart: SIZES.ten }}>
+    //         <RegularTextCB
+    //           style={{
+    //             color: Colors.black,
+    //             fontSize: 16,
+    //           }}>
+    //           {item.title}
+    //         </RegularTextCB>
+    //         <View
+    //           style={{
+    //             flexDirection: 'row',
+    //             marginTop: SIZES.five,
+    //             alignItems: 'center',
+    //           }}>
+    //           <Image
+    //             source={Images.iconVerified}
+    //             style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
+    //           />
+    //           <RegularTextCB
+    //             style={{
+    //               color: Colors.turqoiseGreen,
+    //               fontSize: 12,
+    //               marginStart: SIZES.five,
+    //             }}>
+    //             Verified
+    //           </RegularTextCB>
+    //         </View>
+    //       </View>
+    //     </View>
+    //     <View
+    //       style={{
+    //         flexDirection: 'row',
+    //         marginTop: SIZES.five,
+    //         alignItems: 'center',
+    //         justifyContent: 'space-between',
+    //       }}>
+    //       <RegularTextCB
+    //         style={{
+    //           color: Colors.black,
+    //           fontSize: 16,
+    //         }}>
+    //         {item.requirement}
+    //       </RegularTextCB>
+    //       <LightTextCB
+    //         style={{
+    //           color: Colors.black,
+    //           fontSize: 12,
+    //         }}>
+    //         {item.pricing}
+    //       </LightTextCB>
+    //     </View>
+    //     <RegularTextCB
+    //       style={{
+    //         color: Colors.sickGreen,
+    //         fontSize: 12,
+    //       }}>
+    //       {item.type}
+    //     </RegularTextCB>
+    //     <RegularTextCB
+    //       style={{
+    //         color: Colors.coolGrey,
+    //       }}>
+    //       {item.desc}
+    //     </RegularTextCB>
+    //     <View
+    //       style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+    //       <Image
+    //         source={Images.iconLocationPin}
+    //         style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+    //       />
+    //       <RegularTextCB
+    //         style={{
+    //           color: Colors.coolGrey,
+    //           marginStart: SIZES.five,
+    //         }}>
+    //         {item.location}
+    //       </RegularTextCB>
+    //     </View>
+    //     <View
+    //       style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+    //       <Image
+    //         source={Images.iconStopWatch}
+    //         style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+    //       />
+    //       <View
+    //         style={{
+    //           flexDirection: 'row',
+    //           marginStart: SIZES.five,
+    //           alignItems: 'center',
+    //           flex: 1,
+    //           justifyContent: 'space-between',
+    //         }}>
+    //         <RegularTextCB
+    //           style={{
+    //             color: Colors.coolGrey,
+    //           }}>
+    //           {item.time}
+    //         </RegularTextCB>
+    //         <RegularTextCB
+    //           style={{
+    //             color: Colors.black,
+    //           }}>
+    //           {'Contact >'}
+    //         </RegularTextCB>
+    //       </View>
+    //     </View>
+    //   </View>
+    // );
   };
 
-  state = {};
   render() {
+
+    // console.log('render data ====== ',this.state.completeJob)
+
     return (
       <View style={styles.container}>
         <View
@@ -307,7 +346,7 @@ export default class Dashboard extends Component {
               }}>
               Quick Job
             </RegularTextCB>
-            <View style={{ marginTop: SIZES.ten }}>
+            {/* <View style={{ marginTop: SIZES.ten }}>
               <ButtonRadius10
                 label="1 Job available in your location"
                 bgColor={Colors.sickGreen}
@@ -315,7 +354,8 @@ export default class Dashboard extends Component {
                   // this.props.navigation.navigate(Constants.viewJob);
                 }}
               />
-            </View>
+
+            </View> */}
           </View>
           <View
             style={{
@@ -491,7 +531,7 @@ export default class Dashboard extends Component {
             </RegularTextCB>
             <FlatList
               style={{ paddingBottom: SIZES.ten*10 }}
-              data={this.completedJobs}
+              data={this.state.completeJob}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={this.rendercompletedJobsItem}

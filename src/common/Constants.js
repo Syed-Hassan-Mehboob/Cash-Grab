@@ -89,7 +89,8 @@ const Constants = {
   getVenderByCatagory:'customer/get-vendor-profile?',
   getVenderAllCategory:'vendors/categories',
   getJobAround:'vendors/get-around-job?',
-  viewJob:'customer/jobs/detail?'
+  viewJob:'customer/jobs/detail?',
+  getCompleteJob:'vendors/get-completed-job'
 };
 
 export const SIZES = {
