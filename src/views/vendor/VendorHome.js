@@ -184,7 +184,7 @@ export default class VendorHome extends Component {
   };
 
   renderJobsForYouItem = ({item}) => {
-    console.log('Job Around data ======',item)
+    // console.log('Job Around data ======',item)
     return <ListComponent item={item} />;
   };
 
@@ -336,14 +336,14 @@ export default class VendorHome extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={{marginLeft:SIZES.five-2}}>
+            <View style={{}}>
             <FlatList
               data={this.state.jobAround}
               horizontal
               keyExtractor={(item) => item.id}
               renderItem={this.renderJobsForYouItem}
               showsHorizontalScrollIndicator={false}
-              // contentContainerStyle={{paddingHorizontal:50}}
+              contentContainerStyle={{}}
             />
             </View>
            

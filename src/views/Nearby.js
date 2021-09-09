@@ -17,8 +17,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import Spinner from 'react-native-loading-spinner-overlay';
 const { height, width } = Dimensions.get('window');
 const CARD_HEIGHT =SIZES.ten*20;
 const CARD_WIDTH = width * 0.4;
@@ -101,7 +100,7 @@ const Nearby = (props) => {
 
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
-
+  
   useEffect(() => {
 
     mapAnimation.addListener(({ value }) => {
@@ -134,24 +133,57 @@ const Nearby = (props) => {
   });
 
   useEffect(() => {
-    getUserAccessToken();
-  }, [])
+    const unsubscribe = props.navigation.addListener('focus', () => {
+     getUserAccessToken();
+    });
+
+    return unsubscribe;
+
+  }, [props.navigation])
+
+  
 
   const getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     setaccessToken(token);
-    getVendorAroundYou()
+    getUserProfile();
   };
 
-  console.log("response =============>", vendorAround)
-  getVendorAroundYou = () => {
+  getUserProfile = () => {
     
-    console.log("getVendorAroundYou===============>");
+    setisLoading(true)
     const onSuccess = ({ data }) => {
-      setvendorAround(data.data);
-      // setisLoading(false);
+   
+      let latitude=data.data.records.userProfile.latitude
+      let longitude=data.data.records.userProfile.longitude
 
-      console.log('==============Vender Around ',data);
+      getVendorAroundYou(latitude,longitude);
+      setisLoading(false)
+    };
+
+    const onFailure = (error) => {
+      setisLoading(false)
+      utils.showResponseError(error);
+    };
+
+setisLoading(false)
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  // console.log("response =============>", vendorAround)
+  getVendorAroundYou = (latatide,longitude) => {
+    
+    setisLoading(true);
+    const onSuccess = ({ data }) => {
+      console.log('Around Data ==============',data.data)
+      setvendorAround(data.data);
+      setisLoading(false);
 
     };
 
@@ -163,9 +195,10 @@ const Nearby = (props) => {
     setisLoading(true);
 
     let params = {
-      latitude: "24.90628280557342",
-      longitude: "67.07237028142383",
+      latitude: Number(latatide),
+      longitude: Number(longitude),
     };
+
     Axios.get(Constants.getvendorAround, {
       params,
       headers: {
@@ -191,7 +224,9 @@ const Nearby = (props) => {
     });
 
     return { scale };
+
   });
+  
 
   const onMarkerPress = (mapEventData) => {
     const markerId = mapEventData._targetInst.return.key;
@@ -405,21 +440,25 @@ const Nearby = (props) => {
         customMapStyle={mapStyle}
         style={[styles.container]}>
         {vendorAround.map((marker, index) => {
-          const scaleStyle = {
+
+          {/* const scaleStyle = {
             transform: [
               {
                 scale: interpolations[index].scale,
               },
             ],
-          };
+          }; */}
+
+          console.log("marker data ==-= ",marker.latitude)
+
           return (
             <MapView.Marker
               key={index}
-              coordinate={{ latitude :parseFloat(marker.latitude),longitude :parseFloat(marker.longitude)}}
+              coordinate={{ latitude :Number(marker.latitude),longitude :Number(marker.longitude)}}
               onPress={(e) => {
                 onMarkerPress(e);
               }}>
-              <Animated.View style={[styles.markerWrap, scaleStyle]}>
+              <Animated.View style={[styles.markerWrap, ]}>
                 <Animated.Image
                   source={{uri:Constants.imageURL+marker.image}}
                   style={styles.marker}
@@ -428,7 +467,9 @@ const Nearby = (props) => {
             </MapView.Marker>
           );
         })}
+        
       </MapView>
+      
       <Animated.ScrollView
         ref={_scrollView}
         horizontal
@@ -465,6 +506,8 @@ const Nearby = (props) => {
           { useNativeDriver: true },
         )}>
         {vendorAround.map((marker, index) => {
+
+          {/* console.log('marker data ==== ', marker) */}
           return (
             <TouchableOpacity
               style={styles.card}
@@ -475,11 +518,10 @@ const Nearby = (props) => {
           }
           )
               }}>
-              <View style={styles.circleCard}>
+              <View style={[styles.circleCard]}>
                 <Image
                   source={{uri:Constants.imageURL+marker.image}}
                   style={styles.iconUser}
-                  resizeMode="cover"
                 />
               </View>
               <View style={styles.textContent}>
@@ -517,12 +559,18 @@ const Nearby = (props) => {
                     marginTop: SIZES.five,
                   }}>
                   {marker.rating}
+
                 </RegularTextCB>
               </View>
             </TouchableOpacity>
           );
         })}
       </Animated.ScrollView>
+      <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+          textStyle={{color:'#fff'}}
+        />
     </View>
   );
 };
@@ -573,7 +621,7 @@ const styles = StyleSheet.create({
     paddingRight: width - CARD_WIDTH,
   },
   card: {
-    padding: SIZES.ten,
+    padding: SIZES.five,
     elevation: 2,
     backgroundColor: '#FFF',
     borderRadius: SIZES.twenty,
@@ -596,23 +644,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
-    resizeMode: 'contain',
+    height: '100%',
+    width: '100%',
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
-    shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
-    shadowOpacity: 0.15,
-    shadowRadius: SIZES.five,
-    elevation: SIZES.five,
+    height: SIZES.ten*8,
+    width: SIZES.ten*8,
+    borderRadius: SIZES.ten*4,
   },
   textContent: {
-    padding: SIZES.ten,
     alignItems: 'center',
   },
   cardtitle: {

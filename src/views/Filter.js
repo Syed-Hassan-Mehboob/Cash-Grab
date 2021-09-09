@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   FlatList,
   Image,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import ButtonRadius10 from '../components/ButtonRadius10';
@@ -17,11 +17,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../network/APIKit';
 import utils from '../utils';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{ name: 'BookingConfirmed' },],
+  routes: [{name: 'BookingConfirmed'}],
 });
 
 export default class Filter extends Component {
@@ -37,9 +37,8 @@ export default class Filter extends Component {
       selectedLocation: undefined,
       isLoading: false,
       accessToken: '',
-      minPrice:'',
-      maxPrice:'',
-     
+      minPrice: '',
+      maxPrice: '',
     };
   }
 
@@ -49,17 +48,17 @@ export default class Filter extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.getfilters();
     });
-
   };
 
   getfilters = () => {
-    const onSuccess = ({ data }) => {
-      console.log('filter data ====',data.data)
+    const onSuccess = ({data}) => {
+      // console.log('filter data ====',data.data)
       this.setState({
-        isLoading: false, categories: data.data.categories.map((category) => ({
+        isLoading: false,
+        categories: data.data.categories.map((category) => ({
           ...category,
           isSelected: false,
         })),
@@ -70,55 +69,68 @@ export default class Filter extends Component {
         locations: data.data.locations.map((location) => ({
           ...location,
           isSelected: false,
-        }))
-      })
-        ;
+        })),
+      });
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
-    Axios.get(Constants.customerFilterservice, { headers: { Authorization: this.state.accessToken, } })
+    Axios.get(Constants.customerFilterservice, {
+      headers: {Authorization: this.state.accessToken},
+    })
       .then(onSuccess)
       .catch(onFailure);
   };
 
   setfilters = () => {
-
     postData = {
       query: this.state.selectedCategory,
-    },
-      console.log("post data", postData)
+    };
 
-    const onSuccess = ({ data }) => {
+    // console.log("post data", postData)
 
-      this.setState({ isLoading: false });
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
       utils.showResponseError(error);
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     const options = {
-      headers: { 'Content-Type': 'application/json', Authorization: this.state.accessToken, },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
     };
 
-    Axios.post(Constants.postJob, postData, options).then(onSuccess).catch(onFailure);
-  }
+    Axios.post(Constants.postJob, postData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
-  renderCategoriesItem = ({ item, index }) => {
+
+
+  renderCategoriesItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={item.isSelected === false ? styles.unselectedDate : styles.selectedDate}
-        onPress={() => { this.handleCategoriesItemClick(index); }}>
+        style={
+          item.isSelected === false
+            ? styles.unselectedDate
+            : styles.selectedDate
+        }
+        onPress={() => {
+          this.handleCategoriesItemClick(index);
+        }}>
         <View>
-          <RegularTextCB style={{ fontSize: 14 }}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
@@ -130,22 +142,25 @@ export default class Filter extends Component {
       item.isSelected = false;
     });
     mDates[index].isSelected = true;
-    this.setState({ categories: mDates, selectedCategory: mDates[index] }, () => {
-
-    });
+    this.setState(
+      {categories: mDates, selectedCategory: mDates[index]},
+      () => {},
+    );
   };
 
-  renderPriceItem = ({ item, index }) => {
-    
+  renderPriceItem = ({item, index}) => {
     return (
       <TouchableOpacity
         style={
-          item.isSelected === false ? styles.unselectedDate : styles.selectedDate}
+          item.isSelected === false
+            ? styles.unselectedDate
+            : styles.selectedDate
+        }
         onPress={() => {
           this.handleOnPriceItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{ fontSize: 14 }}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
@@ -159,20 +174,22 @@ export default class Filter extends Component {
     mPrices[index].isSelected = true;
     let name = mPrices[index].name;
     let price = name.split('-');
-    this.setState({ prices: mPrices, minPrice:price[0],maxPrice:price[1] });
+    this.setState({prices: mPrices, minPrice: price[0], maxPrice: price[1]});
   };
 
-
-
-  renderLocationItem = ({ item, index }) => {
+  renderLocationItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={item.isSelected === false ? styles.unselectedDate : styles.selectedDate}
+        style={
+          item.isSelected === false
+            ? styles.unselectedDate
+            : styles.selectedDate
+        }
         onPress={() => {
           this.handleLocationItemClick(index);
         }}>
         <View>
-          <RegularTextCB style={{ fontSize: 14 }}>{item.name}</RegularTextCB>
+          <RegularTextCB style={{fontSize: 14}}>{item.name}</RegularTextCB>
         </View>
       </TouchableOpacity>
     );
@@ -180,48 +197,76 @@ export default class Filter extends Component {
 
   handleLocationItemClick = (index) => {
     let mLocation = this.state.locations;
-    mLocation.forEach((item) => { item.isSelected = false; });
-    mLocation[index].isSelected = true;
-    this.setState({ slots: mLocation, selectedLocation: mLocation[index] }, () => {
-
+    mLocation.forEach((item) => {
+      item.isSelected = false;
     });
+    mLocation[index].isSelected = true;
+    this.setState(
+      {slots: mLocation, selectedLocation: mLocation[index]},
+      () => {},
+    );
   };
 
-  getFilterData = () => {
-   
-    const postData={
-      type:'vender',
-      categoryId:this.state.selectedCategory.id,
-      min_price:this.state.minPrice,
-      max_price:this.state.maxPrice,
-      location:this.state.selectedLocation.name
+  getUserProfile = () => {
+    const onSuccess = ({ data }) => {
+      let latitude=data.data.records.userProfile.latitude
+      let longitude=data.data.records.userProfile.longitude
+      let type=data.data.records.type
       
-    }
+      this.getFilterData(latitude,longitude,type);
+    };
 
-    console.log('==========',postData)
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
-this.setState({ isLoading: true });
-const onSuccess = ({ data }) => {
-  console.log('========================Filter Data==',data)
-utils.showToast(data.message);
-this.setState({ isLoading: false });
-};
-const onFailure = (error) => {
-console.log("error =============",error)
-utils.showResponseError(error.massage);
-this.setState({ isLoading: false });
-};
-const options = {
-headers: {
-  Authorization: this.state.accessToken,
- // 'Content-Type':'application/x-www-form-urlencoded'
-},
-};
-Axios.post(Constants.customerFilter,postData,options)
-.then(onSuccess)
-.catch(onFailure);
 
-};
+  getFilterData = (latitude,longitude,type) => {
+
+    const postData = {
+      type: type,
+      categoryId: this.state.selectedCategory !== null&& this.state.selectedCategory !== undefined  ? this.state.selectedCategory.id :null,
+      min_price: this.state.minPrice !== null && this.state.minPrice !==undefined ?this.state.minPrice:null,
+      max_price: this.state.maxPrice !== null && this.state.maxPrice !==undefined ?this.state.maxPrice:null,
+      distance: this.state.selectedLocation !==null && this.state.selectedLocation !==undefined ? this.state.selectedLocation.name :null,
+      lat:latitude,
+      lng:longitude
+      
+    };
+    
+    // console.log('Post Data  ===== ',postData)
+  
+
+    this.setState({isLoading: true});
+
+    const onSuccess = ({data}) => {
+      // console.log('========================Filter Data==',data)
+      utils.showToast(data.message);
+      this.setState({isLoading: false});
+    };
+    const onFailure = (error) => {
+      //
+      utils.showResponseError(error.massage);
+      this.setState({isLoading: false});
+    };
+    const options = {
+      headers: {
+        Authorization: this.state.accessToken,
+        // 'Content-Type':'application/x-www-form-urlencoded'
+      },
+    };
+    Axios.post(Constants.venderFilter,postData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   render() {
     return (
@@ -235,28 +280,30 @@ Axios.post(Constants.customerFilter,postData,options)
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
-              style={{ position: 'absolute', left: 0 }}
+              style={{position: 'absolute', left: 0}}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
               <Image source={Images.arrowBack} style={styles.iconBack} />
             </TouchableOpacity>
-            <RegularTextCB style={{ fontSize: 30 }}>
+            <RegularTextCB style={{fontSize: 30}}>
               Furniture service
             </RegularTextCB>
             <TouchableOpacity
-              style={{ position: 'absolute', right: 0, }}
-              onPress={() => { this.props.navigation.goBack(); }}>
+              style={{position: 'absolute', right: 0}}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
               <RegularTextCB
-                style={{ fontSize: 14, textDecorationLine: 'underline', }}>
+                style={{fontSize: 14, textDecorationLine: 'underline'}}>
                 RESET
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-          <View style={{ marginTop: SIZES.twenty }}>
-            <RegularTextCB style={{ fontSize: 18 }}>Categories</RegularTextCB>
+          <View style={{marginTop: SIZES.twenty}}>
+            <RegularTextCB style={{fontSize: 18}}>Categories</RegularTextCB>
             <FlatList
-              style={{ marginTop: SIZES.ten }}
+              style={{marginTop: SIZES.ten}}
               data={this.state.categories}
               numColumns={3}
               keyExtractor={(date) => date.id}
@@ -272,10 +319,10 @@ Axios.post(Constants.customerFilter,postData,options)
               }}
             />
           </View>
-          <View style={{ marginTop: SIZES.twenty }}>
-            <RegularTextCB style={{ fontSize: 18 }}>Price</RegularTextCB>
+          <View style={{marginTop: SIZES.twenty}}>
+            <RegularTextCB style={{fontSize: 18}}>Price</RegularTextCB>
             <FlatList
-              style={{ marginTop: SIZES.ten }}
+              style={{marginTop: SIZES.ten}}
               data={this.state.prices}
               numColumns={3}
               keyExtractor={(date) => date.id}
@@ -291,12 +338,12 @@ Axios.post(Constants.customerFilter,postData,options)
               }}
             />
           </View>
-          <View style={{ marginTop: SIZES.twenty }}>
-            <RegularTextCB style={{ fontSize: 18 }}>
+          <View style={{marginTop: SIZES.twenty}}>
+            <RegularTextCB style={{fontSize: 18}}>
               Location (within)
             </RegularTextCB>
             <FlatList
-              style={{ marginTop: SIZES.ten }}
+              style={{marginTop: SIZES.ten}}
               data={this.state.locations}
               numColumns={3}
               keyExtractor={(slot) => slot.id}
@@ -318,8 +365,14 @@ Axios.post(Constants.customerFilter,postData,options)
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-               this.getFilterData()
-                }}
+                // this.getUserProfile();
+                this.props.navigation.navigate(Constants.Filtered,{
+                  id:this.state.selectedCategory.id,
+                  minPrice:this.state.minPrice,
+                  max_price:this.state.maxPrice,
+                  location:this.state.selectedLocation.name
+                })
+              }}
             />
           </View>
         </View>
@@ -341,7 +394,7 @@ const styles = StyleSheet.create({
     paddingTop: SIZES.twenty,
   },
   childContainer: {
-    marginTop: SIZES.ten*4,
+    marginTop: SIZES.ten * 4,
     paddingBottom: 100,
   },
   selectedDate: {
@@ -354,7 +407,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -366,10 +419,10 @@ const styles = StyleSheet.create({
     flex: 1 / 3,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
-    borderRadius: SIZES.fifteen-3,
+    borderRadius: SIZES.fifteen - 3,
     borderColor: Colors.white,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,

@@ -188,49 +188,43 @@ export default class postJob extends Component {
 
   postJob = () => {
 
-    // const PostData={
-    //    title : this.state.serviceCaption,
-    //    price :this.state.rateRequested, 
-    //    description:this.state.jobDesc,
-    //    expiry_date:this.state.expirydate,
-    //    address: this.state.location,
-    //    location:this.state.location,
-    //    images :this.state.jobImages,
-    //    services : this.state.services,
-    // }
+    const PostData={
+       title : this.state.serviceCaption,
+       price :this.state.rateRequested, 
+       description:this.state.jobDesc,
+       expiry_date:this.state.expirydate,
+       address: this.state.location,
+       location:this.state.location,
+       images :this.state.jobImages,
+       services : this.state.services,
+    }
 
-    const formData = new FormData();
-    formData.append('title', this.state.serviceCaption);
-    formData.append('price' ,this.state.rateRequested);
-    formData.append('description',this.state.jobDesc);
-    formData.append('expiry_date',this.state.expirydate);
-    formData.append('address', this.state.location);
-    formData.append('location',this.state.location);;
-    formData.append('image[]',this.state.jobImages)
-    // this.state.jobImages.forEach((item, i) => {
-    //   formData.append("image[]", {
-    //     uri:Platform.OS === 'android' ? item : item.replace('file:///', ''),
-    //     name: `image-profile`,
-    //     type: 'image/jpeg',
-    //   });
-    // });
-       
-    formData.append('services[]',this.state.services);
+    // const formData = new FormData();
+    // formData.append('title', this.state.serviceCaption);
+    // formData.append('price' ,this.state.rateRequested);
+    // formData.append('description',this.state.jobDesc);
+    // formData.append('expiry_date',this.state.expirydate);
+    // formData.append('address', this.state.location);
+    // formData.append('location',this.state.location);;
+    // formData.append('image[]',this.state.jobImages)  
+    // formData.append('services[]',this.state.services);
 
 
+    // cons
+ 
 
-console.log('========',formData._parts)
+console.log('post Data =======================================================',PostData)
 
     this.setState({ isLoading: true });
     const onSuccess = ({ data }) => {
-      console.log('Post Jobe Data ======',data);
+      console.log('Post Jobe Data =====================================================',data);
       utils.showToast(data.message);
       this.setState({ isLoading: false });
     
     };
 
     const onFailure = (error) => {
-      // console.log("error =====================================================================>", error)
+      console.log("error =========================================== ==========================>", Object.keys(error))
       utils.showResponseError(error);
       this.setState({ isLoading: false });
     };
@@ -243,7 +237,8 @@ console.log('========',formData._parts)
         Authorization: this.state.accessToken,
       },
     };
-    Axios.post(Constants.postJob,formData._parts,options)
+
+    Axios.post(Constants.postJob,PostData,options)
     .then(onSuccess)
     .catch(onFailure);
 
@@ -266,7 +261,8 @@ console.log('========',formData._parts)
         response.assets.map((item) => {
           console.log('Image Uri ==== ==== ',item.uri)
           imageuri.push(item.uri);
-        });
+        }
+        );
 
         this.setState({jobImages: imageuri, showImages: true});
 
@@ -287,7 +283,7 @@ console.log('========',formData._parts)
 
   onDayPress = (day) => {
     this.setState({expirydate: day.dateString}, () => {
-      console.log('date ====>', this.state.expirydate);
+      // console.log('date ====>', this.state.expirydate);
       setTimeout(() => {
         this.setState({isModalVisible: false});
       }, 200);

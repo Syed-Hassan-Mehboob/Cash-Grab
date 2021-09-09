@@ -147,7 +147,8 @@ export default class VendorEditProfile extends Component {
       uri: Platform.OS === 'android' ? image : image.replace('file:///',''),
       name: `image-profile`,
       type: 'image/jpeg',
-    });
+    }
+    );
 
     const options = {
       headers: {

@@ -143,7 +143,7 @@ export default class VendorAllJobs extends Component {
 
         </View>
        
-       <View style={{marginLeft:SIZES.twenty,}}>
+       <View>
        <FlatList
           style={{ marginTop:SIZES.ten }}
           data={this.state.allJobsAround}

@@ -19,7 +19,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
 import utils from '../utils';
-import { Spinner } from 'native-base';
+import Spinner from 'react-native-loading-spinner-overlay';
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
@@ -136,7 +136,7 @@ export default class ViewVendorProfile extends React.Component {
         ]}
         onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
         <Image
-          source={{uri:item.image}}
+          source={{uri:Constants.imageURL+item.categories.image}}
           style={{height: SIZES.ten*9, width: SIZES.ten*9, borderRadius: SIZES.fifteen}}
         />
         <View
@@ -145,7 +145,7 @@ export default class ViewVendorProfile extends React.Component {
             flex: 1,
           }}>
           <Image
-            source={{uri:item.icon}}
+            source={{uri:Constants.imageURL+item.categories.icon}}
             style={{height: SIZES.twenty, width: 20, justifyContent: 'space-evenly'}}
           />
           <RegularTextCB
@@ -154,7 +154,7 @@ export default class ViewVendorProfile extends React.Component {
               fontSize: 16,
               color: Colors.black,
             }}>
-            {item.name}
+            {item.categories.name}
           </RegularTextCB>
           <View
             style={{
@@ -297,6 +297,7 @@ export default class ViewVendorProfile extends React.Component {
                 style={[styles.iconBack, {tintColor: Colors.white}]}
               />
             </TouchableOpacity>
+
             <RegularTextCB style={{fontSize: SIZES.ten*3, color: Colors.white}}>
               Profile
             </RegularTextCB>
@@ -305,6 +306,7 @@ export default class ViewVendorProfile extends React.Component {
               onPress={() => {
                 this.props.navigation.navigate(Constants.chat);
               }}>
+              
               <Image
                 source={{uri:Constants.imageURL+this.state.image}}
                 style={[styles.iconBack, {tintColor: Colors.white}]}

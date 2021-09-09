@@ -40,67 +40,75 @@ export default class FileredScreen extends Component {
     getUserAccessToken = async () => {
         const token = await AsyncStorage.getItem(Constants.accessToken);
         this.setState({ accessToken: token }, () => {
-            this.getAllJobs();
-            this.getFilterData();
+           this.getUserProfile()
         });
     };
-    getAllJobs = () => {
+
+
+    getUserProfile = () => {
         const onSuccess = ({ data }) => {
-            this.setState({ isLoading: false, allJobs: data.data.records });
-        };
+          let latitude=data.data.records.userProfile.latitude
+          let longitude=data.data.records.userProfile.longitude
+          let type=data.data.records.type
+          
+          console.log('Type ===== ', type)
 
+          this.getFilterData(latitude,longitude,type);
+        };
+    
         const onFailure = (error) => {
-            this.setState({ isLoading: false });
-            utils.showResponseError(error);
+          utils.showResponseError(error);
+        };
+        Axios.get(Constants.getProfileURL, {
+          headers: {
+            Authorization: this.state.accessToken,
+          },
+        })
+          .then(onSuccess)
+          .catch(onFailure);
+      };
+
+      getFilterData = (latitude,longitude,type) => {
+        const postData = {
+          type: type,
+          categoryId:this.props.route.params ,
+          min_price: this.props.route.params.minPrice !== null && this.props.route.params.minPrice !==undefined ?this.props.route.params.minPrice:null,
+          max_price: this.props.route.params.maxPrice !== null && this.props.route.params.maxPrice !==undefined ?this.props.route.params.maxPrice:null,
+          distance: this.props.route.params.location !==null && this.props.route.params.location !==undefined ? this.props.route.params.location :null,
+          lat:latitude,
+          lng:longitude
         };
 
-        this.setState({ isLoading: true });
+        // console.log('Post Data  ===== ',postData)
+      
+        this.setState({isLoading: true});
+    
+        const onSuccess = ({data}) => {
+        //   console.log('========================Filter Data==',data)
 
-        Axios.get(Constants.getAllJobs, {
-            headers: { Authorization: this.state.accessToken },
-        })
-            .then(onSuccess)
-            .catch(onFailure);
-    };
-
-    getFilterData = () => {
-   
-        const postData={
-            // type:'vender',
-            categoryId:this.props.route.params.catagoryid,
-            min_price:'50',
-            max_price:'40',
-            location:this.props.route.params.location
-       }
-     
-      this.setState({ isLoading: true });
-         const onSuccess = ({ data }) => {
-             console.log('========================Filter Data==',data)
-           utils.showToast(data.message);
-           this.setState({ isLoading: false });
-         };
-         const onFailure = (error) => {
-           console.log("error =============",error)
-           utils.showResponseError(error.massage);
-           this.setState({ isLoading: false });
-         };
-         const options = {
-           headers: {
-             Authorization: this.state.accessToken,
+          utils.showToast(data.message);
+          this.setState({isLoading: false,allJobs:data.data});
+        };
+        const onFailure = (error) => {
+          //
+          utils.showResponseError(error.massage);
+          this.setState({isLoading: false});
+        };
+        const options = {
+          headers: {
+            Authorization: this.state.accessToken,
             // 'Content-Type':'application/x-www-form-urlencoded'
-           },
-         };
-         Axios.post(Constants.customerFilter,postData,options)
-         .then(onSuccess)
-         .catch(onFailure);
-       };
-     
-
+          },
+        };
+        Axios.post(Constants.venderFilter,postData, options)
+          .then(onSuccess)
+          .catch(onFailure);
+      };
+    
 
     renderSingleCategoriesItem = ({ item }) => {
+        console.log('Filter Data item ===== ',item)
         return (
-        //    console.log('=====Item',item['user']['userProfile']),
-        //    console.log('=====Item',item.user.userProfile),
             <ListComponent item={item} />
         )
 
@@ -133,11 +141,12 @@ export default class FileredScreen extends Component {
                     </TouchableOpacity>
 
 
-                    <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>All Jobs</RegularTextCB>
+                    <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>Filtered Job</RegularTextCB>
 
                 </View>
-
-                {/* <FlatList
+               
+               <View style={{}}>
+               <FlatList
                     style={{ marginTop: SIZES.ten }}
                     data={(this.state.allJobs)}
                     keyExtractor={(item) => item.id}
@@ -151,7 +160,9 @@ export default class FileredScreen extends Component {
                         // for android
                         paddingBottom: SIZES.ten,
                     }}
-                /> */}
+                />
+               </View>
+            
                 <Spinner
                     visible={this.state.isLoading}
                     textContent={'Loading...'}

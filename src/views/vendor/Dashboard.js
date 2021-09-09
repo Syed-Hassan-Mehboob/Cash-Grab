@@ -28,7 +28,16 @@ export default class Dashboard extends Component {
       isLoading: false,
       accessToken: '',
       completeJob:[],
-      jobProcess:{}
+      withDraw:{},
+      name:'',
+      title:'',
+      price:'',
+      description:'',
+      location:'',
+      time:'',
+      image:'',
+      verfiyAt:''
+
     };
   }
   componentDidMount() {
@@ -42,21 +51,30 @@ export default class Dashboard extends Component {
   }
 
   getUserAccessToken = async () => {
-    console.log("getUserAccessToken=============================>")
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({ accessToken: token });
     this.getCompleteJob();
-
   };
 
   getCompleteJob = () => {
 
     this.setState({isLoading: true});
+
     const onSuccess = ({data}) => {  
-      
+
+      // console.log('Complete job vvv======= ',data.data.completed)
       this.setState({
-        completeJob:data?.data.process,
-        jobProcess:data?.process
+        completeJob:data?.data.completed,
+        jobProcess:data?.data.progress,
+        withDraw:data?.data.withdraw,
+        name:data?.data.progress.user.name,
+        title:data?.data.progress.title,
+        price:data?.data.progress.price,
+        description:data?.data.progress.description,
+        time:data?.data.progress.time,
+        image:data?.data.progress.user.userProfile.image,
+        location:data?.data.progress.location,
+        verfiyAt:data?.data.progress.user.email_verified_at  
       })
 
       this.setState({isLoading: false});
@@ -77,237 +95,137 @@ export default class Dashboard extends Component {
       .catch(onFailure);
   };
 
-  completedJobs = [
-    {
-      id: '1',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '4',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '5',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '6',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '7',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '8',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-  ];
-
-
-
+  
   rendercompletedJobsItem = ({ item }) => {
 
     console.log('COmplete job item   =========',item)
 
-    // return (
-    //   <View
-    //     style={[
-    //       styles.card,
-    //       { padding: SIZES.fifteen, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five },
-    //     ]}>
-    //     <View
-    //       style={{
-    //         flexDirection: 'row',
-    //         alignItems: 'center',
-    //       }}>
-    //       <View style={styles.circleCard}>
-    //         <Image
-    //           source={item.image}
-    //           style={styles.iconUser}
-    //           resizeMode="cover"
-    //         />
-    //       </View>
-    //       <View style={{ marginStart: SIZES.ten }}>
-    //         <RegularTextCB
-    //           style={{
-    //             color: Colors.black,
-    //             fontSize: 16,
-    //           }}>
-    //           {item.title}
-    //         </RegularTextCB>
-    //         <View
-    //           style={{
-    //             flexDirection: 'row',
-    //             marginTop: SIZES.five,
-    //             alignItems: 'center',
-    //           }}>
-    //           <Image
-    //             source={Images.iconVerified}
-    //             style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
-    //           />
-    //           <RegularTextCB
-    //             style={{
-    //               color: Colors.turqoiseGreen,
-    //               fontSize: 12,
-    //               marginStart: SIZES.five,
-    //             }}>
-    //             Verified
-    //           </RegularTextCB>
-    //         </View>
-    //       </View>
-    //     </View>
-    //     <View
-    //       style={{
-    //         flexDirection: 'row',
-    //         marginTop: SIZES.five,
-    //         alignItems: 'center',
-    //         justifyContent: 'space-between',
-    //       }}>
-    //       <RegularTextCB
-    //         style={{
-    //           color: Colors.black,
-    //           fontSize: 16,
-    //         }}>
-    //         {item.requirement}
-    //       </RegularTextCB>
-    //       <LightTextCB
-    //         style={{
-    //           color: Colors.black,
-    //           fontSize: 12,
-    //         }}>
-    //         {item.pricing}
-    //       </LightTextCB>
-    //     </View>
-    //     <RegularTextCB
-    //       style={{
-    //         color: Colors.sickGreen,
-    //         fontSize: 12,
-    //       }}>
-    //       {item.type}
-    //     </RegularTextCB>
-    //     <RegularTextCB
-    //       style={{
-    //         color: Colors.coolGrey,
-    //       }}>
-    //       {item.desc}
-    //     </RegularTextCB>
-    //     <View
-    //       style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
-    //       <Image
-    //         source={Images.iconLocationPin}
-    //         style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
-    //       />
-    //       <RegularTextCB
-    //         style={{
-    //           color: Colors.coolGrey,
-    //           marginStart: SIZES.five,
-    //         }}>
-    //         {item.location}
-    //       </RegularTextCB>
-    //     </View>
-    //     <View
-    //       style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
-    //       <Image
-    //         source={Images.iconStopWatch}
-    //         style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
-    //       />
-    //       <View
-    //         style={{
-    //           flexDirection: 'row',
-    //           marginStart: SIZES.five,
-    //           alignItems: 'center',
-    //           flex: 1,
-    //           justifyContent: 'space-between',
-    //         }}>
-    //         <RegularTextCB
-    //           style={{
-    //             color: Colors.coolGrey,
-    //           }}>
-    //           {item.time}
-    //         </RegularTextCB>
-    //         <RegularTextCB
-    //           style={{
-    //             color: Colors.black,
-    //           }}>
-    //           {'Contact >'}
-    //         </RegularTextCB>
-    //       </View>
-    //     </View>
-    //   </View>
-    // );
+    return (
+      <View
+        style={[
+          styles.card,
+          { padding: SIZES.fifteen, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five },
+        ]}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <View style={styles.circleCard}>
+            <Image
+              source={{uri:Constants.imageURL+item.user.userProfile.image}}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={{ marginStart: SIZES.ten }}>
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 16,
+              }}>
+              {item.user.name}
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: SIZES.five,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+                  fontSize: 12,
+                  marginStart: SIZES.five,
+                }}>
+                  {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.five,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <RegularTextCB
+            style={{
+              color: Colors.black,
+              fontSize: 16,
+            }}>
+            {item.title}
+          </RegularTextCB>
+          <LightTextCB
+            style={{
+              color: Colors.black,
+              fontSize: 12,
+            }}>
+           ${item.price}
+          </LightTextCB>
+        </View>
+        {/* <RegularTextCB
+          style={{
+            color: Colors.sickGreen,
+            fontSize: 12,
+          }}>
+          {item.type}
+        </RegularTextCB> */}
+        <RegularTextCB
+          style={{
+            color: Colors.coolGrey,
+          }}>
+          {item.description}
+        </RegularTextCB>
+        <View
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+          <Image
+            source={Images.iconLocationPin}
+            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              marginStart: SIZES.five,
+            }}>
+            {item.location}
+          </RegularTextCB>
+        </View>
+        <View
+          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+          <Image
+            source={Images.iconStopWatch}
+            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginStart: SIZES.five,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {item.time}
+            </RegularTextCB>
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+              }}>
+              {'Contact >'}
+            </RegularTextCB>
+          </View>
+        </View>
+      </View>
+    );
   };
 
   render() {
@@ -370,7 +288,7 @@ export default class Dashboard extends Component {
             <RegularTextCB
               style={{ fontSize: SIZES.twenty
               , marginStart: SIZES.five, color: Colors.sickGreen }}>
-              $100
+              {this.state.withDraw.total}
             </RegularTextCB>
           </View>
           <View style={{ marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen }}>
@@ -382,6 +300,7 @@ export default class Dashboard extends Component {
               }}>
               Order In Progress
             </RegularTextCB>
+
             <View
               style={[
                 styles.card,
@@ -399,10 +318,11 @@ export default class Dashboard extends Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={this.completedJobs[0].image}
+                    source={{uri:Constants.imageURL+this.state.image}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
+            
                 </View>
                 <View style={{ marginStart: SIZES.ten }}>
                   <RegularTextCB
@@ -410,7 +330,7 @@ export default class Dashboard extends Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.completedJobs[0].title}
+                    {this.state.name}
                   </RegularTextCB>
                   <View
                     style={{
@@ -428,7 +348,7 @@ export default class Dashboard extends Component {
                         fontSize: 12,
                         marginStart: SIZES.five,
                       }}>
-                      Verified
+                      {this.state.verfiyAt !== null ? "Verified" : "Unverified"}
                     </RegularTextCB>
                   </View>
                 </View>
@@ -445,28 +365,28 @@ export default class Dashboard extends Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.completedJobs[0].requirement}
+                  {this.state.title}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  {this.completedJobs[0].pricing}
+                  ${this.state.price}
                 </LightTextCB>
               </View>
-              <RegularTextCB
+              {/* <RegularTextCB
                 style={{
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
                 {this.completedJobs[0].type}
-              </RegularTextCB>
+              </RegularTextCB> */}
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                {this.completedJobs[0].desc}
+                {this.state.description}
               </RegularTextCB>
               <View
                 style={{
@@ -483,7 +403,7 @@ export default class Dashboard extends Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.completedJobs[0].location}
+                  {this.state.location}
                 </RegularTextCB>
               </View>
               <View
@@ -508,7 +428,7 @@ export default class Dashboard extends Component {
                     style={{
                       color: Colors.coolGrey,
                     }}>
-                    {this.completedJobs[0].time}
+                    {this.state.time}
                   </RegularTextCB>
                   <RegularTextCB
                     style={{
@@ -538,6 +458,12 @@ export default class Dashboard extends Component {
             />
           </View>
         </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFFf',
+          fontFamily: Constants.fontRegular,}}
+        />
       </View>
     );
   }

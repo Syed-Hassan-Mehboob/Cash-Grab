@@ -63,19 +63,22 @@ export default class Home extends Component {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({ accessToken: token }, () => {
       this.getUserProfile();
-      this.getCategories();
-      this.getVendorAroundYou();
+      this.getCategories(); 
       this.getTopServices();
     });
   };
 
   getUserProfile = () => {
+    
     const onSuccess = ({ data }) => {
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
       });
+      let latitude=data.data.records.userProfile.latitude
+      let longitude=data.data.records.userProfile.longitude
+      this.getVendorAroundYou(latitude,longitude);
     };
 
     const onFailure = (error) => {
@@ -114,7 +117,7 @@ export default class Home extends Component {
       .catch(onFailure);
   };
 
-  getVendorAroundYou = () => {
+  getVendorAroundYou = (latitude,longitude) => {
     const onSuccess = ({ data }) => {
       this.setState({
         isLoading: false,
@@ -132,10 +135,9 @@ export default class Home extends Component {
     this.setState({ isLoading: true });
 
     let params = {
-      latitude: "24.90628280557342",
-      longitude: "67.07237028142383",
-      limit: 2,
-
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      limit:2
     };
     Axios.get(Constants.getvendorAround, {
       params,

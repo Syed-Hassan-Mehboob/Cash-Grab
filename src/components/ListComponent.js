@@ -57,7 +57,7 @@ const ListComponent = (props) => {
                 </LightTextCB>
 
             </View>
-            <View style={{width:'70%'}}>
+            <View style={{width:SIZES.ten*35}}>
             <RegularTextCB
                 style={{ color: Colors.coolGrey, }}>
                 {item.description}
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 20,
         // flex: 1,
-        width:'90%',
+        width:SIZES.ten*47,
         shadowColor: '#c5c5c5',
         shadowOffset: { width: 5, height: 5 },
         shadowOpacity: 1.0,

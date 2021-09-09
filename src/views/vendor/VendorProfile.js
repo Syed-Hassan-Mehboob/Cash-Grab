@@ -158,7 +158,8 @@ export default class VendorProfile extends React.Component {
 
   getUserAccessToken = async () => {
   const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getUserProfile());
+    this.setState({ accessToken: token }, 
+      () => this.getUserProfile());
   };
 
   getUserProfile = () => {
@@ -216,7 +217,7 @@ export default class VendorProfile extends React.Component {
           },
         ]} activeOpacity={0.6} >
         <Image
-          source={item.image}
+          source={{uri:Constants.imageURL+item.image}}
           style={{ height:SIZES.ten*9, width:SIZES.ten*9, borderRadius:SIZES.fifteen }}
         />
         <View style={{ marginStart:SIZES.ten }}>

@@ -90,7 +90,8 @@ const Constants = {
   getVenderAllCategory:'vendors/categories',
   getJobAround:'vendors/get-around-job?',
   viewJob:'customer/jobs/detail?',
-  getCompleteJob:'vendors/get-completed-job'
+  getCompleteJob:'vendors/get-completed-job',
+  venderFilter:'vendors/filter'
 };
 
 export const SIZES = {
