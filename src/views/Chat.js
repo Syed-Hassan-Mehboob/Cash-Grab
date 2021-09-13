@@ -12,7 +12,7 @@ import {
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import LightTextCB from '../components/LightTextCB';
@@ -69,8 +69,8 @@ export default class Chat extends React.Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: 15,
-                width: 15,
+                height: SIZES.fifteenWidth,
+                width: SIZES.fifteenWidth,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
@@ -87,13 +87,13 @@ export default class Chat extends React.Component {
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: SIZES.twenty}}>
           <ButtonRadius10
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{height: 50}} />
+        <View style={{height: SIZES.fifty}} />
       </View>
     );
   };
@@ -123,7 +123,7 @@ export default class Chat extends React.Component {
   renderSupportItem = ({item}) => {
     return (
       <View
-        style={{flexDirection: 'row', marginVertical: 5, marginHorizontal: 15}}>
+        style={{flexDirection: 'row', marginVertical: SIZES.five, marginHorizontal: SIZES.fifteenWidth}}>
         <View style={styles.circleCard}>
           <Image
             source={item.user.image}
@@ -132,7 +132,7 @@ export default class Chat extends React.Component {
           />
         </View>
         <View>
-          <View style={{marginStart: 10}}>
+          <View style={{marginStart: SIZES.ten}}>
             <View style={[styles.chatContainer]}>
               <RegularTextCB>{item.message.text}</RegularTextCB>
             </View>
@@ -160,8 +160,8 @@ export default class Chat extends React.Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginTop: 10,
-              padding: 15,
+              marginTop: SIZES.ten,
+              padding: SIZES.fifteenWidth,
             }}>
             <TouchableOpacity
               style={{}}
@@ -173,7 +173,7 @@ export default class Chat extends React.Component {
                 style={[styles.iconBack, {tintColor: Colors.white}]}
               />
             </TouchableOpacity>
-            <View style={{flexDirection: 'row', marginStart: 10}}>
+            <View style={{flexDirection: 'row', marginStart: SIZES.ten}}>
               <View style={styles.circleCard}>
                 <Image
                   source={Images.emp1}
@@ -181,7 +181,7 @@ export default class Chat extends React.Component {
                   resizeMode="cover"
                 />
               </View>
-              <View style={{marginStart: 10}}>
+              <View style={{marginStart: SIZES.ten}}>
                 <RegularTextCB style={{fontSize: 18, color: Colors.sickGreen}}>
                   Mike Lyne
                 </RegularTextCB>
@@ -193,15 +193,15 @@ export default class Chat extends React.Component {
             <View
               style={{
                 position: 'absolute',
-                right: 10,
+                right: SIZES.ten,
                 flexDirection: 'row',
               }}>
               <TouchableOpacity activeOpacity={0.7}>
                 <Image
                   source={Images.iconAudioCall}
                   style={{
-                    height: 50,
-                    width: 50,
+                    height: SIZES.fifty,
+                    width: SIZES.fifty,
                   }}
                 />
               </TouchableOpacity>
@@ -209,8 +209,8 @@ export default class Chat extends React.Component {
                 <Image
                   source={Images.iconVideoCall}
                   style={{
-                    height: 50,
-                    width: 50,
+                    height: SIZES.fifty,
+                    width: SIZES.fifty,
                   }}
                 />
               </TouchableOpacity>
@@ -222,8 +222,8 @@ export default class Chat extends React.Component {
           keyExtractor={(item) => item.id}
           renderItem={this.renderSupportItem}
           contentContainerStyle={{
-            paddingTop: 20,
-            paddingBottom: 20,
+            paddingTop: SIZES.twenty,
+            paddingBottom: SIZES.twenty,
           }}
         />
         <View
@@ -236,7 +236,7 @@ export default class Chat extends React.Component {
               bottom: 0,
               left: 0,
               right: 0,
-              padding: 10,
+              padding: SIZES.ten,
             },
           ]}>
           <TouchableOpacity onPress={() => this.toggleIsModalVisible()}>
@@ -252,7 +252,7 @@ export default class Chat extends React.Component {
             onChangeText={(text) => this.setState({message: text})}
           />
           <TouchableOpacity onPress={() => {}}>
-            <Image source={Images.iconSend} style={{height: 40, width: 40}} />
+            <Image source={Images.iconSend} style={{height: SIZES.ten*4, width: SIZES.ten*4}} />
           </TouchableOpacity>
         </View>
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
@@ -269,36 +269,36 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   chatContainer: {
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     backgroundColor: Colors.paleGrey,
-    padding: 10,
+    padding: SIZES.ten,
   },
   circleCard: {
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+    height: SIZES.ten*4,
+    width: SIZES.ten*4,
+    borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   iconUser: {
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+    height: SIZES.ten*4,
+    width: SIZES.ten*4,
+    borderRadius: SIZES.twenty,
     resizeMode: 'contain',
   },
   textInput: {
     fontSize: 16,
     flex: 1,
-    marginHorizontal: 10,
-    height: 50,
+    marginHorizontal: SIZES.ten,
+    height: SIZES.fifty,
     fontFamily: Constants.fontRegular,
     color: Colors.black,
   },
@@ -308,8 +308,8 @@ const styles = StyleSheet.create({
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    padding: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
 });

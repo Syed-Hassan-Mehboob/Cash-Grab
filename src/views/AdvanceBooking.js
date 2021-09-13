@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import {CommonActions} from '@react-navigation/native';
+import { SIZES } from '../common/Constants';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -156,16 +157,16 @@ export default class AdvanceBooking extends Component {
           }}>
           <Image source={Images.arrowBack} style={styles.iconBack} />
         </TouchableOpacity>
-        <LightTextCB style={{fontSize: 30, marginTop: 30}}>
+        <LightTextCB style={{fontSize:30, marginTop:SIZES.ten*3}}>
           Furniture service
         </LightTextCB>
-        <LightTextCB style={{fontSize: 16, marginTop: 10}}>
+        <LightTextCB style={{fontSize: 16, marginTop: SIZES.ten}}>
           Advance Booking
         </LightTextCB>
         <View>
-          <LightTextCB style={{fontSize: 18, marginTop: 20}}>Date</LightTextCB>
+          <LightTextCB style={{fontSize: 18, marginTop: SIZES.twenty}}>Date</LightTextCB>
           <FlatList
-            style={{marginTop: 10}}
+            style={{marginTop: SIZES.ten}}
             data={this.state.dates}
             numColumns={3}
             keyExtractor={(date) => date.id}
@@ -173,10 +174,10 @@ export default class AdvanceBooking extends Component {
             extraData={this.state}
           />
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: SIZES.twenty}}>
           <LightTextCB style={{fontSize: 18}}>Open Slots</LightTextCB>
           <FlatList
-            style={{marginTop: 10}}
+            style={{marginTop: SIZES.ten}}
             data={this.state.slots}
             numColumns={3}
             keyExtractor={(slot) => slot.id}
@@ -202,50 +203,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: SIZES.twenty,
+    paddingTop: SIZES.twenty,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    paddingBottom: 20,
+    paddingBottom: SIZES.twenty,
   },
   selectedDate: {
     alignItems: 'center',
-    paddingTop: 20,
-    paddingBottom: 20,
-    margin: 10,
+    paddingTop: SIZES.twenty,
+    paddingBottom: SIZES.twenty,
+    margin: SIZES.ten,
     flex: 1,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
-    borderRadius: 15,
+    borderRadius: SIZES.fifteen,
     borderColor: Colors.orange,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   unselectedDate: {
     alignItems: 'center',
-    paddingTop: 20,
-    paddingBottom: 20,
-    margin: 10,
+    paddingTop: SIZES.twenty,
+    paddingBottom: SIZES.twenty,
+    margin: SIZES.ten,
     flex: 1,
     backgroundColor: Colors.white,
     borderWidth: 1.5,
-    borderRadius: 15,
+    borderRadius: SIZES.fifteen,
     borderColor: Colors.white,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   iconBack: {
-    height: 20,
-    width: 20,
-    marginTop: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    marginTop: SIZES.twenty,
     resizeMode: 'contain',
   },
 });

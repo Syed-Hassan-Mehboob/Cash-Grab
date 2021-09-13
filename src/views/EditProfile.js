@@ -21,13 +21,14 @@ import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import EditText from '../components/EditText';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 
 const { width, height } = Dimensions.get('window');
 
 export default class EditProfile extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -35,13 +36,13 @@ export default class EditProfile extends Component {
       isModalVisible: false,
       isCountryCodePickerVisible: false,
       accessToken: '',
-      avatar: '',
-      fullName: '',
-      email: '',
+      avatar:this.props.route.params.avatar,
+      fullName: this.props.route.params.name,
+      email:this.props.route.params.email,
       countryCode: '',
       countryFlag: '',
-      phoneNumber: '',
-      location: '',
+      phoneNumber:this.props.route.params.phone,
+      location:this.props.route.params.location,
       oldPassword: '',
       newPassword: '',
     };
@@ -53,7 +54,7 @@ export default class EditProfile extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getUserProfile());
+    this.setState({ accessToken: token });
   };
 
   changePasswordState() {
@@ -92,7 +93,7 @@ export default class EditProfile extends Component {
     return (
       <View style={styles.bottomSheetBody}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <LightTextCB style={{ fontSize: 30 }}>Upload Photo</LightTextCB>
+          <LightTextCB style={{ fontSize: SIZES.ten*3 }}>Upload Photo</LightTextCB>
           <TouchableOpacity
             onPress={() => {
               this.toggleIsModalVisible();
@@ -100,8 +101,8 @@ export default class EditProfile extends Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: 15,
-                width: 15,
+                height: SIZES.fifteen,
+                width: SIZES.fifteen,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
@@ -111,19 +112,19 @@ export default class EditProfile extends Component {
         <LightTextCB style={{ fontSize: 16, color: Colors.grey }}>
           Upload a photo from
         </LightTextCB>
-        <View style={{ marginTop: 30 }}>
+        <View style={{ marginTop: SIZES.ten*3 }}>
           <ButtonRadius10
             label="CAMERA"
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: SIZES.five }}>
           <ButtonRadius10
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{ height: 50 }} />
+        <View style={{ height: SIZES.fifty }} />
       </View>
     );
   };
@@ -131,8 +132,8 @@ export default class EditProfile extends Component {
   choosePhotoFromGallery = () => {
     this.toggleIsModalVisible();
     ImagePicker.openPicker({
-      width: 500,
-      height: 500,
+      width: SIZES.ten*40,
+      height: SIZES.ten*40,
       cropping: true,
       cropperCircleOverlay: true,
     }).then((image) => {
@@ -143,8 +144,8 @@ export default class EditProfile extends Component {
   takePhotoFromCamera = () => {
     this.toggleIsModalVisible();
     ImagePicker.openCamera({
-      width: 500,
-      height: 500,
+      width: SIZES.ten*40,
+      height: SIZES.ten*40,
       cropping: true,
       cropperCircleOverlay: true,
     }).then((image) => {
@@ -159,35 +160,37 @@ export default class EditProfile extends Component {
     });
   };
 
-  getUserProfile = () => {
-    const onSuccess = ({ data }) => {
-      this.toggleIsLoading();
-      this.setState({
-        avatar: Constants.imageURL + data.data.records.userProfile.image,
-        fullName: data.data.records.name,
-        email: data.data.records.email,
-        countryCode: data.data.records.country_code,
-        countryFlag: data.data.records.country_flag,
-        phoneNumber: data.data.records.phone,
-        location: data.data.records.userProfile.location,
-      });
-    };
+  // getUserProfile = () => {
+  //   const onSuccess = ({ data }) => {
+  //   console.log('Edite profile Data========',data)
+  //     this.toggleIsLoading();
+  //     this.setState({
+  //       avatar: Constants.imageURL + data.data.records.userProfile.image,
+  //       fullName: data.data.records.name,
+  //       email: data.data.records.email,
+  //       countryCode: data.data.records.country_code,
+  //       countryFlag: data.data.records.country_flag,
+  //       phoneNumber: data.data.records.phone,
+  //       location: data.data.records.userProfile.location,
+  //     });
+  //   };
 
-    const onFailure = (error) => {
-      this.toggleIsLoading();
-      utils.showResponseError(error);
-    };
+  //   const onFailure = (error) => {
+  //     this.toggleIsLoading();
+  //     utils.showResponseError(error);
+  //   };
 
 
-    this.toggleIsLoading();
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
+  //   this.toggleIsLoading();
+  //   Axios.get(Constants.getProfileURL,{
+  //     headers: {
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
+
 
   editUserProfile = () => {
     let name = this.state.fullName;
@@ -238,7 +241,7 @@ export default class EditProfile extends Component {
       utils.showToast(data.message);
 
       setTimeout(() => {
-        // this.props.navigation.goBack();
+        this.props.navigation.goBack();
       }, 1000);
     };
 
@@ -247,15 +250,15 @@ export default class EditProfile extends Component {
       utils.showResponseError(error);
     };
 
-    const params = {
-      name: name,
-      email: email,
-      country_code: countryCode,
-      country_flag: countryFlag,
-      phone: phone,
-      image: image,
-      location: location,
-    };
+    // const params = {
+    //   name: name,
+    //   email: email,
+    //   country_code: countryCode,
+    //   country_flag: countryFlag,
+    //   phone: phone,
+    //   image: image,
+    //   location: location,
+    // };
 
 
     const formData = new FormData();
@@ -271,6 +274,7 @@ export default class EditProfile extends Component {
       name: `image-profile`,
       type: 'image/jpeg',
     });
+    
 
     const options = {
       headers: {
@@ -280,7 +284,7 @@ export default class EditProfile extends Component {
     };
 
     this.toggleIsLoading();
-    Axios.post(Constants.updateProfileURL, formData, options)
+    Axios.post(Constants.updateProfileURL,formData, options)
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -290,8 +294,8 @@ export default class EditProfile extends Component {
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
         <View
           style={{
-            borderBottomStartRadius: 30,
-            borderBottomEndRadius: 30,
+            borderBottomStartRadius: SIZES.ten*3,
+            borderBottomEndRadius: SIZES.ten*3,
             height: height / 3.10,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -302,12 +306,12 @@ export default class EditProfile extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: 15,
-              marginTop: Platform.OS === 'android' ? 0 : 20,
-              paddingVertical: 10
+              padding: SIZES.fifteen,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.five,
+              paddingVertical: SIZES.ten
             }}>
             <TouchableOpacity
-              style={{ position: 'absolute', left: 10 }}
+              style={{ position: 'absolute', left: SIZES.ten }}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
@@ -316,17 +320,17 @@ export default class EditProfile extends Component {
                 style={[styles.iconBack, { tintColor: Colors.white }]}
               />
             </TouchableOpacity>
-            <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
+            <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.white }}>
               Profile
             </RegularTextCB>
             <TouchableOpacity
               style={{
                 position: 'absolute',
-                right: 10,
-                paddingVertical: 5,
-                paddingHorizontal: 15,
+                right: SIZES.ten,
+                paddingVertical: SIZES.five,
+                paddingHorizontal: SIZES.fifteen,
                 backgroundColor: Colors.sickGreen,
-                borderRadius: 5,
+                borderRadius:SIZES.five,
               }}
               onPress={() => {
                 this.editUserProfile();
@@ -342,7 +346,7 @@ export default class EditProfile extends Component {
             ]}
             onPress={() => this.toggleIsModalVisible()}>
             <Image
-              source={{ uri: this.state.avatar }}
+              source={{ uri:this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -350,8 +354,8 @@ export default class EditProfile extends Component {
             <Image
               source={Images.iconCamera}
               style={{
-                height: 25,
-                width: 25,
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
                 position: 'absolute',
                 resizeMode: 'contain',
                 opacity: 0.2,
@@ -359,22 +363,22 @@ export default class EditProfile extends Component {
             />
           </TouchableOpacity>
           <RegularTextCB
-            style={{ color: Colors.white, fontSize: 20, marginTop: 10 }}>
-            {this.state.fullName}
+            style={{ color: Colors.white, fontSize:16, marginTop: SIZES.ten }}>
+            {this.props.route.params.name}
           </RegularTextCB>
-          <View style={{ backgroundColor: Colors.white, paddingHorizontal: 30, borderRadius: 10 }} >
-            <TextInput multiline={true} placeholder="About Me" style={{ fontFamily: Constants.fontRegular, fontSize: 15, }} />
+          <View style={{ backgroundColor: Colors.white, paddingHorizontal: SIZES.ten*3, borderRadius: SIZES.ten }} >
+            <TextInput multiline={true} placeholder="About Me" style={{ fontFamily: Constants.fontRegular, fontSize: SIZES.fifteen, }} />
           </View>
         </View>
         <ScrollView
-          style={[styles.container, { paddingVertical: 20 }]}
+          style={[styles.container, { paddingVertical: SIZES.five }]}
           showsVerticalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.five,
                 flex: 0.5,
               }}>
               Name
@@ -394,7 +398,7 @@ export default class EditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.five,
                 flex: 0.5,
               }}>
               Email
@@ -414,14 +418,14 @@ export default class EditProfile extends Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginEnd: 20,
-              marginVertical: 10,
+              marginEnd: SIZES.five,
+              marginVertical: SIZES.ten,
             }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.five,
                 flex: 0.5,
               }}>
               Phone No.
@@ -452,7 +456,7 @@ export default class EditProfile extends Component {
                 style={{
                   fontSize: 16,
                   flex: 1,
-                  height: 50,
+                  height: SIZES.fifty,
                   color: Colors.black,
                   fontFamily: Constants.fontRegular,
                 }}
@@ -464,7 +468,7 @@ export default class EditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.five,
                 flex: 0.5,
               }}>
               Location
@@ -484,7 +488,7 @@ export default class EditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.five,
                 flex: 0.5,
               }}>
               Old Password
@@ -505,7 +509,7 @@ export default class EditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.five,
                 flex: 0.5,
               }}>
               New Password
@@ -518,7 +522,7 @@ export default class EditProfile extends Component {
               onChangeText={(text) => {
                 this.setState({newPassword: text});
               }}
-              style={[styles.textInput, {marginBottom: 20}]}
+              style={[styles.textInput, {marginBottom: SIZES.five}]}
             />
           </View> */}
         </ScrollView>
@@ -537,21 +541,21 @@ export default class EditProfile extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.fifteen,
+    width: SIZES.fifteen,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.five,
+    height: SIZES.five,
+    width: SIZES.five,
     alignSelf: 'center',
     color: Colors.orange,
   },
   iconUser: {
-    height: 80,
-    width: 80,
-    borderRadius: 80 / 2,
+    height: SIZES.ten*8,
+    width: SIZES.ten*8,
+    borderRadius: SIZES.ten*8 / 2,
     overflow: 'hidden',
   },
   container: {
@@ -569,15 +573,15 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 16,
     flex: 1,
-    marginVertical: 10,
-    marginHorizontal: 20,
-    height: 50,
+    marginVertical: SIZES.ten,
+    marginHorizontal: SIZES.five,
+    height: SIZES.fifty,
     color: Colors.black,
     fontFamily: Constants.fontRegular,
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -595,80 +599,80 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
+    shadowRadius: SIZES.ten,
     elevation: 8,
-    paddingTop: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    paddingTop: SIZES.five,
+    borderTopStartRadius: SIZES.five,
+    borderTopEndRadius: SIZES.five,
   },
   panelHeader: {
     alignItems: 'center',
   },
   panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
+    width: SIZES.ten*4,
+    height: SIZES.ten-2,
+    borderRadius: SIZES.five-1,
     backgroundColor: '#00000040',
-    marginBottom: 10,
+    marginBottom: SIZES.ten,
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    padding: SIZES.five,
+    borderTopStartRadius: SIZES.five,
+    borderTopEndRadius: SIZES.five,
   },
   orangeCircle: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 30 / 2,
+    borderRadius: SIZES.ten*3 / 2,
     alignSelf: 'flex-end',
-    right: 10,
+    right: SIZES.ten,
     backgroundColor: Colors.orange,
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: SIZES.ten,
+    padding: SIZES.five,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   card1: {
     flexDirection: 'row',
-    height: 50,
+    height: SIZES.fifty,
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    borderRadius: SIZES.ten,
+    paddingHorizontal:SIZES.ten*4,
+    paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
   },
   iconUser: {
-    height: 90,
-    width: 90,
-    borderRadius: 90 / 2,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius: SIZES.ten*9 / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: 90,
-    width: 90,
-    borderRadius: 90 / 2,
+    height:SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius: SIZES.ten*9 / 2,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   modal: {
     justifyContent: 'flex-end',

@@ -20,12 +20,12 @@ export default class DrawerNavigator extends React.Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem('user');
     var userData = JSON.parse(user);
-    this.setState({ isVendor: userData.type === 'vendor' });
+    this.setState({ isVendor: userData.type === 'vendor' }, () => console.log('userType: ', this.state.isVendor));
   };
 
   DrawerScreens = () => {
     return (
-      this.state.isVendor ?
+      !this.state.isVendor ?
         <Drawer.Navigator
           drawerType="slide"
           drawerStyle={{ width: '70%' }}

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
@@ -64,11 +64,11 @@ export default class TermsAndConditions extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            padding: SIZES.fifteen,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
@@ -108,20 +108,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 15,
+    borderRadius: SIZES.ten,
+    padding: SIZES.fifteen,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
-    marginHorizontal: 15,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
+    marginHorizontal: SIZES.fifteen,
     alignItems: 'center',
   },
   spinnerTextStyle: {

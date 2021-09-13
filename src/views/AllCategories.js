@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -61,14 +61,31 @@ export default class AllCategories extends Component {
       .catch(onFailure);
   };
 
-  renderAllCategoriesItem = ({ item }) => {
+   formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+      numberOfElementsLastRow++;
+    }
+  
+    return data;
+  };
 
+  renderAllCategoriesItem = ({ item, index }) => {
     return (
+
       <TouchableOpacity
         style={[
           styles.card,
-          { padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5, alignItems: 'center' },
-        ]}>
+          { padding: 15, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
+        ]} 
+        onPress={() =>
+          this.props.navigation.navigate(Constants.singleCategory,{
+            item: item
+          })
+        }
+        >
 
         <Image
           source={{ uri: Constants.imageURL + item.image }}
@@ -78,7 +95,7 @@ export default class AllCategories extends Component {
         />
 
         <RegularTextCB
-          style={{ fontSize: 16, marginTop: -20, color: Colors.coolGrey }}>
+          style={{ fontSize: 16, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
           {item.name}
         </RegularTextCB>
 
@@ -102,7 +119,7 @@ export default class AllCategories extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: Platform.OS === 'android' ? 0 : 30,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten*3,
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -110,7 +127,7 @@ export default class AllCategories extends Component {
             }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>
+          <RegularTextCB style={{ fontSize: SIZES.ten*3, alignSelf: 'center' }}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity
@@ -120,27 +137,28 @@ export default class AllCategories extends Component {
             <Image
               source={Images.iconHamburger}
               style={{
-                height: 20,
-                width: 20,
+                height: SIZES.twenty,
+                width: SIZES.twenty,
                 resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, paddingTop: 10 }} >
+        <View style={{ flex: 1, paddingTop: SIZES.ten }} >
+
           <FlatList
-            data={this.state.getAllCategories}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
+            data={this.formatData(this.state.getAllCategories,2)}
             numColumns={2}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
               // for ios
-              bottom: 100,
+              bottom: SIZES.ten*10,
             }}
             contentContainerStyle={{
               // for android
-              paddingBottom: 100,
+              paddingBottom: SIZES.ten*10,
             }}
           />
         </View>
@@ -156,45 +174,45 @@ export default class AllCategories extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 50,
-    width: 50,
+    height: SIZES.fifty,
+    width: SIZES.fifty,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 10,
-    paddingHorizontal: 10,
+    paddingTop: SIZES.ten,
+    paddingHorizontal: SIZES.ten,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding: 20,
+    padding: SIZES.twenty,
     flex: 1,
   },
   formLabel: {
@@ -209,7 +227,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -226,23 +244,23 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   spinnerTextStyle: {
     color: '#FFF',

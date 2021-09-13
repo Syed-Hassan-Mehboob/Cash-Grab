@@ -1,119 +1,27 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {
   Image,
+  LogBox,
   Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
+  FlatList
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE,Marker} from 'react-native-maps';
 import Colors from '../../common/Colors';
-import Constants from '../../common/Constants';
+import Constants, { height, SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
-
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import Spinner from 'react-native-loading-spinner-overlay';
 export default class ViewJob extends React.Component {
-  completedJobs = [
-    {
-      id: '1',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '2',
-      image: Images.emp2,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '3',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '4',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '5',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '6',
-      image: Images.emp3,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '7',
-      image: Images.emp4,
-      title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-    {
-      id: '8',
-      image: Images.emp1,
-      title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-      pricing: '$24/Hr',
-      requirement: 'Car Mechanic Needed',
-      type: 'Automobile',
-      location: '111, NYC Street, NY 121',
-      time: '12:00-3:00',
-    },
-  ];
+  
 
   initialMapState = {
     region: {
@@ -124,15 +32,98 @@ export default class ViewJob extends React.Component {
     },
   };
 
+
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: false,
+      accessToken: '',
+      viewJob: [],
+      images:[],
+      userData:{},
+      userImage:'',
+      username:'',
+      title:'',
+      price:'',
+      location:'',
+      time:'',
+      region: this.initialMapState.region,
+      latitude:'',
+      longitude:''
+    };
   }
 
-  state = {
-    region: this.initialMapState.region,
+  componentDidMount() {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    this.getUserAccessToken()
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken()
+    });
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token }, () => {
+      this.viewJob();
+    });
   };
 
+  
+
+  viewJob = () => {
+    
+    this.setState({isLoading:true}) 
+    const onSuccess = ({ data }) => {
+
+      console.log
+     
+      this.setState({isLoading:false})
+      this.setState({
+     userImage:data.data.records.user.userProfile.image,
+     title:data.data.records.title,
+     location:data.data.records.location,
+     time:data.data.records.time,
+     images:data.data.records.images,
+     username:data.data.records.user.name,
+     lat:data.data.records.user.userProfile.latitude,
+     lng:data.data.records.user.userProfile.longitude,
+     price:data.data.records.price,
+     description:data.data.records.description,
+    latitude:data.data.records.user.userProfile.latitude,
+    longitude:data.data.records.user.userProfile.longitude
+      })
+
+      utils.showToast(data.message)
+
+      this.setState({ isLoading: false,  });
+
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+    let params = {
+      jobId: this.props.route.params.item,
+    };
+    Axios.get(Constants.viewJob, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+    
+  };
+
+ 
+
   render() {
+    // this.state.images.map((item)=>{console.log('==========',item)})
+
     return (
       <View style={styles.container}>
         <View
@@ -142,20 +133,20 @@ export default class ViewJob extends React.Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: 10}}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: 30}}>View Job</RegularTextCB>
+          <RegularTextCB style={{fontSize: SIZES.ten*3}}>View Job</RegularTextCB>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{marginBottom: 5}}>
-            <View style={{padding: 20}}>
+          <View style={{marginBottom: SIZES.five}}>
+            <View style={{padding: SIZES.twenty}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -163,23 +154,23 @@ export default class ViewJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={this.completedJobs[0].image}
+                    source={{uri:Constants.imageURL+this.state.userImage}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{marginStart: 10}}>
+                <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
                     style={{
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.completedJobs[0].title}
+                    {this.state.username}
                   </RegularTextCB>
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginTop: 5,
+                      marginTop: SIZES.five,
                       alignItems: 'center',
                     }}>
                     <Image
@@ -190,7 +181,7 @@ export default class ViewJob extends React.Component {
                       style={{
                         color: Colors.turqoiseGreen,
                         fontSize: 12,
-                        marginStart: 5,
+                        marginStart: SIZES.five,
                       }}>
                       Verified
                     </RegularTextCB>
@@ -200,7 +191,7 @@ export default class ViewJob extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 }}>
@@ -209,33 +200,36 @@ export default class ViewJob extends React.Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.completedJobs[0].requirement}
+                  {this.state.title}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  {this.completedJobs[0].pricing}
+                  $
+                  {this.state.price}
                 </LightTextCB>
               </View>
-              <RegularTextCB
+              {/* <RegularTextCB
                 style={{
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
-                {this.completedJobs[0].type}
-              </RegularTextCB>
+                User Type
+                {this.props.route.params.item.user.type}
+              </RegularTextCB> */}
+
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                {this.completedJobs[0].desc}
+                {this.state.description}
               </RegularTextCB>
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
@@ -245,15 +239,15 @@ export default class ViewJob extends React.Component {
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
-                    marginStart: 5,
+                    marginStart: SIZES.five,
                   }}>
-                  {this.completedJobs[0].location}
+                  {this.state.location}
                 </RegularTextCB>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
@@ -263,36 +257,48 @@ export default class ViewJob extends React.Component {
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
-                    marginStart: 5,
+                    marginStart: SIZES.five,
                   }}>
-                  {this.completedJobs[0].time}
+                  {this.state.time}
                 </RegularTextCB>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                }}>
-                <View>
-                  <Image source={Images.car1} style={styles.carImage} />
-                </View>
-                <View>
-                  <Image source={Images.car2} style={styles.carImage} />
-                </View>
-                <View>
-                  <Image source={Images.car3} style={styles.carImage} />
-                </View>
               </View>
-            </View>
+
+          <FlatList
+              horizontal
+              data={this.state.images}
+              keyExtractor={(item) => item.id}
+              renderItem={({item})=>{
+                console.log('images===',item.images)
+                return(
+                    <Image source={Images.car1} style={styles.carImage}/>
+          
+                )
+              }}
+              showsHorizontalScrollIndicator={false}
+            />
+
             <MapView
               provider={PROVIDER_GOOGLE}
-              initialRegion={this.state.region}
+          
+              initialRegion={{
+                latitude:24.90628280557342,
+                longitude:67.07237028142383,
+                latitudeDelta: 0.04864195044303443,
+               longitudeDelta: 0.04014281769006
+              }}
+
               showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
               style={styles.mapStyle}
-            />
-            <View style={{marginVertical: 30, marginHorizontal: 20}}>
+            >
+             <Marker coordinate={{ latitude:Number(this.state.latitude),longitude:Number(this.state.longitude)}} 
+               title={this.state.title}
+             />
+
+            </MapView>
+            <View style={{marginVertical: SIZES.ten*3, marginHorizontal: SIZES.twenty}}>
               <ButtonRadius10
                 label="CONTACT"
                 bgColor={Colors.sickGreen}
@@ -303,6 +309,12 @@ export default class ViewJob extends React.Component {
             </View>
           </View>
         </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF',
+         fontFamily: Constants.fontRegular,}}
+        />
       </View>
     );
   }
@@ -314,50 +326,53 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   mapStyle: {
-    height: 400,
+    height:SIZES.ten*40,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
-    elevation: 10,
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   carImage: {
-    height: 150,
-    width: 150,
-    resizeMode: 'contain',
+    height: SIZES.fifty*2,
+    width: SIZES.fifty*2,
   },
   carImageShadow: {
-    height: 80,
-    width: 80,
-    borderRadius: 10,
+    height: SIZES.ten*8,
+    width: SIZES.ten*8,
+    borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

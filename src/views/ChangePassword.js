@@ -20,7 +20,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import EditText from '../components/EditText';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 
@@ -64,6 +64,7 @@ export default class ChangePassword extends Component {
       this.toggleIsLoading();
       this.setState({
         fullName: data.data.records.name,
+        avatar:Constants.imageURL+data.data.records.userProfile.image
       });
     };
 
@@ -139,8 +140,8 @@ export default class ChangePassword extends Component {
       <View style={{ flex: 1, backgroundColor: Colors.white }}>
         <View
           style={{
-            borderBottomStartRadius: 30,
-            borderBottomEndRadius: 30,
+            borderBottomStartRadius: SIZES.ten*3,
+            borderBottomEndRadius: SIZES.ten*3,
             height: height / 3.75,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -152,10 +153,10 @@ export default class ChangePassword extends Component {
               justifyContent: 'center',
               width: '100%',
               padding: 15,
-              marginTop: Platform.OS === 'android' ? 0 : 20,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
-              style={{ position: 'absolute', left: 10 }}
+              style={{ position: 'absolute', left: SIZES.ten }}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
@@ -164,17 +165,17 @@ export default class ChangePassword extends Component {
                 style={[styles.iconBack, { tintColor: Colors.white }]}
               />
             </TouchableOpacity>
-            <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
+            <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.white }}>
               Change Password
             </RegularTextCB>
             <TouchableOpacity
               style={{
                 position: 'absolute',
-                right: 10,
-                paddingVertical: 5,
+                right: SIZES.ten,
+                paddingVertical: SIZES.five,
                 paddingHorizontal: 15,
                 backgroundColor: Colors.sickGreen,
-                borderRadius: 5,
+                borderRadius: SIZES.five,
               }}
               onPress={() => {
                 this.changePassword();
@@ -189,25 +190,25 @@ export default class ChangePassword extends Component {
               { justifyContent: 'center', alignItems: 'center' },
             ]}>
             <Image
-              source={Images.emp1}
+              source={{uri:this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </TouchableOpacity>
           <RegularTextCB
-            style={{ color: Colors.white, fontSize: 20, marginTop: 10 }}>
+            style={{ color: Colors.white, fontSize: SIZES.twenty, marginTop: SIZES.ten }}>
             {this.state.fullName}
           </RegularTextCB>
         </View>
         <ScrollView
-          style={[styles.container, { paddingVertical: 20 }]}
+          style={[styles.container, { paddingVertical: SIZES.twenty }]}
           showsVerticalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.twenty,
                 flex: 0.5,
               }}>
               Current
@@ -227,7 +228,7 @@ export default class ChangePassword extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.twenty,
                 flex: 0.5,
               }}>
               New
@@ -240,7 +241,7 @@ export default class ChangePassword extends Component {
               onChangeText={(text) => {
                 this.setState({ newPassword: text });
               }}
-              style={[styles.textInput, { marginBottom: 20 }]}
+              style={[styles.textInput, { marginBottom: SIZES.twenty }]}
             />
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -248,7 +249,7 @@ export default class ChangePassword extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart: SIZES.twenty,
                 flex: 0.5,
               }}>
               Confirm
@@ -260,7 +261,7 @@ export default class ChangePassword extends Component {
               onChangeText={(text) => {
                 this.setState({ newPasswordConfirm: text });
               }}
-              style={[styles.textInput, { marginBottom: 20 }]}
+              style={[styles.textInput, { marginBottom: SIZES.twenty }]}
             />
           </View>
         </ScrollView>
@@ -276,21 +277,21 @@ export default class ChangePassword extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   iconUser: {
-    height: 80,
-    width: 80,
-    borderRadius: 80 / 2,
+    height: SIZES.ten*8,
+    width: SIZES.ten*8,
+    borderRadius: SIZES.ten*8 / 2,
     resizeMode: 'contain',
   },
   container: {
@@ -308,15 +309,15 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 16,
     flex: 1,
-    marginVertical: 10,
-    marginHorizontal: 20,
-    height: 50,
+    marginVertical: SIZES.ten,
+    marginHorizontal: SIZES.twenty,
+    height: SIZES.fif,
     color: Colors.black,
     fontFamily: Constants.fontRegular,
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.ten*4,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -334,80 +335,80 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
+    shadowRadius: SIZES.ten,
     elevation: 8,
-    paddingTop: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    paddingTop: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
   panelHeader: {
     alignItems: 'center',
   },
   panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
+    width: SIZES.ten*4,
+    height: SIZES.ten-2,
+    borderRadius: SIZES.five-1,
     backgroundColor: '#00000040',
-    marginBottom: 10,
+    marginBottom: SIZES.ten,
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    padding: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
   orangeCircle: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 30 / 2,
+    borderRadius: SIZES.ten*3 / 2,
     alignSelf: 'flex-end',
-    right: 10,
+    right: SIZES.ten,
     backgroundColor: Colors.orange,
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: SIZES.ten,
+    padding: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   card1: {
     flexDirection: 'row',
-    height: 50,
+    height: SIZES.fif,
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    borderRadius: SIZES.ten,
+    paddingHorizontal: SIZES.twenty,
+    paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   iconUser: {
-    height: 90,
-    width: 90,
-    borderRadius: 90 / 2,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius: SIZES.ten*9 / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: 90,
-    width: 90,
-    borderRadius: 45,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius: SIZES.ten*4,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   modal: {
     justifyContent: 'flex-end',

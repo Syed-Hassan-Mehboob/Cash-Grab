@@ -12,7 +12,7 @@ import { CommonActions } from '@react-navigation/native';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import utils from '../utils';
@@ -35,6 +35,9 @@ export default class DrawerScreen extends Component {
     accessToken: '',
     avatar: '',
     name: '',
+    email: '',
+    countryCode: '',
+    phone: '',
     location: '',
   };
 
@@ -45,9 +48,10 @@ export default class DrawerScreen extends Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem(Constants.user);
     var userData = JSON.parse(user);
+  
     this.setState(
       {
-        isVendor: userData === 'vendor',
+        isVendor: userData.type === 'vendor',
         accessToken: 'Bearer ' + userData.token,
       },
       () => this.getUserProfile(),
@@ -58,8 +62,11 @@ export default class DrawerScreen extends Component {
     const onSuccess = ({ data }) => {
       this.setState({
         avatar: data.data.records.userProfile.image,
-        location: data.data.records.userProfile.location,
         name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        phone: data.data.records.phone,
+        location: data.data.records.userProfile.location,
       });
     };
 
@@ -128,16 +135,29 @@ export default class DrawerScreen extends Component {
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate(
+
                 this.state.isVendor
+                
                   ? Constants.vendorEditProfile
+
                   : Constants.editProfile,
+                  {
+                  avatar:Constants.imageURL+this.state.avatar,
+                  name: this.state.name,
+                  email: this.state.email,
+                  countryCode: this.state.countryCode,
+                  phone: this.state.phone,
+                  location:this.state.location,
+                  }
+               
               )
+            
             }
             style={{
               width: '100%',
               flexDirection: 'row',
-              height: 110,
-              paddingTop: Platform.OS === 'android' ? 30 : 60,
+              height: SIZES.ten*11,
+              paddingTop: Platform.OS === 'android' ? SIZES.ten*3 : SIZES.ten*6,
               paddingBottom: 20,
               alignItems: 'center',
               paddingHorizontal: 25,
@@ -149,7 +169,7 @@ export default class DrawerScreen extends Component {
                 resizeMode="cover"
               />
             </View>
-            <View style={{ flex: 1, paddingHorizontal: 10 }}>
+            <View style={{ flex: 1, paddingHorizontal: SIZES.ten }}>
               <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
                 {this.state.name}
               </RegularTextCB>
@@ -158,13 +178,13 @@ export default class DrawerScreen extends Component {
               </RegularTextCB>
             </View>
           </TouchableOpacity>
-          <View style={[styles.formContainer2, { top: 50 }]}>
+          <View style={[styles.formContainer2, { top: SIZES.fifty }]}>
             <View style={{ flex: 1 }}>
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.notifications);
@@ -181,7 +201,7 @@ export default class DrawerScreen extends Component {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.chatListing);
@@ -196,7 +216,7 @@ export default class DrawerScreen extends Component {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.settings);
@@ -213,7 +233,7 @@ export default class DrawerScreen extends Component {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.changePassword);
@@ -230,7 +250,7 @@ export default class DrawerScreen extends Component {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.faq);
@@ -247,7 +267,7 @@ export default class DrawerScreen extends Component {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(
@@ -266,7 +286,7 @@ export default class DrawerScreen extends Component {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
-                  padding: 15,
+                  padding: SIZES.fifteen,
                 }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.support);
@@ -287,8 +307,8 @@ export default class DrawerScreen extends Component {
                 width: '100%',
                 flex: 0.3,
                 alignItems: 'center',
-                paddingHorizontal: 10,
-                paddingVertical: 10,
+                paddingHorizontal: SIZES.ten,
+                paddingVertical: SIZES.ten,
               }}>
               <Image
                 source={Images.iconDrawerLogOut}
@@ -306,18 +326,18 @@ export default class DrawerScreen extends Component {
           animationOutTiming={600}
           backdropTransitionInTiming={600}
           backdropTransitionOutTiming={600}>
-          <View style={{ backgroundColor: Colors.navy, padding: 15 }}>
+          <View style={{ backgroundColor: Colors.navy, padding: SIZES.fifteen }}>
             <BoldTextCB style={[{ color: Colors.white, fontSize: 22 }]}>
               CashGrab
             </BoldTextCB>
             <RegularTextCB
-              style={{ marginVertical: 10, fontSize: 16, color: Colors.white }}>
+              style={{ marginVertical: SIZES.ten, fontSize: 16, color: Colors.white }}>
               Are you sure you want to logout?
             </RegularTextCB>
             <View
               style={{
                 flexDirection: 'row',
-                marginTop: 10,
+                marginTop: SIZES.ten,
                 alignSelf: 'flex-end',
               }}>
               <TouchableOpacity
@@ -332,12 +352,12 @@ export default class DrawerScreen extends Component {
                   );
                 }}
                 style={{
-                  padding: 10,
-                  width: 50,
+                  padding: SIZES.ten,
+                  width: SIZES.fifty,
                   alignItems: 'center',
-                  borderRadius: 15,
+                  borderRadius: SIZES.fifteen,
                   backgroundColor: Colors.white,
-                  marginEnd: 5,
+                  marginEnd: SIZES.five,
                 }}>
                 <RegularTextCB style={{ color: Colors.navy }}>Yes</RegularTextCB>
               </TouchableOpacity>
@@ -346,12 +366,12 @@ export default class DrawerScreen extends Component {
                   this.toggleModal();
                 }}
                 style={{
-                  padding: 10,
-                  width: 50,
+                  padding: SIZES.ten,
+                  width: SIZES.fifty,
                   alignItems: 'center',
-                  borderRadius: 15,
+                  borderRadius: SIZES.fifteen,
                   backgroundColor: Colors.white,
-                  marginStart: 5,
+                  marginStart: SIZES.five,
                 }}>
                 <RegularTextCB style={{ color: Colors.navy }}>No</RegularTextCB>
               </TouchableOpacity>
@@ -370,34 +390,34 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   drawerSubText: {
-    paddingVertical: 10,
+    paddingVertical: SIZES.ten,
     color: Colors.white,
-    paddingHorizontal: 10,
+    paddingHorizontal: SIZES.ten,
   },
   formContainer2: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: 10,
+    paddingHorizontal: SIZES.ten,
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   iconDrawer: {
-    width: 22,
-    height: 22,
+    width: SIZES.twenty+2,
+    height: SIZES.twenty+2,
     alignSelf: 'center',
     resizeMode: 'contain',
   },

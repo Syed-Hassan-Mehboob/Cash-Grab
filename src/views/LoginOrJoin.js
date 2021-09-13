@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, ImageBackground, Image, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import BoldTextCB from '../components/BoldTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
@@ -33,7 +33,7 @@ export default function LoginOrJoin(props) {
           <RegularTextCB style={{ fontSize: 18, color: Colors.white }}>
             Lorem Ipsum Dicolora Amit Sed, Eluit
           </RegularTextCB>
-          <View style={{ width: '90%', marginTop: 60 }}>
+          <View style={{ width: '90%', marginTop: SIZES.ten*6 }}>
             <ButtonRadius10
               onPress={() => {
                 openNewScreen(Constants.login);
@@ -43,7 +43,7 @@ export default function LoginOrJoin(props) {
               textColor={Colors.black}
             />
           </View>
-          <View style={{ width: '90%', marginTop: 20 }}>
+          <View style={{ width: '90%', marginTop: SIZES.twenty }}>
             <ButtonRadius10
               onPress={() => {
                 openNewScreen(Constants.createAccount);

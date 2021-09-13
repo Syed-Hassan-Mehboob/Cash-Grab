@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants from '../../common/Constants';
+import Constants, { SIZES } from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
@@ -42,6 +42,7 @@ export default class VendorSingleCategory extends Component {
   getAllCategories = () => {
 
     const onSuccess = ({ data }) => {
+      console.log('All Catagor==========',data.data.records)
       this.setState({ isLoading: false, getAllCategories: data.data.records });
     };
 
@@ -52,7 +53,7 @@ export default class VendorSingleCategory extends Component {
 
     this.setState({ isLoading: true });
 
-    Axios.get(Constants.getAllVendorCategories, {
+    Axios.get(Constants.getVenderAllCategory, {
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -61,24 +62,42 @@ export default class VendorSingleCategory extends Component {
       .catch(onFailure);
   };
 
+  formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+      numberOfElementsLastRow++;
+    }
+  
+    return data;
+  };
+
   renderAllCategoriesItem = ({ item }) => {
 
     return (
       <TouchableOpacity
         style={[
           styles.card,
-          { padding: 15, marginHorizontal: 5, marginBottom: 20, marginTop: 5, alignItems: 'center' },
-        ]}>
+          { padding:SIZES.fifteen, marginHorizontal:SIZES.five, marginBottom:SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
+        ]}   
+        onPress={() =>{
+          this.props.navigation.navigate(Constants.vendorSingleCategory,{
+               item:item.id
+          }
+          )
+        }}
+        >
 
         <Image
           source={{ uri: Constants.imageURL + item.image }}
           // source={item.image}
-          style={{ height: 120, width: 120 }}
+          style={{ height:SIZES.ten*12, width:SIZES.ten*12 }}
           resizeMode="stretch"
         />
 
         <RegularTextCB
-          style={{ fontSize: 16, marginTop: -20, color: Colors.coolGrey }}>
+          style={{ fontSize: 16, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
           {item.name}
         </RegularTextCB>
 
@@ -101,7 +120,7 @@ export default class VendorSingleCategory extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: Platform.OS === 'android' ? 0 : 20,
+            marginTop: Platform.OS === 'android' ? 0 :SIZES.twenty,
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -119,27 +138,27 @@ export default class VendorSingleCategory extends Component {
             <Image
               source={Images.iconHamburger}
               style={{
-                height: 20,
-                width: 20,
+                height: SIZES.twenty,
+                width:SIZES.twenty,
                 resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, paddingTop: 10 }} >
+        <View style={{ flex: 1, paddingTop:SIZES.ten }} >
           <FlatList
-            data={this.state.getAllCategories}
+           data={this.formatData(this.state.getAllCategories,2)}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             numColumns={2}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
               // for ios
-              bottom: 100,
+              bottom: SIZES.ten*10,
             }}
             contentContainerStyle={{
               // for android
-              paddingBottom: 100,
+              paddingBottom:SIZES.ten*10,
             }}
           />
         </View>
@@ -155,45 +174,45 @@ export default class VendorSingleCategory extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width:SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: 30,
-    width: 30,
+    height:SIZES.ten*3,
+    width:SIZES.ten*3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 100,
-    width: 100,
+    height: SIZES.ten*10,
+    width: SIZES.ten*10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: 75,
-    width: 75,
-    borderRadius: 75 / 2,
+    height:SIZES.ten*8,
+    width: SIZES.ten*8,
+    borderRadius: SIZES.ten*8 / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
     fontSize: 20,
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width:SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 15,
-    paddingHorizontal: 15,
+    paddingTop:SIZES.fifteen,
+    paddingHorizontal:SIZES.fifteen,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding: 20,
+    padding:SIZES.twenty,
     flex: 1,
   },
   formLabel: {
@@ -208,7 +227,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height:SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -225,17 +244,17 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius:SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: { width: SIZES.five, height:SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius:SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: 100,
-    width: 100,
+    height: SIZES.ten*10,
+    width: SIZES.ten*10,
     // borderRadius: 75 / 2,
     // shadowColor: '#c5c5c5',
     // shadowOffset: { width: 5, height: 5 },

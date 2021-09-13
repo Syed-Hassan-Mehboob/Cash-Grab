@@ -16,23 +16,39 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import EditText from '../../components/EditText';
-
+import Constants, { SIZES } from '../../common/Constants';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width, height} = Dimensions.get('window');
 
 export default class VendorEditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      avatar: '',
-      fullName: '',
-      email: '',
-      phoneNumber: '',
-      location: '',
+      avatar:this.props.route.params.avatar,
+      fullName:this.props.route.params.name,
+      email:this.props.route.params.email,
+      phoneNumber:this.props.route.params.phone,
+      location:this.props.route.params.location,
+      countryCode:this.props.route.params.countryCode,
       oldPassword: '',
       newPassword: '',
       isModalVisible: false,
+      isLoading: false,
+      accessToken: '',
     };
   }
+
+  componentDidMount() {
+    this.getUserAccessToken();
+    console.log('Avator========',this.state.fullName)
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({ accessToken: token });
+  };
 
   changePasswordState() {
     if (this.state.secureText)
@@ -51,11 +67,103 @@ export default class VendorEditProfile extends Component {
     }
   };
 
+  toggleIsLoading = () => {
+    this.setState({ isLoading: !this.state.isLoading });
+  };
+
   toggleIsModalVisible = () => {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
     });
   };
+
+   editUserProfile = () => {
+    let name = this.state.fullName;
+    let email = this.state.email;
+    let countryCode = this.state.countryCode;
+    let phone = this.state.phoneNumber;
+    let image = this.state.avatar;
+    let location = this.state.location;
+    
+    if (utils.isEmpty(name)) {
+      utils.showToast('Invalid Name');
+      return;
+    }
+
+    if (name.length < 3) {
+      utils.showToast('Name Should Not Be Less Than 3 Characters');
+      return;
+    }
+
+    if (name.length > 55) {
+      utils.showToast('Name Should Not Be Greater Than 55 Characters');
+      return;
+    }
+
+    if (this.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (utils.isEmpty(phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
+
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+
+    if (phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
+
+    const onSuccess = ({ data }) => {
+     console.log('upload======',data)
+      this.toggleIsLoading();
+      utils.showToast(data.message);
+
+      setTimeout(() => {
+        this.props.navigation.goBack();
+      }, 1000);
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+  
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('country_code', countryCode);
+    formData.append('phone', phone);
+    formData.append('location', location);
+    formData.append('image', {
+      ...image,
+      uri: Platform.OS === 'android' ? image : image.replace('file:///',''),
+      name: `image-profile`,
+      type: 'image/jpeg',
+    }
+    );
+
+    const options = {
+      headers: {
+        'Content-Type':'application/x-www-form-urlencoded',
+        Authorization: this.state.accessToken,
+      },
+    };
+
+    this.toggleIsLoading();
+    Axios.post(Constants.updateProfileURL,formData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+
 
   renderBottomSheetContent = () => {
     return (
@@ -69,8 +177,8 @@ export default class VendorEditProfile extends Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: 15,
-                width: 15,
+                height:SIZES.fifteen,
+                width:SIZES.fifteen,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
@@ -87,13 +195,13 @@ export default class VendorEditProfile extends Component {
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: SIZES.twenty}}>
           <ButtonRadius10
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
           />
         </View>
-        <View style={{height: 50}} />
+        <View style={{height:SIZES.fifty}} />
       </View>
     );
   };
@@ -101,22 +209,24 @@ export default class VendorEditProfile extends Component {
   choosePhotoFromGallery = () => {
     this.toggleIsModalVisible();
     ImagePicker.openPicker({
-      width: 500,
-      height: 500,
+      width:SIZES.five*100,
+      height:SIZES.five*100,
       cropping: true,
     }).then((image) => {
-      this.setState({avatar: image.path});
+      this.setState({avatar:image.path});
     });
   };
 
   takePhotoFromCamera = () => {
     this.toggleIsModalVisible();
     ImagePicker.openCamera({
-      width: 500,
-      height: 500,
+      width:SIZES.five*100,
+      height:SIZES.five*100,
       cropping: true,
     }).then((image) => {
-      this.setState({avatar: image.path});
+      // console.log('=====Image',image.path)
+      this.setState({avatar:image.path});
+      // console.log('Avator===',this.state.avatar)
     });
   };
 
@@ -125,8 +235,8 @@ export default class VendorEditProfile extends Component {
       <View style={{flex: 1, backgroundColor: Colors.white}}>
         <View
           style={{
-            borderBottomStartRadius: 30,
-            borderBottomEndRadius: 30,
+            borderBottomStartRadius:SIZES.ten*3,
+            borderBottomEndRadius:SIZES.ten*3,
             height: height / 3.75,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -137,11 +247,11 @@ export default class VendorEditProfile extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: 15,
-              marginTop: Platform.OS === 'android' ? 0 : 20,
+              padding:SIZES.fifteen,
+              marginTop: Platform.OS === 'android' ? 0 :SIZES.twenty,
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: 10}}
+              style={{position: 'absolute', left:SIZES.ten}}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
@@ -156,15 +266,14 @@ export default class VendorEditProfile extends Component {
             <TouchableOpacity
               style={{
                 position: 'absolute',
-                right: 10,
-                paddingVertical: 5,
-                paddingHorizontal: 15,
+                right:SIZES.ten,
+                paddingVertical:SIZES.five,
+                paddingHorizontal:SIZES.fifteen,
                 backgroundColor: Colors.sickGreen,
-                borderRadius: 5,
+                borderRadius:SIZES.five,
               }}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}>
+              onPress={() => this.editUserProfile()}
+              >
               <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
             </TouchableOpacity>
           </View>
@@ -176,15 +285,15 @@ export default class VendorEditProfile extends Component {
             ]}
             onPress={() => this.toggleIsModalVisible()}>
             <Image
-              source={Images.emp1}
+              source={{uri:this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />
             <Image
               source={Images.iconCamera}
               style={{
-                height: 25,
-                width: 25,
+                height:SIZES.twentyFive,
+                width:SIZES.twentyFive,
                 position: 'absolute',
                 resizeMode: 'contain',
                 opacity: 0.2,
@@ -192,19 +301,19 @@ export default class VendorEditProfile extends Component {
             />
           </TouchableOpacity>
           <RegularTextCB
-            style={{color: Colors.white, fontSize: 20, marginTop: 10}}>
-            Damian Santosa
+            style={{color: Colors.white, fontSize: SIZES.TWENTY, marginTop:SIZES.ten}}>
+            {this.props.route.params.name}
           </RegularTextCB>
         </View>
         <ScrollView
-          style={[styles.container, {paddingVertical: 20}]}
+          style={[styles.container, {paddingVertical:SIZES.twenty}]}
           showsVerticalScrollIndicator={false}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart:SIZES.twenty,
                 flex: 0.5,
               }}>
               Name
@@ -224,7 +333,7 @@ export default class VendorEditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart:SIZES.twenty,
                 flex: 0.5,
               }}>
               Email
@@ -245,7 +354,7 @@ export default class VendorEditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart:SIZES.twenty,
                 flex: 0.5,
               }}>
               Phone No.
@@ -270,7 +379,7 @@ export default class VendorEditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart:SIZES.twenty,
                 flex: 0.5,
               }}>
               Location
@@ -290,7 +399,7 @@ export default class VendorEditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart:SIZES.twenty,
                 flex: 0.5,
               }}>
               Old Password
@@ -311,7 +420,7 @@ export default class VendorEditProfile extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
-                marginStart: 20,
+                marginStart:SIZES.twenty,
                 flex: 0.5,
               }}>
               New Password
@@ -324,7 +433,7 @@ export default class VendorEditProfile extends Component {
               onChangeText={(text) => {
                 this.setState({newPassword: text});
               }}
-              style={[styles.textInput, {marginBottom: 20}]}
+              style={[styles.textInput, {marginBottom: SIZES.TWENTY}]}
             />
           </View>
         </ScrollView>
@@ -338,21 +447,21 @@ export default class VendorEditProfile extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height:SIZES.twenty,
+    width:SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.TWENTY,
+    height: SIZES.twenty,
+    width:SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   iconUser: {
-    height: 80,
-    width: 80,
-    borderRadius: 80 / 2,
+    height:SIZES.ten*8,
+    width:SIZES.ten*8,
+    borderRadius: SIZES.ten*8 / 2,
     resizeMode: 'contain',
   },
   container: {
@@ -370,14 +479,14 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 16,
     flex: 1,
-    marginVertical: 10,
-    marginHorizontal: 20,
-    height: 50,
+    marginVertical: SIZES.ten,
+    marginHorizontal:SIZES.twenty,
+    height:SIZES.fifty,
     color: Colors.black,
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -395,65 +504,65 @@ const styles = StyleSheet.create({
   bottomSheetHeader: {
     backgroundColor: Colors.white,
     shadowColor: '#333333',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width:SIZES.five, height:SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    paddingTop: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    shadowRadius: SIZES.ten,
+    paddingTop:SIZES.twenty,
+    borderTopStartRadius:SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
   panelHeader: {
     alignItems: 'center',
   },
   panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
+    width:SIZES.fifty-10,
+    height: SIZES.ten-2,
+    borderRadius: SIZES.five-1,
     backgroundColor: '#00000040',
-    marginBottom: 10,
+    marginBottom:SIZES.ten,
   },
   bottomSheetBody: {
     backgroundColor: Colors.white,
-    padding: 20,
-    borderTopStartRadius: 20,
-    borderTopEndRadius: 20,
+    padding: SIZES.twenty,
+    borderTopStartRadius: SIZES.twenty,
+    borderTopEndRadius: SIZES.twenty,
   },
   orangeCircle: {
-    height: 30,
-    width: 30,
+    height:SIZES.ten*3,
+    width: SIZES.ten*3,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 30 / 2,
+    borderRadius: SIZES.ten*3 / 2,
     alignSelf: 'flex-end',
-    right: 10,
+    right:SIZES.ten,
     backgroundColor: Colors.orange,
   },
   card: {
     backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 20,
+    borderRadius:SIZES.ten,
+    padding: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius:SIZES.ten,
+    elevation:SIZES.ten,
     alignItems: 'center',
   },
   iconUser: {
-    height: 90,
-    width: 90,
-    borderRadius: 90 / 2,
+    height: SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius: SIZES.ten*9 / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: 90,
-    width: 90,
-    borderRadius: 45,
+    height:SIZES.ten*9,
+    width: SIZES.ten*9,
+    borderRadius:SIZES.fifty-5,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width:SIZES.five, height:SIZES.five},
     shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius:SIZES.five,
+    elevation:SIZES.five,
   },
   modal: {
     justifyContent: 'flex-end',

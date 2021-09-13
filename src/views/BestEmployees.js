@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {SafeAreaView, View, StyleSheet, Image} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, { SIZES } from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 
@@ -159,10 +159,10 @@ export default class BestEmployees extends Component {
     return (
       <Card
         style={{
-          borderRadius: 20,
-          shadowRadius: 20,
-          shadowOffset: 20,
-          shadowOpacity: 20,
+          borderRadius: SIZES.twenty,
+          shadowRadius: SIZES.twenty,
+          shadowOffset: SIZES.twenty,
+          shadowOpacity: SIZES.twenty,
         }}>
         <TouchableOpacity
           style={styles.itemContainer}
@@ -184,17 +184,17 @@ export default class BestEmployees extends Component {
                 style={styles.iconUser}
                 resizeMode="cover"
               />
-              <View style={{marginStart: 20, marginEnd: 20}}>
+              <View style={{marginStart: SIZES.twenty, marginEnd: SIZES.twenty}}>
                 <LightTextCB style={{fontSize: 18, color: Colors.black1}}>
                   {item.name}
                 </LightTextCB>
-                <View style={{flexDirection: 'row', marginTop: 5}}>
+                <View style={{flexDirection: 'row', marginTop: SIZES.five}}>
                   <LightTextCB style={{fontSize: 18, color: Colors.black1}}>
                     Verified
                   </LightTextCB>
                   <Image
                     source={Images.tickVerified}
-                    style={{height: 20, width: 20, marginStart: 5}}
+                    style={{height: SIZES.twenty, width: SIZES.twenty, marginStart: SIZES.five}}
                   />
                 </View>
               </View>
@@ -202,7 +202,7 @@ export default class BestEmployees extends Component {
             <Image source={Images.arrowForward} style={[styles.iconForward]} />
           </View>
           <LightTextCB
-            style={{fontSize: 18, color: Colors.black1, marginTop: 20}}>
+            style={{fontSize: 18, color: Colors.black1, marginTop: SIZES.twenty}}>
             {item.location}
           </LightTextCB>
           <LightTextCB
@@ -219,7 +219,7 @@ export default class BestEmployees extends Component {
       <View style={styles.container}>
         <View
           style={{
-            marginTop: 20,
+            marginTop: SIZES.twenty,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -237,10 +237,10 @@ export default class BestEmployees extends Component {
             <Image source={Images.iconFilter} style={styles.iconFilter} />
           </TouchableOpacity>
         </View>
-        <LightTextCB style={{fontSize: 30, marginTop: 30}}>
+        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten*3}}>
           Best Employees
         </LightTextCB>
-        <LightTextCB style={{fontSize: 18, marginTop: 30}}>
+        <LightTextCB style={{fontSize: 18, marginTop: SIZES.ten*3}}>
           201 people available around you
         </LightTextCB>
         <FlatList
@@ -257,45 +257,45 @@ export default class BestEmployees extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: 20,
-    width: 20,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: 30,
-    width: 30,
+    height: SIZES.ten*3,
+    width: SIZES.ten*3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: 12,
-    width: 12,
+    height: SIZES.fifteen-3,
+    width: SIZES.fifteen-3,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: 60,
-    width: 60,
-    borderRadius: 60 / 2,
+    height: SIZES.ten*6,
+    width: SIZES.ten*6,
+    borderRadius: SIZES.ten*6 / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
-    fontSize: 20,
-    height: 20,
-    width: 20,
+    fontSize: SIZES.twenty,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    paddingTop: SIZES.twenty,
+    paddingHorizontal: SIZES.twenty,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding: 20,
+    padding: SIZES.twenty,
     flex: 1,
   },
   formLabel: {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: 45,
+    height: SIZES.fifty-5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
