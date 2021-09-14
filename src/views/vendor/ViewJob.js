@@ -93,7 +93,7 @@ export default class ViewJob extends React.Component {
     longitude:data.data.records.user.userProfile.longitude
       })
 
-      utils.showToast(data.message)
+      // utils.showToast(data.message)
 
       this.setState({ isLoading: false,  });
 

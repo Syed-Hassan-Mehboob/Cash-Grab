@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
@@ -28,6 +28,9 @@ const {height, width} = Dimensions.get('window');
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import RNFetchBlob from 'react-native-fetch-blob';
 import axios from 'axios';
+import ImgToBase64 from 'react-native-image-base64';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 export default class postJob extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +53,7 @@ export default class postJob extends Component {
     latitude: '',
     longitude: '',
     showModal: false,
+    JobImagesUri:[]
   };
 
   componentDidMount() {
@@ -182,70 +186,65 @@ export default class postJob extends Component {
   };
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
-
 
   postJob = () => {
-
-    const PostData={
-       title : this.state.serviceCaption,
-       price :this.state.rateRequested, 
-       description:this.state.jobDesc,
-       expiry_date:this.state.expirydate,
-       address: this.state.location,
-       location:this.state.location,
-       images :this.state.jobImages,
-       services : this.state.services,
-    }
-
-    // const formData = new FormData();
-    // formData.append('title', this.state.serviceCaption);
-    // formData.append('price' ,this.state.rateRequested);
-    // formData.append('description',this.state.jobDesc);
-    // formData.append('expiry_date',this.state.expirydate);
-    // formData.append('address', this.state.location);
-    // formData.append('location',this.state.location);;
-    // formData.append('image[]',this.state.jobImages)  
-    // formData.append('services[]',this.state.services);
-
-
-    // cons
+    /* const params = {
+       old_password: currentPassword,
+       password: newPassword,
+       password_confirmation: confirmPassword,
+     };
  
+     const options = {
+       headers: {
+         'Content-Type': 'application/json',
+         Authorization: this.state.accessToken,
+       },
+     };
+ 
+     this.toggleIsLoading();
+ 
+     Axios.post(Constants.updatePasswordURL, params, options).then(onSuccess).catch(onFailure); */
 
-console.log('post Data =======================================================',PostData)
-
-    this.setState({ isLoading: true });
-    const onSuccess = ({ data }) => {
-      console.log('Post Jobe Data =====================================================',data);
-      utils.showToast(data.message);
-      this.setState({ isLoading: false });
-    
+    const PostData = {
+      title: this.state.serviceCaption,
+      price: this.state.rateRequested,
+      description: this.state.jobDesc,
+      expiry_date: this.state.expirydate,
+      address: this.state.address,
+      location: this.state.location,
+      image:this.state.jobImages,
+      services: this.state.services,
     };
 
-    const onFailure = (error) => {
-      console.log("error =========================================== ==========================>", Object.keys(error))
-      utils.showResponseError(error);
-      this.setState({ isLoading: false });
-    };
+    // console.log('Post data ==== === ==== ',this.state.jobImages)
 
+        this.setState({ isLoading: true });
+        const onSuccess = ({ data }) => {
+          console.log('Post Jobe Data =====================================================',data);
+          utils.showToast(data.message);
+          this.setState({ isLoading: false });
 
-    const options = {
-      headers: {
-        // Accept: "application/x-www-form-urlencoded",
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: this.state.accessToken,
-      },
-    };
+        };
 
-    Axios.post(Constants.postJob,PostData,options)
-    .then(onSuccess)
-    .catch(onFailure);
+        const onFailure = (error) => {
+          console.log("error =========================================== ==========================>", Object.keys(error))
+          utils.showResponseError(error);
+          this.setState({ isLoading: false });
+        };
 
+        const options = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: this.state.accessToken,
+          },
+        };
+
+        Axios.post(Constants.postJob,PostData,options)
+        .then(onSuccess)
+        .catch(onFailure);
   };
-
-
-
 
   openGallery = () => {
     launchImageLibrary({mediaType: 'photo', selectionLimit: 4}, (response) => {
@@ -256,29 +255,41 @@ console.log('post Data =======================================================',
       } else if (response.errorMessage) {
         console.log('Image Picker Error', response.errorMessage);
       } else if (response.assets) {
-        console.log('=======responce',response);
-        var imageuri = [];
+    
+
+        
+        var imageuriBase64 = [];
+        var JobImagesUri=[]
         response.assets.map((item) => {
-          console.log('Image Uri ==== ==== ',item.uri)
-          imageuri.push(item.uri);
-        }
-        );
 
-        this.setState({jobImages: imageuri, showImages: true});
+          // console.log('Image Uri ==== ==== ', item.uri);
+          JobImagesUri.push(item.uri)
+          ImgToBase64.getBase64String(item.uri)
+            .then((base64String) => {
+              // console.log("image converted to base 64 =======>>>>", 'data:image/png;base64,'+base64String)
+              imageuriBase64.push('data:image/png;base64,'+base64String);
+            })
+            .catch((err) => console.log("catch error while converting image to base 64=====>>>>",err))
+         }
+         
+         );
 
+        this.setState({JobImagesUri:JobImagesUri, jobImages: imageuriBase64, showImages: true,});
       } else {
       }
     });
   };
 
+  
+
   remove(image) {
     let images = [];
-    this.state.jobImages.filter((item) => {
+    this.state.JobImagesUri.filter((item) => {
       if (item !== image) {
         images.push(item);
       }
     });
-    this.setState({jobImages: images});
+    this.setState({JobImagesUri: images});
   }
 
   onDayPress = (day) => {
@@ -306,7 +317,11 @@ console.log('post Data =======================================================',
               direction === 'left' ? (
                 <Image
                   source={Images.arrowBack}
-                  style={{height: SIZES.twenty, width: SIZES.twenty, resizeMode: 'contain'}}
+                  style={{
+                    height: SIZES.twenty,
+                    width: SIZES.twenty,
+                    resizeMode: 'contain',
+                  }}
                 />
               ) : (
                 <Image
@@ -360,11 +375,13 @@ console.log('post Data =======================================================',
               padding: SIZES.fifteen,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
-            <RegularTextCB style={{fontSize: SIZES.ten*3, color: Colors.black}}>
+            <RegularTextCB
+              style={{fontSize: SIZES.ten * 3, color: Colors.black}}>
               Post a Job
             </RegularTextCB>
           </View>
-          <View style={{paddingHorizontal: SIZES.twenty, paddingTop: SIZES.ten}}>
+          <View
+            style={{paddingHorizontal: SIZES.twenty, paddingTop: SIZES.ten}}>
             <View>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Service Caption
@@ -417,7 +434,7 @@ console.log('post Data =======================================================',
               <View
                 style={[
                   {
-                    height: SIZES.ten*6,
+                    height: SIZES.ten * 6,
                     backgroundColor: Colors.white,
                     borderRadius: SIZES.ten,
                     shadowColor: '#c5c5c5',
@@ -447,7 +464,6 @@ console.log('post Data =======================================================',
                   this.setState({ services: val })
                 }}
               /> */}
-
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
@@ -497,7 +513,7 @@ console.log('post Data =======================================================',
                   style={[
                     styles.textInput,
                     {
-                      height: SIZES.ten*12,
+                      height: SIZES.ten * 12,
                       paddingTop: SIZES.ten,
                       alignItems: 'flex-start',
                       textAlignVertical: 'top',
@@ -510,43 +526,54 @@ console.log('post Data =======================================================',
               onPress={() => {
                 this.openGallery();
               }}
-              style={[styles.dashBorder, {marginTop: SIZES.ten*3, padding: 25}]}>
+              style={[
+                styles.dashBorder,
+                {marginTop: SIZES.ten * 3, padding: 25},
+              ]}>
               <Image
                 source={Images.cloud}
-                style={{height: SIZES.fifty, width: SIZES.ten*8, resizeMode: 'contain'}}
+                style={{
+                  height: SIZES.fifty,
+                  width: SIZES.ten * 8,
+                  resizeMode: 'contain',
+                }}
               />
               <RegularTextCB
-                style={{marginTop: SIZES.ten, color: Colors.black, fontSize: 16}}>
+                style={{
+                  marginTop: SIZES.ten,
+                  color: Colors.black,
+                  fontSize: 16,
+                }}>
                 Upload Photo
               </RegularTextCB>
               <RegularTextCB style={{color: Colors.coolGrey}}>
                 Please upload a clear high-quality photo
               </RegularTextCB>
             </TouchableOpacity>
-            {this.state.jobImages.length > 0 ? (
-              <View style={{height: '8%', marginVertical: SIZES.ten*3}}>
+            {this.state.JobImagesUri.length > 0 ? (
+              <View style={{height: '8%', marginVertical: SIZES.ten * 3}}>
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
-                  {this.state.jobImages.map((item) => {
+                  {this.state.JobImagesUri.map((item) => {
                     return (
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image
                           style={{
-                            height: SIZES.ten*9,
-                            width: SIZES.ten*9,
+                            height: SIZES.ten * 9,
+                            width: SIZES.ten * 9,
                             marginHorizontal: SIZES.ten,
                             borderRadius: SIZES.ten,
                           }}
-                          source={{uri:item}}
+                          source={{uri: item}}
                           resizeMode="cover"
                         />
                         <View
                           style={{
                             position: 'absolute',
                             padding: SIZES.five,
-                            top: SIZES.five-2,
+                            top: SIZES.five - 2,
                             right: SIZES.ten,
                           }}>
                           <TouchableOpacity
@@ -555,8 +582,8 @@ console.log('post Data =======================================================',
                             }}
                             style={{
                               padding: 4,
-                              height: SIZES.fifteen+2,
-                              width: SIZES.fifteen+2,
+                              height: SIZES.fifteen + 2,
+                              width: SIZES.fifteen + 2,
                               backgroundColor: Colors.white,
                               borderRadius: SIZES.ten,
                               overflow: 'hidden',
@@ -577,17 +604,19 @@ console.log('post Data =======================================================',
 
             <View
               style={{
-                marginVertical: this.state.jobImages.length > 0 ? 0 : SIZES.ten*3,
-                paddingBottom: this.state.jobImages.length > 0 ? SIZES.ten*4 : 0,
+                marginVertical:
+                  this.state.JobImagesUri.length > 0 ? 0 : SIZES.ten * 3,
+                paddingBottom:
+                  this.state.JobImagesUri.length > 0 ? SIZES.ten * 4 : 0,
               }}>
               <ButtonRadius10
                 bgColor={Colors.sickGreen}
                 label="POST"
                 onPress={() => {
-                  this.postJob()
-            //       setTimeout(() => {
-            //   this.props.navigation.navigate(Constants.home);
-            //  }, 5000);
+                  this.postJob();
+                        setTimeout(() => {
+                    this.props.navigation.navigate(Constants.home);
+                   }, 5000);
                 }}
               />
             </View>
@@ -628,6 +657,11 @@ console.log('post Data =======================================================',
           style={styles.modal}>
           {this.renderBottomSheetContent()}
         </Modal>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -651,7 +685,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    height: SIZES.ten*12,
+    height: SIZES.ten * 12,
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     padding: SIZES.twenty,
@@ -683,7 +717,7 @@ const styles = StyleSheet.create({
   selectedFilter: {
     alignItems: 'center',
     paddingVertical: SIZES.ten,
-    margin: SIZES.five-3,
+    margin: SIZES.five - 3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.sickGreen,
@@ -692,15 +726,15 @@ const styles = StyleSheet.create({
   unselectedFilter: {
     alignItems: 'center',
     paddingVertical: SIZES.ten,
-    margin: SIZES.five-3,
+    margin: SIZES.five - 3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.white,
     borderRadius: SIZES.fifteen,
   },
   selectedDateBG: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     backgroundColor: Colors.sickGreen,
     borderRadius: SIZES.fifteen,
     alignItems: 'center',
@@ -728,7 +762,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     justifyContent: 'center',
   },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
+},
 });

@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 20,
         // flex: 1,
-        width:SIZES.ten*47,
+        width:SIZES.ten*46,
         shadowColor: '#c5c5c5',
         shadowOffset: { width: 5, height: 5 },
         shadowOpacity: 1.0,

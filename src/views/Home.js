@@ -232,7 +232,7 @@ export default class Home extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL + item.image }}
+              source={{ uri: Constants.imageURL + item.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -613,10 +613,9 @@ const styles = StyleSheet.create({
     color: Colors.black1,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
-    resizeMode: 'contain',
+    height: '100%',
+    width: '100%',
+    // borderRadius: SIZES.ten*6 / 2,
   },
   circle: {
     height: SIZES.ten*12,
@@ -632,6 +631,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
+    overflow:'hidden'
   },
   card: {
     backgroundColor: '#fff',

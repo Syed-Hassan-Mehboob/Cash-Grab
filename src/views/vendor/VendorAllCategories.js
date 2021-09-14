@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  Dimensions
 } from 'react-native';
 import Colors from '../../common/Colors';
 import Constants, { SIZES } from '../../common/Constants';
@@ -23,7 +24,8 @@ export default class VendorSingleCategory extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      getAllCategories: []
+      getAllCategories: [],
+
     };
   }
 
@@ -74,6 +76,10 @@ export default class VendorSingleCategory extends Component {
   };
 
   renderAllCategoriesItem = ({ item }) => {
+    
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
 
     return (
       <TouchableOpacity
@@ -83,7 +89,9 @@ export default class VendorSingleCategory extends Component {
         ]}   
         onPress={() =>{
           this.props.navigation.navigate(Constants.vendorSingleCategory,{
-               item:item.id
+              image:item.image,
+              name:item.name,
+              item:item.id
           }
           )
         }}
@@ -133,7 +141,7 @@ export default class VendorSingleCategory extends Component {
           </RegularTextCB>
           <TouchableOpacity
             onPress={() => {
-              this.openNextScreen(Constants.filter);
+              this.openNextScreen(Constants.venderFilter);
             }}>
             <Image
               source={Images.iconHamburger}
@@ -243,14 +251,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius:SIZES.twenty,
+
+    height:SIZES.ten*20,
+    width:SIZES.ten*10,
+    borderRadius:SIZES.ten*2,
     flex: 1,
     shadowColor: '#c5c5c5',
     shadowOffset: { width: SIZES.five, height:SIZES.five },
     shadowOpacity: 1.0,
-    shadowRadius:SIZES.ten,
-    elevation: SIZES.ten,
+    shadowRadius:SIZES.five,
+    elevation: SIZES.five,
   },
   circleCard: {
     height: SIZES.ten*10,
@@ -265,5 +275,16 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+  },
+  item: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 1,
+    height: Dimensions.get('window').width / 2, // approximate a square
   },
 });

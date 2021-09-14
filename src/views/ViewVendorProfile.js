@@ -79,10 +79,10 @@ export default class ViewVendorProfile extends React.Component {
 
 
     const onSuccess = ({ data }) => {
-      console.log('Vender By catagory =======',data);
+      console.log('Vender By catagory =======',data.data.records);
       this.setState({  
      name:data.data.records.name,email:data.data.records.email,
-      phone:data.data.records.phone,
+    phone:data.data.records.phone,
      ratings:data.data.records.ratings,
      year:data.data.records.year,
      image:data.data.records.userProfile.image ,
@@ -203,8 +203,7 @@ export default class ViewVendorProfile extends React.Component {
           </View>
           <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-            Name
-              {/* {item.user.name} */}
+              {item.name === null ? 'Undefine' : item.name }
             </RegularTextCB>
             <Image
               source={Images.like}
@@ -302,14 +301,18 @@ export default class ViewVendorProfile extends React.Component {
               Profile
             </RegularTextCB>
             <TouchableOpacity
-              style={{position: 'absolute', right: SIZES.ten}}
+              style={{position: 'absolute', right: SIZES.ten,
+              height:SIZES.twentyFive,width:SIZES.twentyFive,
+              borderRadius:SIZES.twentyFive,overflow:'hidden',
+              borderWidth:1,borderColor:Colors.grey}}
               onPress={() => {
                 this.props.navigation.navigate(Constants.chat);
               }}>
               
               <Image
                 source={{uri:Constants.imageURL+this.state.image}}
-                style={[styles.iconBack, {tintColor: Colors.white}]}
+                style={[styles.iconBack]}
+                resizeMode={'cover'}
               />
             </TouchableOpacity>
           </View>
@@ -660,14 +663,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: SIZES.twenty,
-    width: SIZES.twenty,
-    resizeMode: 'contain',
+    height:'100%',
+    width:'100%'
   },
   card: {
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     borderColor: Colors.sickGreen,
+    width:'100%',
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,

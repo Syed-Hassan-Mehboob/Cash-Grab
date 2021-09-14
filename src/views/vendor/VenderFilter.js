@@ -9,22 +9,22 @@ import {
   View,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import Images from '../common/Images';
-import Colors from '../common/Colors';
-import ButtonRadius10 from '../components/ButtonRadius10';
-import RegularTextCB from '../components/RegularTextCB';
+import Images from '../../common/Images';
+import Colors from '../../common/Colors';
+import ButtonRadius10 from '../../components/ButtonRadius10';
+import RegularTextCB from '../../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Axios from '../network/APIKit';
-import utils from '../utils';
-import Constants, {SIZES} from '../common/Constants';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import Constants, {SIZES} from '../../common/Constants';
 
 const resetAction = CommonActions.reset({
   index: 0,
   routes: [{name: 'BookingConfirmed'}],
 });
 
-export default class Filter extends Component {
+export default class VenderFilter extends Component {
   constructor(props) {
     super(props);
 
@@ -80,7 +80,7 @@ export default class Filter extends Component {
 
     this.setState({isLoading: true});
 
-    Axios.get(Constants.customerFilterservice, {
+    Axios.get(Constants.getVenderFilter, {
       headers: {Authorization: this.state.accessToken},
     })
       .then(onSuccess)
@@ -214,13 +214,13 @@ export default class Filter extends Component {
       
   //   };
     
-  //   // console.log('Post Data  ===== ',postData)
+  //   console.log('Post Data  ===== ',postData)
   
 
   //   this.setState({isLoading: true});
 
   //   const onSuccess = ({data}) => {
-  //     // console.log('========================Filter Data==',data)
+  //     console.log('========================Filter Data==',data)
   //     utils.showToast(data.message);
   //     this.setState({isLoading: false});
   //   };
@@ -338,7 +338,7 @@ export default class Filter extends Component {
               bgColor={Colors.sickGreen}
               onPress={() => {
                 // this.getUserProfile();
-                this.props.navigation.navigate(Constants.Filtered,{
+                this.props.navigation.navigate(Constants.venderFilterd,{
                   id:this.state.selectedCategory.id,
                   minPrice:this.state.minPrice,
                   max_price:this.state.maxPrice,
@@ -404,4 +404,8 @@ const styles = StyleSheet.create({
     width: SIZES.twenty,
     resizeMode: 'contain',
   },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
+},
 });

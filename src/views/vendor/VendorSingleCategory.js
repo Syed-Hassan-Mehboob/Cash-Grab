@@ -145,8 +145,8 @@ export default class VendorSingleCategory extends Component {
   getJobsByCategory = () => {
     console.log('==================',this.props.route.params.item.id)
     const onSuccess = ({ data }) => {
-      console.log('Single category Data==========',data.data)
-      utils.showToast(data.message)
+     
+      // utils.showToast(data.message)
       this.setState({ isLoading: false,  getJobsByCatagory: data.data });
     };
 
@@ -172,7 +172,7 @@ export default class VendorSingleCategory extends Component {
 
   renderSingleCategoriesItem = ({ item }) => {
 
-    // console.log('======================single ',item)
+    console.log('======================single ',item)
     
     return (
       <TouchableOpacity
@@ -221,7 +221,7 @@ export default class VendorSingleCategory extends Component {
 
         <RegularTextCB
           style={{ color: Colors.sickGreen, fontSize: 12, }}>
-          {item.service[0]['name']}
+          { item.service.length > 0 ? item.service[0]['name'] : 'No Service Found'}
         </RegularTextCB>
         <RegularTextCB
           style={{ color: Colors.coolGrey, }}>
@@ -303,11 +303,11 @@ export default class VendorSingleCategory extends Component {
           </TouchableOpacity>
           <View style={{ flexDirection: 'row',alignItems:"center",justifyContent:'center' }}>
             <Image
-              source={{ uri: Constants.imageURL + this.props.route.params.item.image }}
+              source={{ uri: Constants.imageURL + this.props.route.params.image }}
               style={{ height: SIZES.fifty, width: SIZES.fifty }}
             />
             <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>
-              {this.props.route.params.item.name}
+              {this.props.route.params.name}
             </RegularTextCB>
           </View>
         </View>

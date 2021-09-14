@@ -21,6 +21,8 @@ const Constants = {
   bookingConfirmed: 'BookingConfirmed',
   filter: 'Filter',
   Filtered: 'Filtered',
+  venderFilter:'vendors/getfilters',
+  venderFilterd:'venderFilterd',
   changePassword: 'ChangePassword',
   editProfile: 'EditProfile',
   vendorEditProfile: 'VendorEditProfile',
@@ -80,7 +82,7 @@ const Constants = {
   postJob: "customer/jobs/create",
   getAllJobs: "vendors/getAllJobs",
   getJobsByCategory: 'vendors/getJobsByCategory?',
-  getFilter: 'vendors/getfilters',
+  getVenderFilter: 'vendors/getfilters',
   getvendorAround: "customer/vendorAroundYou?",
   getTopSerVices: 'customer/getAllVendors',
   customerFilterservice:'customer/getfilters' ,
@@ -91,7 +93,8 @@ const Constants = {
   getJobAround:'vendors/get-around-job?',
   viewJob:'customer/jobs/detail?',
   getCompleteJob:'vendors/get-completed-job',
-  venderFilter:'vendors/filter'
+  search:'customer/filter-services?',
+  venderFilterd:'vendors/filter?'
 };
 
 export const SIZES = {

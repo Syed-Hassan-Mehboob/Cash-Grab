@@ -33,6 +33,8 @@ export default class VendorHome extends Component {
       categories: [],
       accessToken: '',
       jobAround: [],
+      avatar:'',
+      name:''
     };
   }
 
@@ -125,8 +127,8 @@ export default class VendorHome extends Component {
 
 
     const onSuccess = ({data}) => {
-      console.log(' Job Around You =====', data);
-      utils.showToast(data.message)
+      // console.log(' Job Around You =====', data);
+      // utils.showToast(data.message)
       this.setState({
         isLoading:false,
         jobAround:data.data
@@ -157,13 +159,15 @@ export default class VendorHome extends Component {
   };
 
   renderCategoryItem = ({item}) => {
-    // console.log('All Catagory======',item);
+    // console.log('All Category Home ite======',item);
 
     return (
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate(Constants.vendorSingleCategory, {
-            item: item,
+              image:item.image,
+              name:item.name,
+              item:item.id
           });
         }}
         style={{alignItems: 'center'}}>
@@ -233,7 +237,7 @@ export default class VendorHome extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.filter);
+                  this.props.navigation.navigate(Constants.venderFilter);
                 }}
                 style={{position: 'absolute', right: SIZES.twenty}}>
                 <Image
@@ -388,11 +392,11 @@ const styles = StyleSheet.create({
     height: SIZES.fifty + SIZES.ten,
     width: SIZES.fifty + SIZES.ten,
     borderRadius: SIZES.twenty + SIZES.ten,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
-    shadowOpacity: 0.15,
-    shadowRadius: SIZES.five,
-    elevation: SIZES.five,
+    // shadowColor: '#c5c5c5',
+    // shadowOffset: {width: SIZES.five, height: SIZES.five},
+    // shadowOpacity: 0.15,
+    // shadowRadius: SIZES.five,
+    // elevation: SIZES.five,
   },
   card: {
     backgroundColor: '#fff',
