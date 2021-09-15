@@ -287,7 +287,7 @@ export default class ViewVendorProfile extends React.Component {
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: SIZES.ten}}
+              style={{position: 'absolute', left: SIZES.ten,width:SIZES.fifteen,height:SIZES.fifteen}}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
@@ -366,14 +366,14 @@ export default class ViewVendorProfile extends React.Component {
           <View
             style={[
               styles.card,
-              {marginHorizontal: SIZES.twenty, marginTop: SIZES.ten*3, padding: SIZES.twenty},
+              {marginHorizontal: SIZES.twenty, marginTop: SIZES.ten*5, padding: SIZES.twenty},
             ]}>
             <View
               style={{
                 flexDirection: 'row',
                 width: '80%',
                 justifyContent: 'space-around',
-                marginTop: -SIZES.ten*4,
+                marginTop: -SIZES.ten*3,
               }}>
               <TouchableOpacity
                 style={[
@@ -383,6 +383,7 @@ export default class ViewVendorProfile extends React.Component {
                     paddingVertical: SIZES.ten,
                     borderWidth: this.state.isDescriptionSelected ? 2 : 0,
                     borderColor: Colors.sickGreen,
+                    
                   },
                 ]}
                 onPress={() => this.selectIsDescriptionSelected()}>
@@ -390,6 +391,7 @@ export default class ViewVendorProfile extends React.Component {
                   Description
                 </RegularTextCB>
               </TouchableOpacity>
+              
               <TouchableOpacity
                 style={[
                   styles.card,
@@ -408,7 +410,7 @@ export default class ViewVendorProfile extends React.Component {
             
             </View>
             {this.state.isDescriptionSelected && (
-              <View style={{width: '100%'}}>
+              <View style={{width: '100%',}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -568,7 +570,7 @@ export default class ViewVendorProfile extends React.Component {
               </View>
             )}
             {this.state.isReviewsSelected && (
-              <View>
+              <View style={{marginTop:SIZES.ten}}>
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   data={this.state.review}
@@ -584,6 +586,7 @@ export default class ViewVendorProfile extends React.Component {
                       marginHorizontal: -SIZES.twenty,
                       paddingHorizontal: SIZES.ten,
                       paddingVertical: SIZES.five,
+                      width:'100%'
                     },
                   ]}>
                   <Image
@@ -670,7 +673,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     borderColor: Colors.sickGreen,
-    width:'100%',
+    // width:'100%',
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,

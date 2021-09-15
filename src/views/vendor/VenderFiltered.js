@@ -107,7 +107,7 @@ export default class VenderFileredScreen extends Component {
     
 
     renderSingleCategoriesItem = ({ item }) => {
-        console.log('Filter Data item Vender  ===== ',item)
+        // console.log('Filter Data item Vender  ===== ',item)
         return (
             <ListComponent item={item} />
         )
@@ -144,8 +144,7 @@ export default class VenderFileredScreen extends Component {
                     <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>Filtered Job</RegularTextCB>
 
                 </View>
-               
-               <View style={{flex:1,marginLeft:SIZES.five}}>
+ 
                <FlatList
                     style={{ marginTop: SIZES.ten }}
                     data={(this.state.allJobs)}
@@ -159,9 +158,9 @@ export default class VenderFileredScreen extends Component {
                     contentContainerStyle={{
                         // for android
                         paddingBottom: SIZES.ten,
+                        alignItems:'center'
                     }}
                 />
-               </View>
             
                 <Spinner
                     visible={this.state.isLoading}

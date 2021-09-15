@@ -60,6 +60,7 @@ export default class VendorHome extends Component {
   };
 
   getCategories = () => {
+
     const onSuccess = ({data}) => {
       // console.log('All Job ================',data.data.records)
 
@@ -125,7 +126,7 @@ export default class VendorHome extends Component {
       lng: longitude,
     }; 
 
-
+    this.setState({isLoading: true});
     const onSuccess = ({data}) => {
       // console.log(' Job Around You =====', data);
       // utils.showToast(data.message)
@@ -140,10 +141,6 @@ export default class VendorHome extends Component {
       utils.showResponseError(error);
     };
 
-
-  
-
-    this.setState({isLoading: true});
     Axios.post(Constants.getJobAround, params, {
       headers: {
         Authorization: token,

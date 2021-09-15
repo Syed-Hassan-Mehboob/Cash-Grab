@@ -26,7 +26,7 @@ import ChangePassword from '../ChangePassword';
 import VendorAllJobs from "../../views/vendor/VendorAllJobs";
 import VenderFilter from '../vendor/VenderFilter';
 import VenderFileredScreen from '../vendor/VenderFiltered';
-
+import ViewVendorProfile from '../ViewVendorProfile';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
@@ -58,6 +58,7 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.venderFilter} component={VenderFilter} />
       <HomeStack.Screen name={Constants.venderFilterd} component={VenderFileredScreen} />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
+      <HomeStack.Screen name={Constants.viewVendorProfile} component={ViewVendorProfile} />
       <HomeStack.Screen
         name={Constants.termsAndConditionsScreen}
         component={TermsAndConditions}

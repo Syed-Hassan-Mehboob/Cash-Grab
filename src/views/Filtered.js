@@ -146,7 +146,6 @@ export default class FileredScreen extends Component {
 
                 </View>
                
-               <View style={{}}>
                <FlatList
                     style={{ marginTop: SIZES.ten }}
                     data={(this.state.allJobs)}
@@ -159,10 +158,10 @@ export default class FileredScreen extends Component {
                     }}
                     contentContainerStyle={{
                         // for android
-                        paddingBottom: SIZES.ten,
+                        paddingBottom: SIZES.twenty,
+                        alignItems:'center'
                     }}
                 />
-               </View>
             
                 <Spinner
                     visible={this.state.isLoading}

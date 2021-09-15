@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, { height, SIZES, width } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -230,13 +230,15 @@ export default class Home extends Component {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <View style={styles.circleCard}>
-            <Image
+                   <Image
               source={{ uri: Constants.imageURL + item.image}}
-              style={styles.iconUser}
+              style={{height: width* 0.12, width: width* 0.12, backgroundColor:"pink",
+              borderRadius:width*0.12 }}
               resizeMode="cover"
-            />
-          </View>
+            />  
+          {/* <View style={styles.circleCard}>
+   
+          </View> */}
           <RegularTextCB
             style={{
               color: Colors.black,
