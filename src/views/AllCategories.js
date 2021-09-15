@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  Dimensions
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
@@ -73,6 +74,11 @@ export default class AllCategories extends Component {
   };
 
   renderAllCategoriesItem = ({ item, index }) => {
+
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
+
     return (
 
       <TouchableOpacity
@@ -244,7 +250,9 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: SIZES.twenty,
+    height:SIZES.ten*20,
+    width:SIZES.ten*10,
+    borderRadius:SIZES.ten*2,
     flex: 1,
     shadowColor: '#c5c5c5',
     shadowOffset: { width: SIZES.five, height: SIZES.five },
@@ -265,5 +273,16 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+  },
+  item: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 1,
+    height: Dimensions.get('window').width / 2, // approximate a square
   },
 });

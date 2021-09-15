@@ -217,12 +217,12 @@ export default class VendorProfile extends React.Component {
           },
         ]} activeOpacity={0.6} >
         <Image
-          source={{uri:Constants.imageURL+item.image}}
+          source={{uri:Constants.imageURL+item.categories.image}}
           style={{ height:SIZES.ten*9, width:SIZES.ten*9, borderRadius:SIZES.fifteen }}
         />
         <View style={{ marginStart:SIZES.ten }}>
           <Image
-            source={item.icon}
+            source={{uri:Constants.imageURL+item.categories.icon}}
             style={{ height:SIZES.twenty, width:SIZES.twenty, justifyContent: 'space-evenly' }}
           />
           <RegularTextCB
@@ -231,7 +231,7 @@ export default class VendorProfile extends React.Component {
               fontSize: 16,
               color: Colors.black,
             }}>
-            {item.name}
+            {item.categories.name}
           </RegularTextCB>
           <RegularTextCB
             style={{
@@ -239,7 +239,7 @@ export default class VendorProfile extends React.Component {
               color: Colors.coolGrey,
               width: width / 1.75 - 100,
             }}>
-            {item.desc}
+            {item.price}
           </RegularTextCB>
         </View>
       </TouchableOpacity>

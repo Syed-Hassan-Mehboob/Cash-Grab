@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -7,10 +7,10 @@ import {
   View,
   Animated,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
@@ -18,8 +18,8 @@ import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-const { height, width } = Dimensions.get('window');
-const CARD_HEIGHT =SIZES.ten*20;
+const {height, width} = Dimensions.get('window');
+const CARD_HEIGHT = SIZES.ten * 20;
 const CARD_WIDTH = width * 0.4;
 const SPACING_FOR_CARD_INSET = width * 0.08 - SIZES.ten;
 
@@ -81,7 +81,6 @@ const Nearby = (props) => {
       rating: '3.8 ratings',
     },
   ];
-  
 
   const initialMapState = {
     markers,
@@ -94,16 +93,15 @@ const Nearby = (props) => {
   };
 
   const [state, setState] = React.useState(initialMapState);
-  const [accessToken, setaccessToken] = React.useState("");
+  const [accessToken, setaccessToken] = React.useState('');
   const [isLoading, setisLoading] = React.useState();
-  const [vendorAround, setvendorAround] = React.useState([])
+  const [vendorAround, setvendorAround] = React.useState([]);
 
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
-  
-  useEffect(() => {
 
-    mapAnimation.addListener(({ value }) => {
+  useEffect(() => {
+    mapAnimation.addListener(({value}) => {
       let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next
       if (index >= state.markers.length) {
         index = state.markers.length - 1;
@@ -118,7 +116,7 @@ const Nearby = (props) => {
       const regionTimeOut = setTimeout(() => {
         if (mapIndex !== index) {
           mapIndex = index;
-          const { coordinate } = state.markers[index];
+          const {coordinate} = state.markers[index];
           _map.current.animateToRegion(
             {
               ...coordinate,
@@ -134,14 +132,11 @@ const Nearby = (props) => {
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
-     getUserAccessToken();
+      getUserAccessToken();
     });
 
     return unsubscribe;
-
-  }, [props.navigation])
-
-  
+  }, [props.navigation]);
 
   const getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
@@ -150,23 +145,21 @@ const Nearby = (props) => {
   };
 
   getUserProfile = () => {
-    
-    setisLoading(true)
-    const onSuccess = ({ data }) => {
-   
-      let latitude=data.data.records.userProfile.latitude
-      let longitude=data.data.records.userProfile.longitude
+    setisLoading(true);
+    const onSuccess = ({data}) => {
+      let latitude = data.data.records.userProfile.latitude;
+      let longitude = data.data.records.userProfile.longitude;
 
-      getVendorAroundYou(latitude,longitude);
-      setisLoading(false)
+      getVendorAroundYou(latitude, longitude);
+      setisLoading(false);
     };
 
     const onFailure = (error) => {
-      setisLoading(false)
+      setisLoading(false);
       utils.showResponseError(error);
     };
 
-setisLoading(false)
+    setisLoading(false);
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: accessToken,
@@ -177,14 +170,12 @@ setisLoading(false)
   };
 
   // console.log("response =============>", vendorAround)
-  getVendorAroundYou = (latatide,longitude) => {
-    
+  getVendorAroundYou = (latatide, longitude) => {
     setisLoading(true);
-    const onSuccess = ({ data }) => {
-      console.log('Around Data ==============',data.data)
+    const onSuccess = ({data}) => {
+      console.log('Around Data ==============', data.data);
       setvendorAround(data.data);
       setisLoading(false);
-
     };
 
     const onFailure = (error) => {
@@ -209,7 +200,6 @@ setisLoading(false)
       .catch(onFailure);
   };
 
-
   const interpolations = state.markers.map((marker, index) => {
     const inputRange = [
       (index - 1) * CARD_WIDTH,
@@ -223,17 +213,15 @@ setisLoading(false)
       extrapolate: 'clamp',
     });
 
-    return { scale };
-
+    return {scale};
   });
-  
 
   const onMarkerPress = (mapEventData) => {
     const markerId = mapEventData._targetInst.return.key;
     let x = markerId * CARD_WIDTH + markerId * SIZES.twenty;
     if (Platform.OS === 'ios') x = x - SPACING_FOR_CARD_INSET;
 
-    _scrollView.current.scrollTo({ x: x, y: 0, animate: true });
+    _scrollView.current.scrollTo({x: x, y: 0, animate: true});
   };
 
   const _map = React.useRef(null);
@@ -415,14 +403,16 @@ setisLoading(false)
           borderBottomRightRadius: SIZES.twenty,
           padding: SIZES.twenty,
           shadowColor: '#000',
-          shadowOffset: { width: SIZES.five, height: SIZES.five },
+          shadowOffset: {width: SIZES.five, height: SIZES.five},
           shadowOpacity: 1.0,
           shadowRadius: SIZES.ten,
           alignItems: 'center',
         }}>
-        <View style={{ flex: 1 }}>
-          <RegularTextCB style={[{ fontSize: SIZES.twenty,fontWeight:'bold' }]}>102 Electricians</RegularTextCB>
-          <LightTextCB style={{ fontSize: 14, color: Colors.black }}>
+        <View style={{flex: 1}}>
+          <RegularTextCB style={[{fontSize: SIZES.twenty, fontWeight: 'bold'}]}>
+            102 Electricians
+          </RegularTextCB>
+          <LightTextCB style={{fontSize: 14, color: Colors.black}}>
             Near by..
           </LightTextCB>
         </View>
@@ -440,36 +430,39 @@ setisLoading(false)
         customMapStyle={mapStyle}
         style={[styles.container]}>
         {vendorAround.map((marker, index) => {
-
-          {/* const scaleStyle = {
+          {
+            /* const scaleStyle = {
             transform: [
               {
                 scale: interpolations[index].scale,
               },
             ],
-          }; */}
+          }; */
+          }
 
-          console.log("marker data ==-= ",marker.latitude)
+          console.log('marker data ==-= ', marker.latitude);
 
           return (
             <MapView.Marker
               key={index}
-              coordinate={{ latitude :Number(marker.latitude),longitude :Number(marker.longitude)}}
+              coordinate={{
+                latitude: Number(marker.latitude),
+                longitude: Number(marker.longitude),
+              }}
               onPress={(e) => {
                 onMarkerPress(e);
               }}>
-              <Animated.View style={[styles.markerWrap, ]}>
+              <Animated.View style={[styles.markerWrap]}>
                 <Animated.Image
-                  source={{uri:Constants.imageURL+marker.image}}
+                  source={{uri: Constants.imageURL + marker.image}}
                   style={styles.marker}
                 />
               </Animated.View>
             </MapView.Marker>
           );
         })}
-        
       </MapView>
-      
+
       <Animated.ScrollView
         ref={_scrollView}
         horizontal
@@ -503,24 +496,24 @@ setisLoading(false)
               },
             },
           ],
-          { useNativeDriver: true },
+          {useNativeDriver: true},
         )}>
         {vendorAround.map((marker, index) => {
-
-          {/* console.log('marker data ==== ', marker) */}
+          {
+            /* console.log('marker data ==== ', marker) */
+          }
           return (
             <TouchableOpacity
               style={styles.card}
               key={index}
-              onPress={() =>{
-                props.navigation.navigate(Constants.viewVendorProfile,{
-               item:marker.id
-          }
-          )
+              onPress={() => {
+                props.navigation.navigate(Constants.viewVendorProfile, {
+                  item: marker.id,
+                });
               }}>
               <View style={[styles.circleCard]}>
                 <Image
-                  source={{uri:Constants.imageURL+marker.image}}
+                  source={{uri: Constants.imageURL + marker.image}}
                   style={styles.iconUser}
                 />
               </View>
@@ -537,7 +530,11 @@ setisLoading(false)
                   }}>
                   <Image
                     source={Images.iconVerified}
-                    style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
+                    style={{
+                      height: SIZES.fifteen,
+                      width: SIZES.fifteen,
+                      resizeMode: 'contain',
+                    }}
                   />
                   <RegularTextCB
                     style={{
@@ -549,7 +546,11 @@ setisLoading(false)
                   </RegularTextCB>
                 </View>
                 <RegularTextCB
-                  style={{ fontSize: 16, color: Colors.grey, marginTop: SIZES.five }}>
+                  style={{
+                    fontSize: 16,
+                    color: Colors.grey,
+                    marginTop: SIZES.five,
+                  }}>
                   {marker.location}
                 </RegularTextCB>
                 <RegularTextCB
@@ -559,7 +560,6 @@ setisLoading(false)
                     marginTop: SIZES.five,
                   }}>
                   {marker.rating}
-
                 </RegularTextCB>
               </View>
             </TouchableOpacity>
@@ -567,10 +567,10 @@ setisLoading(false)
         })}
       </Animated.ScrollView>
       <Spinner
-          visible={isLoading}
-          textContent={'Loading...'}
-          textStyle={{color:'#fff'}}
-        />
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: '#fff'}}
+      />
     </View>
   );
 };
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
   },
   chipsScrollView: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? SIZES.ten*9 : SIZES.ten*8,
+    top: Platform.OS === 'ios' ? SIZES.ten * 9 : SIZES.ten * 8,
     paddingHorizontal: SIZES.ten,
   },
   chipsIcon: {
@@ -600,12 +600,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
-    padding: SIZES.ten-2,
+    padding: SIZES.ten - 2,
     paddingHorizontal: SIZES.twenty,
     marginHorizontal: SIZES.ten,
-    height: SIZES.ten*3,
+    height: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -627,13 +627,13 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.twenty,
     marginHorizontal: SIZES.five,
     shadowColor: '#000',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     alignItems: 'center',
     width: CARD_WIDTH,
-    height:CARD_HEIGHT,
-    paddingVertical: SIZES.five-3,
+    height: CARD_HEIGHT,
+    paddingVertical: SIZES.five - 3,
     overflow: 'hidden',
   },
   cardImage: {
@@ -648,9 +648,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   circleCard: {
-    height: SIZES.ten*8,
-    width: SIZES.ten*8,
-    borderRadius: SIZES.ten*4,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: SIZES.ten * 4,
+    overflow: 'hidden',
   },
   textContent: {
     alignItems: 'center',
@@ -668,10 +669,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: SIZES.fifty,
     height: SIZES.fifty,
+    borderRadius: SIZES.fifty,
+    overflow: 'hidden',
   },
   marker: {
-    width: SIZES.ten*3,
-    height: SIZES.ten*3,
+    width: SIZES.ten * 3,
+    height: SIZES.ten * 3,
   },
   button: {
     alignItems: 'center',

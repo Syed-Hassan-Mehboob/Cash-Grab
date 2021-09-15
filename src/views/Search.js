@@ -23,14 +23,17 @@ export default function Search(props) {
   const[allVender,setAllVender]=useState(null);
   const[isLoading,setIsloading]=useState(false);
   const renderBestEmployeesItem = ({ item }) => {
-    // console.log("sdsadsadsadsa",item.services)
+
+    // console.log("sdsadsadsadsa==============",item)
 
     return (
       <View style={[styles.card, { margin: SIZES.ten }]}>
         <TouchableOpacity
           style={styles.itemContainer}
           onPress={() => {
-            // this.openNextScreen(Constants.viewVendorProfile);
+            props.navigation.navigate(Constants.viewVendorProfile,
+            {item:item.id}
+            );
           }}>
           <View
             style={{
@@ -151,7 +154,7 @@ const getData = async () => {
       setIsloading(false);
     };
 
-    Axios.post(Constants.customerFilterservice,{name:searchText},
+    Axios.post(Constants.search,{name:searchText},
       {
       headers: { Authorization: token },
     }).

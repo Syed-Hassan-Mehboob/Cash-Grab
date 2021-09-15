@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, { height, SIZES, width } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -230,13 +230,15 @@ export default class Home extends Component {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{ uri: Constants.imageURL + item.image }}
-              style={styles.iconUser}
+                   <Image
+              source={{ uri: Constants.imageURL + item.image}}
+              style={{height: width* 0.12, width: width* 0.12, backgroundColor:"pink",
+              borderRadius:width*0.12 }}
               resizeMode="cover"
-            />
-          </View>
+            />  
+          {/* <View style={styles.circleCard}>
+   
+          </View> */}
           <RegularTextCB
             style={{
               color: Colors.black,
@@ -613,10 +615,9 @@ const styles = StyleSheet.create({
     color: Colors.black1,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
-    resizeMode: 'contain',
+    height: '100%',
+    width: '100%',
+    // borderRadius: SIZES.ten*6 / 2,
   },
   circle: {
     height: SIZES.ten*12,
@@ -632,6 +633,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
+    overflow:'hidden'
   },
   card: {
     backgroundColor: '#fff',

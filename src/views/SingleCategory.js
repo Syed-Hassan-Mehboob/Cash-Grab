@@ -50,7 +50,7 @@ export default class SingleCategory extends Component {
       console.log('==== catagory data ====',data);
       this.toggleIsLoading();
       this.setState({ vendors: data.data });
-      utils.showToast(data.message)
+      // utils.showToast(data.message)
     };
 
     const onFailure = (error) => {
@@ -77,7 +77,7 @@ export default class SingleCategory extends Component {
 
   renderSingleCategoriesItem = ({ item }) => {
 
-    console.log('Single Category Item======',item.userProfile)
+    // console.log('Single Category Item======',item.userProfile)
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -350,6 +350,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
+    overflow:'hidden'
   },
   spinnerTextStyle: {
     color: '#FFF',

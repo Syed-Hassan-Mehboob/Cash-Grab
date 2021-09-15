@@ -8,18 +8,18 @@ import {
     Platform,
     LogBox,
 } from 'react-native';
-import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
-import Images from '../common/Images';
-import RegularTextCB from '../components/RegularTextCB';
-import LightTextCB from '../components/LightTextCB';
-import utils from '../utils';
-import Axios from '../network/APIKit';
+import Colors from '../../common/Colors';
+import Constants, { SIZES } from '../../common/Constants';
+import Images from '../../common/Images';
+import RegularTextCB from '../../components/RegularTextCB';
+import LightTextCB from '../../components/LightTextCB';
+import utils from '../../utils';
+import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ListComponent from "../components/ListComponent";
+import ListComponent from "../../components/ListComponent";
 
-export default class FileredScreen extends Component {
+export default class VenderFileredScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -71,7 +71,7 @@ export default class FileredScreen extends Component {
       getFilterData = (latitude,longitude,type) => {
         const postData = {
           type:type,
-          categoryId:this.props.route.params.id,
+          categoryId:this.props.route.params ,
           min_price: this.props.route.params.minPrice !== null && this.props.route.params.minPrice !==undefined ?this.props.route.params.minPrice:null,
           max_price: this.props.route.params.maxPrice !== null && this.props.route.params.maxPrice !==undefined ?this.props.route.params.maxPrice:null,
           distance: this.props.route.params.location !==null && this.props.route.params.location !==undefined ? this.props.route.params.location :null,
@@ -84,12 +84,11 @@ export default class FileredScreen extends Component {
         this.setState({isLoading: true});
     
         const onSuccess = ({data}) => {
-          console.log('========================Filter Data==',data)
+        //   console.log('========================Filter Data==',data)
 
         //   utils.showToast(data.message);
           this.setState({isLoading: false,allJobs:data.data});
         };
-        
         const onFailure = (error) => {
           //
           utils.showResponseError(error.massage);
@@ -101,14 +100,14 @@ export default class FileredScreen extends Component {
             // 'Content-Type':'application/x-www-form-urlencoded'
           },
         };
-        Axios.post(Constants.customerFilter,postData, options)
+        Axios.post(Constants.venderFilterd,postData, options)
           .then(onSuccess)
           .catch(onFailure);
       };
     
 
     renderSingleCategoriesItem = ({ item }) => {
-        console.log('Filter Data item ===== ',item)
+        // console.log('Filter Data item Vender  ===== ',item)
         return (
             <ListComponent item={item} />
         )
@@ -145,7 +144,7 @@ export default class FileredScreen extends Component {
                     <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>Filtered Job</RegularTextCB>
 
                 </View>
-               
+ 
                <FlatList
                     style={{ marginTop: SIZES.ten }}
                     data={(this.state.allJobs)}
@@ -158,7 +157,7 @@ export default class FileredScreen extends Component {
                     }}
                     contentContainerStyle={{
                         // for android
-                        paddingBottom: SIZES.twenty,
+                        paddingBottom: SIZES.ten,
                         alignItems:'center'
                     }}
                 />
