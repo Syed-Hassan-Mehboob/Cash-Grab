@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
@@ -11,29 +11,27 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Constants, { height, SIZES, width } from '../common/Constants';
+import Modal from 'react-native-modal';
+import Constants, {height, SIZES, width} from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import BoldTextCB from '../components/BoldTextCB';
 
 export default class Home extends Component {
- 
-  openDrawer = () => {
-    this.props.navigation.openDrawer();
-  };
-
   constructor(props) {
+    console.log('start constructor');
     super(props);
     this.state = {
       isLoading: false,
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
+      permissionModalVisibility: false,
       accessToken: '',
-      service:'Select',
+      service: 'Select',
       avatar: '',
       name: '',
       rateRequested: '',
@@ -44,50 +42,86 @@ export default class Home extends Component {
       topServices: [],
       selections: [],
       categories: [],
-      startTime:'08:55',
-      isDatePickerVisible:false,
-      showModal:false,
-      lat:'',
-      long:'',
-      servicesid:[]
+      startTime: '08:55',
+      isDatePickerVisible: false,
+      showModal: false,
+      lat: '',
+      long: '',
+      servicesid: [],
     };
+
+    console.log('end constructor');
   }
 
   componentDidMount() {
-    this.getUserAccessToken()
+    console.log('start did mount');
+    this.getUserAccessToken();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
+    console.log('end did mount');
   }
+
+  checkLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+
+        this.openNearbyScreen();
+      } else {
+        console.log('location permission denied');
+        this.setState({permissionModalVisibility: true});
+      }
+    } catch (err) {
+      console.log('getLocation catch: ==================> ', err);
+    }
+  };
+
+  openNearbyScreen = () => {
+    this.props.navigation.navigate(Constants.nearby, {
+      avatar: this.state.avatar,
+    });
+  };
+
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
+      console.log(
+        'getUserAccessToken <<< ============================= >>> called',
+      );
       this.getUserProfile();
-      this.getCategories(); 
+      this.getCategories();
       this.getTopServices();
     });
   };
 
   getUserProfile = () => {
-    
-    const onSuccess = ({ data }) => {
+    const onSuccess = ({data}) => {
+      console.log(
+        'getUserProfile <<< ============================= >>> called',
+      );
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
       });
-      let latitude=data.data.records.userProfile.latitude
-      let longitude=data.data.records.userProfile.longitude
-      this.getVendorAroundYou(latitude,longitude);
+      let latitude = data.data.records.userProfile.latitude;
+      let longitude = data.data.records.userProfile.longitude;
+      this.getVendorAroundYou(latitude, longitude);
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      console.log(
+        'getUserProfile <<< ============================= >>> called',
+      );
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -98,16 +132,18 @@ export default class Home extends Component {
   };
 
   getCategories = () => {
-    const onSuccess = ({ data }) => {
-      this.setState({ isLoading: false, categories: data.data.records });
+    const onSuccess = ({data}) => {
+      console.log('getCategories <<< ============================= >>> called');
+      this.setState({isLoading: false, categories: data.data.records});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      console.log('getCategories <<< ============================= >>> called');
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     Axios.get(Constants.customerCategoriesURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -117,27 +153,31 @@ export default class Home extends Component {
       .catch(onFailure);
   };
 
-  getVendorAroundYou = (latitude,longitude) => {
-    const onSuccess = ({ data }) => {
+  getVendorAroundYou = (latitude, longitude) => {
+    const onSuccess = ({data}) => {
+      console.log(
+        'getVendorAroundYou <<< ============================= >>> called',
+      );
       this.setState({
         isLoading: false,
-        vendorAround: data.data
-      }, () => {
-
+        vendorAround: data.data,
       });
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      console.log(
+        'getVendorAroundYou <<< ============================= >>> called',
+      );
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
     let params = {
       latitude: Number(latitude),
       longitude: Number(longitude),
-      limit:2
+      limit: 2,
     };
     Axios.get(Constants.getvendorAround, {
       params,
@@ -147,95 +187,104 @@ export default class Home extends Component {
     })
       .then(onSuccess)
       .catch(onFailure);
-
-
   };
 
-
   getTopServices = () => {
-    const onSuccess = ({ data }) => {
+    const onSuccess = ({data}) => {
+      console.log(
+        'getTopServices <<< ============================= >>> called',
+      );
       this.setState({
         isLoading: false,
-        topServices: data.data.records
-      }, () => {
-        
+        topServices: data.data.records,
       });
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      console.log(
+        'getTopServices <<< ============================= >>> called',
+      );
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
     let params = {
       limit: SIZES.ten,
     };
     Axios.get(Constants.getTopSerVices, {
       params,
-      headers: { Authorization: this.state.accessToken },
+      headers: {Authorization: this.state.accessToken},
     })
       .then(onSuccess)
       .catch(onFailure);
-
-
   };
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
 
-
-  renderCategoryItem = ({ item }) => {
-
+  renderCategoryItem = ({item}) => {
     // console.log('Catagory Item ====',item)
     return (
       <TouchableOpacity
         onPress={() =>
-          this.props.navigation.navigate(Constants.singleCategory,{
-            item: item
+          this.props.navigation.navigate(Constants.singleCategory, {
+            item: item,
           })
         }
-        style={{ alignItems: 'center' }}>
+        style={{alignItems: 'center', marginLeft: SIZES.ten}}>
         <Image
           style={styles.circle}
-          source={{ uri: Constants.imageURL + item.image }}
+          source={{uri: Constants.imageURL + item.image}}
         />
         <RegularTextCB
-          style={{ fontSize: 14, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
+          style={{
+            fontSize: 14,
+            marginTop: SIZES.five,
+            color: Colors.coolGrey,
+          }}>
           {item.name}
         </RegularTextCB>
       </TouchableOpacity>
     );
   };
 
-  renderVendorsAroundYouItem = ({ item }) => {
-// console.log('Vender item ======',item)
+  renderVendorsAroundYouItem = ({item}) => {
+    // console.log('Vender item ======',item)
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         style={[
           styles.card,
-          { padding: SIZES.ten, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five },
+          {
+            padding: SIZES.ten,
+            marginHorizontal: SIZES.fifteen,
+            marginBottom: SIZES.twenty,
+            marginTop: SIZES.five,
+          },
         ]}
-        onPress={() =>{
-          this.props.navigation.navigate(Constants.viewVendorProfile,{
-               item:item.id
-          }
-          )
+        onPress={() => {
+          this.props.navigation.navigate(Constants.viewVendorProfile, {
+            item: item.id,
+          });
         }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-                   <Image
-              source={{ uri: Constants.imageURL + item.image}}
-              style={{height: width* 0.12, width: width* 0.12, backgroundColor:"pink",
-              borderRadius:width*0.12 }}
-              resizeMode="cover"
-            />  
+          <Image
+            source={{uri: Constants.imageURL + item.image}}
+            style={{
+              height: width * 0.12,
+              width: width * 0.12,
+              backgroundColor: 'pink',
+              borderRadius: width * 0.12,
+            }}
+            resizeMode="cover"
+          />
           {/* <View style={styles.circleCard}>
    
           </View> */}
@@ -258,10 +307,16 @@ export default class Home extends Component {
           {item.name}
         </RegularTextCB>
 
-        <View style={{ flexDirection: 'row', marginTop: SIZES.five }}>
+        <View style={{flexDirection: 'row', marginTop: SIZES.five}}>
           <Image
             source={Images.iconVerified}
-            style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain', tintColor: item.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }}
+            style={{
+              height: SIZES.fifteen,
+              width: SIZES.fifteen,
+              resizeMode: 'contain',
+              tintColor:
+                item.email_verified_at !== null ? Colors.turqoiseGreen : 'red',
+            }}
           />
           <RegularTextCB
             style={{
@@ -269,7 +324,7 @@ export default class Home extends Component {
               fontSize: 12,
               marginStart: SIZES.five,
             }}>
-            {item.email_verified_at !== null ? "Verified" : "Unverified"}
+            {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
           </RegularTextCB>
         </View>
         <RegularTextCB
@@ -306,8 +361,7 @@ export default class Home extends Component {
     );
   };
 
-  renderUrgentServicesItem = ({ item }) => {
-
+  renderUrgentServicesItem = ({item}) => {
     // console.log('Urgent Services =======',item.userProfile)
     return (
       <TouchableOpacity
@@ -315,21 +369,18 @@ export default class Home extends Component {
         style={[
           styles.card,
           {
-            height:SIZES.ten*20,
-            padding:SIZES.ten,
+            height: SIZES.ten * 20,
+            padding: SIZES.ten,
             marginHorizontal: SIZES.ten,
             marginTop: SIZES.five,
-            marginBottom:SIZES.ten*4,
+            marginBottom: SIZES.ten * 4,
           },
         ]}
-        onPress={() =>{
-          this.props.navigation.navigate(Constants.viewVendorProfile,{
-               item:item.id
-          }
-          )
-        }} 
-         
-          >
+        onPress={() => {
+          this.props.navigation.navigate(Constants.viewVendorProfile, {
+            item: item.id,
+          });
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -337,7 +388,7 @@ export default class Home extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL + item.userProfile.image }}
+              source={{uri: Constants.imageURL + item.userProfile.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -403,8 +454,6 @@ export default class Home extends Component {
     );
   };
 
-
-
   render() {
     return (
       <View style={styles.container}>
@@ -418,22 +467,23 @@ export default class Home extends Component {
                 width: '100%',
                 alignItems: 'center',
                 paddingHorizontal: SIZES.twenty,
-                marginTop: Platform.OS === 'android' ? SIZES.twenty : SIZES.ten*6,
+                marginTop:
+                  Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 6,
               }}>
               <TouchableOpacity
                 activeOpacity={0.6}
-                style={{ flexDirection: 'row', alignItems: 'center' }}
+                style={{flexDirection: 'row', alignItems: 'center'}}
                 onPress={() =>
                   this.props.navigation.navigate(Constants.profile)
                 }>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{ uri: Constants.imageURL + this.state.avatar }}
+                    source={{uri: Constants.imageURL + this.state.avatar}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <RegularTextCB style={{ fontSize: 16, marginStart: SIZES.ten }}>
+                <RegularTextCB style={{fontSize: 16, marginStart: SIZES.ten}}>
                   Welcome,
                 </RegularTextCB>
                 <RegularTextCB
@@ -472,12 +522,12 @@ export default class Home extends Component {
                 alignItems: 'center',
               }}
               onPress={() => this.props.navigation.navigate(Constants.search)}>
-              <RegularTextCB style={{ fontSize: 16, color: Colors.coolGrey }}>
+              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
                 Search Service...
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{ height: SIZES.fifty, width: SIZES.fifty }}
+                style={{height: SIZES.fifty, width: SIZES.fifty}}
               />
             </TouchableOpacity>
             <View
@@ -510,7 +560,7 @@ export default class Home extends Component {
             <FlatList
               horizontal
               data={this.state.categories}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={this.renderCategoryItem}
               showsHorizontalScrollIndicator={false}
               contentInset={{
@@ -540,10 +590,7 @@ export default class Home extends Component {
                 }}>
                 Vendors Around You
               </RegularTextCB>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate(Constants.nearby)
-                }>
+              <TouchableOpacity onPress={() => this.checkLocationPermission()}>
                 <RegularTextCB
                   style={{
                     color: Colors.black,
@@ -556,19 +603,23 @@ export default class Home extends Component {
             <FlatList
               horizontal
               data={this.state.vendorAround}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
             />
             <RegularTextCB
-              style={{ fontSize: SIZES.twenty, marginTop: SIZES.ten, paddingHorizontal: SIZES.twenty }}>
+              style={{
+                fontSize: SIZES.twenty,
+                marginTop: SIZES.ten,
+                paddingHorizontal: SIZES.twenty,
+              }}>
               Top Services
             </RegularTextCB>
             <FlatList
-              style={{ paddingBottom:SIZES.ten*10 }}
+              style={{paddingBottom: SIZES.ten * 10}}
               numColumns={2}
               data={this.state.topServices}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={this.renderUrgentServicesItem}
               showsHorizontalScrollIndicator={false}
             />
@@ -584,9 +635,9 @@ export default class Home extends Component {
             right: SIZES.fifteen,
           }}
           onPress={() => {
-            this.props.navigation.navigate(Constants.QuickNotify)
+            this.props.navigation.navigate(Constants.QuickNotify);
           }}>
-          <RegularTextCB style={{ color: Colors.white }}>
+          <RegularTextCB style={{color: Colors.white}}>
             Quick Service
           </RegularTextCB>
         </TouchableOpacity>
@@ -595,6 +646,48 @@ export default class Home extends Component {
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
+        <Modal
+          isVisible={this.state.permissionModalVisibility}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View style={{backgroundColor: Colors.navy, padding: SIZES.fifteen}}>
+            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
+              CashGrab
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.white,
+              }}>
+              Please enable your location to see nearby vendors...
+            </RegularTextCB>
+            <View
+              style={{
+                marginTop: SIZES.ten,
+                alignSelf: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({permissionModalVisibility: false});
+                }}
+                style={{
+                  padding: SIZES.ten,
+                  width: SIZES.fifty,
+                  alignItems: 'center',
+                  borderRadius: SIZES.fifteen,
+                  marginTop: SIZES.ten,
+                  backgroundColor: Colors.white,
+                }}>
+                <RegularTextCB style={{color: Colors.navy}}>Ok</RegularTextCB>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -607,7 +700,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     marginHorizontal: SIZES.ten,
-    height: SIZES.ten*7,
+    height: SIZES.ten * 7,
   },
   textInput: {
     fontSize: 16,
@@ -620,27 +713,26 @@ const styles = StyleSheet.create({
     // borderRadius: SIZES.ten*6 / 2,
   },
   circle: {
-    height: SIZES.ten*12,
-    width: SIZES.ten*12,
-    resizeMode: 'stretch',
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
-    overflow:'hidden'
+    overflow: 'hidden',
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -658,27 +750,26 @@ const styles = StyleSheet.create({
   selectedFilter: {
     alignItems: 'center',
     paddingVertical: SIZES.ten,
-    margin: SIZES.five-3,
+    margin: SIZES.five - 3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.sickGreen,
-    borderRadius: SIZES.fifteen-3,
+    borderRadius: SIZES.fifteen - 3,
   },
   unselectedFilter: {
     alignItems: 'center',
     paddingVertical: SIZES.ten,
-    margin: SIZES.five-3,
+    margin: SIZES.five - 3,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: Colors.white,
-    borderRadius: SIZES.fifteen-3,
+    borderRadius: SIZES.fifteen - 3,
   },
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
   },
 });
-
 
 vendors = [
   {

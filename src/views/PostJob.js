@@ -53,7 +53,7 @@ export default class postJob extends Component {
     latitude: '',
     longitude: '',
     showModal: false,
-    JobImagesUri:[]
+    JobImagesUri: [],
   };
 
   componentDidMount() {
@@ -214,36 +214,41 @@ export default class postJob extends Component {
       expiry_date: this.state.expirydate,
       address: this.state.address,
       location: this.state.location,
-      image:this.state.jobImages,
+      image: this.state.jobImages,
       services: this.state.services,
     };
 
     // console.log('Post data ==== === ==== ',this.state.jobImages)
 
-        this.setState({ isLoading: true });
-        const onSuccess = ({ data }) => {
-          console.log('Post Jobe Data =====================================================',data);
-          utils.showToast(data.message);
-          this.setState({ isLoading: false });
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      console.log(
+        'Post Jobe Data =====================================================',
+        data,
+      );
+      utils.showToast(data.message);
+      this.setState({isLoading: false});
+    };
 
-        };
+    const onFailure = (error) => {
+      console.log(
+        'error =========================================== ==========================>',
+        Object.keys(error),
+      );
+      utils.showResponseError(error);
+      this.setState({isLoading: false});
+    };
 
-        const onFailure = (error) => {
-          console.log("error =========================================== ==========================>", Object.keys(error))
-          utils.showResponseError(error);
-          this.setState({ isLoading: false });
-        };
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
+    };
 
-        const options = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: this.state.accessToken,
-          },
-        };
-
-        Axios.post(Constants.postJob,PostData,options)
-        .then(onSuccess)
-        .catch(onFailure);
+    Axios.post(Constants.postJob, PostData, options)
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   openGallery = () => {
@@ -255,32 +260,33 @@ export default class postJob extends Component {
       } else if (response.errorMessage) {
         console.log('Image Picker Error', response.errorMessage);
       } else if (response.assets) {
-    
-
-        
         var imageuriBase64 = [];
-        var JobImagesUri=[]
+        var JobImagesUri = [];
         response.assets.map((item) => {
-
           // console.log('Image Uri ==== ==== ', item.uri);
-          JobImagesUri.push(item.uri)
+          JobImagesUri.push(item.uri);
           ImgToBase64.getBase64String(item.uri)
             .then((base64String) => {
               // console.log("image converted to base 64 =======>>>>", 'data:image/png;base64,'+base64String)
-              imageuriBase64.push('data:image/png;base64,'+base64String);
+              imageuriBase64.push('data:image/png;base64,' + base64String);
             })
-            .catch((err) => console.log("catch error while converting image to base 64=====>>>>",err))
-         }
-         
-         );
+            .catch((err) =>
+              console.log(
+                'catch error while converting image to base 64=====>>>>',
+                err,
+              ),
+            );
+        });
 
-        this.setState({JobImagesUri:JobImagesUri, jobImages: imageuriBase64, showImages: true,});
+        this.setState({
+          JobImagesUri: JobImagesUri,
+          jobImages: imageuriBase64,
+          showImages: true,
+        });
       } else {
       }
     });
   };
-
-  
 
   remove(image) {
     let images = [];
@@ -614,9 +620,9 @@ export default class postJob extends Component {
                 label="POST"
                 onPress={() => {
                   this.postJob();
-                        setTimeout(() => {
+                  setTimeout(() => {
                     this.props.navigation.navigate(Constants.home);
-                   }, 5000);
+                  }, 5000);
                 }}
               />
             </View>
@@ -651,6 +657,7 @@ export default class postJob extends Component {
             </View>
           </View>
         </Modal>
+
         <Modal
           animationIn="pulse"
           isVisible={this.state.isModalVisible}
@@ -768,5 +775,5 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
-},
+  },
 });

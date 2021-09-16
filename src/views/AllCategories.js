@@ -1,5 +1,5 @@
-import { Card } from 'native-base';
-import React, { Component } from 'react';
+import {Card} from 'native-base';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
-  Dimensions
+  Dimensions,
 } from 'react-native';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,7 +25,7 @@ export default class AllCategories extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      getAllCategories: []
+      getAllCategories: [],
     };
   }
 
@@ -35,23 +35,22 @@ export default class AllCategories extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.getAllCategories();
     });
-
   };
 
   getAllCategories = () => {
-    const onSuccess = ({ data }) => {
-      this.setState({ isLoading: false, getAllCategories: data.data.records });
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false, getAllCategories: data.data.records});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
     Axios.get(Constants.getAllCustomerCategories, {
       headers: {
@@ -62,56 +61,60 @@ export default class AllCategories extends Component {
       .catch(onFailure);
   };
 
-   formatData = (data, numColumns) => {
+  formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
-    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
       numberOfElementsLastRow++;
     }
-  
+
     return data;
   };
 
-  renderAllCategoriesItem = ({ item, index }) => {
-
+  renderAllCategoriesItem = ({item, index}) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
 
     return (
-
       <TouchableOpacity
         style={[
           styles.card,
-          { padding: 15, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
-        ]} 
+          {
+            padding: 15,
+            marginHorizontal: SIZES.five,
+            marginBottom: SIZES.twenty,
+            marginTop: SIZES.five,
+            alignItems: 'center',
+          },
+        ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.singleCategory,{
-            item: item
+          this.props.navigation.navigate(Constants.singleCategory, {
+            item: item,
           })
-        }
-        >
-
+        }>
         <Image
-          source={{ uri: Constants.imageURL + item.image }}
+          source={{uri: Constants.imageURL + item.image}}
           // source={item.image}
-          style={{ height: 120, width: 120 }}
-          resizeMode="stretch"
+          style={{height: SIZES.ten * 10, width: SIZES.ten * 10}}
+          resizeMode="cover"
         />
 
         <RegularTextCB
-          style={{ fontSize: 16, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
+          style={{
+            fontSize: 16,
+            marginTop: SIZES.ten,
+            color: Colors.coolGrey,
+          }}>
           {item.name}
         </RegularTextCB>
-
-
-
-
       </TouchableOpacity>
     );
   };
-
 
   openNextScreen = (nextScreen) => {
     this.props.navigation.navigate(nextScreen);
@@ -125,7 +128,7 @@ export default class AllCategories extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten*3,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten * 3,
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -133,7 +136,7 @@ export default class AllCategories extends Component {
             }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <RegularTextCB style={{ fontSize: SIZES.ten*3, alignSelf: 'center' }}>
+          <RegularTextCB style={{fontSize: SIZES.ten * 3, alignSelf: 'center'}}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity
@@ -150,21 +153,20 @@ export default class AllCategories extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, paddingTop: SIZES.ten }} >
-
+        <View style={{flex: 1, paddingTop: SIZES.ten}}>
           <FlatList
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
-            data={this.formatData(this.state.getAllCategories,2)}
+            data={this.formatData(this.state.getAllCategories, 2)}
             numColumns={2}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
               // for ios
-              bottom: SIZES.ten*10,
+              bottom: SIZES.ten * 10,
             }}
             contentContainerStyle={{
               // for android
-              paddingBottom: SIZES.ten*10,
+              paddingBottom: SIZES.ten * 10,
             }}
           />
         </View>
@@ -185,8 +187,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
@@ -195,9 +197,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -250,22 +252,22 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    height:SIZES.ten*20,
-    width:SIZES.ten*10,
-    borderRadius:SIZES.ten*2,
+    height: SIZES.ten * 20,
+    width: SIZES.ten * 10,
+    borderRadius: SIZES.ten * 2,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,

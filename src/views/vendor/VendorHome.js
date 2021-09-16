@@ -33,8 +33,8 @@ export default class VendorHome extends Component {
       categories: [],
       accessToken: '',
       jobAround: [],
-      avatar:'',
-      name:''
+      avatar: '',
+      name: '',
     };
   }
 
@@ -46,23 +46,19 @@ export default class VendorHome extends Component {
     });
   }
 
-  componentWillMount(){
-    
-  }
+  componentWillMount() {}
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, async () => {
       this.getUserProfile(token);
       this.getCategories();
-
     });
   };
 
   getCategories = () => {
-
     const onSuccess = ({data}) => {
-      // console.log('All Job ================',data.data.records)
+      console.log('All Category ================', data.data.records);
 
       this.setState({isLoading: false, categories: data.data.records});
     };
@@ -88,16 +84,14 @@ export default class VendorHome extends Component {
 
   getUserProfile = async (token) => {
     const onSuccess = ({data}) => {
-      
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
       });
       const latitude = data.data.records.userProfile.latitude;
-      const longitude=data.data.records.userProfile.longitude;
-        this.getJobAroundYou(latitude,longitude,token); 
-    
+      const longitude = data.data.records.userProfile.longitude;
+      this.getJobAroundYou(latitude, longitude, token);
     };
 
     // console.log('lat',this.state.lat)
@@ -117,23 +111,20 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-
-
-  getJobAroundYou = async (latitude,longitude,token) => {
-
+  getJobAroundYou = async (latitude, longitude, token) => {
     let params = {
-      lat:latitude,
+      lat: latitude,
       lng: longitude,
-    }; 
+    };
 
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(' Job Around You =====', data);
+      console.log(' Job Around You =====', data);
       // utils.showToast(data.message)
       this.setState({
-        isLoading:false,
-        jobAround:data.data
-      })
+        isLoading: false,
+        jobAround: data.data,
+      });
     };
 
     const onFailure = (error) => {
@@ -150,7 +141,6 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-
   toggleIsLoading = () => {
     this.setState({isLoading: !this.state.isLoading});
   };
@@ -162,12 +152,16 @@ export default class VendorHome extends Component {
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate(Constants.vendorSingleCategory, {
-              image:item.image,
-              name:item.name,
-              item:item.id
+            image: item.image,
+            name: item.name,
+            item: item.id,
           });
         }}
-        style={{alignItems: 'center'}}>
+        style={{
+          alignItems: 'center',
+          paddingHorizontal: SIZES.ten,
+          paddingVertical: SIZES.five,
+        }}>
         <Image
           style={styles.circle}
           source={{uri: Constants.imageURL + item.image}}
@@ -175,7 +169,7 @@ export default class VendorHome extends Component {
         <RegularTextCB
           style={{
             fontSize: 14,
-            marginTop: -SIZES.twenty,
+            marginTop: SIZES.ten,
             color: Colors.coolGrey,
           }}>
           {item.name}
@@ -338,16 +332,15 @@ export default class VendorHome extends Component {
               </TouchableOpacity>
             </View>
             <View style={{}}>
-            <FlatList
-              data={this.state.jobAround}
-              horizontal
-              keyExtractor={(item) => item.id}
-              renderItem={this.renderJobsForYouItem}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{}}
-            />
+              <FlatList
+                data={this.state.jobAround}
+                horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={this.renderJobsForYouItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{}}
+              />
             </View>
-           
           </View>
         </ScrollView>
         <Spinner
@@ -381,9 +374,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   circle: {
-    height: SIZES.ten * 12,
-    width: SIZES.ten * 12,
-    resizeMode: 'stretch',
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: SIZES.ten * 8,
   },
   circleCard: {
     height: SIZES.fifty + SIZES.ten,
