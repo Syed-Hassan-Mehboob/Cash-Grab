@@ -222,19 +222,19 @@ export default class postJob extends Component {
 
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console.log(
-        'Post Jobe Data =====================================================',
-        data,
-      );
-      utils.showToast(data.message);
+      // console.log(
+      //   'Post Jobe Data =====================================================',
+      //   data,
+      // );
+      utils.showToast('Your Job Has Been Posted');
       this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
-      console.log(
-        'error =========================================== ==========================>',
-        Object.keys(error),
-      );
+      // console.log(
+      //   'error =========================================== ==========================>',
+      //   Object.keys(error),
+      // );
       utils.showResponseError(error);
       this.setState({isLoading: false});
     };

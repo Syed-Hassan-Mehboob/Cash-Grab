@@ -98,6 +98,21 @@ export default class Profile extends React.Component {
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                left: SIZES.ten,
+                width: SIZES.fifteen,
+                height: SIZES.fifteen,
+              }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <Image
+                source={Images.arrowBack}
+                style={[styles.iconBack, {tintColor: Colors.white}]}
+              />
+            </TouchableOpacity>
             <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
               Profile
             </RegularTextCB>

@@ -48,6 +48,7 @@ export default class EditProfile extends Component {
       showModal: false,
       lat: '',
       long: '',
+      abouteMe: '',
     };
   }
 
@@ -309,7 +310,9 @@ export default class EditProfile extends Component {
 
     const onFailure = (error) => {
       this.toggleIsLoading();
-      utils.showResponseError(error);
+      // console.log('Error===== Responce ==', Object.keys(error));
+      console.log('Error===== Responce ==', error.isAxiosError);
+      utils.showResponseError('Error===== Responce ==', error);
     };
 
     // const params = {
@@ -337,10 +340,12 @@ export default class EditProfile extends Component {
       name: `image-profile`,
       type: 'image/jpeg',
     });
+    formData.append('about_me', this.state.abouteMe);
 
+    console.log('Form data ==== ', formData);
     const options = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: this.state.accessToken,
       },
     };
@@ -441,6 +446,9 @@ export default class EditProfile extends Component {
               style={{
                 fontFamily: Constants.fontRegular,
                 fontSize: SIZES.fifteen,
+              }}
+              onChangeText={(text) => {
+                this.setState({abouteMe: text});
               }}
             />
           </View>

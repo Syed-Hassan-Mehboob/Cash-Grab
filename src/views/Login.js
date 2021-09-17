@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
@@ -55,7 +55,7 @@ export default class Login extends Component {
       await AsyncStorage.setItem(Constants.accessToken, 'Bearer ' + user.token);
       var data = JSON.stringify(user);
       // console.log('User======',user)
-      await AsyncStorage.setItem('user',data);
+      await AsyncStorage.setItem('user', data);
       this.setState({isLoading: false});
       setTimeout(() => {
         this.props.navigation.dispatch(resetAction);
@@ -84,6 +84,8 @@ export default class Login extends Component {
       return;
     }
 
+    this.setState({isLoading: true});
+
     const onSuccess = ({data}) => {
       if (data.status === 2) {
         this.setState({isLoading: false});
@@ -98,8 +100,6 @@ export default class Login extends Component {
       utils.showResponseError(error);
       this.setState({isLoading: false});
     };
-
-    this.setState({isLoading: true});
 
     Axios.post(Constants.loginURL, {
       email: email,
@@ -120,7 +120,7 @@ export default class Login extends Component {
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: SIZES.ten*7,
+                height: SIZES.ten * 7,
                 width: '60%',
                 resizeMode: 'contain',
                 marginTop: 85,
@@ -151,7 +151,8 @@ export default class Login extends Component {
                 style={[styles.textInput]}
               />
             </View>
-            <View style={[styles.textInputContainer, {marginTop: SIZES.ten*3}]}>
+            <View
+              style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
               <EditText
                 ref={'password'}
                 placeholder={'Password'}
@@ -171,7 +172,7 @@ export default class Login extends Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginTop: SIZES.ten*3,
+                marginTop: SIZES.ten * 3,
               }}>
               <RegularTextCB style={styles.noUnderlineText}>
                 Rember Me
@@ -196,7 +197,7 @@ export default class Login extends Component {
                 />
               </TouchableOpacity>
             </View>
-            <View style={{marginVertical: SIZES.ten*3}}>
+            <View style={{marginVertical: SIZES.ten * 3}}>
               <ButtonRadius10
                 label="LOGIN"
                 bgColor={Colors.sickGreen}

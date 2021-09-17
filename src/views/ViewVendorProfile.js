@@ -13,7 +13,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,28 +24,25 @@ const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
 export default class ViewVendorProfile extends React.Component {
- 
   constructor(props) {
     super(props);
     this.state = {
-      isDescriptionSelected: true, 
+      isDescriptionSelected: true,
       isReviewsSelected: false,
-       review: [],
+      review: [],
       isLoading: false,
       accessToken: '',
-      services:[],
-      name:'',
-      email:'',
-      phone:'',
-      ratings:'',
-      countryCode:'',
-      image:'',
-      location:'',
-      customer:''
-
+      services: [],
+      name: '',
+      email: '',
+      phone: '',
+      ratings: '',
+      countryCode: '',
+      image: '',
+      location: '',
+      customer: '',
     };
   }
-
 
   componentDidMount() {
     this.getUserAccessToken();
@@ -65,51 +62,48 @@ export default class ViewVendorProfile extends React.Component {
     });
   };
 
-
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.getVenderProfile();
     });
-
   };
 
   getVenderProfile = () => {
     // console.log('======', this.props.route.params.item)
 
-
-    const onSuccess = ({ data }) => {
-      console.log('Vender By catagory =======',data.data.records);
-      this.setState({  
-     name:data.data.records.name,email:data.data.records.email,
-    phone:data.data.records.phone,
-     ratings:data.data.records.ratings,
-     year:data.data.records.year,
-     image:data.data.records.userProfile.image ,
-     location:data.data.records.userProfile.location,
-     customer:data.data.records.customer,
-     services:data.data.records.services,
-     review:data.data.records.comments,
-     isLoading: false,
-  });
-  this.setState({
-    isLoading:false
-  })
+    const onSuccess = ({data}) => {
+      console.log('Vender By catagory =======', data.data.records);
+      this.setState({
+        name: data.data.records.name,
+        email: data.data.records.email,
+        phone: data.data.records.phone,
+        ratings: data.data.records.ratings,
+        year: data.data.records.year,
+        image: data.data.records.userProfile.image,
+        location: data.data.records.userProfile.location,
+        customer: data.data.records.customer,
+        services: data.data.records.services,
+        review: data.data.records.comments,
+        isLoading: false,
+      });
+      this.setState({
+        isLoading: false,
+      });
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
     let params = {
       id: this.props.route.params.item,
     };
 
-    Axios.post(Constants.getVenderByCatagory, params,{
-     
+    Axios.post(Constants.getVenderByCatagory, params, {
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -118,9 +112,8 @@ export default class ViewVendorProfile extends React.Component {
       .catch(onFailure);
   };
 
-
   renderServicesItem = ({item}) => {
-    console.log('Services =========',item)
+    console.log('Services =========', item);
     return (
       <TouchableOpacity
         style={[
@@ -136,8 +129,12 @@ export default class ViewVendorProfile extends React.Component {
         ]}
         onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
         <Image
-          source={{uri:Constants.imageURL+item.categories.image}}
-          style={{height: SIZES.ten*9, width: SIZES.ten*9, borderRadius: SIZES.fifteen}}
+          source={{uri: Constants.imageURL + item.categories.image}}
+          style={{
+            height: SIZES.ten * 8,
+            width: SIZES.ten * 8,
+            borderRadius: SIZES.fifteen,
+          }}
         />
         <View
           style={{
@@ -145,8 +142,12 @@ export default class ViewVendorProfile extends React.Component {
             flex: 1,
           }}>
           <Image
-            source={{uri:Constants.imageURL+item.categories.icon}}
-            style={{height: SIZES.twenty, width: 20, justifyContent: 'space-evenly'}}
+            source={{uri: Constants.imageURL + item.categories.icon}}
+            style={{
+              height: SIZES.twenty,
+              width: 20,
+              justifyContent: 'space-evenly',
+            }}
           />
           <RegularTextCB
             numberOfLines={2}
@@ -161,14 +162,14 @@ export default class ViewVendorProfile extends React.Component {
               flexDirection: 'row',
               flexShrink: 1,
             }}>
-            <RegularTextCB
+            {/* <RegularTextCB
               style={{
                 fontSize: 14,
                 color: Colors.coolGrey,
-                flex:1
+                flex: 1,
               }}>
               {item.price}
-            </RegularTextCB>
+            </RegularTextCB> */}
           </View>
         </View>
       </TouchableOpacity>
@@ -176,7 +177,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
-    console.log('Item==========',item);
+    console.log('Item==========', item);
     return (
       <View
         style={{
@@ -187,9 +188,9 @@ export default class ViewVendorProfile extends React.Component {
         <View style={{flexDirection: 'row'}}>
           <View
             style={{
-              height: SIZES.ten*6,
-              width: SIZES.ten*6,
-              borderRadius: SIZES.ten*3,
+              height: SIZES.ten * 6,
+              width: SIZES.ten * 6,
+              borderRadius: SIZES.ten * 3,
               shadowColor: '#c5c5c5',
               shadowOffset: {width: SIZES.five, height: SIZES.five},
               shadowOpacity: 1.0,
@@ -197,19 +198,23 @@ export default class ViewVendorProfile extends React.Component {
               elevation: SIZES.ten,
             }}>
             <Image
-              source={{uri:item.image}}
-              style={{height: SIZES.ten*6, width: SIZES.ten*6, borderRadius: SIZES.ten*3}}
+              source={{uri: item.image}}
+              style={{
+                height: SIZES.ten * 6,
+                width: SIZES.ten * 6,
+                borderRadius: SIZES.ten * 3,
+              }}
             />
           </View>
           <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-              {item.name === null ? 'Undefine' : item.name }
+              {item.name === null ? 'Undefine' : item.name}
             </RegularTextCB>
             <Image
               source={Images.like}
               style={{
                 position: 'absolute',
-                right: SIZES.ten*7,
+                right: SIZES.ten * 7,
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
                 resizeMode: 'contain',
@@ -248,7 +253,7 @@ export default class ViewVendorProfile extends React.Component {
                 position: 'absolute',
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
-                right: SIZES.ten*7,
+                right: SIZES.ten * 7,
                 bottom: 0,
                 resizeMode: 'contain',
               }}
@@ -260,15 +265,14 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   render() {
-
     // console.log('User Data=============',this.state.userData);
 
     return (
       <View style={styles.container}>
         <View
           style={{
-            borderBottomStartRadius: SIZES.ten*3,
-            borderBottomEndRadius: SIZES.ten*3,
+            borderBottomStartRadius: SIZES.ten * 3,
+            borderBottomEndRadius: SIZES.ten * 3,
             height: height / 2.15,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -287,7 +291,12 @@ export default class ViewVendorProfile extends React.Component {
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
-              style={{position: 'absolute', left: SIZES.ten,width:SIZES.fifteen,height:SIZES.fifteen}}
+              style={{
+                position: 'absolute',
+                left: SIZES.ten,
+                width: SIZES.fifteen,
+                height: SIZES.fifteen,
+              }}
               onPress={() => {
                 this.props.navigation.goBack();
               }}>
@@ -297,20 +306,26 @@ export default class ViewVendorProfile extends React.Component {
               />
             </TouchableOpacity>
 
-            <RegularTextCB style={{fontSize: SIZES.ten*3, color: Colors.white}}>
+            <RegularTextCB
+              style={{fontSize: SIZES.ten * 3, color: Colors.white}}>
               Profile
             </RegularTextCB>
             <TouchableOpacity
-              style={{position: 'absolute', right: SIZES.ten,
-              height:SIZES.twentyFive,width:SIZES.twentyFive,
-              borderRadius:SIZES.twentyFive,overflow:'hidden',
-              borderWidth:1,borderColor:Colors.grey}}
+              style={{
+                position: 'absolute',
+                right: SIZES.ten,
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                borderRadius: SIZES.twentyFive,
+                overflow: 'hidden',
+                borderWidth: 1,
+                borderColor: Colors.grey,
+              }}
               onPress={() => {
                 this.props.navigation.navigate(Constants.chat);
               }}>
-              
               <Image
-                source={{uri:Constants.imageURL+this.state.image}}
+                source={{uri: Constants.imageURL + this.state.image}}
                 style={[styles.iconBack]}
                 resizeMode={'cover'}
               />
@@ -319,12 +334,12 @@ export default class ViewVendorProfile extends React.Component {
         </View>
         <ScrollView
           contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}
-          style={{marginTop: SIZES.ten*7}}
+          style={{marginTop: SIZES.ten * 7}}
           showsVerticalScrollIndicator={false}>
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
               <Image
-                source={{uri:Constants.imageURL+this.state.image}}
+                source={{uri: Constants.imageURL + this.state.image}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
@@ -337,7 +352,11 @@ export default class ViewVendorProfile extends React.Component {
               }}>
               <Image
                 source={Images.iconVerified}
-                style={{height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain'}}
+                style={{
+                  height: SIZES.fifteen,
+                  width: SIZES.fifteen,
+                  resizeMode: 'contain',
+                }}
               />
               <RegularTextCB
                 style={{
@@ -349,7 +368,11 @@ export default class ViewVendorProfile extends React.Component {
               </RegularTextCB>
             </View>
             <RegularTextCB
-              style={{color: Colors.white, fontSize: 18, marginTop: SIZES.five}}>
+              style={{
+                color: Colors.white,
+                fontSize: 18,
+                marginTop: SIZES.five,
+              }}>
               {this.state.name}
             </RegularTextCB>
             <RegularTextCB
@@ -366,14 +389,18 @@ export default class ViewVendorProfile extends React.Component {
           <View
             style={[
               styles.card,
-              {marginHorizontal: SIZES.twenty, marginTop: SIZES.ten*5, padding: SIZES.twenty},
+              {
+                marginHorizontal: SIZES.twenty,
+                marginTop: SIZES.ten * 5,
+                padding: SIZES.twenty,
+              },
             ]}>
             <View
               style={{
                 flexDirection: 'row',
                 width: '80%',
                 justifyContent: 'space-around',
-                marginTop: -SIZES.ten*3,
+                marginTop: -SIZES.ten * 3,
               }}>
               <TouchableOpacity
                 style={[
@@ -383,7 +410,6 @@ export default class ViewVendorProfile extends React.Component {
                     paddingVertical: SIZES.ten,
                     borderWidth: this.state.isDescriptionSelected ? 2 : 0,
                     borderColor: Colors.sickGreen,
-                    
                   },
                 ]}
                 onPress={() => this.selectIsDescriptionSelected()}>
@@ -391,7 +417,7 @@ export default class ViewVendorProfile extends React.Component {
                   Description
                 </RegularTextCB>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[
                   styles.card,
@@ -407,10 +433,9 @@ export default class ViewVendorProfile extends React.Component {
                   Reviews
                 </RegularTextCB>
               </TouchableOpacity>
-            
             </View>
             {this.state.isDescriptionSelected && (
-              <View style={{width: '100%',}}>
+              <View style={{width: '100%'}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -447,10 +472,10 @@ export default class ViewVendorProfile extends React.Component {
                     paddingVertical: SIZES.ten,
                   }}>
                   <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
-                    Phone Number 
+                    Phone Number
                   </RegularTextCB>
                   <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                  {this.state.phone}
+                    {this.state.phone}
                   </RegularTextCB>
                 </View>
                 <View
@@ -488,8 +513,8 @@ export default class ViewVendorProfile extends React.Component {
                     <Image
                       source={Images.flag}
                       style={{
-                        height: SIZES.ten*3,
-                        width: SIZES.ten*3,
+                        height: SIZES.ten * 3,
+                        width: SIZES.ten * 3,
                         tintColor: Colors.white,
                         resizeMode: 'contain',
                       }}
@@ -519,8 +544,8 @@ export default class ViewVendorProfile extends React.Component {
                     <Image
                       source={Images.star}
                       style={{
-                        height: SIZES.ten*3,
-                        width: SIZES.ten*3,
+                        height: SIZES.ten * 3,
+                        width: SIZES.ten * 3,
                         tintColor: Colors.white,
                         resizeMode: 'contain',
                       }}
@@ -532,7 +557,7 @@ export default class ViewVendorProfile extends React.Component {
                         textAlign: 'center',
                         fontSize: 12,
                       }}>
-                       {this.state.ratings} Rating
+                      {this.state.ratings} Rating
                     </RegularTextCB>
                   </LinearGradient>
                   <LinearGradient
@@ -549,8 +574,8 @@ export default class ViewVendorProfile extends React.Component {
                     <Image
                       source={Images.client}
                       style={{
-                        height: SIZES.ten*3,
-                        width: SIZES.ten*3,
+                        height: SIZES.ten * 3,
+                        width: SIZES.ten * 3,
                         tintColor: Colors.white,
                         resizeMode: 'contain',
                       }}
@@ -563,14 +588,14 @@ export default class ViewVendorProfile extends React.Component {
                         fontSize: 12,
                       }}>
                       {this.state.customer} Client
-                      {console.log('=====',this.state.customer)}
+                      {console.log('=====', this.state.customer)}
                     </RegularTextCB>
                   </LinearGradient>
                 </View>
               </View>
             )}
             {this.state.isReviewsSelected && (
-              <View style={{marginTop:SIZES.ten}}>
+              <View style={{marginTop: SIZES.ten}}>
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   data={this.state.review}
@@ -586,7 +611,7 @@ export default class ViewVendorProfile extends React.Component {
                       marginHorizontal: -SIZES.twenty,
                       paddingHorizontal: SIZES.ten,
                       paddingVertical: SIZES.five,
-                      width:'100%'
+                      width: '100%',
                     },
                   ]}>
                   <Image
@@ -602,7 +627,11 @@ export default class ViewVendorProfile extends React.Component {
                   <TouchableOpacity onPress={() => {}}>
                     <Image
                       source={Images.iconSend}
-                      style={{height: SIZES.ten*4, width: SIZES.ten*4, resizeMode: 'contain'}}
+                      style={{
+                        height: SIZES.ten * 4,
+                        width: SIZES.ten * 4,
+                        resizeMode: 'contain',
+                      }}
                     />
                   </TouchableOpacity>
                 </View>
@@ -621,7 +650,7 @@ export default class ViewVendorProfile extends React.Component {
                   Services We Offer
                 </RegularTextCB>
                 <FlatList
-                  style={{paddingBottom:SIZES.ten*10}}
+                  style={{paddingBottom: SIZES.ten * 10}}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={this.state.services}
@@ -644,16 +673,12 @@ export default class ViewVendorProfile extends React.Component {
                 />
               </View>
             </View>
-            
-          )
-          }
-     
+          )}
         </ScrollView>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
-          textStyle={{ color: '#FFFf',
-          fontFamily: Constants.fontRegular,}}
+          textStyle={{color: '#FFFf', fontFamily: Constants.fontRegular}}
         />
       </View>
     );
@@ -666,8 +691,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height:'100%',
-    width:'100%'
+    height: '100%',
+    width: '100%',
   },
   card: {
     backgroundColor: Colors.white,
@@ -682,14 +707,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconUser: {
-    height: SIZES.ten*9,
-    width: SIZES.ten*9,
-    borderRadius: SIZES.ten*9 / 2,
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
+    borderRadius: (SIZES.ten * 9) / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: SIZES.ten*9,
-    width: SIZES.ten*9,
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
     borderRadius: SIZES.fifty,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   FlatList,
   Image,
@@ -15,7 +15,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import BoldTextCB from '../../components/BoldTextCB';
-import Constants, { SIZES } from '../../common/Constants';
+import Constants, {SIZES} from '../../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../../network/APIKit';
@@ -27,48 +27,43 @@ export default class Dashboard extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      completeJob:[],
-      withDraw:{},
-      progress:[],
-      name:'',
-      title:'',
-      price:'',
-      description:'',
-      location:'',
-      time:'',
-      image:'',
-      verfiyAt:''
-
+      completeJob: [],
+      withDraw: {},
+      progress: [],
+      name: '',
+      title: '',
+      price: '',
+      description: '',
+      location: '',
+      time: '',
+      image: '',
+      verfiyAt: '',
     };
   }
   componentDidMount() {
-
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
     });
-  
   }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token });
+    this.setState({accessToken: token});
     this.getCompleteJob();
   };
 
   getCompleteJob = () => {
-
     this.setState({isLoading: true});
 
-    const onSuccess = ({data}) => {  
+    const onSuccess = ({data}) => {
+      console.log('Complete job vvv======= ', data.data);
 
-      console.log('Complete job vvv======= ',data.data)
-     
       this.setState({
-        completeJob:data?.data.completed,
-        progress:data.data.progress,
-        withDraw:data?.data.withdraw,
+        completeJob: data?.data.completed,
+        progress: data.data.progress,
+        withDraw: data?.data.withdraw,
         // name:data?.data.progress.user.name,
         // title:data?.data.progress.title,
         // price:data?.data.progress.price,
@@ -76,8 +71,8 @@ export default class Dashboard extends Component {
         // time:data?.data.progress.time,
         // image:data?.data.progress.user.userProfile.image,
         // location:data?.data.progress.location,
-        // verfiyAt:data?.data.progress.user.email_verified_at  
-      })
+        // verfiyAt:data?.data.progress.user.email_verified_at
+      });
 
       this.setState({isLoading: false});
     };
@@ -97,16 +92,19 @@ export default class Dashboard extends Component {
       .catch(onFailure);
   };
 
-  
-  rendercompletedJobsItem = ({ item }) => {
-
-    console.log('COmplete job item   =========',item)
+  rendercompletedJobsItem = ({item}) => {
+    console.log('COmplete job item   =========', item);
 
     return (
       <View
         style={[
           styles.card,
-          { padding: SIZES.fifteen, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five },
+          {
+            padding: SIZES.fifteen,
+            marginHorizontal: SIZES.five,
+            marginBottom: SIZES.twenty,
+            marginTop: SIZES.five,
+          },
         ]}>
         <View
           style={{
@@ -115,12 +113,12 @@ export default class Dashboard extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri:Constants.imageURL+item.user.userProfile.image}}
+              source={{uri: Constants.imageURL + item.user.userProfile.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{ marginStart: SIZES.ten }}>
+          <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -136,7 +134,11 @@ export default class Dashboard extends Component {
               }}>
               <Image
                 source={Images.iconVerified}
-                style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
+                style={{
+                  height: SIZES.fifteen,
+                  width: SIZES.fifteen,
+                  resizeMode: 'contain',
+                }}
               />
               <RegularTextCB
                 style={{
@@ -144,7 +146,9 @@ export default class Dashboard extends Component {
                   fontSize: 12,
                   marginStart: SIZES.five,
                 }}>
-                  {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
+                {item.user.email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>
@@ -168,7 +172,7 @@ export default class Dashboard extends Component {
               color: Colors.black,
               fontSize: 12,
             }}>
-           ${item.price}
+            ${item.price}
           </LightTextCB>
         </View>
         {/* <RegularTextCB
@@ -185,10 +189,18 @@ export default class Dashboard extends Component {
           {item.description}
         </RegularTextCB>
         <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.five,
+            alignItems: 'center',
+          }}>
           <Image
             source={Images.iconLocationPin}
-            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+            style={{
+              height: SIZES.fifteen + 2,
+              width: SIZES.fifteen + 2,
+              resizeMode: 'contain',
+            }}
           />
           <RegularTextCB
             style={{
@@ -199,10 +211,18 @@ export default class Dashboard extends Component {
           </RegularTextCB>
         </View>
         <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.five,
+            alignItems: 'center',
+          }}>
           <Image
             source={Images.iconStopWatch}
-            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+            style={{
+              height: SIZES.fifteen + 2,
+              width: SIZES.fifteen + 2,
+              resizeMode: 'contain',
+            }}
           />
           <View
             style={{
@@ -230,12 +250,10 @@ export default class Dashboard extends Component {
     );
   };
 
-  renderProgressJob=({item})=>{
+  renderProgressJob = ({item}) => {
+    console.log('Progress Job ======= ,', item);
 
-    console.log('Progress Job ======= ,',item)
-  
-    return(
-
+    return (
       <View
         style={[
           styles.card,
@@ -253,13 +271,12 @@ export default class Dashboard extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri:Constants.imageURL+item.user.userProfile.image}}
+              source={{uri: Constants.imageURL + item.user.userProfile.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
-      
           </View>
-          <View style={{ marginStart: SIZES.ten }}>
+          <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB
               style={{
                 color: Colors.black,
@@ -275,7 +292,11 @@ export default class Dashboard extends Component {
               }}>
               <Image
                 source={Images.iconVerified}
-                style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
+                style={{
+                  height: SIZES.fifteen,
+                  width: SIZES.fifteen,
+                  resizeMode: 'contain',
+                }}
               />
               <RegularTextCB
                 style={{
@@ -283,7 +304,9 @@ export default class Dashboard extends Component {
                   fontSize: 12,
                   marginStart: SIZES.five,
                 }}>
-                {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
+                {item.user.email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>
@@ -331,7 +354,11 @@ export default class Dashboard extends Component {
           }}>
           <Image
             source={Images.iconLocationPin}
-            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+            style={{
+              height: SIZES.fifteen + 2,
+              width: SIZES.fifteen + 2,
+              resizeMode: 'contain',
+            }}
           />
           <RegularTextCB
             style={{
@@ -349,7 +376,11 @@ export default class Dashboard extends Component {
           }}>
           <Image
             source={Images.iconStopWatch}
-            style={{ height: SIZES.fifteen+2, width: SIZES.fifteen+2, resizeMode: 'contain' }}
+            style={{
+              height: SIZES.fifteen + 2,
+              width: SIZES.fifteen + 2,
+              resizeMode: 'contain',
+            }}
           />
           <View
             style={{
@@ -374,12 +405,10 @@ export default class Dashboard extends Component {
           </View>
         </View>
       </View>
-    )
-
-  }
+    );
+  };
 
   render() {
-
     // console.log('render data ====== ',this.state.completeJob)
 
     return (
@@ -393,20 +422,37 @@ export default class Dashboard extends Component {
             padding: SIZES.fifteen,
             marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
-          <RegularTextCB style={{ fontSize: SIZES.ten*3 }}>Dashboard</RegularTextCB>
           <TouchableOpacity
-            style={{ position: 'absolute', right: SIZES.ten }}
+            style={{
+              position: 'absolute',
+              left: SIZES.ten,
+              width: SIZES.fifteen,
+              height: SIZES.fifteen,
+            }}
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}>
+            <Image
+              source={Images.arrowBack}
+              style={[styles.iconBack, {tintColor: Colors.black1}]}
+            />
+          </TouchableOpacity>
+          <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
+            Dashboard
+          </RegularTextCB>
+          <TouchableOpacity
+            style={{position: 'absolute', right: SIZES.ten}}
             onPress={() => {
               this.props.navigation.navigate(Constants.withDraw);
             }}>
             <Image
               source={Images.iconWithDraw}
-              style={{ height: SIZES.ten*4, width: SIZES.ten*4 }}
+              style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
             />
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen }}>
+          <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,
@@ -431,60 +477,57 @@ export default class Dashboard extends Component {
               justifyContent: 'center',
               flexDirection: 'row',
             }}>
-            <RegularTextCB style={{ fontSize: SIZES.twenty
-             }}>
+            <RegularTextCB style={{fontSize: SIZES.twenty}}>
               Total Earnings:
             </RegularTextCB>
             <RegularTextCB
-              style={{ fontSize: SIZES.twenty
-              , marginStart: SIZES.five, color: Colors.sickGreen }}>
+              style={{
+                fontSize: SIZES.twenty,
+                marginStart: SIZES.five,
+                color: Colors.sickGreen,
+              }}>
               {this.state.withDraw.total}
             </RegularTextCB>
           </View>
 
-        
-          <View style={{ marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen }}>
-      <RegularTextCB
-        style={{
-          fontSize: SIZES.twenty
-          ,
-          color: Colors.black,
-        }}>
-        Order In Progress
-      </RegularTextCB>
-      <FlatList
-             
+          <View
+            style={{marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen}}>
+            <RegularTextCB
+              style={{
+                fontSize: SIZES.twenty,
+                color: Colors.black,
+              }}>
+              Order In Progress
+            </RegularTextCB>
+            <FlatList
               data={this.state.progress}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={this.renderProgressJob}
             />
-
-      </View>
-      <View style={{ marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen }}>
+          </View>
+          <View
+            style={{marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB
               style={{
-                fontSize: SIZES.twenty
-                ,
+                fontSize: SIZES.twenty,
                 color: Colors.black,
               }}>
               Completed Order
             </RegularTextCB>
             <FlatList
-              style={{ paddingBottom: SIZES.ten*10 }}
+              style={{paddingBottom: SIZES.ten * 10}}
               data={this.state.completeJob}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={this.rendercompletedJobsItem}
             />
           </View>
-
         </ScrollView>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
-          textStyle={{ color: '#FFFf',
-          fontFamily: Constants.fontRegular,}}
+          textStyle={{color: '#FFFf', fontFamily: Constants.fontRegular}}
         />
       </View>
     );
@@ -497,10 +540,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   iconBack: {
-    height: SIZES.twenty
-    ,
-    width: SIZES.twenty
-    ,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   quickJobCard: {
@@ -513,7 +554,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.fifteen,
     paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -521,29 +562,28 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: SIZES.twenty
-    ,
+    borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius:SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.5,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
 });

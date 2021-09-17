@@ -20,10 +20,10 @@ import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
+import Geolocation from '@react-native-community/geolocation';
 
 export default class Home extends Component {
   constructor(props) {
-    console.log('start constructor');
     super(props);
     this.state = {
       isLoading: false,
@@ -47,20 +47,57 @@ export default class Home extends Component {
       showModal: false,
       lat: '',
       long: '',
+      seeAllClicked: false,
       servicesid: [],
+      currentLat: '',
+      currentLong: '',
     };
-
-    console.log('end constructor');
   }
 
   componentDidMount() {
-    console.log('start did mount');
-    this.getUserAccessToken();
+    this.checkLocationPermission();
+
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
-    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
-    console.log('end did mount');
+    this.props.navigation.addListener('focus', () => {
+      // this.getUserAccessToken();
+      this.checkLocationPermission();
+    });
   }
+
+  getLocation = async () => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        // _map.current.animateToRegion(
+        //   {
+        //     longitude: Number(position.coords.latitude),
+        //     latitude: Number(position.coords.longitude),
+        //     latitudeDelta: 0.002,
+        //     longitudeDelta: 0.002,
+        //   },
+        //   1500,
+        // );
+
+        this.setState({
+          currentLat: position.coords.latitude,
+          currentLong: position.coords.longitude,
+        });
+
+        console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      },
+      (error) => {
+        // console.log(
+        //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
+        //   error,
+        // );
+      },
+    );
+
+    // watchID = Geolocation.watchPosition((position) => {
+    //   const lastPosition = JSON.stringify(position);
+    //   //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    // });
+  };
 
   checkLocationPermission = async () => {
     try {
@@ -68,15 +105,20 @@ export default class Home extends Component {
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the location');
-
-        this.openNearbyScreen();
+        if (this.state.seeAllClicked) {
+          // this.getLocation();
+          // this.getUserAccessToken();
+          this.openNearbyScreen();
+        } else {
+          this.getLocation();
+          this.getUserAccessToken();
+        }
       } else {
-        console.log('location permission denied');
+        // //console.log('location permission denied');
         this.setState({permissionModalVisibility: true});
       }
     } catch (err) {
-      console.log('getLocation catch: ==================> ', err);
+      //console.log('getLocation catch: ==================> ', err);
     }
   };
 
@@ -89,20 +131,22 @@ export default class Home extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      console.log(
-        'getUserAccessToken <<< ============================= >>> called',
-      );
       this.getUserProfile();
       this.getCategories();
       this.getTopServices();
+      console.log(
+        'coordinates',
+        this.state.currentLat,
+        ' =============>>>>',
+        this.state.currentLong,
+      );
+      this.getVendorAroundYou();
     });
   };
 
   getUserProfile = () => {
+    this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console.log(
-        'getUserProfile <<< ============================= >>> called',
-      );
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
@@ -110,18 +154,14 @@ export default class Home extends Component {
       });
       let latitude = data.data.records.userProfile.latitude;
       let longitude = data.data.records.userProfile.longitude;
-      this.getVendorAroundYou(latitude, longitude);
+      // this.getVendorAroundYou(latitude, longitude);
     };
 
     const onFailure = (error) => {
-      console.log(
-        'getUserProfile <<< ============================= >>> called',
-      );
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({isLoading: true});
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -133,17 +173,15 @@ export default class Home extends Component {
 
   getCategories = () => {
     const onSuccess = ({data}) => {
-      console.log('getCategories <<< ============================= >>> called');
       this.setState({isLoading: false, categories: data.data.records});
     };
 
     const onFailure = (error) => {
-      console.log('getCategories <<< ============================= >>> called');
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({isLoading: true});
+    // this.setState({isLoading: true});
     Axios.get(Constants.customerCategoriesURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -153,11 +191,8 @@ export default class Home extends Component {
       .catch(onFailure);
   };
 
-  getVendorAroundYou = (latitude, longitude) => {
+  getVendorAroundYou = () => {
     const onSuccess = ({data}) => {
-      console.log(
-        'getVendorAroundYou <<< ============================= >>> called',
-      );
       this.setState({
         isLoading: false,
         vendorAround: data.data,
@@ -165,18 +200,13 @@ export default class Home extends Component {
     };
 
     const onFailure = (error) => {
-      console.log(
-        'getVendorAroundYou <<< ============================= >>> called',
-      );
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({isLoading: true});
-
     let params = {
-      latitude: Number(latitude),
-      longitude: Number(longitude),
+      latitude: Number(this.state.currentLat),
+      longitude: Number(this.state.currentLong),
       limit: 2,
     };
     Axios.get(Constants.getvendorAround, {
@@ -191,9 +221,6 @@ export default class Home extends Component {
 
   getTopServices = () => {
     const onSuccess = ({data}) => {
-      console.log(
-        'getTopServices <<< ============================= >>> called',
-      );
       this.setState({
         isLoading: false,
         topServices: data.data.records,
@@ -201,14 +228,11 @@ export default class Home extends Component {
     };
 
     const onFailure = (error) => {
-      console.log(
-        'getTopServices <<< ============================= >>> called',
-      );
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({isLoading: true});
+    // this.setState({isLoading: true});
 
     let params = {
       limit: SIZES.ten,
@@ -226,7 +250,7 @@ export default class Home extends Component {
   };
 
   renderCategoryItem = ({item}) => {
-    // console.log('Catagory Item ====',item)
+    // //console.log('Catagory Item ====',item)
     return (
       <TouchableOpacity
         onPress={() =>
@@ -252,7 +276,7 @@ export default class Home extends Component {
   };
 
   renderVendorsAroundYouItem = ({item}) => {
-    // console.log('Vender item ======',item)
+    // //console.log('Vender item ======', item);
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -280,7 +304,6 @@ export default class Home extends Component {
             style={{
               height: width * 0.12,
               width: width * 0.12,
-              backgroundColor: 'pink',
               borderRadius: width * 0.12,
             }}
             resizeMode="cover"
@@ -332,7 +355,7 @@ export default class Home extends Component {
             color: Colors.coolGrey,
             marginTop: SIZES.five,
           }}>
-          Car Wash
+          {item.categroy}
         </RegularTextCB>
         <View
           style={{
@@ -362,7 +385,7 @@ export default class Home extends Component {
   };
 
   renderUrgentServicesItem = ({item}) => {
-    // console.log('Urgent Services =======',item.userProfile)
+    // //console.log('Urgent Services =======',item.userProfile)
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -590,7 +613,12 @@ export default class Home extends Component {
                 }}>
                 Vendors Around You
               </RegularTextCB>
-              <TouchableOpacity onPress={() => this.checkLocationPermission()}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({seeAllClicked: true}, () => {
+                    this.checkLocationPermission();
+                  });
+                }}>
                 <RegularTextCB
                   style={{
                     color: Colors.black,

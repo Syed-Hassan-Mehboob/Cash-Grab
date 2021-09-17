@@ -42,11 +42,13 @@ export default class AllCategories extends Component {
 
   getAllCategories = () => {
     const onSuccess = ({data}) => {
+      console.log('All Category ==== ', data.data);
       this.setState({isLoading: false, getAllCategories: data.data.records});
     };
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
+      console.log('=================', error);
       utils.showResponseError(error);
     };
 

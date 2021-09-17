@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  PermissionsAndroid,
 } from 'react-native';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
@@ -54,6 +55,24 @@ export default class VendorHome extends Component {
       this.getUserProfile(token);
       this.getCategories();
     });
+  };
+
+  checkLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.props.navigation.navigate(Constants.venderFilter);
+      } else {
+        alert('test');
+        // console.log('location permission denied');
+        utils.showToast('Enable LOcation First ');
+        // this.props.navigation.goBack();
+      }
+    } catch (err) {
+      console.log('getLocation catch: ==================> ', err);
+    }
   };
 
   getCategories = () => {
@@ -228,7 +247,8 @@ export default class VendorHome extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.venderFilter);
+                  // this.props.navigation.navigate(Constants.venderFilter);
+                  this.checkLocationPermission();
                 }}
                 style={{position: 'absolute', right: SIZES.twenty}}>
                 <Image

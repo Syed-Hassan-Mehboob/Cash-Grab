@@ -89,7 +89,7 @@ const Nearby = (props) => {
   };
 
   // console.log("response =============>", vendorAround)
-  getVendorAroundYou = (latatide, longitude) => {
+  const getVendorAroundYou = (latatide, longitude) => {
     setisLoading(true);
     const onSuccess = ({data}) => {
       console.log('Around Data ============== > ', data);
@@ -357,8 +357,8 @@ const Nearby = (props) => {
         }}>
         <TouchableOpacity
           style={{
-            height: SIZES.ten * 3,
-            width: SIZES.ten * 3,
+            height: SIZES.ten * 6,
+            width: SIZES.ten * 6,
             alignItems: 'center',
             justifyContent: 'center',
           }}
