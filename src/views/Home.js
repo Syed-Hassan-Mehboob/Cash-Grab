@@ -55,6 +55,8 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
+    console.log('User Home ===== ');
+
     this.checkLocationPermission();
 
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -78,15 +80,17 @@ export default class Home extends Component {
         //   1500,
         // );
 
+        console.log('======Geolocation ', position.coords);
+
         this.setState({
           currentLat: position.coords.latitude,
           currentLong: position.coords.longitude,
         });
 
-        console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        // //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
       (error) => {
-        // console.log(
+        // //console.log(
         //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
         //   error,
         // );
@@ -95,7 +99,7 @@ export default class Home extends Component {
 
     // watchID = Geolocation.watchPosition((position) => {
     //   const lastPosition = JSON.stringify(position);
-    //   //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    //   ////console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     // });
   };
 
@@ -114,17 +118,19 @@ export default class Home extends Component {
           this.getUserAccessToken();
         }
       } else {
-        // //console.log('location permission denied');
+        // ////console.log('location permission denied');
         this.setState({permissionModalVisibility: true});
       }
     } catch (err) {
-      //console.log('getLocation catch: ==================> ', err);
+      ////console.log('getLocation catch: ==================> ', err);
     }
   };
 
   openNearbyScreen = () => {
-    this.props.navigation.navigate(Constants.nearby, {
-      avatar: this.state.avatar,
+    this.setState({seeAllClicked: false}, () => {
+      this.props.navigation.navigate(Constants.nearby, {
+        avatar: this.state.avatar,
+      });
     });
   };
 
@@ -134,12 +140,12 @@ export default class Home extends Component {
       this.getUserProfile();
       this.getCategories();
       this.getTopServices();
-      console.log(
-        'coordinates',
-        this.state.currentLat,
-        ' =============>>>>',
-        this.state.currentLong,
-      );
+      // //console.log(
+      //   'coordinates',
+      //   this.state.currentLat,
+      //   ' =============>>>>',
+      //   this.state.currentLong,
+      // );
       this.getVendorAroundYou();
     });
   };
@@ -209,6 +215,9 @@ export default class Home extends Component {
       longitude: Number(this.state.currentLong),
       limit: 2,
     };
+
+    console.log('vender Around you Params ', params);
+
     Axios.get(Constants.getvendorAround, {
       params,
       headers: {
@@ -250,7 +259,7 @@ export default class Home extends Component {
   };
 
   renderCategoryItem = ({item}) => {
-    // //console.log('Catagory Item ====',item)
+    // ////console.log('Catagory Item ====',item)
     return (
       <TouchableOpacity
         onPress={() =>
@@ -276,7 +285,7 @@ export default class Home extends Component {
   };
 
   renderVendorsAroundYouItem = ({item}) => {
-    // //console.log('Vender item ======', item);
+    // ////console.log('Vender item ======', item);
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -385,7 +394,7 @@ export default class Home extends Component {
   };
 
   renderUrgentServicesItem = ({item}) => {
-    // //console.log('Urgent Services =======',item.userProfile)
+    // ////console.log('Urgent Services =======',item.userProfile)
     return (
       <TouchableOpacity
         activeOpacity={0.8}

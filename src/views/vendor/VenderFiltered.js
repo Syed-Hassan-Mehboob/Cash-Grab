@@ -17,8 +17,9 @@ import utils from '../../utils';
 import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ListComponent from '../../components/ListComponent';
 import Geolocation from '@react-native-community/geolocation';
+import FilterComponant from '../../components/FilterComponant';
+
 export default class VenderFileredScreen extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ export default class VenderFileredScreen extends Component {
       currentLong: '',
     };
 
-    console.log('==========', this.props.route.params);
+    // console.log('==========', this.props.route.params);
   }
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -63,8 +64,9 @@ export default class VenderFileredScreen extends Component {
           currentLat: position.coords.latitude,
           currentLong: position.coords.longitude,
         });
+
         this.getUserProfile();
-        console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        // console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
       (error) => {
         // console.log(
@@ -86,7 +88,7 @@ export default class VenderFileredScreen extends Component {
       let longitude = data.data.records.userProfile.longitude;
       let type = data.data.records.type;
 
-      console.log('Type ===== ', type);
+      // console.log('Type ===== ', type);
 
       this.getFilterData(type);
     };
@@ -131,9 +133,14 @@ export default class VenderFileredScreen extends Component {
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log('========================Filter Data==', data);
+      // console.log('========================Filter Data==', data);
 
-      //   utils.showToast(data.message);
+      if (data.status === 0) {
+        utils.showToast(data.message);
+        // this.props.navigation.goBack();
+        // setTimeout(() => {}, 1000);
+      }
+
       this.setState({isLoading: false, allJobs: data.data});
     };
     const onFailure = (error) => {
@@ -154,7 +161,7 @@ export default class VenderFileredScreen extends Component {
 
   renderSingleCategoriesItem = ({item}) => {
     // console.log('Filter Data item Vender  ===== ',item)
-    return <ListComponent item={item} />;
+    return <FilterComponant item={item} />;
   };
 
   openNextScreen = (nextScreen) => {

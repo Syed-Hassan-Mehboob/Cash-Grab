@@ -22,6 +22,10 @@ import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ListComponent from '../../components/ListComponent';
+import Geolocation from '@react-native-community/geolocation';
+import BoldTextCB from '../../components/BoldTextCB';
+import Modal from 'react-native-modal';
+
 export default class VendorHome extends Component {
   openDrawer = () => {
     this.props.navigation.openDrawer();
@@ -36,48 +40,34 @@ export default class VendorHome extends Component {
       jobAround: [],
       avatar: '',
       name: '',
+      currentLat: '',
+      currentLong: '',
+      permissionModalVisibility: false,
     };
   }
 
   componentDidMount() {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    console.log('Vendor Home ===== ');
     this.getUserAccessToken();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.props.navigation.addListener('focus', () => {
+      // this.checkLocationPermission();
       this.getUserAccessToken();
     });
   }
 
-  componentWillMount() {}
-
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, async () => {
-      this.getUserProfile(token);
+      this.getUserProfile();
+      this.getJobAroundYou();
       this.getCategories();
     });
   };
 
-  checkLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.props.navigation.navigate(Constants.venderFilter);
-      } else {
-        alert('test');
-        // console.log('location permission denied');
-        utils.showToast('Enable LOcation First ');
-        // this.props.navigation.goBack();
-      }
-    } catch (err) {
-      console.log('getLocation catch: ==================> ', err);
-    }
-  };
-
   getCategories = () => {
     const onSuccess = ({data}) => {
-      console.log('All Category ================', data.data.records);
+      //console.log('All Category ================', data.data.records);
 
       this.setState({isLoading: false, categories: data.data.records});
     };
@@ -101,19 +91,17 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-  getUserProfile = async (token) => {
+  getUserProfile = async () => {
     const onSuccess = ({data}) => {
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
       });
-      const latitude = data.data.records.userProfile.latitude;
-      const longitude = data.data.records.userProfile.longitude;
-      this.getJobAroundYou(latitude, longitude, token);
+      // this.getJobAroundYou(latitude, longitude, token);
     };
 
-    // console.log('lat',this.state.lat)
+    // //console.log('lat',this.state.lat)
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
@@ -130,30 +118,35 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-  getJobAroundYou = async (latitude, longitude, token) => {
-    let params = {
-      lat: latitude,
-      lng: longitude,
-    };
+  getJobAroundYou = async () => {
+    // let params = {
+    //   lat: this.state.currentLat,
+    //   lng: this.state.currentLong,
+    // };
 
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console.log(' Job Around You =====', data);
+      //console.log(' Job for You =====', data);
       // utils.showToast(data.message)
       this.setState({
         isLoading: false,
-        jobAround: data.data,
+        jobAround: data.data.records,
       });
     };
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
       utils.showResponseError(error);
+      //console.log('==================Error', error);
     };
 
-    Axios.post(Constants.getJobAround, params, {
+    Axios.get(Constants.getAllJobs, {
+      params: {
+        limit: 5,
+        offset: 0,
+      },
       headers: {
-        Authorization: token,
+        Authorization: this.state.accessToken,
       },
     })
       .then(onSuccess)
@@ -164,8 +157,24 @@ export default class VendorHome extends Component {
     this.setState({isLoading: !this.state.isLoading});
   };
 
+  checkLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.props.navigation.navigate(Constants.venderFilter);
+      } else {
+        // ////console.log('location permission denied');
+        this.setState({permissionModalVisibility: true});
+      }
+    } catch (err) {
+      ////console.log('getLocation catch: ==================> ', err);
+    }
+  };
+
   renderCategoryItem = ({item}) => {
-    // console.log('All Category Home ite======',item);
+    // //console.log('All Category Home ite======',item);
 
     return (
       <TouchableOpacity
@@ -198,7 +207,7 @@ export default class VendorHome extends Component {
   };
 
   renderJobsForYouItem = ({item}) => {
-    // console.log('Job Around data ======',item)
+    // //console.log('Job Around data ======',item)
     return <ListComponent item={item} />;
   };
 
@@ -247,7 +256,6 @@ export default class VendorHome extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  // this.props.navigation.navigate(Constants.venderFilter);
                   this.checkLocationPermission();
                 }}
                 style={{position: 'absolute', right: SIZES.twenty}}>
@@ -275,7 +283,7 @@ export default class VendorHome extends Component {
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
+                style={{height: SIZES.fifty, width: SIZES.fifty}}
               />
             </TouchableOpacity>
             <View
@@ -354,11 +362,13 @@ export default class VendorHome extends Component {
             <View style={{}}>
               <FlatList
                 data={this.state.jobAround}
-                horizontal
+                // horizontal
                 keyExtractor={(item) => item.id}
                 renderItem={this.renderJobsForYouItem}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{}}
+                contentContainerStyle={{
+                  alignItems: 'center',
+                }}
               />
             </View>
           </View>
@@ -368,6 +378,53 @@ export default class VendorHome extends Component {
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
+
+        <Modal
+          isVisible={this.state.permissionModalVisibility}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View
+            style={{
+              backgroundColor: Colors.navy,
+              padding: SIZES.fifteen,
+            }}>
+            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
+              CashGrab
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.white,
+              }}>
+              Please enable your location to see nearby vendors...
+            </RegularTextCB>
+            <View
+              style={{
+                marginTop: SIZES.ten,
+                alignSelf: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({permissionModalVisibility: false});
+                }}
+                style={{
+                  padding: SIZES.ten,
+                  width: SIZES.fifty,
+                  alignItems: 'center',
+                  borderRadius: SIZES.fifteen,
+                  marginTop: SIZES.ten,
+                  backgroundColor: Colors.white,
+                }}>
+                <RegularTextCB style={{color: Colors.navy}}>Ok</RegularTextCB>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }

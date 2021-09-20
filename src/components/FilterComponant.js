@@ -23,14 +23,14 @@ const ListComponent = (props) => {
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={styles.circleCard}>
           <Image
-            source={{uri: Constants.imageURL + item.user.userProfile.image}}
+            source={{uri: Constants.imageURL + item.image}}
             style={styles.iconUser}
             resizeMode="cover"
           />
         </View>
         <View style={{marginStart: 10}}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.user.name}
+            {item.name}
           </RegularTextCB>
           <View
             style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     // flex: 1,
-    width: '90%',
+    width: SIZES.ten * 50,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

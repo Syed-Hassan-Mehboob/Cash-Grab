@@ -58,7 +58,7 @@ export default class Dashboard extends Component {
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log('Complete job vvv======= ', data.data);
+      console.log('Complete job vvv======= ', data.data.withdraw);
 
       this.setState({
         completeJob: data?.data.completed,

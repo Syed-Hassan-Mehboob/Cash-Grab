@@ -36,19 +36,20 @@ export default class EditProfile extends Component {
       isModalVisible: false,
       isCountryCodePickerVisible: false,
       accessToken: '',
-      avatar: this.props.route.params.avatar,
-      fullName: this.props.route.params.name,
-      email: this.props.route.params.email,
-      countryCode: this.props.route.params.countryCode,
-      countryFlag: this.props.route.params.countryFlag,
-      phoneNumber: this.props.route.params.phone,
-      location: this.props.route.params.location,
+      avatar: '',
+      fullName: '',
+      email: '',
+      countryCode: '',
+      countryFlag: '',
+      phoneNumber: '',
+      location: '',
       oldPassword: '',
       newPassword: '',
       showModal: false,
       lat: '',
       long: '',
       abouteMe: '',
+      secureText: false,
     };
   }
 
@@ -59,6 +60,7 @@ export default class EditProfile extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
+    this.getUserProfile();
   };
 
   changePasswordState() {
@@ -76,6 +78,35 @@ export default class EditProfile extends Component {
       isModalVisible: !this.state.isModalVisible,
     });
   };
+
+  // getUserProfile = () => {
+  //   const onSuccess = ({data}) => {
+  //     this.toggleIsLoading();
+  //     this.setState({
+  //       avatar: data.data.records.userProfile.image,
+  //       fullName: data.data.records.name,
+  //       email: data.data.records.email,
+  //       countryCode: data.data.records.country_code,
+  //       countryFlag: data.data.records.country_flag,
+  //       phoneNumber: data.data.records.phone,
+  //       location: data.data.records.userProfile.location,
+  //     });
+  //   };
+
+  //   const onFailure = (error) => {
+  //     this.toggleIsLoading();
+  //     utils.showResponseError(error);
+  //   };
+
+  //   this.toggleIsLoading();
+  //   Axios.get(Constants.getProfileURL, {
+  //     headers: {
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
 
   renderBottomSheetHeader = () => {
     return (

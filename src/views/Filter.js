@@ -347,4 +347,8 @@ const styles = StyleSheet.create({
     width: SIZES.twenty,
     resizeMode: 'contain',
   },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
+  },
 });

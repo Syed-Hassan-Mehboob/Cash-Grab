@@ -17,7 +17,7 @@ import utils from '../utils';
 import Axios from '../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ListComponent from '../components/ListComponent';
+import FilterComponant from '../components/FilterComponant';
 import Geolocation from '@react-native-community/geolocation';
 
 export default class FileredScreen extends Component {
@@ -186,7 +186,7 @@ export default class FileredScreen extends Component {
 
   renderSingleCategoriesItem = ({item}) => {
     // console.log('Filter Data item ===== ', item);
-    return <ListComponent item={item} />;
+    return <FilterComponant item={item} />;
   };
 
   openNextScreen = (nextScreen) => {

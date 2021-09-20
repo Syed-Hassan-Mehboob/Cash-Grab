@@ -38,49 +38,46 @@ export default class VendorAllJobs extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      this.getUserProfile();
+      this.getJobAroundYou();
     });
   };
 
-  getUserProfile = async () => {
-    const onSuccess = ({data}) => {
-      // console.log('Data============',data.data.records)
-      const latitude = data.data.records.userProfile.latitude;
-      const longitude = data.data.records.userProfile.longitude;
-      this.getJobAroundYou(latitude, longitude);
-    };
+  // getUserProfile = async () => {
+  //   const onSuccess = ({data}) => {
+  //     // console.log('Data============',data.data.records)
+  //     const latitude = data.data.records.userProfile.latitude;
+  //     const longitude = data.data.records.userProfile.longitude;
+  //   };
+  //   // console.log('lat',this.state.lat)
+  //   const onFailure = (error) => {
+  //     this.setState({isLoading: false});
+  //     utils.showResponseError(error);
+  //   };
 
-    // console.log('lat',this.state.lat)
+  //   this.setState({isLoading: true});
+  //   Axios.get(Constants.getProfileURL, {
+  //     headers: {
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
 
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    this.setState({isLoading: true});
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
-  getJobAroundYou = async (latitude, longitude) => {
-    let params = {
-      lat: latitude,
-      lng: longitude,
-    };
+  getJobAroundYou = async () => {
+    // let params = {
+    //   lat: latitude,
+    //   lng: longitude,
+    // };
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      // console.log(' Job All Job Around you =====', data);
+      console.log(' Job All Job Around you =====', data.data);
 
       // utils.showToast(data.message);
       this.setState({
         isLoading: false,
-        allJobsAround: data.data,
+        allJobsAround: data.data.records,
       });
     };
 
@@ -89,7 +86,8 @@ export default class VendorAllJobs extends Component {
       utils.showResponseError(error);
     };
     this.setState({isLoading: true});
-    Axios.post(Constants.getJobAround, params, {
+
+    Axios.get(Constants.getAllJobs, {
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -120,7 +118,7 @@ export default class VendorAllJobs extends Component {
           <TouchableOpacity
             style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
-              this.props.navigation.goBack();
+              this.props.navigation.navigate(Constants.vendorHome);
             }}>
             <Image
               source={Images.arrowBack}

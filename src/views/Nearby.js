@@ -38,7 +38,6 @@ const Nearby = (props) => {
   useEffect(() => {
     const getTokenAndlocation = async () => {
       token = await AsyncStorage.getItem(Constants.accessToken);
-
       // watchID != null && Geolocation.clearWatch(watchID);
       getLocation();
 
@@ -289,8 +288,8 @@ const Nearby = (props) => {
           initialRegion={{
             latitude: Region.latitude,
             longitude: Region.longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.04,
           }}
           // zoomEnabled
           showsUserLocation

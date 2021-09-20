@@ -273,7 +273,7 @@ export default class VendorProfile extends React.Component {
               // elevation:10,
             }}>
             <Image
-              source={item.user.image}
+              source={{uri: Constants.imageURL + item.profiles.image}}
               style={{
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
@@ -283,7 +283,7 @@ export default class VendorProfile extends React.Component {
           </View>
           <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-              {item.user.name}
+              {item.customer.name === null ? 'Undefined' : item.customer.name}
             </RegularTextCB>
             <Image
               source={Images.like}
@@ -302,7 +302,7 @@ export default class VendorProfile extends React.Component {
                 marginTop: 5,
                 width: width - 80,
               }}>
-              {item.review.text}
+              {item.comments === null ? 'Undefine' : item.comments}
             </RegularTextCB>
             <View style={{alignSelf: 'baseline', marginTop: SIZES.five}}>
               <StarRating
@@ -312,7 +312,7 @@ export default class VendorProfile extends React.Component {
                 halfStar={Images.starHalf}
                 emptyStar={Images.starHalf}
                 starSize={15}
-                rating={parseInt(item.review.rating)}
+                rating={parseInt(item.rating)}
               />
             </View>
             <RegularTextCB
@@ -320,7 +320,7 @@ export default class VendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.review.date}
+              {item.created_at === null ? 'Undefined' : item.created_at}
             </RegularTextCB>
             <Image
               source={Images.moreDots}

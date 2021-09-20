@@ -41,6 +41,7 @@ export default class ViewVendorProfile extends React.Component {
       image: '',
       location: '',
       customer: '',
+      typeReview: '',
     };
   }
 
@@ -177,7 +178,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
-    console.log('Item==========', item);
+    console.log(' Vender view item Reviews Item==========', item);
     return (
       <View
         style={{
@@ -198,7 +199,7 @@ export default class ViewVendorProfile extends React.Component {
               elevation: SIZES.ten,
             }}>
             <Image
-              source={{uri: item.image}}
+              source={{uri: Constants.imageURL + item.profiles.image}}
               style={{
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
@@ -208,7 +209,7 @@ export default class ViewVendorProfile extends React.Component {
           </View>
           <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-              {item.name === null ? 'Undefine' : item.name}
+              {item.customer.name === null ? 'Undefined' : item.customer.name}
             </RegularTextCB>
             <Image
               source={Images.like}
@@ -227,7 +228,7 @@ export default class ViewVendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 width: width - 80,
               }}>
-              {item.comments}
+              {item.comments === null ? 'Undefined' : item.comments}
             </RegularTextCB>
             <View style={{alignSelf: 'baseline', marginTop: SIZES.five}}>
               <StarRating
@@ -245,7 +246,7 @@ export default class ViewVendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.created_at}
+              {item.created_at === null ? 'Undefined' : item.created_at}
             </RegularTextCB>
             <Image
               source={Images.moreDots}
@@ -620,9 +621,9 @@ export default class ViewVendorProfile extends React.Component {
                   />
                   <TextInput
                     placeholder={'Write Review'}
-                    value={this.state.review}
+                    value={this.state.typeReview}
                     style={styles.textInput}
-                    onChangeText={(text) => this.setState({review: text})}
+                    onChangeText={(text) => this.setState({typeReview: text})}
                   />
                   <TouchableOpacity onPress={() => {}}>
                     <Image
