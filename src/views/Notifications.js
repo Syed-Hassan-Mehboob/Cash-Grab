@@ -173,7 +173,7 @@ export default class Notifications extends Component {
   };
 
   render() {
-    console.log('Notifications======', this.state.notifications);
+    // console.log('Notifications======', this.state.notifications);
     return (
       <View style={[styles.container]}>
         <View

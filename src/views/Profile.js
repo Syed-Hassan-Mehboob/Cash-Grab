@@ -32,9 +32,11 @@ export default class Profile extends React.Component {
     countryFlag: '',
     phone: '',
     location: '',
+    abouteMe: '',
   };
 
   componentDidMount() {
+    this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
     });
@@ -51,6 +53,7 @@ export default class Profile extends React.Component {
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
+      console.log('Profile data ==== ', data.data.records);
       this.toggleIsLoading();
       this.setState({
         avatar: data.data.records.userProfile.image,
@@ -60,6 +63,7 @@ export default class Profile extends React.Component {
         countryFlag: data.data.records.country_flag,
         phone: data.data.records.phone,
         location: data.data.records.userProfile.location,
+        abouteMe: data.data.records.userProfile.about_me,
       });
     };
 
@@ -119,15 +123,7 @@ export default class Profile extends React.Component {
             <TouchableOpacity
               style={{position: 'absolute', right: SIZES.ten}}
               onPress={() => {
-                this.props.navigation.navigate(Constants.editProfile, {
-                  avatar: Constants.imageURL + this.state.avatar,
-                  name: this.state.name,
-                  email: this.state.email,
-                  countryCode: this.state.countryCode,
-                  countryFlag: this.state.countryFlag,
-                  phone: this.state.phone,
-                  location: this.state.location,
-                });
+                this.props.navigation.navigate(Constants.editProfile);
               }}>
               <Image
                 source={Images.iconEdit}

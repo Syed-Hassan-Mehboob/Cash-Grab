@@ -200,14 +200,35 @@ export default class QuickNotify extends Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#fff', paddingHorizontal: 20}}>
-        <RegularTextCB
+        <View
           style={{
-            fontSize: 18,
-            color: Colors.lightYellowGreen,
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingVertical: SIZES.twenty,
           }}>
-          Quick Services
-        </RegularTextCB>
+          <TouchableOpacity
+            style={{
+              height: SIZES.twenty,
+              width: SIZES.twenty,
+            }}
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}>
+            <Image
+              source={Images.arrowBack}
+              style={[styles.iconBack, {tintColor: Colors.black1}]}
+            />
+          </TouchableOpacity>
+          <RegularTextCB
+            style={{
+              fontSize: 18,
+              color: Colors.lightYellowGreen,
+              marginLeft: SIZES.ten,
+            }}>
+            Quick Services
+          </RegularTextCB>
+        </View>
+
         <View
           style={{
             backgroundColor: 'pink',
@@ -397,6 +418,11 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
+  },
+  iconBack: {
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    resizeMode: 'contain',
   },
 });
 

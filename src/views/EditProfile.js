@@ -47,7 +47,7 @@ export default class EditProfile extends Component {
       newPassword: '',
       showModal: false,
       lat: '',
-      long: '',
+      lng: '',
       abouteMe: '',
       secureText: false,
     };
@@ -79,34 +79,36 @@ export default class EditProfile extends Component {
     });
   };
 
-  // getUserProfile = () => {
-  //   const onSuccess = ({data}) => {
-  //     this.toggleIsLoading();
-  //     this.setState({
-  //       avatar: data.data.records.userProfile.image,
-  //       fullName: data.data.records.name,
-  //       email: data.data.records.email,
-  //       countryCode: data.data.records.country_code,
-  //       countryFlag: data.data.records.country_flag,
-  //       phoneNumber: data.data.records.phone,
-  //       location: data.data.records.userProfile.location,
-  //     });
-  //   };
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      console.log('User Profile Data ===== === =', data);
+      this.setState({
+        avatar: Constants.imageURL + data.data.records.userProfile.image,
+        fullName: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        countryFlag: data.data.records.country_flag.toUpperCase(),
+        phoneNumber: data.data.records.phone,
+        location: data.data.records.userProfile.location,
+        abouteMe: data.data.records.userProfile.about_me,
+      });
+    };
 
-  //   const onFailure = (error) => {
-  //     this.toggleIsLoading();
-  //     utils.showResponseError(error);
-  //   };
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
 
-  //   this.toggleIsLoading();
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   renderBottomSheetHeader = () => {
     return (
@@ -127,15 +129,23 @@ export default class EditProfile extends Component {
         keyboardKeyType={'search'}
         fetchDetails={true}
         onPress={(data, details = null) => {
-          console.log(
-            'response===========================================>',
-            details,
+          // console.log("response===========================================>", details.formatted_address);
+          this.setState(
+            {
+              location: details.formatted_address,
+              lat: details.geometry.location.lat,
+              lng: details.geometry.location.lng,
+            },
+            () => {
+              setTimeout(() => {
+                this.setState({showModal: false});
+              }, 400);
+            },
           );
         }}
         query={{
           key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
           language: 'en',
-          types: '',
         }}
         enablePoweredByContainer={false}
         styles={{
@@ -173,8 +183,6 @@ export default class EditProfile extends Component {
         GooglePlacesSearchQuery={{rankby: 'distance'}}
         GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
         renderDescription={(row) => row.description}
-        currentLocation={true}
-        currentLocationLabel="Current location"
         nearbyPlacesAPI="GooglePlacesSearch"
         predefinedPlaces={[]}
         debounce={200}
@@ -186,7 +194,13 @@ export default class EditProfile extends Component {
   renderBottomSheetContent = () => {
     return (
       <View style={styles.bottomSheetBody}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: SIZES.ten,
+            paddingVertical: SIZES.five,
+          }}>
           <LightTextCB style={{fontSize: SIZES.ten * 3}}>
             Upload Photo
           </LightTextCB>
@@ -197,8 +211,8 @@ export default class EditProfile extends Component {
             <Image
               source={Images.iconClose}
               style={{
-                height: SIZES.fifteen,
-                width: SIZES.fifteen,
+                height: SIZES.twenty,
+                width: SIZES.twenty,
                 tintColor: Colors.coolGrey,
                 resizeMode: 'contain',
               }}
@@ -214,7 +228,7 @@ export default class EditProfile extends Component {
             onPress={() => this.takePhotoFromCamera()}
           />
         </View>
-        <View style={{marginTop: SIZES.five}}>
+        <View style={{marginTop: SIZES.ten * 3}}>
           <ButtonRadius10
             label="GALLERY"
             onPress={() => this.choosePhotoFromGallery()}
@@ -256,36 +270,6 @@ export default class EditProfile extends Component {
     });
   };
 
-  // getUserProfile = () => {
-  //   const onSuccess = ({ data }) => {
-  //   console.log('Edite profile Data========',data)
-  //     this.toggleIsLoading();
-  //     this.setState({
-  //       avatar: Constants.imageURL + data.data.records.userProfile.image,
-  //       fullName: data.data.records.name,
-  //       email: data.data.records.email,
-  //       countryCode: data.data.records.country_code,
-  //       countryFlag: data.data.records.country_flag,
-  //       phoneNumber: data.data.records.phone,
-  //       location: data.data.records.userProfile.location,
-  //     });
-  //   };
-
-  //   const onFailure = (error) => {
-  //     this.toggleIsLoading();
-  //     utils.showResponseError(error);
-  //   };
-
-  //   this.toggleIsLoading();
-  //   Axios.get(Constants.getProfileURL,{
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
   editUserProfile = () => {
     let name = this.state.fullName;
     let email = this.state.email;
@@ -294,6 +278,8 @@ export default class EditProfile extends Component {
     let phone = this.state.phoneNumber;
     let image = this.state.avatar;
     let location = this.state.location;
+    let lat = this.state.lat;
+    let lng = this.state.lng;
 
     if (utils.isEmpty(name)) {
       utils.showToast('Invalid Name');
@@ -371,7 +357,10 @@ export default class EditProfile extends Component {
       name: `image-profile`,
       type: 'image/jpeg',
     });
+
     formData.append('about_me', this.state.abouteMe);
+    formData.append('lat', lat);
+    formData.append('lng', lng);
 
     console.log('Form data ==== ', formData);
     const options = {
@@ -463,20 +452,23 @@ export default class EditProfile extends Component {
           </TouchableOpacity>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 16, marginTop: SIZES.ten}}>
-            {this.props.route.params.name}
+            {this.state.fullName}
           </RegularTextCB>
           <View
             style={{
               backgroundColor: Colors.white,
-              paddingHorizontal: SIZES.ten * 3,
+              // paddingHorizontal: SIZES.ten * 3,
               borderRadius: SIZES.ten,
+              width: SIZES.ten * 30,
+              marginVertical: SIZES.five,
             }}>
             <TextInput
               multiline={true}
               placeholder="About Me"
+              value={this.state.abouteMe}
               style={{
                 fontFamily: Constants.fontRegular,
-                fontSize: SIZES.fifteen,
+                fontSize: 16,
               }}
               onChangeText={(text) => {
                 this.setState({abouteMe: text});
@@ -485,8 +477,10 @@ export default class EditProfile extends Component {
           </View>
         </View>
         <ScrollView
+          contentContainerStyle={{paddingHorizontal: SIZES.ten}}
           style={[styles.container, {paddingVertical: SIZES.five}]}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'always'}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
@@ -589,24 +583,24 @@ export default class EditProfile extends Component {
                 color: Colors.coolGrey,
                 fontSize: 16,
                 marginStart: SIZES.five,
-                flex: 0.5,
+                flex: 0.48,
               }}>
               Location
             </RegularTextCB>
-            {/* <View
+            <View
               style={[
+                styles.textInput,
                 {
-                  flex: 1,
-                  height: SIZES.ten * 6,
+                  height: 53,
+                  paddingHorizontal: SIZES.fifteen,
                   backgroundColor: Colors.white,
+                  marginVertical: SIZES.ten,
                   borderRadius: SIZES.ten,
-                  paddingVertical: SIZES.five,
-                  paddingHorizontal: SIZES.twentyFive,
                   shadowColor: '#c5c5c5',
-                  shadowOffset: {width: SIZES.five, height: SIZES.five},
+                  shadowOffset: {width: 5, height: 5},
                   shadowOpacity: 1.0,
-                  shadowRadius: SIZES.ten,
-                  elevation: SIZES.ten,
+                  shadowRadius: 10,
+                  elevation: 10,
                   justifyContent: 'center',
                 },
               ]}>
@@ -620,9 +614,9 @@ export default class EditProfile extends Component {
                   {this.state.location ? this.state.location : 'Get Location'}
                 </RegularTextCB>
               </TouchableOpacity>
-            </View> */}
+            </View>
 
-            <EditText
+            {/* <EditText
               ref={'location'}
               placeholder={'Location'}
               value={this.state.location}
@@ -630,7 +624,7 @@ export default class EditProfile extends Component {
                 this.setState({location: text});
               }}
               style={[styles.textInput]}
-            />
+            /> */}
           </View>
 
           <Modal
@@ -709,7 +703,7 @@ export default class EditProfile extends Component {
               onChangeText={(text) => {
                 this.setState({newPassword: text});
               }}
-              style={[styles.textInput, {marginBottom: SIZES.five}]}
+              style={[styles.textInput, {marginBottom: SIZES.fifteen}]}
             />
           </View>
         </ScrollView>
@@ -728,8 +722,8 @@ export default class EditProfile extends Component {
 
 const styles = StyleSheet.create({
   iconBack: {
-    height: SIZES.fifteen,
-    width: SIZES.fifteen,
+    height: SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconPassword: {

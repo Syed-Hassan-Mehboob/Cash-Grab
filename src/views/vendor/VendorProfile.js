@@ -134,6 +134,7 @@ export default class VendorProfile extends React.Component {
   };
 
   componentDidMount() {
+    this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
     });
@@ -164,7 +165,10 @@ export default class VendorProfile extends React.Component {
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      console.log('Vender Profile =========', data.data.records);
+      console.log(
+        'Vender Profile =========',
+        data.data.records.userProfile.image,
+      );
       this.toggleIsLoading();
       this.setState({
         avatar: Constants.imageURL + data.data.records.userProfile.image,
@@ -254,7 +258,7 @@ export default class VendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
-    console.log('Reviews ====================', item);
+    // console.log('Reviews ====================', item);
     return (
       <View
         style={{
@@ -379,15 +383,8 @@ export default class VendorProfile extends React.Component {
             <TouchableOpacity
               style={{position: 'absolute', right: SIZES.ten}}
               onPress={() => {
-                this.props.navigation.navigate(Constants.vendorEditProfile, {
-                  avatar: this.state.avatar,
-                  name: this.state.name,
-                  email: this.state.email,
-                  countryCode: this.state.countryCode,
-                  countryFlag: this.state.countryFlag,
-                  phone: this.state.phone,
-                  location: this.state.location,
-                });
+                console.log('Country Flag ===== ==', this.state.countryFlag);
+                this.props.navigation.navigate(Constants.vendorEditProfile);
               }}>
               <Image
                 source={Images.iconEdit}

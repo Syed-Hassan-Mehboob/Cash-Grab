@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, width} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from './LightTextCB';
 import RegularTextCB from './RegularTextCB';
@@ -141,8 +141,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    // flex: 1,
-    width: '90%',
+    width: width - SIZES.fifteen,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

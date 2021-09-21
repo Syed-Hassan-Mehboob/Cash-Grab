@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,9 +9,9 @@ import {
   Platform,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../../common/Colors';
-import Constants, { SIZES } from '../../common/Constants';
+import Constants, {SIZES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
@@ -20,16 +20,15 @@ import utils from '../../utils';
 export default class VenderNotifications extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       isLoading: false,
-      notifications:[]
-    }
+      notifications: [],
+    };
   }
 
   componentDidMount() {
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
-
 
   renderHiddenItem = (data, rowMap) => {
     const rowActionAnimatedValue = new Animated.Value(75);
@@ -47,13 +46,16 @@ export default class VenderNotifications extends Component {
     );
   };
 
-  renderNotificationsItem = ({ item }) => {
-    console.log("Item  ===============>", item.notifications.map((item) => {
-      console.log(item.content)
-    }))
+  renderNotificationsItem = ({item}) => {
+    console.log(
+      'Item  ===============>',
+      item.notifications.map((item) => {
+        console.log(item.content);
+      }),
+    );
     return (
-      <View style={{ marginHorizontal:SIZES.fifteen }}>
-        <RegularTextCB style={{ color: Colors.black, fontSize: 18 }}>
+      <View style={{marginHorizontal: SIZES.fifteen}}>
+        <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
           {item.date}
         </RegularTextCB>
 
@@ -64,14 +66,14 @@ export default class VenderNotifications extends Component {
               style={[
                 styles.card,
                 {
-                  marginVertical:SIZES.ten,
+                  marginVertical: SIZES.ten,
                   borderWidth: item.date === 'Latest' ? 1 : 0,
                 },
               ]}>
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.itemContainer}
-                onPress={() => { }}>
+                onPress={() => {}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -79,7 +81,7 @@ export default class VenderNotifications extends Component {
                   }}>
                   <View style={styles.circleCard}>
                     <Image
-                      source={{ uri: Constants.imageURL + notification.image }}
+                      source={{uri: Constants.imageURL + notification.image}}
                       style={styles.iconUser}
                       resizeMode="cover"
                     />
@@ -95,7 +97,8 @@ export default class VenderNotifications extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}>
-                      <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
+                      <RegularTextCB
+                        style={{fontSize: 16, color: Colors.black}}>
                         {notification.title}
                       </RegularTextCB>
                       <RegularTextCB>{item.time}</RegularTextCB>
@@ -113,53 +116,50 @@ export default class VenderNotifications extends Component {
                 </View>
               </TouchableOpacity>
             </View>
-
           );
         })}
       </View>
     );
   };
 
-  renderDeleteButton = ({ item }) => {
+  renderDeleteButton = ({item}) => {
     return (
       <View
         style={{
           borderTopLeftRadius: SIZES.twenty,
-          borderBottomLeftRadius:SIZES.twenty,
+          borderBottomLeftRadius: SIZES.twenty,
           backgroundColor: Colors.sickGreen,
-          padding:SIZES.twenty,
+          padding: SIZES.twenty,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
         <Image
           source={Images.iconSwipeToDelete}
-          style={{ height:SIZES.twenty, width:SIZES.twenty }}
+          style={{height: SIZES.twenty, width: SIZES.twenty}}
         />
       </View>
     );
   };
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getNotifications());
+    this.setState({accessToken: token}, () => this.getNotifications());
   };
 
   getNotifications = () => {
-    const onSuccess = ({ data }) => {
-     
+    const onSuccess = ({data}) => {
       this.toggleIsLoading();
-      this.setState({ notifications: data.data });
+      this.setState({notifications: data.data});
     };
 
     const onFailure = (error) => {
       this.toggleIsLoading();
       utils.showResponseError(error);
     };
-
 
     this.toggleIsLoading();
     Axios.get(Constants.notificationsURL, {
@@ -175,20 +175,46 @@ export default class VenderNotifications extends Component {
     // console.log('Notifications======',this.state.notifications)
     return (
       <View style={[styles.container]}>
-        <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>
-          Notifications
-        </RegularTextCB>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            padding: 15,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+          }}>
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              left: SIZES.ten,
+              width: SIZES.fifteen,
+              height: SIZES.fifteen,
+            }}
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}>
+            <Image
+              source={Images.arrowBack}
+              style={[styles.iconBack, {tintColor: Colors.black1}]}
+            />
+          </TouchableOpacity>
+          <RegularTextCB style={{fontSize: 30, alignSelf: 'center'}}>
+            Notifications
+          </RegularTextCB>
+        </View>
+
         <SwipeListView
-          style={{ marginTop: SIZES.ten }}
+          style={{marginTop: SIZES.ten}}
           data={this.state.notifications}
           renderItem={this.renderNotificationsItem}
           contentInset={{
             // for ios
-            bottom: SIZES.ten*10,
+            bottom: SIZES.ten * 10,
           }}
           contentContainerStyle={{
             // for android
-            paddingBottom:SIZES.ten*10,
+            paddingBottom: SIZES.ten * 10,
           }}
         />
         <Spinner
@@ -208,19 +234,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: SIZES.ten*10,
-    width: SIZES.ten*10,
+    height: SIZES.ten * 10,
+    width: SIZES.ten * 10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
-    borderRadius: SIZES.ten*3 / 2,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
+    borderRadius: (SIZES.ten * 3) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -233,7 +259,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? SIZES.twenty :SIZES.ten*4,
+    paddingTop: Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 4,
   },
   childContainer: {
     flex: 1,
@@ -255,7 +281,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -276,17 +302,17 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width:SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
-    elevation:SIZES.ten,
+    elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
-    borderRadius:SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
@@ -294,11 +320,11 @@ const styles = StyleSheet.create({
   rowFront: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     margin: SIZES.five,
     marginBottom: SIZES.fifteen,
     shadowColor: '#999',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.five,
@@ -306,7 +332,7 @@ const styles = StyleSheet.create({
   rowFrontVisible: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     padding: SIZES.ten,
     marginBottom: SIZES.fifteen,
   },
@@ -316,9 +342,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft:SIZES.fifteen,
+    paddingLeft: SIZES.fifteen,
     margin: SIZES.five,
-    marginBottom:SIZES.fifteen,
+    marginBottom: SIZES.fifteen,
     borderRadius: SIZES.five,
   },
   backTextWhite: {
@@ -327,11 +353,11 @@ const styles = StyleSheet.create({
   rowFront: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height:SIZES.ten*6,
+    height: SIZES.ten * 6,
     margin: SIZES.five,
     marginBottom: SIZES.fifteen,
     shadowColor: '#999',
-    shadowOffset: { width:SIZES.five, height:SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.five,
@@ -339,7 +365,7 @@ const styles = StyleSheet.create({
   rowFrontVisible: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     padding: SIZES.ten,
     marginBottom: SIZES.fifteen,
   },
@@ -349,9 +375,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft:SIZES.fifteen,
+    paddingLeft: SIZES.fifteen,
     margin: SIZES.five,
-    marginBottom:SIZES.fifteen,
+    marginBottom: SIZES.fifteen,
     borderRadius: SIZES.five,
   },
   backRightBtn: {
@@ -360,12 +386,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
-    width: SIZES.ten*8,
-    paddingRight: SIZES.twenty-3,
+    width: SIZES.ten * 8,
+    paddingRight: SIZES.twenty - 3,
   },
   backRightBtnLeft: {
     backgroundColor: '#1f65ff',
-    right: SIZES.twenty-3,
+    right: SIZES.twenty - 3,
   },
   backRightBtnRight: {
     backgroundColor: 'red',
@@ -376,7 +402,7 @@ const styles = StyleSheet.create({
   trash: {
     height: SIZES.twenty,
     width: SIZES.twentyFive,
-    marginRight: SIZES.ten-7,
+    marginRight: SIZES.ten - 7,
   },
   title: {
     fontSize: 14,

@@ -22,6 +22,9 @@ import Constants, {SIZES} from '../../common/Constants';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+
 const {width, height} = Dimensions.get('window');
 
 export default class VendorEditProfile extends Component {
@@ -29,29 +32,33 @@ export default class VendorEditProfile extends Component {
     super(props);
     this.state = {
       isCountryCodePickerVisible: false,
-      avatar: this.props.route.params.avatar,
-      fullName: this.props.route.params.name,
-      email: this.props.route.params.email,
-      phoneNumber: this.props.route.params.phone,
-      location: this.props.route.params.location,
-      countryCode: this.props.route.params.countryCode,
-      countryFlag: this.props.route.params.countryFlag,
+      avatar: '',
+      fullName: '',
+      email: '',
+      countryCode: '',
+      countryFlag: '',
+      phoneNumber: '',
+      location: '',
       oldPassword: '',
       newPassword: '',
       isModalVisible: false,
       isLoading: false,
       accessToken: '',
+      showModal: false,
+      lat: '',
+      lng: '',
+      secureText: false,
     };
   }
 
   componentDidMount() {
     this.getUserAccessToken();
-    console.log('Avator========', this.state.fullName);
   }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
+    this.getUserProfile();
   };
 
   changePasswordState() {
@@ -59,6 +66,82 @@ export default class VendorEditProfile extends Component {
       this.setState({secureText: false, eyeIcon: 'eye'});
     else this.setState({secureText: true, eyeIcon: 'eye-off'});
   }
+
+  toggleIsModalVisible = () => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+    });
+  };
+  GooglePlacesInput = () => {
+    return (
+      <GooglePlacesAutocomplete
+        placeholder={'Search'}
+        //   renderLeftButton={() => }
+        minLength={2}
+        keyboardKeyType={'search'}
+        fetchDetails={true}
+        onPress={(data, details = null) => {
+          // console.log("response===========================================>", details.formatted_address);
+          this.setState(
+            {
+              location: details.formatted_address,
+              lat: details.geometry.location.lat,
+              lng: details.geometry.location.lng,
+            },
+            () => {
+              setTimeout(() => {
+                this.setState({showModal: false});
+              }, 400);
+            },
+          );
+        }}
+        query={{
+          key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
+          language: 'en',
+        }}
+        enablePoweredByContainer={false}
+        styles={{
+          textInputContainer: {
+            backgroundColor: '#fff',
+            marginTop: 0,
+            marginBottom: 0,
+            marginLeft: 0,
+            marginRight: 0,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: SIZES.five,
+            },
+            shadowOpacity: 0.36,
+            shadowRadius: 6.68,
+            elevation: 11,
+            paddingHorizontal: SIZES.five,
+            borderRadius: 8,
+          },
+          textInput: {
+            marginTop: 0,
+            marginBottom: 0,
+            marginLeft: 0,
+            marginRight: 0,
+          },
+          listView: {
+            marginTop: SIZES.ten,
+            borderRadius: 8,
+            overflow: 'hidden',
+            backgroundColor: '#fff',
+          },
+          row: {borderRadius: 8},
+        }}
+        GooglePlacesSearchQuery={{rankby: 'distance'}}
+        GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
+        renderDescription={(row) => row.description}
+        nearbyPlacesAPI="GooglePlacesSearch"
+        predefinedPlaces={[]}
+        debounce={200}
+        google
+      />
+    );
+  };
 
   validateEmail = (text) => {
     this.setState({email: text});
@@ -75,16 +158,40 @@ export default class VendorEditProfile extends Component {
     this.setState({isLoading: !this.state.isLoading});
   };
 
-  toggleIsModalVisible = () => {
-    this.setState({
-      isModalVisible: !this.state.isModalVisible,
-    });
-  };
-
   toggleIsCountryCodePickerVisible = () => {
     this.setState({
       isCountryCodePickerVisible: !this.state.isCountryCodePickerVisible,
     });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      console.log('User Profile Data ===== === =', data);
+      this.setState({
+        avatar: Constants.imageURL + data.data.records.userProfile.image,
+        fullName: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        countryFlag: data.data.records.country_flag.toUpperCase(),
+        phoneNumber: data.data.records.phone,
+        location: data.data.records.userProfile.location,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   editUserProfile = () => {
@@ -94,6 +201,9 @@ export default class VendorEditProfile extends Component {
     let phone = this.state.phoneNumber;
     let image = this.state.avatar;
     let location = this.state.location;
+    let countryFlag = this.state.countryFlag;
+    let lat = this.state.lat;
+    let lng = this.state.lng;
 
     if (utils.isEmpty(name)) {
       utils.showToast('Invalid Name');
@@ -130,6 +240,7 @@ export default class VendorEditProfile extends Component {
       return;
     }
 
+    this.toggleIsLoading();
     const onSuccess = ({data}) => {
       console.log('upload======', data);
       this.toggleIsLoading();
@@ -149,6 +260,7 @@ export default class VendorEditProfile extends Component {
     formData.append('name', name);
     formData.append('email', email);
     formData.append('country_code', countryCode);
+    formData.append('country_flag', countryFlag);
     formData.append('phone', phone);
     formData.append('location', location);
     formData.append('image', {
@@ -157,7 +269,8 @@ export default class VendorEditProfile extends Component {
       name: `image-profile`,
       type: 'image/jpeg',
     });
-
+    formData.append('lat', lat);
+    formData.append('lng', lng);
     const options = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -237,6 +350,7 @@ export default class VendorEditProfile extends Component {
   };
 
   onSelect = (country) => {
+    console.log('Country Flag === ==== ', country.cca2);
     this.setState({
       countryFlag: country.cca2,
       countryCode: country.callingCode[0],
@@ -318,19 +432,21 @@ export default class VendorEditProfile extends Component {
               fontSize: SIZES.TWENTY,
               marginTop: SIZES.ten,
             }}>
-            {this.props.route.params.name}
+            {this.state.fullName}
           </RegularTextCB>
         </View>
         <ScrollView
+          contentContainerStyle={{paddingHorizontal: SIZES.ten}}
           style={[styles.container, {paddingVertical: SIZES.twenty}]}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'always'}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
                 marginStart: SIZES.twenty,
-                flex: 0.5,
+                flex: 0.37,
               }}>
               Name
             </RegularTextCB>
@@ -344,13 +460,14 @@ export default class VendorEditProfile extends Component {
               style={[styles.textInput]}
             />
           </View>
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
+                flex: 0.37,
                 marginStart: SIZES.twenty,
-                flex: 0.5,
               }}>
               Email
             </RegularTextCB>
@@ -363,19 +480,30 @@ export default class VendorEditProfile extends Component {
                 this.validateEmail(text);
               }}
               style={[styles.textInput]}
+              isEditable={false}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginVertical: SIZES.ten,
+            }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
+                flex: 0.45,
                 marginStart: SIZES.twenty,
-                flex: 0.5,
               }}>
               Phone No.
             </RegularTextCB>
-            <View style={[styles.card1, {flexDirection: 'row', flex: 0.85}]}>
+            <View
+              style={[
+                styles.card1,
+                {flexDirection: 'row', marginVertical: SIZES.ten},
+              ]}>
               <CountryPicker
                 onSelect={this.onSelect}
                 countryCode={this.state.countryFlag}
@@ -403,22 +531,58 @@ export default class VendorEditProfile extends Component {
                   flex: 1,
                   height: SIZES.fifty,
                   color: Colors.black,
+
                   fontFamily: Constants.fontRegular,
                 }}
               />
             </View>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
+                flex: 0.35,
                 marginStart: SIZES.twenty,
-                flex: 0.5,
               }}>
               Location
             </RegularTextCB>
-            <EditText
+            <View
+              style={[
+                styles.textInput,
+                {
+                  height: 53,
+                  paddingHorizontal: SIZES.fifteen,
+                  backgroundColor: Colors.white,
+                  marginVertical: SIZES.ten,
+                  borderRadius: SIZES.ten,
+                  shadowColor: '#c5c5c5',
+                  shadowOffset: {width: 5, height: 5},
+                  shadowOpacity: 1.0,
+                  shadowRadius: 10,
+                  elevation: 10,
+                  justifyContent: 'center',
+                },
+              ]}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    showModal: true,
+                  });
+                }}>
+                <RegularTextCB>
+                  {this.state.location ? this.state.location : 'Get Location'}
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            {/* <EditText
               ref={'location'}
               placeholder={'Location'}
               value={this.state.location}
@@ -426,15 +590,52 @@ export default class VendorEditProfile extends Component {
                 this.setState({location: text});
               }}
               style={[styles.textInput]}
-            />
+            /> */}
           </View>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={this.state.showModal}
+            onRequestClose={() => {
+              this.setState({showModal: false});
+            }}>
+            <View
+              style={{
+                flex: 1,
+                padding: SIZES.twenty,
+                backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+              }}>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                {this.GooglePlacesInput()}
+                <TouchableOpacity
+                  style={{
+                    marginTop: SIZES.fifteen,
+                    marginLeft: SIZES.five * 1.3,
+                  }}
+                  onPress={() => {
+                    this.setState({showModal: false});
+                  }}>
+                  <Image
+                    style={{
+                      height: SIZES.fifteen,
+                      width: SIZES.fifteen,
+                      tintColor: '#fff',
+                    }}
+                    resizeMode="contain"
+                    source={Images.iconClose}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
+                flex: 0.37,
                 marginStart: SIZES.twenty,
-                flex: 0.5,
               }}>
               Old Password
             </RegularTextCB>
@@ -449,13 +650,14 @@ export default class VendorEditProfile extends Component {
               style={[styles.textInput]}
             />
           </View>
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
                 fontSize: 16,
+                flex: 0.37,
                 marginStart: SIZES.twenty,
-                flex: 0.5,
               }}>
               New Password
             </RegularTextCB>
@@ -471,9 +673,15 @@ export default class VendorEditProfile extends Component {
             />
           </View>
         </ScrollView>
+
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
           {this.renderBottomSheetContent()}
         </Modal>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -507,18 +715,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   card1: {
+    flex: 1,
     flexDirection: 'row',
-    height: SIZES.fifty,
+    // marginHorizontal: SIZES.fifteen + 2,
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
-    paddingHorizontal: SIZES.ten * 4,
-    paddingVertical: SIZES.five,
+    paddingHorizontal: SIZES.fifteen + 4,
+    // paddingVertical: SIZES.five - 1,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
     alignItems: 'center',
+    // justifyContent: 'space-around',
   },
   formLabel: {
     fontSize: 16,
@@ -526,9 +736,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
-    flex: 1,
+    flex: 0.8,
     marginVertical: SIZES.ten,
-    marginHorizontal: SIZES.twenty,
+    // marginHorizontal: SIZES.twenty,
     height: SIZES.fifty,
     color: Colors.black,
   },
@@ -615,5 +825,9 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

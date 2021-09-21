@@ -376,16 +376,35 @@ export default class postJob extends Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
+              // justifyContent: 'center',
               width: '100%',
+
               padding: SIZES.fifteen,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
+            <TouchableOpacity
+              style={{
+                height: SIZES.twenty,
+                width: SIZES.twenty,
+              }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <Image
+                source={Images.arrowBack}
+                style={[styles.iconBack, {tintColor: Colors.black1}]}
+              />
+            </TouchableOpacity>
             <RegularTextCB
-              style={{fontSize: SIZES.ten * 3, color: Colors.black}}>
+              style={{
+                fontSize: SIZES.ten * 3,
+                color: Colors.black,
+                marginLeft: SIZES.twenty,
+              }}>
               Post a Job
             </RegularTextCB>
           </View>
+
           <View
             style={{paddingHorizontal: SIZES.twenty, paddingTop: SIZES.ten}}>
             <View>

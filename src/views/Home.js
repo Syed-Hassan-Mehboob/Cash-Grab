@@ -213,10 +213,10 @@ export default class Home extends Component {
     let params = {
       latitude: Number(this.state.currentLat),
       longitude: Number(this.state.currentLong),
-      limit: 2,
+      limit: 4,
     };
 
-    console.log('vender Around you Params ', params);
+    // console.log('vender Around you Params ', params);
 
     Axios.get(Constants.getvendorAround, {
       params,
