@@ -1,8 +1,8 @@
 import React from 'react';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Platform, View } from 'react-native';
-import Constants, { SIZES } from '../../common/Constants';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Image, Platform, View} from 'react-native';
+import Constants, {SIZES} from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import Home from '../Home';
@@ -29,6 +29,8 @@ import ChangePassword from '../ChangePassword';
 import Filtered from '../Filtered';
 import ViewJob from '../vendor/ViewJob';
 import QuickNotify from '../../components/QuickNotify';
+import UserHome from '../UserHome';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -37,11 +39,12 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.home}
+      initialRouteName={Constants.UserHome}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
       }}>
+      <HomeStack.Screen name={Constants.UserHome} component={UserHome} />
       <HomeStack.Screen name={Constants.home} component={Home} />
       <HomeStack.Screen name={Constants.search} component={Search} />
       <HomeStack.Screen
@@ -69,7 +72,7 @@ const HomeNavigator = () => {
         name={Constants.confirmPayment}
         component={ConfirmPayment}
       />
-      
+
       <HomeStack.Screen
         name={Constants.dateTimeSlots}
         component={DateTimeSlots}
@@ -142,10 +145,10 @@ const customTabBarStyle = {
     borderTopLeftRadius: SIZES.twenty,
     borderTopRightRadius: SIZES.twenty,
     shadowColor: '#000000 ',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
-    height: Platform.OS === 'android' ? SIZES.ten*6 :SIZES.ten*8,
+    height: Platform.OS === 'android' ? SIZES.ten * 6 : SIZES.ten * 8,
     marginTop: 2,
     elevation: 4,
     borderTopWidth: 0,
@@ -160,10 +163,14 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.home}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barHomeSelected : Images.barHome}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
@@ -172,10 +179,14 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.notifications}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barBellSelected : Images.barBell}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
@@ -184,7 +195,7 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.plus}
         options={{
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({color}) => (
             <View
               style={{
                 justifyContent: 'center',
@@ -194,8 +205,8 @@ const Tabs = () => {
               <Image
                 source={Images.barPlus}
                 style={{
-                  height: SIZES.ten*9,
-                  width: SIZES.ten*9,
+                  height: SIZES.ten * 9,
+                  width: SIZES.ten * 9,
                   resizeMode: 'contain',
                 }}
               />
@@ -207,10 +218,14 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.profile}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barProfileSelected : Images.barProfile}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
@@ -219,15 +234,19 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.settings}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barMoreSelected : Images.barMore}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
         component={Settings}
-        listeners={({ navigation }) => ({
+        listeners={({navigation}) => ({
           tabPress: (e) => {
             e.preventDefault();
             navigation.openDrawer();

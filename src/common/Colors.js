@@ -23,5 +23,6 @@ const Colors = {
   darkSkyBlue: '#51cae9',
   turquoiseBlue: '#05abd0',
   paleGrey: '#eef1ff',
+  sickGreen: '#abcf37FF',
 };
 export default Colors;

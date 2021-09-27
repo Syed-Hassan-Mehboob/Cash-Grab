@@ -15,7 +15,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import BoldTextCB from '../../components/BoldTextCB';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {SIZES, FONTS, STYLES} from '../../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../../network/APIKit';
@@ -412,14 +412,13 @@ export default class Dashboard extends Component {
     // console.log('render data ====== ',this.state.completeJob)
 
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            padding: SIZES.fifteen,
+            padding: SIZES.ten * 2,
             marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
@@ -437,9 +436,11 @@ export default class Dashboard extends Component {
               style={[styles.iconBack, {tintColor: Colors.black1}]}
             />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
+
+          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
             Dashboard
           </RegularTextCB>
+
           <TouchableOpacity
             style={{position: 'absolute', right: SIZES.ten}}
             onPress={() => {

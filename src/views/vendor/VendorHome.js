@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {FONTS, SIZES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
@@ -142,7 +142,7 @@ export default class VendorHome extends Component {
 
     Axios.get(Constants.getAllJobs, {
       params: {
-        limit: 5,
+        limit: 1,
         offset: 0,
       },
       headers: {
@@ -254,7 +254,8 @@ export default class VendorHome extends Component {
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
-              <TouchableOpacity
+
+              {/* <TouchableOpacity
                 onPress={() => {
                   this.checkLocationPermission();
                 }}
@@ -267,8 +268,9 @@ export default class VendorHome extends Component {
                     resizeMode: 'contain',
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
+
             <TouchableOpacity
               style={{
                 marginVertical: SIZES.ten,
@@ -286,7 +288,7 @@ export default class VendorHome extends Component {
                 style={{height: SIZES.fifty, width: SIZES.fifty}}
               />
             </TouchableOpacity>
-            <View
+            {/* <View
               style={{
                 paddingHorizontal: SIZES.twenty,
                 flexDirection: 'row',
@@ -330,17 +332,16 @@ export default class VendorHome extends Component {
                 // for android
                 paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
               }}
-            />
+            /> */}
             <View
               style={{
                 paddingHorizontal: SIZES.twenty,
-                paddingTop: SIZES.twenty,
+                paddingVertical: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <RegularTextCB
-                style={{fontSize: SIZES.twenty, color: Colors.black}}>
+              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
                 Jobs For You
               </RegularTextCB>
 
@@ -359,7 +360,85 @@ export default class VendorHome extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={{}}>
+
+            <View style={{paddingHorizontal: SIZES.twenty}}>
+              <FlatList
+                data={this.state.jobAround}
+                // horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={this.renderJobsForYouItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  alignItems: 'center',
+                }}
+              />
+            </View>
+            <View
+              style={{
+                paddingHorizontal: SIZES.twenty,
+                paddingVertical: SIZES.twenty,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                Quick Job
+              </RegularTextCB>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.VendorQuickJob);
+                }}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{paddingHorizontal: SIZES.twenty}}>
+              <FlatList
+                data={this.state.jobAround}
+                // horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={this.renderJobsForYouItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  alignItems: 'center',
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                paddingHorizontal: SIZES.twenty,
+                paddingVertical: SIZES.twenty,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                Bookings
+              </RegularTextCB>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.VenderBookings, {});
+                }}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{paddingHorizontal: SIZES.twenty}}>
               <FlatList
                 data={this.state.jobAround}
                 // horizontal

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES, width} from '../common/Constants';
+import Constants, {SIZES, width, FONTS} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from './LightTextCB';
 import RegularTextCB from './RegularTextCB';
@@ -75,9 +75,10 @@ const ListComponent = (props) => {
           ${item.price}
         </LightTextCB>
       </View>
-      <View style={{width: SIZES.ten * 35}}>
+      <View style={{}}>
         <RegularTextCB style={{color: Colors.coolGrey}}>
-          {item.description}
+          Looking for a car mechanic that can look into the battery setup. The
+          car is in a still position & would require some man power
         </RegularTextCB>
       </View>
       <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
@@ -112,11 +113,8 @@ const ListComponent = (props) => {
             }}>
             {item.time}
           </RegularTextCB>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-            }}>
-            {'Contact >'}
+          <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+            {'View Job >'}
           </RegularTextCB>
         </View>
       </View>
@@ -139,9 +137,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   card: {
+    // width: width - 30,
     backgroundColor: '#fff',
-    borderRadius: 20,
-    width: width - SIZES.fifteen,
+    borderRadius: SIZES.ten * 2,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

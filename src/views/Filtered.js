@@ -32,7 +32,7 @@ export default class FileredScreen extends Component {
       currentLong: '',
     };
 
-    console.log('==========', this.props.route.params);
+    //console.log('==========', this.props.route.params);
   }
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -57,21 +57,19 @@ export default class FileredScreen extends Component {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       } else {
-        // //console.log('location permission denied');
+        // ////console.log('location permission denied');
         this.setState({permissionModalVisibility: true});
       }
     } catch (err) {
-      //console.log('getLocation catch: ==================> ', err);
+      ////console.log('getLocation catch: ==================> ', err);
     }
   };
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      let latitude = data.data.records.userProfile.latitude;
-      let longitude = data.data.records.userProfile.longitude;
       let type = data.data.records.type;
 
-      console.log('Type ===== ', type);
+      //console.log('Type ===== ', type);
 
       this.getFilterData(type);
     };
@@ -101,6 +99,8 @@ export default class FileredScreen extends Component {
         //   1500,
         // );
 
+        console.log('Filterd Geo Location === ===', position.coords);
+
         this.setState({
           currentLat: position.coords.latitude,
           currentLong: position.coords.longitude,
@@ -109,7 +109,7 @@ export default class FileredScreen extends Component {
         // this.getUserProfile();
       },
       (error) => {
-        // console.log(
+        // //console.log(
         //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
         //   error,
         // );
@@ -118,7 +118,7 @@ export default class FileredScreen extends Component {
 
     // watchID = Geolocation.watchPosition((position) => {
     //   const lastPosition = JSON.stringify(position);
-    //   //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    //   ////console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     // });
   };
 
@@ -150,10 +150,7 @@ export default class FileredScreen extends Component {
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log(
-        '======================== Filtered Data =================',
-        data,
-      );
+      //console.log('======================== Filtered Data =================', data, );
       //   utils.showToast(data.message);
       this.setState({isLoading: false, allJobs: data.data});
 
@@ -165,11 +162,7 @@ export default class FileredScreen extends Component {
     };
 
     const onFailure = (error) => {
-      //
-      console.log(
-        '=========================== Filtered Error ===================',
-        error,
-      );
+      //console.log('=========================== Filtered Error ===================', error,);
 
       utils.showResponseError(error.massage);
       this.setState({isLoading: false});
@@ -185,7 +178,7 @@ export default class FileredScreen extends Component {
   };
 
   renderSingleCategoriesItem = ({item}) => {
-    // console.log('Filter Data item ===== ', item);
+    // //console.log('Filter Data item ===== ', item);
     return <FilterComponant item={item} />;
   };
 

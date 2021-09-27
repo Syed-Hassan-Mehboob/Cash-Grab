@@ -96,6 +96,7 @@ const Images = {
   cashGrabLogoNew: require('../assets/cashgrablogonew.png'),
   cashGrabLogoNew2: require('../assets/cashgrablogonew2.png'),
   visa: require('../assets/visa.png'),
+  bookings: require('../assets/bookings.png'),
 };
 
 export default Images;
