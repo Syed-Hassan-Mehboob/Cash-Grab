@@ -29,6 +29,8 @@ import VenderFileredScreen from '../vendor/VenderFiltered';
 import ViewVendorProfile from '../ViewVendorProfile';
 import BookingAcceptance from '../vendor/BookingAcceptance';
 import BookingConfirmed2 from '../vendor/BookingConfirmed2';
+import VendorBookings from '../vendor/Bookings';
+import VendorQuickJobs from '../vendor/QuickJob';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -39,7 +41,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.vendorHome}
+      initialRouteName={Constants.splash}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
@@ -70,6 +72,14 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
+      />
+      <HomeStack.Screen
+        name={Constants.VenderBookings}
+        component={VendorBookings}
+      />
+      <HomeStack.Screen
+        name={Constants.VendorQuickJob}
+        component={VendorQuickJobs}
       />
       <HomeStack.Screen
         name={Constants.termsAndConditionsScreen}

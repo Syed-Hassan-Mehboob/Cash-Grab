@@ -131,6 +131,7 @@ export default class VendorProfile extends React.Component {
     customer: '',
     services: [],
     review: [],
+    abouteMe: '',
   };
 
   componentDidMount() {
@@ -183,6 +184,7 @@ export default class VendorProfile extends React.Component {
         services: data.data.records.services,
         review: data.data.records.comments,
         customer: data.data.records.customer,
+        abuteMe: data.data.records.userProfile.about_me,
       });
     };
 
@@ -446,9 +448,11 @@ export default class VendorProfile extends React.Component {
                 fontSize: 16,
                 textAlign: 'center',
                 marginTop: SIZES.five,
-              }}>
-              Hello there i am a professional car mechanic,{'\n'}I have 8 years
-              of experience so feel free{'\n'}to contact me.
+              }}
+              numberOfLines={2}>
+              {this.state.abouteMe != null
+                ? this.state.abouteMe
+                : 'Aboute Me is Not Define '}
             </RegularTextCB>
           </View>
           <View

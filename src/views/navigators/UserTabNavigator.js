@@ -29,6 +29,7 @@ import ChangePassword from '../ChangePassword';
 import Filtered from '../Filtered';
 import ViewJob from '../vendor/ViewJob';
 import QuickNotify from '../../components/QuickNotify';
+import UserHome from '../UserHome';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -38,11 +39,12 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.home}
+      initialRouteName={Constants.UserHome}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
       }}>
+      <HomeStack.Screen name={Constants.UserHome} component={UserHome} />
       <HomeStack.Screen name={Constants.home} component={Home} />
       <HomeStack.Screen name={Constants.search} component={Search} />
       <HomeStack.Screen

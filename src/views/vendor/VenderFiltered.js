@@ -31,7 +31,7 @@ export default class VenderFileredScreen extends Component {
       currentLong: '',
     };
 
-    // console.log('==========', this.props.route.params);
+    // //console.log('==========', this.props.route.params);
   }
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -65,11 +65,13 @@ export default class VenderFileredScreen extends Component {
           currentLong: position.coords.longitude,
         });
 
+        //console.log('Geo Location Filter data ====== === =', position.coords);
+
         this.getUserProfile();
-        // console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        // //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
       (error) => {
-        // console.log(
+        // //console.log(
         //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
         //   error,
         // );
@@ -78,7 +80,7 @@ export default class VenderFileredScreen extends Component {
 
     // watchID = Geolocation.watchPosition((position) => {
     //   const lastPosition = JSON.stringify(position);
-    //   //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    //   ////console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     // });
   };
 
@@ -88,7 +90,7 @@ export default class VenderFileredScreen extends Component {
       let longitude = data.data.records.userProfile.longitude;
       let type = data.data.records.type;
 
-      // console.log('Type ===== ', type);
+      // //console.log('Type ===== ', type);
 
       this.getFilterData(type);
     };
@@ -128,12 +130,12 @@ export default class VenderFileredScreen extends Component {
       lng: this.state.currentLong,
     };
 
-    // console.log('Post Data  ===== ',postData)
+    // //console.log('Post Data  ===== ',postData)
 
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      // console.log('========================Filter Data==', data);
+      // //console.log('========================Filter Data==', data);
 
       if (data.status === 0) {
         utils.showToast(data.message);
@@ -160,7 +162,7 @@ export default class VenderFileredScreen extends Component {
   };
 
   renderSingleCategoriesItem = ({item}) => {
-    // console.log('Filter Data item Vender  ===== ',item)
+    // //console.log('Filter Data item Vender  ===== ',item)
     return <FilterComponant item={item} />;
   };
 

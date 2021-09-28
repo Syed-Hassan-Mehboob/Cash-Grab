@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,11 +8,11 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import utils from '../utils';
@@ -20,7 +20,7 @@ import Axios from '../network/APIKit';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{ name: Constants.login }],
+  routes: [{name: Constants.login}],
 });
 
 export default class DrawerScreen extends Component {
@@ -48,7 +48,7 @@ export default class DrawerScreen extends Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem(Constants.user);
     var userData = JSON.parse(user);
-  
+
     this.setState(
       {
         isVendor: userData.type === 'vendor',
@@ -59,7 +59,7 @@ export default class DrawerScreen extends Component {
   };
 
   getUserProfile = () => {
-    const onSuccess = ({ data }) => {
+    const onSuccess = ({data}) => {
       this.setState({
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
@@ -86,15 +86,15 @@ export default class DrawerScreen extends Component {
   };
 
   logout() {
-    const onSuccess = ({ data }) => {
-      this.setState({ isLoading: false });
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false});
 
       AsyncStorage.removeItem('user');
       this.props.navigation.dispatch(resetAction);
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
@@ -105,7 +105,7 @@ export default class DrawerScreen extends Component {
       },
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     Axios.get(Constants.logoutURL, options).then(onSuccess).catch(onFailure);
   }
 
@@ -116,12 +116,12 @@ export default class DrawerScreen extends Component {
   };
 
   getUserName() {
-    const { userData } = this.state;
+    const {userData} = this.state;
     if (userData != null) {
       return (
         <RegularTextCB
           numberOfLines={1}
-          style={{ fontSize: 22, fontFamily: Constants.fontBold, color: '#000' }}>
+          style={{fontSize: 22, fontFamily: Constants.fontBold, color: '#000'}}>
           {userData.name}
         </RegularTextCB>
       );
@@ -131,55 +131,66 @@ export default class DrawerScreen extends Component {
   render() {
     return (
       <View style={styles.drawerContainer}>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate(
-
                 this.state.isVendor
-                
                   ? Constants.vendorEditProfile
-
                   : Constants.editProfile,
-                  {
-                  avatar:Constants.imageURL+this.state.avatar,
+                {
+                  avatar: Constants.imageURL + this.state.avatar,
                   name: this.state.name,
                   email: this.state.email,
                   countryCode: this.state.countryCode,
                   phone: this.state.phone,
-                  location:this.state.location,
-                  }
-               
+                  location: this.state.location,
+                },
               )
-            
             }
             style={{
               width: '100%',
               flexDirection: 'row',
-              height: SIZES.ten*11,
-              paddingTop: Platform.OS === 'android' ? SIZES.ten*3 : SIZES.ten*6,
+              height: SIZES.ten * 11,
+              paddingTop:
+                Platform.OS === 'android' ? SIZES.ten * 3 : SIZES.ten * 6,
               paddingBottom: 20,
               alignItems: 'center',
               paddingHorizontal: 25,
             }}>
             <View style={styles.circleCard}>
               <Image
-                source={{ uri: Constants.imageURL + this.state.avatar }}
+                source={{uri: Constants.imageURL + this.state.avatar}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
             </View>
-            <View style={{ flex: 1, paddingHorizontal: SIZES.ten }}>
-              <RegularTextCB style={{ fontSize: 16, color: Colors.sickGreen }}>
+            <View style={{flex: 1, paddingHorizontal: SIZES.ten}}>
+              <RegularTextCB style={{fontSize: 16, color: Colors.sickGreen}}>
                 {this.state.name}
               </RegularTextCB>
-              <RegularTextCB style={{ fontSize: 14, color: Colors.coolGrey }}>
+              <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
                 {this.state.location}
               </RegularTextCB>
             </View>
           </TouchableOpacity>
-          <View style={[styles.formContainer2, { top: SIZES.fifty }]}>
-            <View style={{ flex: 1 }}>
+          <View style={[styles.formContainer2, {top: SIZES.ten * 2}]}>
+            <View style={{flex: 1}}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  padding: SIZES.fifteen,
+                }}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.VenderBookings);
+                }}>
+                <Image source={Images.bookings} style={styles.iconDrawer} />
+                <RegularTextCB style={styles.drawerSubText}>
+                  Bookings
+                </RegularTextCB>
+              </TouchableOpacity>
+
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -197,6 +208,7 @@ export default class DrawerScreen extends Component {
                   Notifications
                 </RegularTextCB>
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -326,12 +338,16 @@ export default class DrawerScreen extends Component {
           animationOutTiming={600}
           backdropTransitionInTiming={600}
           backdropTransitionOutTiming={600}>
-          <View style={{ backgroundColor: Colors.navy, padding: SIZES.fifteen }}>
-            <BoldTextCB style={[{ color: Colors.white, fontSize: 22 }]}>
+          <View style={{backgroundColor: Colors.navy, padding: SIZES.fifteen}}>
+            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
               CashGrab
             </BoldTextCB>
             <RegularTextCB
-              style={{ marginVertical: SIZES.ten, fontSize: 16, color: Colors.white }}>
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.white,
+              }}>
               Are you sure you want to logout?
             </RegularTextCB>
             <View
@@ -359,7 +375,7 @@ export default class DrawerScreen extends Component {
                   backgroundColor: Colors.white,
                   marginEnd: SIZES.five,
                 }}>
-                <RegularTextCB style={{ color: Colors.navy }}>Yes</RegularTextCB>
+                <RegularTextCB style={{color: Colors.navy}}>Yes</RegularTextCB>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -373,7 +389,7 @@ export default class DrawerScreen extends Component {
                   backgroundColor: Colors.white,
                   marginStart: SIZES.five,
                 }}>
-                <RegularTextCB style={{ color: Colors.navy }}>No</RegularTextCB>
+                <RegularTextCB style={{color: Colors.navy}}>No</RegularTextCB>
               </TouchableOpacity>
             </View>
           </View>
@@ -400,24 +416,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.ten,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
   },
   iconDrawer: {
-    width: SIZES.twenty+2,
-    height: SIZES.twenty+2,
+    width: SIZES.twenty + 2,
+    height: SIZES.twenty + 2,
     alignSelf: 'center',
     resizeMode: 'contain',
   },

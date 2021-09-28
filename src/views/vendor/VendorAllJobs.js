@@ -9,7 +9,7 @@ import {
   LogBox,
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
@@ -106,14 +106,14 @@ export default class VendorAllJobs extends Component {
 
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={STYLES.container}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten,
+            padding: SIZES.ten * 2,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.ten,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: SIZES.ten}}
@@ -126,12 +126,12 @@ export default class VendorAllJobs extends Component {
             />
           </TouchableOpacity>
 
-          <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
-            View All Jobs
+          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
+            All Jobs
           </RegularTextCB>
         </View>
 
-        <View>
+        <View style={{paddingHorizontal: SIZES.twenty}}>
           <FlatList
             style={{marginTop: SIZES.ten}}
             data={this.state.allJobsAround}

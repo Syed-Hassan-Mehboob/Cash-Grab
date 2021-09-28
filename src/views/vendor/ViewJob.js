@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Colors from '../../common/Colors';
-import Constants, {height, SIZES} from '../../common/Constants';
+import Constants, {height, SIZES, STYLES, FONTS} from '../../common/Constants';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
@@ -122,15 +122,15 @@ export default class ViewJob extends React.Component {
     });
 
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            // width: '100%',
+            padding: SIZES.ten * 2,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: SIZES.ten}}
@@ -139,10 +139,11 @@ export default class ViewJob extends React.Component {
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
+          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
             View Job
           </RegularTextCB>
         </View>
+
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: SIZES.five}}>
             <View style={{padding: SIZES.twenty}}>

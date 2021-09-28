@@ -7143,6 +7143,7 @@ react-native-star-rating@^1.1.0:
     react-native-button "^2.3.0"
     react-native-vector-icons "^4.5.0"
 
+<<<<<<< HEAD
 react-native-svg@^12.1.1:
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.1.1.tgz#5f292410b8bcc07bbc52b2da7ceb22caf5bcaaee"
@@ -7159,6 +7160,12 @@ react-native-svg@^6.3.1:
     color "^2.0.1"
     lodash "^4.16.6"
     pegjs "^0.10.0"
+=======
+react-native-status-bar-height@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.6.0.tgz#b6afd25b6e3d533c43d0fcdcfd5cafd775592cea"
+  integrity sha512-z3SGLF0mHT+OlJDq7B7h/jXPjWcdBT3V14Le5L2PjntjjWM3+EJzq2BcXDwV+v67KFNJic5pgA26cCmseYek6w==
+>>>>>>> bb1012c9889b0ff407904cd04b387ee168e71f36
 
 react-native-swipe-gestures@^1.0.5:
   version "1.0.5"

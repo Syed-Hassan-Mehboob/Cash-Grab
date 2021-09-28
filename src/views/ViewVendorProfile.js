@@ -42,6 +42,7 @@ export default class ViewVendorProfile extends React.Component {
       location: '',
       customer: '',
       typeReview: '',
+      abouteMe: '',
     };
   }
 
@@ -87,6 +88,7 @@ export default class ViewVendorProfile extends React.Component {
         services: data.data.records.services,
         review: data.data.records.comments,
         isLoading: false,
+        abouteMe: data.data.records.userProfile.about_me,
       });
       this.setState({
         isLoading: false,
@@ -382,9 +384,11 @@ export default class ViewVendorProfile extends React.Component {
                 fontSize: 16,
                 textAlign: 'center',
                 marginTop: SIZES.five,
-              }}>
-              Hello there i am a professional car mechanic,{'\n'}I have 8 years
-              of experience so feel free{'\n'}to contact me.
+              }}
+              numberOfLines={2}>
+              {this.state.abouteMe != null
+                ? this.state.abouteMe
+                : 'Aboute Me is Not Define '}
             </RegularTextCB>
           </View>
           <View
