@@ -215,8 +215,9 @@ export default function BookingAcceptance(props) {
               backgroundColor: Colors.sickGreen,
               marginRight: SIZES.ten,
               padding: SIZES.fifteen,
-              paddingHorizontal: SIZES.twentyFive,
               borderRadius: SIZES.ten,
+              width: SIZES.fifty * 1.7,
+              alignItems: 'center',
             }}>
             <BoldTextCB>Accept</BoldTextCB>
           </TouchableOpacity>
@@ -226,7 +227,6 @@ export default function BookingAcceptance(props) {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginVertical: SIZES.fifteen,
             justifyContent: 'space-between',
           }}>
           <View
@@ -241,7 +241,6 @@ export default function BookingAcceptance(props) {
               disabled={true}
               maxStars={5}
               fullStar={Images.starFull}
-              // halfStar={Images.starHalf}
               emptyStar={Images.starHalf}
               starSize={SIZES.fifteen}
               rating={4}
@@ -268,8 +267,9 @@ export default function BookingAcceptance(props) {
               backgroundColor: Colors.coolGrey,
               marginRight: SIZES.ten,
               padding: SIZES.fifteen,
-              paddingHorizontal: SIZES.twentyFive,
               borderRadius: SIZES.ten,
+              width: SIZES.fifty * 1.7,
+              alignItems: 'center',
             }}>
             <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
           </TouchableOpacity>
