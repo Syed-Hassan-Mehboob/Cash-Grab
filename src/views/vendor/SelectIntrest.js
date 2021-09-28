@@ -67,7 +67,7 @@ export default function SelectIntrest(props) {
     );
   };
 
-  console.log('========', isSelected);
+  //   console.log('========', isSelected);
   return (
     <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
       <View
