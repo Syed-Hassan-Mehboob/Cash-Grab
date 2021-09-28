@@ -183,11 +183,15 @@ export default class DrawerScreen extends Component {
                   padding: SIZES.fifteen,
                 }}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.VenderBookings);
+                  {
+                    this.state.isVendor
+                      ? this.props.navigation.navigate(Constants.VenderBookings)
+                      : null;
+                  }
                 }}>
                 <Image source={Images.bookings} style={styles.iconDrawer} />
                 <RegularTextCB style={styles.drawerSubText}>
-                  Bookings
+                  {this.state.isVendor ? 'Bookings' : 'Schedule Bookings'}
                 </RegularTextCB>
               </TouchableOpacity>
 

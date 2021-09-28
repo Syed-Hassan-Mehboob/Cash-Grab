@@ -41,7 +41,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.BookingAcceptance}
+      initialRouteName={Constants.splash}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,

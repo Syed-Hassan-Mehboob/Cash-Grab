@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, width} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from './LightTextCB';
 import RegularTextCB from './RegularTextCB';
@@ -10,115 +10,109 @@ import {useNavigation} from '@react-navigation/native';
 const ListComponent = (props) => {
   const navigation = useNavigation();
   const item = props.item;
-  // console.log('List Componant=======',item.user.userProfile);
+  // console.log('List Componant=======', item );
   return (
     <TouchableOpacity
-      activeOpacity={0.5}
-      style={[styles.card, {padding: SIZES.fifteen, margin: SIZES.five}]}
-      onPress={() =>
-        navigation.navigate(Constants.viewJob, {
+      activeOpacity={0.8}
+      style={[
+        styles.card,
+        {
+          padding: SIZES.ten,
+          marginHorizontal: SIZES.fifteen,
+          marginBottom: SIZES.twenty,
+          marginTop: SIZES.five,
+        },
+      ]}
+      onPress={() => {
+        this.props.navigation.navigate(Constants.viewVendorProfile, {
           item: item.id,
-        })
-      }>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <View style={styles.circleCard}>
-          <Image
-            source={{uri: Constants.imageURL + item.image}}
-            style={styles.iconUser}
-            resizeMode="cover"
-          />
-        </View>
-        <View style={{marginStart: 10}}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.name}
-          </RegularTextCB>
-          <View
-            style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-            <Image
-              source={Images.iconVerified}
-              style={{
-                height: 15,
-                width: 15,
-                resizeMode: 'contain',
-                tintColor:
-                  item.email_verified_at !== null
-                    ? Colors.turqoiseGreen
-                    : 'red',
-              }}
-            />
-            <RegularTextCB
-              style={{
-                color:
-                  item.email_verified_at !== null
-                    ? Colors.turqoiseGreen
-                    : 'red',
-                fontSize: 12,
-                marginStart: 5,
-              }}>
-              {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
-            </RegularTextCB>
-          </View>
-        </View>
-      </View>
+        });
+      }}>
       <View
         style={{
           flexDirection: 'row',
-          marginTop: 5,
           alignItems: 'center',
-          justifyContent: 'space-between',
         }}>
-        <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-          {item.title}
-        </RegularTextCB>
-
-        <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-          ${item.price}
-        </LightTextCB>
-      </View>
-      <View style={{width: SIZES.ten * 35}}>
-        <RegularTextCB style={{color: Colors.coolGrey}}>
-          {item.description}
-        </RegularTextCB>
-      </View>
-      <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
         <Image
-          source={Images.iconLocationPin}
-          style={{height: 17, width: 17, resizeMode: 'contain'}}
+          source={{uri: Constants.imageURL + item.image}}
+          style={{
+            height: width * 0.12,
+            width: width * 0.12,
+            borderRadius: width * 0.12,
+          }}
+          resizeMode="cover"
+        />
+        {/* <View style={styles.circleCard}>
+   
+          </View> */}
+        <RegularTextCB
+          style={{
+            color: Colors.black,
+            textDecorationLine: 'underline',
+            marginStart: SIZES.five,
+            fontSize: 14,
+          }}>
+          View Profile
+        </RegularTextCB>
+      </View>
+      <RegularTextCB
+        style={{
+          color: Colors.black,
+          marginTop: SIZES.ten,
+          fontSize: 14,
+        }}>
+        {/* {item.name} */}
+      </RegularTextCB>
+
+      <View style={{flexDirection: 'row', marginTop: SIZES.five}}>
+        <Image
+          source={Images.iconVerified}
+          style={{
+            height: SIZES.fifteen,
+            width: SIZES.fifteen,
+            resizeMode: 'contain',
+            tintColor:
+              item.email_verified_at !== null ? Colors.turqoiseGreen : 'red',
+          }}
         />
         <RegularTextCB
           style={{
-            color: Colors.coolGrey,
-            marginStart: 5,
+            color: Colors.turqoiseGreen,
+            fontSize: 12,
+            marginStart: SIZES.five,
           }}>
-          {item.address}
+          {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
         </RegularTextCB>
       </View>
-      <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+      <RegularTextCB
+        style={{
+          color: Colors.coolGrey,
+          marginTop: SIZES.five,
+        }}>
+        {item.categroy}
+      </RegularTextCB>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
         <Image
-          source={Images.iconStopWatch}
-          style={{height: 17, width: 17, resizeMode: 'contain'}}
-        />
-        <View
+          source={Images.star}
           style={{
-            flexDirection: 'row',
-            marginStart: 5,
-            alignItems: 'center',
-            flex: 1,
-            justifyContent: 'space-between',
+            height: SIZES.fifteen,
+            width: SIZES.fifteen,
+            resizeMode: 'contain',
+            tintColor: Colors.orangeYellow,
+          }}
+        />
+        <RegularTextCB
+          style={{
+            fontSize: 14,
+            color: Colors.orangeYellow,
+            marginStart: 2,
           }}>
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-            }}>
-            {item.time}
-          </RegularTextCB>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-            }}>
-            {'Contact >'}
-          </RegularTextCB>
-        </View>
+          1.0
+        </RegularTextCB>
       </View>
     </TouchableOpacity>
   );

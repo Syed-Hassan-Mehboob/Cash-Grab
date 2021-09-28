@@ -273,20 +273,13 @@ export default class Filter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-                if (
-                  this.state.selectedLocation &&
-                  this.state.selectedLocation &&
-                  this.state.selectedLocation != null
-                ) {
-                  this.props.navigation.navigate(Constants.Filtered, {
-                    id: this.state.selectedCategory.id,
-                    minPrice: this.state.minPrice,
-                    maxPrice: this.state.maxPrice,
-                    location: this.state.selectedLocation.name,
-                  });
-                } else {
-                  utils.showToast('Please Select Filter Data');
-                }
+                console.log('========', this.state.maxPrice);
+                this.props.navigation.navigate(Constants.Filtered, {
+                  selectedCategory: this.state.selectedCategory,
+                  minPrice: this.state.minPrice,
+                  maxPrice: this.state.maxPrice,
+                  location: this.state.selectedLocation,
+                });
               }}
             />
           </View>

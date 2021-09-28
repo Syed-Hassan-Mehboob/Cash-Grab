@@ -125,24 +125,35 @@ export default class FileredScreen extends Component {
   getFilterData = (type) => {
     const postData = {
       type: type,
-      categoryId: this.props.route.params.id,
+
+      categoryId:
+        this.props.route.params.selectedCategory !== undefined
+          ? this.props.route.params.selectedCategory.id
+          : '',
+
       min_price:
         this.props.route.params.minPrice !== null &&
-        this.props.route.params.minPrice !== undefined
+        this.props.route.params.minPrice !== undefined &&
+        this.props.route.params.minPrice !== ''
           ? this.props.route.params.minPrice
-          : null,
+          : 0,
+
       max_price:
         this.props.route.params.maxPrice !== null &&
-        this.props.route.params.maxPrice !== undefined
+        this.props.route.params.maxPrice !== undefined &&
+        this.props.route.params.maxPrice !== ''
           ? this.props.route.params.maxPrice
-          : null,
-      location:
+          : 0,
+      distance:
         this.props.route.params.location !== null &&
         this.props.route.params.location !== undefined
-          ? this.props.route.params.location
-          : null,
-      lat: this.state.currentLat,
-      lng: this.state.currentLong,
+          ? this.props.route.params.location.name
+          : 0,
+
+      // lat: this.state.currentLat,
+      // lng: this.state.currentLong,
+      lat: 22.90628280557342,
+      lng: 67.07237028142383,
     };
 
     console.log('Post Data  ===== ', postData);
@@ -150,7 +161,10 @@ export default class FileredScreen extends Component {
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      //console.log('======================== Filtered Data =================', data, );
+      console.log(
+        '======================== Filtered Data =================',
+        data,
+      );
       //   utils.showToast(data.message);
       this.setState({isLoading: false, allJobs: data.data});
 
@@ -162,10 +176,13 @@ export default class FileredScreen extends Component {
     };
 
     const onFailure = (error) => {
-      //console.log('=========================== Filtered Error ===================', error,);
-
-      utils.showResponseError(error.massage);
+      console.log(
+        '=========================== Filtered Error ===================',
+        error,
+      );
       this.setState({isLoading: false});
+
+      // utils.showResponseError(error.massage);
     };
     const options = {
       headers: {
