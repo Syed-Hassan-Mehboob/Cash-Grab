@@ -280,6 +280,11 @@ const styles = StyleSheet.create({
   },
   itemInvisible: {
     backgroundColor: 'transparent',
+    padding: 15,
+    marginHorizontal: SIZES.five,
+    marginBottom: SIZES.twenty,
+    marginTop: SIZES.five,
+    alignItems: 'center',
   },
   item: {
     backgroundColor: '#fff',
@@ -287,6 +292,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     margin: 1,
-    height: Dimensions.get('window').width / 2, // approximate a square
   },
 });

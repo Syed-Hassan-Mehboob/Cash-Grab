@@ -21,6 +21,7 @@ import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import Geolocation from '@react-native-community/geolocation';
+import {Dimensions} from 'react-native';
 
 export default class Home extends Component {
   constructor(props) {
@@ -284,8 +285,26 @@ export default class Home extends Component {
     );
   };
 
+  formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
+      numberOfElementsLastRow++;
+    }
+
+    return data;
+  };
+
   renderVendorsAroundYouItem = ({item}) => {
     // ////console.log('Vender item ======', item);
+
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -638,8 +657,8 @@ export default class Home extends Component {
             <FlatList
               numColumns={2}
               // horizontal
-              data={this.state.vendorAround}
-              keyExtractor={(item) => item.id.toString()}
+              data={this.formatData(this.state.vendorAround, 2)}
+              keyExtractor={(index) => index}
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
             />
@@ -661,22 +680,6 @@ export default class Home extends Component {
             />
           </View>
         </ScrollView>
-        <TouchableOpacity
-          style={{
-            padding: SIZES.ten,
-            backgroundColor: Colors.navy,
-            borderRadius: SIZES.ten,
-            position: 'absolute',
-            bottom: SIZES.fifteen,
-            right: SIZES.fifteen,
-          }}
-          onPress={() => {
-            this.props.navigation.navigate(Constants.QuickNotify);
-          }}>
-          <RegularTextCB style={{color: Colors.white}}>
-            Quick Service
-          </RegularTextCB>
-        </TouchableOpacity>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
@@ -804,6 +807,22 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
+  },
+
+  item: {
+    backgroundColor: '#4D243D',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 1,
+    // height: Dimensions.get('window').width / 2, // approximate a square
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+    padding: SIZES.ten,
+    marginHorizontal: SIZES.fifteen,
+    marginBottom: SIZES.twenty,
+    marginTop: SIZES.five,
   },
 });
 

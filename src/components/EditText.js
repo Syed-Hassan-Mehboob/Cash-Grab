@@ -12,6 +12,7 @@ export default class EditText extends Component {
   state = {
     secureText: true,
     eyeIcon: 'eye-off',
+    borderColor: 'transparent',
   };
 
   changePasswordState(secureTextEntry = false) {
@@ -34,12 +35,19 @@ export default class EditText extends Component {
       isEditable = true,
     } = this.props;
     return (
-      <View style={[styles.card, this.props.style]}>
+      <View
+        style={[
+          styles.card,
+          this.props.style,
+          {borderColor: this.state.borderColor, borderWidth: 1},
+        ]}>
         <TextInput
           secureTextEntry={secureTextEntry ? this.state.secureText : null}
           placeholderTextColor={Colors.grey}
           autoCapitalize="none"
           blurOnSubmit={true}
+          onFocus={() => this.setState({borderColor: Colors.sickGreen})}
+          onBlur={() => this.setState({borderColor: 'transparent'})}
           selectionColor={Colors.sickGreen}
           placeholder={placeholder}
           keyboardType={keyboardType}
