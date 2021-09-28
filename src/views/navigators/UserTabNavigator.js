@@ -166,7 +166,11 @@ const Tabs = () => {
         options={{
           tabBarIcon: ({focused, color}) => (
             <Image
-              source={focused ? Images.barHomeSelected : Images.barHome}
+              source={
+                focused
+                  ? Images.IconStopWatchSelected
+                  : Images.IconStopWatchUnSelected
+              }
               style={{
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,

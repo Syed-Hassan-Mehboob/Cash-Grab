@@ -97,6 +97,8 @@ const Images = {
   cashGrabLogoNew2: require('../assets/cashgrablogonew2.png'),
   visa: require('../assets/visa.png'),
   bookings: require('../assets/bookings.png'),
+  IconStopWatchSelected: require('../assets/IconStopWatchSelected.png'),
+  IconStopWatchUnSelected: require('../assets/IconStopWatchUnSelected.png'),
 };
 
 export default Images;
