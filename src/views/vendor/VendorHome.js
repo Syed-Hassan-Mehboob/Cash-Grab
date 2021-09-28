@@ -246,11 +246,7 @@ export default class VendorHome extends Component {
                   Welcome,
                 </RegularTextCB>
                 <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    marginStart: SIZES.five - 2,
-                    color: Colors.sickGreen,
-                  }}>
+                  style={[FONTS.boldFont18, {color: Colors.black}]}>
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>

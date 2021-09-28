@@ -31,7 +31,8 @@ import BookingAcceptance from '../vendor/BookingAcceptance';
 import BookingConfirmed2 from '../vendor/BookingConfirmed2';
 import VendorBookings from '../vendor/Bookings';
 import VendorQuickJobs from '../vendor/QuickJob';
-
+import SelectIntrest from '../vendor/SelectIntrest';
+import SelectIndustry from '../vendor/SelectIndustry';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
@@ -41,7 +42,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.splash}
+      initialRouteName={Constants.SelectIntrest}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
@@ -69,6 +70,14 @@ const HomeNavigator = () => {
         component={VenderFileredScreen}
       />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
+      <HomeStack.Screen
+        name={Constants.SelectIntrest}
+        component={SelectIntrest}
+      />
+      <HomeStack.Screen
+        name={Constants.SelectIndustry}
+        component={SelectIndustry}
+      />
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}

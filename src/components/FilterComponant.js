@@ -7,24 +7,24 @@ import LightTextCB from './LightTextCB';
 import RegularTextCB from './RegularTextCB';
 import {useNavigation} from '@react-navigation/native';
 
-const ListComponent = (props) => {
+const FilterComponent = (props) => {
   const navigation = useNavigation();
   const item = props.item;
-  // console.log('List Componant=======', item );
+  console.log('List Componant=======', item);
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={[
         styles.card,
         {
-          padding: SIZES.ten,
+          padding: SIZES.ten * 3.5,
           marginHorizontal: SIZES.fifteen,
           marginBottom: SIZES.twenty,
           marginTop: SIZES.five,
         },
       ]}
       onPress={() => {
-        this.props.navigation.navigate(Constants.viewVendorProfile, {
+        navigation.navigate(Constants.viewVendorProfile, {
           item: item.id,
         });
       }}>
@@ -61,7 +61,7 @@ const ListComponent = (props) => {
           marginTop: SIZES.ten,
           fontSize: 14,
         }}>
-        {/* {item.name} */}
+        {item.name}
       </RegularTextCB>
 
       <View style={{flexDirection: 'row', marginTop: SIZES.five}}>
@@ -118,7 +118,7 @@ const ListComponent = (props) => {
   );
 };
 
-export default ListComponent;
+export default FilterComponent;
 
 const styles = StyleSheet.create({
   conatiner: {},
@@ -135,8 +135,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    // flex: 1,
-    width: SIZES.ten * 50,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

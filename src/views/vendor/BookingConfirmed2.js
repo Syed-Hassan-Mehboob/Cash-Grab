@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import {SIZES, width} from '../../common/Constants';
+import Constants, {SIZES, width} from '../../common/Constants';
 import BoldTextCB from '../../components/BoldTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
+import {Icon} from 'native-base';
 
-export default function BookingConfirmed2() {
+export default function BookingConfirmed2(props) {
   return (
     <View style={styles.container}>
       <View
@@ -27,9 +28,13 @@ export default function BookingConfirmed2() {
         <TouchableOpacity
           style={{position: 'absolute', left: 0}}
           onPress={() => {
-            props.navigation.goBack();
+            props.navigation.navigate(Constants.VenderBookings);
           }}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
+          <Icon
+            type="AntDesign"
+            name="left"
+            style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+          />
         </TouchableOpacity>
         <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
           Booking Confirmed
@@ -295,11 +300,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.twenty,
     paddingTop: SIZES.twenty,
   },
-  iconBack: {
-    height: SIZES.twenty,
-    width: SIZES.twenty,
-    resizeMode: 'contain',
-  },
+
   card: {
     backgroundColor: '#fff',
     borderRadius: 10,

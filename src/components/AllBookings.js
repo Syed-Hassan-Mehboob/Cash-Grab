@@ -21,12 +21,7 @@ const AllBookings = (props) => {
           margin: SIZES.five,
         },
       ]}
-      //   onPress={() =>
-      //     navigation.navigate(Constants.viewJob, {
-      //       item: item.id,
-      //     })
-      //   }
-    >
+      onPress={() => navigation.navigate(Constants.BookingAcceptance)}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={styles.circleCard}>
           <Image

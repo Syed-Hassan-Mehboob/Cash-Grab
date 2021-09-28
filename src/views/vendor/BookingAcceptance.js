@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import {SIZES, width} from '../../common/Constants';
+import Constants, {SIZES, width} from '../../common/Constants';
 import BoldTextCB from '../../components/BoldTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
+import {Icon} from 'native-base';
 
 export default function BookingAcceptance(props) {
   return (
@@ -29,7 +30,11 @@ export default function BookingAcceptance(props) {
           onPress={() => {
             props.navigation.goBack();
           }}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
+          <Icon
+            type="AntDesign"
+            name="left"
+            style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+          />
         </TouchableOpacity>
         <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
           Booking Acceptance
@@ -218,6 +223,10 @@ export default function BookingAcceptance(props) {
               borderRadius: SIZES.ten,
               width: SIZES.fifty * 1.7,
               alignItems: 'center',
+            }}
+            activeOpacity={0.6}
+            onPress={() => {
+              props.navigation.navigate(Constants.bookingConfirmed);
             }}>
             <BoldTextCB>Accept</BoldTextCB>
           </TouchableOpacity>
@@ -270,7 +279,11 @@ export default function BookingAcceptance(props) {
               borderRadius: SIZES.ten,
               width: SIZES.fifty * 1.7,
               alignItems: 'center',
-            }}>
+            }}
+            onPress={() => {
+              props.navigation.navigate(Constants.VenderBookings);
+            }}
+            activeOpacity={0.6}>
             <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
           </TouchableOpacity>
         </View>

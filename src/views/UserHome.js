@@ -60,7 +60,7 @@ export default class UserHome extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      this.getServies();
+      // this.getServies();
     });
   };
 
@@ -137,18 +137,18 @@ export default class UserHome extends Component {
     );
   };
 
-  getServies = () => {
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      this.setState({selections: data.data.records});
-      this.setState({isLoading: false});
-    };
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-    Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
-  };
+  // getServies = () => {
+  //   this.setState({isLoading: true});
+  //   const onSuccess = ({data}) => {
+  //     this.setState({selections: data.data.records});
+  //     this.setState({isLoading: false});
+  //   };
+  //   const onFailure = (error) => {
+  //     this.setState({isLoading: false});
+  //     utils.showResponseError(error);
+  //   };
+  //   Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
+  // };
 
   handleConfirm = (date) => {
     const newTime = Moment(date).format('h:mm:ss');
@@ -393,13 +393,12 @@ export default class UserHome extends Component {
 
           <View
             style={[
-              styles.card,
               {
                 marginTop: SIZES.ten,
                 height: SIZES.twentyFive * 5,
               },
             ]}>
-            <TextInput
+            <EditText
               placeholderTextColor={Colors.grey}
               autoCapitalize="none"
               blurOnSubmit={true}
@@ -409,7 +408,8 @@ export default class UserHome extends Component {
               placeholderTextColor={Colors.coolGrey}
               numberOfLines={4}
               multiline={true}
-              style={{
+              style={{height: SIZES.twentyFive * 5}}
+              styles={{
                 flex: 1,
                 textAlignVertical: 'top',
               }}
@@ -427,7 +427,7 @@ export default class UserHome extends Component {
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
             onPress={() => {
-              this.postQuickOrder();
+              // this.postQuickOrder();
             }}
           />
         </View>

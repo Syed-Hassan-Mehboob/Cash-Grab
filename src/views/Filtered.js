@@ -194,8 +194,23 @@ export default class FileredScreen extends Component {
       .catch(onFailure);
   };
 
+  formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
+      numberOfElementsLastRow++;
+    }
+
+    return data;
+  };
   renderSingleCategoriesItem = ({item}) => {
-    // //console.log('Filter Data item ===== ', item);
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
     return <FilterComponant item={item} />;
   };
 
@@ -230,9 +245,10 @@ export default class FileredScreen extends Component {
           </RegularTextCB>
         </View>
 
-        <FlatList
+        {/* <FlatList
           style={{marginTop: SIZES.ten}}
           data={this.state.allJobs}
+          numColumns={2}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}
@@ -242,8 +258,25 @@ export default class FileredScreen extends Component {
           }}
           contentContainerStyle={{
             // for android
-            paddingBottom: SIZES.twenty,
+            // paddingBottom: SIZES.twenty,
             alignItems: 'center',
+          }}
+        /> */}
+
+        <FlatList
+          numColumns={2}
+          data={this.formatData(this.state.allJobs, 2)}
+          keyExtractor={(index) => index}
+          renderItem={this.renderSingleCategoriesItem}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            alignItems: 'center',
+            marginTop: SIZES.ten * 3,
+            paddingBottom: SIZES.twenty,
+          }}
+          contentInset={{
+            // for ios
+            bottom: SIZES.ten,
           }}
         />
 
@@ -346,6 +379,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
+  },
+  item: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 1,
+    // height: Dimensions.get('window').width / 2, // approximate a square
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+    padding: SIZES.ten,
+    marginHorizontal: SIZES.fifteen,
+    marginBottom: SIZES.twenty,
+    marginTop: SIZES.five,
   },
   spinnerTextStyle: {
     color: '#FFF',

@@ -662,6 +662,7 @@ export default class Home extends Component {
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
             />
+            {/* 
             <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,
@@ -677,7 +678,7 @@ export default class Home extends Component {
               keyExtractor={(item) => item.id.toString()}
               renderItem={this.renderUrgentServicesItem}
               showsHorizontalScrollIndicator={false}
-            />
+            /> */}
           </View>
         </ScrollView>
         <Spinner

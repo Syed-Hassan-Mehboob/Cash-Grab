@@ -58,6 +58,7 @@ export default class EditText extends Component {
           multiline={multiline}
           numberOfLines={numberOfLines}
           editable={isEditable}
+          style={[this.props.styles, {flex: 1}]}
         />
         {secureTextEntry && (
           <TouchableOpacity

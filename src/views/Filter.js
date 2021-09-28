@@ -118,6 +118,7 @@ export default class Filter extends Component {
   };
 
   renderPriceItem = ({item, index}) => {
+    console.log('price ==== ', item.isSelected);
     return (
       <TouchableOpacity
         style={

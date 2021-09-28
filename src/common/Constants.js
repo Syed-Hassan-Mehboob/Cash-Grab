@@ -53,6 +53,8 @@ const Constants = {
   QuickNotify: 'QuickNotify',
   VenderBookings: 'VenderBookings',
   VendorQuickJob: 'VendorQuickJob',
+  SelectIntrest: 'SelectIntrest',
+  SelectIndustry: 'SelectIndustry',
   more: 'More',
   settings: 'Settings',
   /* * drawer * */

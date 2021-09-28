@@ -12,6 +12,8 @@ import COLORS from '../../common/Colors';
 import IMAGES from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import AllBookings from '../../components/AllBookings';
+import {Icon} from 'native-base';
+import Colors from '../../common/Colors';
 
 export default function Bookings(props) {
   return (
@@ -29,7 +31,11 @@ export default function Bookings(props) {
           onPress={() => {
             props.navigation.navigate(Constants.vendorHome);
           }}>
-          <Image source={IMAGES.arrowBack} style={[styles.iconBack]} />
+          <Icon
+            type="AntDesign"
+            name="left"
+            style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+          />
         </TouchableOpacity>
         <RegularTextCB style={[FONTS.boldFont24, {color: COLORS.black}]}>
           Bookings
