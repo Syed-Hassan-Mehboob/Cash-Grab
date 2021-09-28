@@ -6,27 +6,23 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryArea,
-} from 'victory-native';
-// import TouchableGraph from 'react-native-touchable-graph';
+import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import BoldTextCB from '../../components/BoldTextCB';
-import Constants, {SIZES, FONTS, STYLES} from '../../common/Constants';
+import Constants, {SIZES, FONTS, STYLES, width} from '../../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
+import {Easing} from 'react-native-reanimated';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -45,8 +41,10 @@ export default class Dashboard extends Component {
       time: '',
       image: '',
       verfiyAt: '',
+      selectedMonth: {},
     };
   }
+
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
@@ -182,7 +180,7 @@ export default class Dashboard extends Component {
             ${item.price}
           </RegularTextCB>
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             marginTop: SIZES.five,
@@ -203,8 +201,8 @@ export default class Dashboard extends Component {
             }}>
             {item.location}
           </RegularTextCB>
-        </View>
-        <View
+        </View> */}
+        {/* <View
           style={{
             flexDirection: 'row',
             marginTop: SIZES.five,
@@ -239,7 +237,10 @@ export default class Dashboard extends Component {
               {'Contact >'}
             </RegularTextCB>
           </View>
-        </View>
+        </View> */}
+        <Text style={[FONTS.mediumFont12, {color: Colors.sickGreen}]}>
+          Automobile
+        </Text>
       </View>
     );
   };
@@ -402,16 +403,111 @@ export default class Dashboard extends Component {
     );
   };
 
+  barLabel = (labelText) => {
+    return (
+      <View>
+        <Text style={[FONTS.mediumFont12, {color: Colors.barBg}]}>
+          {labelText}
+        </Text>
+      </View>
+    );
+  };
+
+  data = [
+    {
+      value: 70,
+      label: 'Jan',
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      topLabel: 's',
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[0]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[0]['value'],
+        );
+      },
+    },
+    {
+      value: 50,
+      label: 'Feb',
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[1]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[1]['value'],
+        );
+      },
+    },
+    {
+      value: 90,
+      label: 'Mar',
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.black,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[2]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[2]['value'],
+        );
+      },
+    },
+    {
+      label: 'Apr',
+      value: 60,
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[3]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[3]['value'],
+        );
+      },
+    },
+    {
+      label: 'May',
+      value: 20,
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[4]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[4]['value'],
+        );
+      },
+    },
+  ];
+
   render() {
-    // console.log('render data ====== ',this.state.completeJob)
-
-    const data = [
-      {x: 1, y: 13000},
-      {x: 2, y: 16500},
-      {x: 3, y: 14250},
-      {x: 4, y: 19000},
-    ];
-
     return (
       <View style={STYLES.container}>
         <View
@@ -495,10 +591,10 @@ export default class Dashboard extends Component {
               </View>
             </View>
           </View>
-          <View style={{backgroundColor: 'red'}}>
+          <View style={{}}>
             <View
               style={{
-                marginTop: SIZES.twenty,
+                marginTop: SIZES.fifteen,
                 justifyContent: 'space-between',
                 flexDirection: 'row',
                 paddingHorizontal: SIZES.fifteen,
@@ -515,7 +611,45 @@ export default class Dashboard extends Component {
                 ${this.state.withDraw.total}
               </BoldTextCB>
             </View>
+            <View
+              style={{
+                marginTop: SIZES.fifteen,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                paddingHorizontal: SIZES.fifteen,
+              }}>
+              <RegularTextCB style={{fontSize: SIZES.twenty}}>
+                {`Monthly Earnings (${
+                  this.state.selectedMonth.label === undefined
+                    ? ''
+                    : this.state.selectedMonth.label
+                })`}
+              </RegularTextCB>
+              <BoldTextCB
+                style={{
+                  fontSize: SIZES.twenty * 1.2,
+                  marginStart: SIZES.five,
+                  color: Colors.black1,
+                }}>
+                ${this.state.selectedMonth.value}
+              </BoldTextCB>
+            </View>
 
+            <BarChart
+              data={this.data}
+              barWidth={SIZES.twenty * 3.1}
+              hideRules={true}
+              activeOpacity={0.7}
+              animationEasing={Easing.cubic}
+              showYAxisIndices={false}
+              hideYAxisText
+              yAxisIndicesColor={'transparent'}
+              barBorderRadius={SIZES.five * 1.8}
+              intactTopLabel={50}
+              xAxisThickness={0}
+              yAxisThickness={0}
+              initialSpacing={10}
+            />
             {/* <TouchableGraph
               onPressBar={(data) => {
                 console.log(data);
@@ -548,8 +682,7 @@ export default class Dashboard extends Component {
               renderItem={this.renderProgressJob}
             />
           </View> */}
-          <View
-            style={{marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen}}>
+          <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,

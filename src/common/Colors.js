@@ -25,5 +25,6 @@ const Colors = {
   turquoiseBlue: '#05abd0',
   paleGrey: '#eef1ff',
   sickGreen: '#abcf37FF',
+  barBg: '#DDE2E2',
 };
 export default Colors;

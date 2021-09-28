@@ -405,7 +405,7 @@ export default class Home extends Component {
               color: Colors.orangeYellow,
               marginStart: 2,
             }}>
-            1.0
+            1.0 ratings
           </RegularTextCB>
         </View>
       </TouchableOpacity>
@@ -662,8 +662,7 @@ export default class Home extends Component {
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
             />
-            {/* 
-            <RegularTextCB
+            {/* <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,
                 marginTop: SIZES.ten,
