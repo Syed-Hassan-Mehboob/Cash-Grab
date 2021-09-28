@@ -9,6 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryArea,
+} from 'victory-native';
+// import TouchableGraph from 'react-native-touchable-graph';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
@@ -119,13 +126,13 @@ export default class Dashboard extends Component {
             />
           </View>
           <View style={{marginStart: SIZES.ten}}>
-            <RegularTextCB
+            <BoldTextCB
               style={{
                 color: Colors.black,
                 fontSize: 16,
               }}>
               {item.user.name}
-            </RegularTextCB>
+            </BoldTextCB>
             <View
               style={{
                 flexDirection: 'row',
@@ -135,10 +142,10 @@ export default class Dashboard extends Component {
               <Image
                 source={Images.iconVerified}
                 style={{
-                  height: SIZES.fifteen,
-                  width: SIZES.fifteen,
-                  resizeMode: 'contain',
+                  height: SIZES.fifteen * 1.5,
+                  width: SIZES.fifteen * 1.5,
                 }}
+                resizeMode="contain"
               />
               <RegularTextCB
                 style={{
@@ -167,27 +174,14 @@ export default class Dashboard extends Component {
             }}>
             {item.title}
           </RegularTextCB>
-          <LightTextCB
+          <RegularTextCB
             style={{
               color: Colors.black,
-              fontSize: 12,
+              fontSize: 14,
             }}>
             ${item.price}
-          </LightTextCB>
+          </RegularTextCB>
         </View>
-        {/* <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {item.type}
-        </RegularTextCB> */}
-        <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-          }}>
-          {item.description}
-        </RegularTextCB>
         <View
           style={{
             flexDirection: 'row',
@@ -411,6 +405,13 @@ export default class Dashboard extends Component {
   render() {
     // console.log('render data ====== ',this.state.completeJob)
 
+    const data = [
+      {x: 1, y: 13000},
+      {x: 2, y: 16500},
+      {x: 3, y: 14250},
+      {x: 4, y: 19000},
+    ];
+
     return (
       <View style={styles.container}>
         <View
@@ -460,37 +461,77 @@ export default class Dashboard extends Component {
               }}>
               Quick Job
             </RegularTextCB>
-            {/* <View style={{ marginTop: SIZES.ten }}>
-              <ButtonRadius10
-                label="1 Job available in your location"
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  // this.props.navigation.navigate(Constants.viewJob);
-                }}
-              />
-
-            </View> */}
-          </View>
-          <View
-            style={{
-              marginTop: SIZES.twenty,
-              justifyContent: 'center',
-              flexDirection: 'row',
-            }}>
-            <RegularTextCB style={{fontSize: SIZES.twenty}}>
-              Total Earnings:
-            </RegularTextCB>
-            <RegularTextCB
+            <View
               style={{
-                fontSize: SIZES.twenty,
-                marginStart: SIZES.five,
-                color: Colors.sickGreen,
+                // marginTop: SIZES.ten,
+                borderColor: Colors.sickGreen,
+                borderWidth: 1.1,
+                borderRadius: SIZES.ten,
+                marginVertical: SIZES.twenty,
               }}>
-              {this.state.withDraw.total}
-            </RegularTextCB>
+              <View
+                style={[
+                  styles.card,
+                  {
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingHorizontal: SIZES.twenty,
+                    paddingVertical: SIZES.fifteen * 1.2,
+                    borderRadius: SIZES.ten,
+                  },
+                ]}>
+                <RegularTextCB>1 Job Available in your location</RegularTextCB>
+                <Image
+                  source={Images.iconDrawerBell}
+                  style={{
+                    height: SIZES.twenty * 1.3,
+                    width: SIZES.twenty * 1.3,
+                    tintColor: Colors.coolGrey,
+                  }}
+                  resizeMode="contain"
+                />
+              </View>
+            </View>
+          </View>
+          <View style={{backgroundColor: 'red'}}>
+            <View
+              style={{
+                marginTop: SIZES.twenty,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                paddingHorizontal: SIZES.fifteen,
+              }}>
+              <RegularTextCB style={{fontSize: SIZES.twenty}}>
+                Total Earnings
+              </RegularTextCB>
+              <BoldTextCB
+                style={{
+                  fontSize: SIZES.twenty * 1.2,
+                  marginStart: SIZES.five,
+                  color: Colors.black1,
+                }}>
+                ${this.state.withDraw.total}
+              </BoldTextCB>
+            </View>
+
+            {/* <TouchableGraph
+              onPressBar={(data) => {
+                console.log(data);
+              }}
+              onPressTickAxis={(data) => {
+                console.log(data);
+              }}>
+              <VictoryChart>
+                <VictoryAxis crossAxis orientation="left" />
+                <VictoryAxis dependentAxis crossAxis orientation="bottom" />
+                <VictoryBar data={data} />
+                <VictoryArea data={data} />
+              </VictoryChart>
+            </TouchableGraph> */}
           </View>
 
-          <View
+          {/* <View
             style={{marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB
               style={{
@@ -505,7 +546,7 @@ export default class Dashboard extends Component {
               showsVerticalScrollIndicator={false}
               renderItem={this.renderProgressJob}
             />
-          </View>
+          </View> */}
           <View
             style={{marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB

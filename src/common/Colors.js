@@ -16,6 +16,7 @@ const Colors = {
   lighNewGreen: '#e9ffa1',
   turqoiseGreen: '#00ff77',
   orangeYellow: '#ffa502',
+  sunflowerYellow: '#ffcc00',
   lightGold: '#ffc45e',
   orange: '#ff6f00',
   pinky: '#f878b4',

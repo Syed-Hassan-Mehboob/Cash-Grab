@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@chartiful/react-native-chart-builder": "^0.1.8",
+    "@chartiful/react-native-vertical-bar-graph": "^0.1.2",
     "@react-native-async-storage/async-storage": "^1.15.4",
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/datetimepicker": "^3.5.2",
@@ -50,10 +52,13 @@
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.18.0",
     "react-native-star-rating": "^1.1.0",
+    "react-native-svg": "^12.1.1",
     "react-native-swipe-list-view": "^3.2.7",
+    "react-native-touchable-graph": "^0.0.15",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
-    "save": "^2.4.0"
+    "save": "^2.4.0",
+    "victory-native": "^35.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",

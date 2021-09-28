@@ -1,8 +1,8 @@
 import React from 'react';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Platform, View } from 'react-native';
-import Constants, { SIZES } from '../../common/Constants';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Image, Platform, View} from 'react-native';
+import Constants, {SIZES} from '../../common/Constants';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import Filter from '../Filter';
@@ -23,10 +23,13 @@ import Faq from '../Faq';
 import WithDraw from '../vendor/WithDraw';
 import Search from '../Search';
 import ChangePassword from '../ChangePassword';
-import VendorAllJobs from "../../views/vendor/VendorAllJobs";
+import VendorAllJobs from '../../views/vendor/VendorAllJobs';
 import VenderFilter from '../vendor/VenderFilter';
 import VenderFileredScreen from '../vendor/VenderFiltered';
 import ViewVendorProfile from '../ViewVendorProfile';
+import BookingAcceptance from '../vendor/BookingAcceptance';
+import BookingConfirmed2 from '../vendor/BookingConfirmed2';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
@@ -55,10 +58,19 @@ const HomeNavigator = () => {
         name={Constants.vendorAllJobs}
         component={VendorAllJobs}
       />
-      <HomeStack.Screen name={Constants.venderFilter} component={VenderFilter} />
-      <HomeStack.Screen name={Constants.venderFilterd} component={VenderFileredScreen} />
+      <HomeStack.Screen
+        name={Constants.venderFilter}
+        component={VenderFilter}
+      />
+      <HomeStack.Screen
+        name={Constants.venderFilterd}
+        component={VenderFileredScreen}
+      />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
-      <HomeStack.Screen name={Constants.viewVendorProfile} component={ViewVendorProfile} />
+      <HomeStack.Screen
+        name={Constants.viewVendorProfile}
+        component={ViewVendorProfile}
+      />
       <HomeStack.Screen
         name={Constants.termsAndConditionsScreen}
         component={TermsAndConditions}
@@ -73,6 +85,14 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
       <HomeStack.Screen name={Constants.chat} component={Chat} />
       <HomeStack.Screen
+        name={Constants.bookingConfirmed}
+        component={BookingConfirmed2}
+      />
+      <HomeStack.Screen
+        name={Constants.BookingAcceptance}
+        component={BookingAcceptance}
+      />
+      <HomeStack.Screen
         name={Constants.vendorEditProfile}
         component={VendorEditProfile}
       />
@@ -80,7 +100,6 @@ const HomeNavigator = () => {
         name={Constants.changePassword}
         component={ChangePassword}
       />
-      
     </HomeStack.Navigator>
   );
 };
@@ -148,10 +167,10 @@ const customTabBarStyle = {
     borderTopLeftRadius: SIZES.twenty,
     borderTopRightRadius: SIZES.twenty,
     shadowColor: '#000000 ',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
-    height: Platform.OS === 'android' ? SIZES.ten*6 : SIZES.ten*8,
+    height: Platform.OS === 'android' ? SIZES.ten * 6 : SIZES.ten * 8,
     marginTop: 2,
     elevation: 4,
     borderTopWidth: 0,
@@ -166,10 +185,14 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.vendorHome}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barHomeSelected : Images.barHome}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
@@ -178,10 +201,14 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.notifications}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barBellSelected : Images.barBell}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
@@ -190,7 +217,7 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.plus}
         options={{
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({color}) => (
             <View
               style={{
                 justifyContent: 'center',
@@ -200,8 +227,8 @@ const Tabs = () => {
               <Image
                 source={Images.barDashboard}
                 style={{
-                  height: SIZES.ten*9,
-                  width: SIZES.ten*9,
+                  height: SIZES.ten * 9,
+                  width: SIZES.ten * 9,
                   resizeMode: 'contain',
                 }}
               />
@@ -213,10 +240,14 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.vendorProfile}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barProfileSelected : Images.barProfile}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
@@ -225,15 +256,19 @@ const Tabs = () => {
       <Tab.Screen
         name={Constants.settings}
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({focused, color}) => (
             <Image
               source={focused ? Images.barMoreSelected : Images.barMore}
-              style={{ height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           ),
         }}
         component={Settings}
-        listeners={({ navigation }) => ({
+        listeners={({navigation}) => ({
           tabPress: (e) => {
             e.preventDefault();
             navigation.openDrawer();

@@ -498,43 +498,41 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 width: '100%',
                 alignItems: 'center',
+                justifyContent: 'space-between',
                 paddingHorizontal: SIZES.twenty,
                 marginTop:
                   Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 6,
               }}>
               <TouchableOpacity
-                activeOpacity={0.6}
-                style={{flexDirection: 'row', alignItems: 'center'}}
-                onPress={() =>
-                  this.props.navigation.navigate(Constants.profile)
-                }>
-                <View style={styles.circleCard}>
-                  <Image
-                    source={{uri: Constants.imageURL + this.state.avatar}}
-                    style={styles.iconUser}
-                    resizeMode="cover"
-                  />
-                </View>
-                <RegularTextCB style={{fontSize: 16, marginStart: SIZES.ten}}>
-                  Welcome,
-                </RegularTextCB>
-                <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    marginStart: 3,
-                    color: Colors.sickGreen,
-                  }}>
-                  {this.state.name}
-                </RegularTextCB>
+                style={{
+                  width: SIZES.fifteen * 1,
+                  height: SIZES.fifteen * 1,
+                }}
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}>
+                <Image
+                  source={Images.arrowBack}
+                  style={[
+                    styles.iconBack,
+                    {
+                      tintColor: Colors.black1,
+                      width: SIZES.fifteen * 1,
+                      height: SIZES.fifteen * 1,
+                    },
+                  ]}
+                />
               </TouchableOpacity>
+
+              <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
+                Explore
+              </RegularTextCB>
+
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);
                 }}
-                style={{
-                  position: 'absolute',
-                  right: SIZES.twenty,
-                }}>
+                style={{}}>
                 <Image
                   source={Images.iconHamburger}
                   style={{
@@ -638,7 +636,8 @@ export default class Home extends Component {
               </TouchableOpacity>
             </View>
             <FlatList
-              horizontal
+              numColumns={2}
+              // horizontal
               data={this.state.vendorAround}
               keyExtractor={(item) => item.id.toString()}
               renderItem={this.renderVendorsAroundYouItem}
