@@ -10,12 +10,13 @@ import {
   Platform,
   Modal,
   TextInput,
+  StatusBar,
 } from 'react-native';
 
 import Spinner from 'react-native-loading-spinner-overlay';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
-import Constants, {SIZES, FONTS, STYLES} from '../common/Constants';
+import Constants, {SIZES, FONTS, STYLES, height} from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -202,10 +203,9 @@ export default class UserHome extends Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={
-          (STYLES.container,
-          {paddingHorizontal: SIZES.ten * 2, bottom: SIZES.twenty})
-        }>
+        contentContainerStyle={[
+          {paddingHorizontal: SIZES.ten * 2, paddingBottom: 70},
+        ]}>
         <View
           style={{
             flexDirection: 'row',
@@ -236,9 +236,19 @@ export default class UserHome extends Component {
 
         <View
           style={{
-            height: SIZES.ten * 6,
-            borderRadius: SIZES.twenty,
-            backgroundColor: 'red',
+            // borderRadius: SIZES.twenty,
+            // backgroundColor: 'red',
+            height: 60,
+            backgroundColor: Colors.white,
+            borderRadius: height * 0.01,
+            shadowColor: '#c5c5c5',
+            shadowOffset: {width: SIZES.five, height: SIZES.five},
+            shadowOpacity: 1.0,
+            shadowRadius: SIZES.ten,
+            elevation: SIZES.ten,
+            justifyContent: 'center',
+            // paddingLeft: SIZES.twenty,
+            marginTop: SIZES.ten,
           }}>
           <MultiDropdownPicker
             viewProperty="name"
@@ -270,7 +280,7 @@ export default class UserHome extends Component {
               rateRequested: text,
             });
           }}
-          style={{height: SIZES.ten * 6, marginTop: SIZES.ten}}
+          style={{marginTop: SIZES.ten}}
         />
         <View style={[{marginTop: SIZES.twenty}]}>
           <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
@@ -279,9 +289,9 @@ export default class UserHome extends Component {
           <View
             style={[
               {
-                height: SIZES.ten * 6,
+                height: 60,
                 backgroundColor: Colors.white,
-                borderRadius: SIZES.ten,
+                borderRadius: height * 0.01,
                 shadowColor: '#c5c5c5',
                 shadowOffset: {width: SIZES.five, height: SIZES.five},
                 shadowOpacity: 1.0,
@@ -326,7 +336,11 @@ export default class UserHome extends Component {
                   this.setState({showModal: false});
                 }}>
                 <Image
-                  style={{height: SIZES.fifteen, width: SIZES.fifteen}}
+                  style={{
+                    height: SIZES.fifteen,
+                    width: SIZES.fifteen,
+                    tintColor: Colors.turqoiseGreen,
+                  }}
                   resizeMode="contain"
                   source={Images.iconClose}
                 />
@@ -348,7 +362,9 @@ export default class UserHome extends Component {
                 address: text,
               });
             }}
-            style={{height: SIZES.ten * 6, marginTop: SIZES.ten}}
+            style={{
+              marginTop: SIZES.ten,
+            }}
           />
         </View>
 
@@ -374,21 +390,13 @@ export default class UserHome extends Component {
           <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
             Job Description
           </RegularTextCB>
-          {/* <EditText
-            ref={'rate'}
-            placeholder={'Enter Address'}
-            value={this.state.address}
-            onChangeText={(text) => {
-              this.setState({
-                address: text,
-              });
-            style={{height: SIZES.ten * 15, marginTop: SIZES.ten}}
-            }} */}
+
           <View
             style={[
               styles.card,
               {
-                height: SIZES.ten * 10,
+                marginTop: SIZES.ten,
+                height: SIZES.twentyFive * 5,
               },
             ]}>
             <TextInput
@@ -399,13 +407,11 @@ export default class UserHome extends Component {
               placeholder={'Enter Job Description '}
               keyboardType={'default'}
               placeholderTextColor={Colors.coolGrey}
-              //   value={value}
-              //   onChangeText={onChangeText}
-              //   style={styles.textInput}
+              numberOfLines={4}
               multiline={true}
-              //   numberOfLines={3}
               style={{
                 flex: 1,
+                textAlignVertical: 'top',
               }}
             />
           </View>
@@ -425,6 +431,16 @@ export default class UserHome extends Component {
             }}
           />
         </View>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => this.props.navigation.navigate(Constants.home)}
+          style={{alignSelf: 'flex-end'}}>
+          <Image
+            source={Images.iconSearch}
+            style={{height: SIZES.fifty * 1.5, width: SIZES.fifty * 1.5}}
+          />
+        </TouchableOpacity>
 
         <Spinner
           visible={this.state.isLoading}
