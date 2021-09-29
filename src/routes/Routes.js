@@ -19,7 +19,9 @@ import OTP from '../views/OTP';
 import DrawerNavigator from '../views/navigators/DrawerNavigator';
 import LoginOrJoin from '../views/LoginOrJoin';
 import VerifyVia from '../views/VerifyVia';
-
+import SelectIntrest from '../views/vendor/SelectIntrest';
+import SelectIndustry from '../views/vendor/SelectIndustry';
+import VendorSignUp from '../views/vendor/VendorSignUp';
 const Stack = createStackNavigator();
 
 export default class Routes extends Component {
@@ -49,6 +51,12 @@ const AppStack = () => {
       <Stack.Screen name={Constants.login} component={Login} />
       <Stack.Screen name={Constants.createAccount} component={CreateAccount} />
       <Stack.Screen name={Constants.signUp} component={SignUp} />
+      <Stack.Screen name={Constants.VendorSignUp} component={VendorSignUp} />
+      <Stack.Screen
+        name={Constants.SelectIndustry}
+        component={SelectIndustry}
+      />
+      <Stack.Screen name={Constants.SelectIntrest} component={SelectIntrest} />
       <Stack.Screen
         name={Constants.forgetPassword}
         component={ForgetPassword}

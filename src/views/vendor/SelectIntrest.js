@@ -17,7 +17,7 @@ import {Icon} from 'native-base';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 
 export default function SelectIntrest(props) {
-  const [isSelected, setIsSlected] = useState(null);
+  const [Data, setData] = useState(DummyData);
 
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -31,6 +31,17 @@ export default function SelectIntrest(props) {
     }
 
     return data;
+  };
+
+  const onPress = (id, type) => {
+    let newArray = Data.map((val, i) => {
+      if (id === val.id) {
+        return {...val, isSlected: type};
+      } else {
+        return val;
+      }
+    });
+    setData(newArray);
   };
 
   const renderInterest = ({item}) => {
@@ -47,13 +58,12 @@ export default function SelectIntrest(props) {
             backgroundColor: Colors.white,
             borderRadius: SIZES.ten,
             margin: SIZES.ten,
-            borderWidth: 2,
-            borderColor:
-              isSelected === item.id ? Colors.sickGreen : 'transparent',
+            borderWidth: 1,
+            borderColor: item.isSlected ? Colors.sickGreen : Colors.white,
           },
         ]}
         activeOpacity={0.6}
-        onPress={() => setIsSlected(item.id)}>
+        onPress={() => onPress(item.id, !item.isSlected)}>
         <Text
           style={[
             FONTS.mediumFont16,
@@ -80,7 +90,7 @@ export default function SelectIntrest(props) {
         <TouchableOpacity
           style={{position: 'absolute', left: 0}}
           onPress={() => {
-            // props.navigation.navigate(Constants.VenderBookings);
+            props.navigation.goBack();
           }}
           activeOpacity={0.6}>
           <Icon
@@ -147,25 +157,30 @@ const styles = StyleSheet.create({
   },
 });
 
-const Data = [
+const DummyData = [
   {
     id: 1,
     name: 'Gaming',
+    isSlected: false,
   },
   {
     id: 2,
     name: 'Planting',
+    isSlected: false,
   },
   {
     id: 3,
     name: 'Bike Riding',
+    isSlected: false,
   },
   {
     id: 4,
     name: 'Photography',
+    isSlected: false,
   },
   {
     id: 5,
     name: 'Peotry',
+    isSlected: false,
   },
 ];

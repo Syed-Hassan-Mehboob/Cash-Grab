@@ -42,7 +42,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.SelectIntrest}
+      initialRouteName={Constants.splash}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
@@ -70,14 +70,7 @@ const HomeNavigator = () => {
         component={VenderFileredScreen}
       />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
-      <HomeStack.Screen
-        name={Constants.SelectIntrest}
-        component={SelectIntrest}
-      />
-      <HomeStack.Screen
-        name={Constants.SelectIndustry}
-        component={SelectIndustry}
-      />
+
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}

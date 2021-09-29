@@ -13,6 +13,7 @@ const Constants = {
   login: 'Login',
   createAccount: 'CreateAccount',
   signUp: 'SignUp',
+  VendorSignUp: 'VendorSignUp',
   forgetPassword: 'ForgetPassword',
   verifyVia: 'VerifyVia',
   otp: 'OTP',
