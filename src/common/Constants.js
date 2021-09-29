@@ -103,6 +103,8 @@ const Constants = {
   search: 'customer/filter-services?',
   venderFilterd: 'vendors/filter?',
   UserHome: 'UserHome',
+  AddServices: 'AddServices',
+  AddTeamMember: 'AddTeamMember',
 };
 
 export const SIZES = {

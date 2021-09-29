@@ -19,6 +19,7 @@ import OTP from '../views/OTP';
 import DrawerNavigator from '../views/navigators/DrawerNavigator';
 import LoginOrJoin from '../views/LoginOrJoin';
 import VerifyVia from '../views/VerifyVia';
+import AddServices from '../views/vendor/AddServices';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,7 @@ const AppStack = () => {
         component={DrawerNavigator}
       />
       <Stack.Screen name="ConfirmBooking" component={ConfirmBooking} />
+      <Stack.Screen name="AddServices" component={AddServices} />
     </Stack.Navigator>
   );
 };

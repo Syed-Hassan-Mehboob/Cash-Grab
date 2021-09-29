@@ -33,6 +33,7 @@ import VendorBookings from '../vendor/Bookings';
 import VendorQuickJobs from '../vendor/QuickJob';
 import SelectIntrest from '../vendor/SelectIntrest';
 import SelectIndustry from '../vendor/SelectIndustry';
+import AddTeamMember from '../vendor/AddTeamMember';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
@@ -42,12 +43,16 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.SelectIntrest}
+      initialRouteName={Constants.AddTeamMember}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
       }}>
       <HomeStack.Screen name={Constants.vendorHome} component={VendorHome} />
+      <HomeStack.Screen
+        name={Constants.AddTeamMember}
+        component={AddTeamMember}
+      />
       <HomeStack.Screen name={Constants.search} component={Search} />
       <HomeStack.Screen
         name={Constants.vendorAllCategories}
