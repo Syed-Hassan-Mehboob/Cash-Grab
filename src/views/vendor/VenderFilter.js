@@ -39,6 +39,9 @@ export default class VenderFilter extends Component {
       accessToken: '',
       minPrice: '',
       maxPrice: '',
+      currentLat: '',
+      currentLong: '',
+      isDatePickerVisible: false,
     };
   }
 
@@ -86,9 +89,6 @@ export default class VenderFilter extends Component {
       .then(onSuccess)
       .catch(onFailure);
   };
-
-
-
 
   renderCategoriesItem = ({item, index}) => {
     return (
@@ -178,67 +178,6 @@ export default class VenderFilter extends Component {
       () => {},
     );
   };
-
-  // getUserProfile = () => {
-  //   const onSuccess = ({ data }) => {
-  //     let latitude=data.data.records.userProfile.latitude
-  //     let longitude=data.data.records.userProfile.longitude
-  //     let type=data.data.records.type
-      
-  //     this.getFilterData(latitude,longitude,type);
-  //   };
-
-  //   const onFailure = (error) => {
-  //     utils.showResponseError(error);
-  //   };
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
-
-  // getFilterData = (latitude,longitude,type) => {
-
-  //   const postData = {
-  //     type: type,
-  //     categoryId: this.state.selectedCategory !== null&& this.state.selectedCategory !== undefined  ? this.state.selectedCategory.id :null,
-  //     min_price: this.state.minPrice !== null && this.state.minPrice !==undefined ?this.state.minPrice:null,
-  //     max_price: this.state.maxPrice !== null && this.state.maxPrice !==undefined ?this.state.maxPrice:null,
-  //     distance: this.state.selectedLocation !==null && this.state.selectedLocation !==undefined ? this.state.selectedLocation.name :null,
-  //     lat:latitude,
-  //     lng:longitude
-      
-  //   };
-    
-  //   console.log('Post Data  ===== ',postData)
-  
-
-  //   this.setState({isLoading: true});
-
-  //   const onSuccess = ({data}) => {
-  //     console.log('========================Filter Data==',data)
-  //     utils.showToast(data.message);
-  //     this.setState({isLoading: false});
-  //   };
-  //   const onFailure = (error) => {
-  //     //
-  //     utils.showResponseError(error.massage);
-  //     this.setState({isLoading: false});
-  //   };
-  //   const options = {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //       // 'Content-Type':'application/x-www-form-urlencoded'
-  //     },
-  //   };
-  //   Axios.post(Constants.venderFilter,postData, options)
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
 
   render() {
     return (
@@ -337,13 +276,20 @@ export default class VenderFilter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-                // this.getUserProfile();
-                this.props.navigation.navigate(Constants.venderFilterd,{
-                  id:this.state.selectedCategory.id,
-                  minPrice:this.state.minPrice,
-                  max_price:this.state.maxPrice,
-                  location:this.state.selectedLocation.name
-                })
+                if (
+                  this.state.selectedLocation &&
+                  this.state.selectedLocation &&
+                  this.state.selectedLocation != null
+                ) {
+                  this.props.navigation.navigate(Constants.venderFilterd, {
+                    id: this.state.selectedCategory.id,
+                    minPrice: this.state.minPrice,
+                    maxPrice: this.state.maxPrice,
+                    location: this.state.selectedLocation.name,
+                  });
+                } else {
+                  utils.showToast('Please Select Filter Data');
+                }
               }}
             />
           </View>
@@ -407,5 +353,5 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
-},
+  },
 });

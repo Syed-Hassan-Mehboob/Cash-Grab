@@ -84,6 +84,8 @@ export default class Login extends Component {
       return;
     }
 
+    this.setState({isLoading: true});
+
     const onSuccess = ({data}) => {
       if (data.status === 2) {
         this.setState({isLoading: false});
@@ -98,8 +100,6 @@ export default class Login extends Component {
       utils.showResponseError(error);
       this.setState({isLoading: false});
     };
-
-    this.setState({isLoading: true});
 
     Axios.post(Constants.loginURL, {
       email: email,

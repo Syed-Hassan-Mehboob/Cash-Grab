@@ -1,5 +1,5 @@
-import { Card } from 'native-base';
-import React, { Component } from 'react';
+import {Card, Icon} from 'native-base';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,17 +7,19 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
-  Dimensions
+  Dimensions,
+  Text,
 } from 'react-native';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../network/APIKit';
 import utils from '../utils';
+import LightTextCB from '../components/LightTextCB';
 
 export default class AllCategories extends Component {
   constructor(props) {
@@ -25,7 +27,7 @@ export default class AllCategories extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      getAllCategories: []
+      getAllCategories: [],
     };
   }
 
@@ -35,23 +37,24 @@ export default class AllCategories extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.getAllCategories();
     });
-
   };
 
   getAllCategories = () => {
-    const onSuccess = ({ data }) => {
-      this.setState({ isLoading: false, getAllCategories: data.data.records });
+    const onSuccess = ({data}) => {
+      console.log('All Category ==== ', data.data);
+      this.setState({isLoading: false, getAllCategories: data.data.records});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
+      console.log('=================', error);
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
     Axios.get(Constants.getAllCustomerCategories, {
       headers: {
@@ -62,56 +65,117 @@ export default class AllCategories extends Component {
       .catch(onFailure);
   };
 
-   formatData = (data, numColumns) => {
+  formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
-    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
       numberOfElementsLastRow++;
     }
-  
+
     return data;
   };
 
-  renderAllCategoriesItem = ({ item, index }) => {
-
+  renderAllCategoriesItem = ({item, index}) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
 
     return (
-
       <TouchableOpacity
+        activeOpacity={0.5}
         style={[
           styles.card,
-          { padding: 15, marginHorizontal: SIZES.five, marginBottom: SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
-        ]} 
+          {
+            marginTop: SIZES.twenty,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginHorizontal: SIZES.ten,
+            paddingHorizontal: SIZES.twenty,
+            paddingVertical: SIZES.ten * 2,
+            borderRadius: SIZES.ten,
+          },
+        ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.singleCategory,{
-            item: item
+          this.props.navigation.navigate(Constants.singleCategory, {
+            item: item,
           })
-        }
-        >
+        }>
+        <View style={{flex: 0.95}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <View style={styles.circleCard}>
+              <Image
+                source={{uri: Constants.imageURL + item.image}}
+                // source={item.image}
+                style={{height: '100%', width: '100%'}}
+                resizeMode="stretch"
+              />
+            </View>
 
-        <Image
-          source={{ uri: Constants.imageURL + item.image }}
-          // source={item.image}
-          style={{ height: 120, width: 120 }}
-          resizeMode="stretch"
-        />
+            <View style={{marginStart: SIZES.ten}}>
+              <RegularTextCB
+                style={[
+                  FONTS.boldFont16,
+                  {
+                    color: Colors.black,
+                  },
+                ]}>
+                {item.name}
+              </RegularTextCB>
+              <RegularTextCB
+                style={{
+                  color: Colors.black,
+                  fontSize: 14,
+                  textDecorationLine: 'underline',
+                  paddingVertical: SIZES.five + 2,
+                }}>
+                View Profile
+              </RegularTextCB>
+            </View>
+          </View>
 
-        <RegularTextCB
-          style={{ fontSize: 16, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
-          {item.name}
-        </RegularTextCB>
+          <Text
+            style={{
+              marginTop: SIZES.ten,
+              color: Colors.coolGrey,
+              fontSize: 14,
+              fontFamily: Constants.fontRegular,
+              lineHeight: 20,
+            }}
+            numberOfLines={3}>
+            Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod
+            temp or incididunt ut labore et dolore...
+          </Text>
+        </View>
 
-
-
-
+        <TouchableOpacity
+          activeOpacity={0.8}
+          // onPress={() => this.props.navigation.navigate(Constants.home)}
+          style={[
+            styles.card,
+            {
+              backgroundColor: Colors.sickGreen,
+              padding: SIZES.ten * 2,
+              borderRadius: SIZES.ten * 4,
+            },
+          ]}>
+          <Icon
+            type="AntDesign"
+            name="right"
+            style={{color: Colors.white, fontSize: 18}}
+          />
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
-
 
   openNextScreen = (nextScreen) => {
     this.props.navigation.navigate(nextScreen);
@@ -119,21 +183,26 @@ export default class AllCategories extends Component {
 
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten*3,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten * 3,
           }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}>
-            <Image source={Images.arrowBack} style={styles.iconBack} />
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+              onPress={() => props.navigation.goBack()}
+            />
           </TouchableOpacity>
-          <RegularTextCB style={{ fontSize: SIZES.ten*3, alignSelf: 'center' }}>
+          <RegularTextCB style={[FONTS.boldFont24, {}]}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity
@@ -145,26 +214,26 @@ export default class AllCategories extends Component {
               style={{
                 height: SIZES.twenty,
                 width: SIZES.twenty,
-                resizeMode: 'contain',
               }}
+              resizeMode={'contain'}
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, paddingTop: SIZES.ten }} >
 
+        <View style={{flex: 1, paddingTop: SIZES.ten}}>
           <FlatList
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
-            data={this.formatData(this.state.getAllCategories,2)}
-            numColumns={2}
+            data={this.state.getAllCategories}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
               // for ios
-              bottom: SIZES.ten*10,
+              bottom: SIZES.ten * 10,
             }}
             contentContainerStyle={{
               // for android
-              paddingBottom: SIZES.ten*10,
+              paddingBottom: SIZES.ten * 10,
+              marginTop: SIZES.twenty,
             }}
           />
         </View>
@@ -185,8 +254,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
@@ -195,9 +264,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -233,7 +302,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -249,23 +318,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
-    backgroundColor: '#fff',
-    height:SIZES.ten*20,
-    width:SIZES.ten*10,
-    borderRadius:SIZES.ten*2,
-    flex: 1,
+    backgroundColor: '#ffff',
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: SIZES.ten * 8,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
@@ -276,6 +341,11 @@ const styles = StyleSheet.create({
   },
   itemInvisible: {
     backgroundColor: 'transparent',
+    padding: 15,
+    marginHorizontal: SIZES.five,
+    marginBottom: SIZES.twenty,
+    marginTop: SIZES.five,
+    alignItems: 'center',
   },
   item: {
     backgroundColor: '#fff',
@@ -283,6 +353,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     margin: 1,
-    height: Dimensions.get('window').width / 2, // approximate a square
   },
 });

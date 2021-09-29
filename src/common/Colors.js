@@ -16,6 +16,7 @@ const Colors = {
   lighNewGreen: '#e9ffa1',
   turqoiseGreen: '#00ff77',
   orangeYellow: '#ffa502',
+  sunflowerYellow: '#ffcc00',
   lightGold: '#ffc45e',
   orange: '#ff6f00',
   pinky: '#f878b4',
@@ -23,5 +24,7 @@ const Colors = {
   darkSkyBlue: '#51cae9',
   turquoiseBlue: '#05abd0',
   paleGrey: '#eef1ff',
+  sickGreen: '#abcf37FF',
+  barBg: '#DDE2E2',
 };
 export default Colors;

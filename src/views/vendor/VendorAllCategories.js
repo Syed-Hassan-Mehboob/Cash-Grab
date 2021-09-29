@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants, { SIZES } from '../../common/Constants';
+import Constants, {SIZES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
@@ -25,35 +25,32 @@ export default class VendorSingleCategory extends Component {
       isLoading: false,
       accessToken: '',
       getAllCategories: [],
-
     };
   }
 
   componentDidMount() {
-    this.getUserAccessToken()
+    this.getUserAccessToken();
   }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.getAllCategories();
     });
-
   };
 
   getAllCategories = () => {
-
-    const onSuccess = ({ data }) => {
-      console.log('All Catagor==========',data.data.records)
-      this.setState({ isLoading: false, getAllCategories: data.data.records });
+    const onSuccess = ({data}) => {
+      console.log('All Catagor==========', data.data.records);
+      this.setState({isLoading: false, getAllCategories: data.data.records});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
 
     Axios.get(Constants.getVenderAllCategory, {
       headers: {
@@ -66,17 +63,19 @@ export default class VendorSingleCategory extends Component {
 
   formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
-    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
       numberOfElementsLastRow++;
     }
-  
+
     return data;
   };
 
-  renderAllCategoriesItem = ({ item }) => {
-    
+  renderAllCategoriesItem = ({item}) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
@@ -85,33 +84,40 @@ export default class VendorSingleCategory extends Component {
       <TouchableOpacity
         style={[
           styles.card,
-          { padding:SIZES.fifteen, marginHorizontal:SIZES.five, marginBottom:SIZES.twenty, marginTop: SIZES.five, alignItems: 'center' },
-        ]}   
-        onPress={() =>{
-          this.props.navigation.navigate(Constants.vendorSingleCategory,{
-              image:item.image,
-              name:item.name,
-              item:item.id
-          }
-          )
-        }}
-        >
-
+          {
+            padding: SIZES.fifteen,
+            marginHorizontal: SIZES.five,
+            marginBottom: SIZES.twenty,
+            marginTop: SIZES.five,
+            alignItems: 'center',
+          },
+        ]}
+        onPress={() => {
+          this.props.navigation.navigate(Constants.vendorSingleCategory, {
+            image: item.image,
+            name: item.name,
+            item: item.id,
+          });
+        }}>
         <Image
-          source={{ uri: Constants.imageURL + item.image }}
+          source={{uri: Constants.imageURL + item.image}}
           // source={item.image}
-          style={{ height:SIZES.ten*12, width:SIZES.ten*12 }}
-          resizeMode="stretch"
+          style={{
+            height: SIZES.ten * 10,
+            width: SIZES.ten * 10,
+            borderRadius: SIZES.ten,
+          }}
+          resizeMode="cover"
         />
 
         <RegularTextCB
-          style={{ fontSize: 16, marginTop: -SIZES.twenty, color: Colors.coolGrey }}>
+          style={{
+            fontSize: 16,
+            marginTop: SIZES.ten,
+            color: Colors.coolGrey,
+          }}>
           {item.name}
         </RegularTextCB>
-
-
-
-
       </TouchableOpacity>
     );
   };
@@ -128,7 +134,7 @@ export default class VendorSingleCategory extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: Platform.OS === 'android' ? 0 :SIZES.twenty,
+            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -136,7 +142,7 @@ export default class VendorSingleCategory extends Component {
             }}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>
+          <RegularTextCB style={{fontSize: 30, alignSelf: 'center'}}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity
@@ -147,26 +153,26 @@ export default class VendorSingleCategory extends Component {
               source={Images.iconHamburger}
               style={{
                 height: SIZES.twenty,
-                width:SIZES.twenty,
+                width: SIZES.twenty,
                 resizeMode: 'contain',
               }}
             />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, paddingTop:SIZES.ten }} >
+        <View style={{flex: 1, paddingTop: SIZES.ten}}>
           <FlatList
-           data={this.formatData(this.state.getAllCategories,2)}
+            data={this.formatData(this.state.getAllCategories, 2)}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             numColumns={2}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
               // for ios
-              bottom: SIZES.ten*10,
+              bottom: SIZES.ten * 10,
             }}
             contentContainerStyle={{
               // for android
-              paddingBottom:SIZES.ten*10,
+              paddingBottom: SIZES.ten * 10,
             }}
           />
         </View>
@@ -183,44 +189,44 @@ export default class VendorSingleCategory extends Component {
 const styles = StyleSheet.create({
   iconBack: {
     height: SIZES.twenty,
-    width:SIZES.twenty,
+    width: SIZES.twenty,
     resizeMode: 'contain',
   },
   iconFilter: {
-    height:SIZES.ten*3,
-    width:SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: SIZES.ten*10,
-    width: SIZES.ten*10,
+    height: SIZES.ten * 10,
+    width: SIZES.ten * 10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height:SIZES.ten*8,
-    width: SIZES.ten*8,
-    borderRadius: SIZES.ten*8 / 2,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: (SIZES.ten * 8) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
     fontSize: 20,
     height: SIZES.twenty,
-    width:SIZES.twenty,
+    width: SIZES.twenty,
     alignSelf: 'center',
     color: Colors.orange,
   },
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop:SIZES.fifteen,
-    paddingHorizontal:SIZES.fifteen,
+    paddingTop: SIZES.fifteen,
+    paddingHorizontal: SIZES.fifteen,
   },
   childContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    padding:SIZES.twenty,
+    padding: SIZES.twenty,
     flex: 1,
   },
   formLabel: {
@@ -235,7 +241,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height:SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -251,20 +257,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
-
-    height:SIZES.ten*20,
-    width:SIZES.ten*10,
-    borderRadius:SIZES.ten*2,
+    height: SIZES.ten * 20,
+    width: SIZES.ten * 10,
+    borderRadius: SIZES.ten * 2,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height:SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius:SIZES.five,
+    shadowRadius: SIZES.five,
     elevation: SIZES.five,
   },
   circleCard: {
-    height: SIZES.ten*10,
-    width: SIZES.ten*10,
+    height: SIZES.ten * 10,
+    width: SIZES.ten * 10,
     // borderRadius: 75 / 2,
     // shadowColor: '#c5c5c5',
     // shadowOffset: { width: 5, height: 5 },

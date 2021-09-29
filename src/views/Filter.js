@@ -18,7 +18,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import Constants, {SIZES} from '../common/Constants';
-
+import Geolocation from '@react-native-community/geolocation';
 const resetAction = CommonActions.reset({
   index: 0,
   routes: [{name: 'BookingConfirmed'}],
@@ -87,9 +87,6 @@ export default class Filter extends Component {
       .catch(onFailure);
   };
 
-
-
-
   renderCategoriesItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -121,6 +118,7 @@ export default class Filter extends Component {
   };
 
   renderPriceItem = ({item, index}) => {
+    console.log('price ==== ', item.isSelected);
     return (
       <TouchableOpacity
         style={
@@ -178,67 +176,6 @@ export default class Filter extends Component {
       () => {},
     );
   };
-
-  // getUserProfile = () => {
-  //   const onSuccess = ({ data }) => {
-  //     let latitude=data.data.records.userProfile.latitude
-  //     let longitude=data.data.records.userProfile.longitude
-  //     let type=data.data.records.type
-      
-  //     this.getFilterData(latitude,longitude,type);
-  //   };
-
-  //   const onFailure = (error) => {
-  //     utils.showResponseError(error);
-  //   };
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
-
-  // getFilterData = (latitude,longitude,type) => {
-
-  //   const postData = {
-  //     type: type,
-  //     categoryId: this.state.selectedCategory !== null&& this.state.selectedCategory !== undefined  ? this.state.selectedCategory.id :null,
-  //     min_price: this.state.minPrice !== null && this.state.minPrice !==undefined ?this.state.minPrice:null,
-  //     max_price: this.state.maxPrice !== null && this.state.maxPrice !==undefined ?this.state.maxPrice:null,
-  //     distance: this.state.selectedLocation !==null && this.state.selectedLocation !==undefined ? this.state.selectedLocation.name :null,
-  //     lat:latitude,
-  //     lng:longitude
-      
-  //   };
-    
-  //   // console.log('Post Data  ===== ',postData)
-  
-
-  //   this.setState({isLoading: true});
-
-  //   const onSuccess = ({data}) => {
-  //     // console.log('========================Filter Data==',data)
-  //     utils.showToast(data.message);
-  //     this.setState({isLoading: false});
-  //   };
-  //   const onFailure = (error) => {
-  //     //
-  //     utils.showResponseError(error.massage);
-  //     this.setState({isLoading: false});
-  //   };
-  //   const options = {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //       // 'Content-Type':'application/x-www-form-urlencoded'
-  //     },
-  //   };
-  //   Axios.post(Constants.venderFilter,postData, options)
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
 
   render() {
     return (
@@ -337,13 +274,13 @@ export default class Filter extends Component {
               label="APPLY"
               bgColor={Colors.sickGreen}
               onPress={() => {
-                // this.getUserProfile();
-                this.props.navigation.navigate(Constants.Filtered,{
-                  id:this.state.selectedCategory.id,
-                  minPrice:this.state.minPrice,
-                  max_price:this.state.maxPrice,
-                  location:this.state.selectedLocation.name
-                })
+                console.log('========', this.state.maxPrice);
+                this.props.navigation.navigate(Constants.Filtered, {
+                  selectedCategory: this.state.selectedCategory,
+                  minPrice: this.state.minPrice,
+                  maxPrice: this.state.maxPrice,
+                  location: this.state.selectedLocation,
+                });
               }}
             />
           </View>
@@ -403,5 +340,9 @@ const styles = StyleSheet.create({
     height: SIZES.twenty,
     width: SIZES.twenty,
     resizeMode: 'contain',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

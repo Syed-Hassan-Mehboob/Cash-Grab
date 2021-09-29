@@ -6,7 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  View, 
+  View,
   Platform,
   Modal,
 } from 'react-native';
@@ -46,8 +46,7 @@ export default class QuickNotify extends Component {
       showModal: false,
       lat: '',
       long: '',
-      servicesid:'',
-
+      servicesid: '',
     };
   }
 
@@ -163,50 +162,73 @@ export default class QuickNotify extends Component {
     this.setState({isDatePickerVisible: false});
   };
   postQuickOrder = () => {
-   
-   const postData={
-    address:this.state.address,
-    service_id:this.state.servicesid,
-     time:this.state.startTime,
-     lat : this.state.lat,
-     lng: this.state.long,
-     price:this.state.rateRequested,
-     location:this.state.location
-}
+    const postData = {
+      address: this.state.address,
+      service_id: this.state.servicesid,
+      time: this.state.startTime,
+      lat: this.state.lat,
+      lng: this.state.long,
+      price: this.state.rateRequested,
+      location: this.state.location,
+    };
 
- this.setState({ isLoading: true });
-    const onSuccess = ({ data }) => {
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
       utils.showToast(data.message);
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       this.props.navigation.navigate(Constants.home);
     };
     const onFailure = (error) => {
-      console.log("error =====================================================================>",error)
+      console.log(
+        'error =====================================================================>',
+        error,
+      );
       utils.showResponseError(error.massage);
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
     };
     const options = {
       headers: {
         Authorization: this.state.accessToken,
-    //    'Content-Type':'application/x-www-form-urlencoded'
+        //    'Content-Type':'application/x-www-form-urlencoded'
       },
     };
-    Axios.post(Constants.quickOrder,postData,options)
-    .then(onSuccess)
-    .catch(onFailure);
+    Axios.post(Constants.quickOrder, postData, options)
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#fff', paddingHorizontal: 20}}>
-        <RegularTextCB
+        <View
           style={{
-            fontSize: 18,
-            color: Colors.lightYellowGreen,
+            flexDirection: 'row',
+            alignItems: 'center',
             paddingVertical: SIZES.twenty,
           }}>
-          Quick Services
-        </RegularTextCB>
+          <TouchableOpacity
+            style={{
+              height: SIZES.twenty,
+              width: SIZES.twenty,
+            }}
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}>
+            <Image
+              source={Images.arrowBack}
+              style={[styles.iconBack, {tintColor: Colors.black1}]}
+            />
+          </TouchableOpacity>
+          <RegularTextCB
+            style={{
+              fontSize: 18,
+              color: Colors.lightYellowGreen,
+              marginLeft: SIZES.ten,
+            }}>
+            Quick Services
+          </RegularTextCB>
+        </View>
+
         <View
           style={{
             backgroundColor: 'pink',
@@ -218,10 +240,14 @@ export default class QuickNotify extends Component {
             value={this.state.services}
             data={this.state.selections}
             onChangeValue={(val) => {
-              this.setState(
-                {servicesid: val},
-                () => { console.log("multidropdown picker ", this.state.servicesid, "value", val) }
-              );
+              this.setState({servicesid: val}, () => {
+                console.log(
+                  'multidropdown picker ',
+                  this.state.servicesid,
+                  'value',
+                  val,
+                );
+              });
             }}
           />
         </View>
@@ -235,9 +261,9 @@ export default class QuickNotify extends Component {
           placeholder={'Enter Rate'}
           value={this.state.rateRequested}
           onChangeText={(text) => {
-              this.setState({
-                  rateRequested:text
-              })
+            this.setState({
+              rateRequested: text,
+            });
           }}
           style={{height: SIZES.ten * 6, marginTop: SIZES.ten}}
         />
@@ -272,7 +298,6 @@ export default class QuickNotify extends Component {
               </RegularTextCB>
             </TouchableOpacity>
           </View>
-
         </View>
 
         <Modal
@@ -304,6 +329,7 @@ export default class QuickNotify extends Component {
             </View>
           </View>
         </Modal>
+
         <View style={{marginTop: SIZES.twenty}}>
           <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
             Address
@@ -313,10 +339,9 @@ export default class QuickNotify extends Component {
             placeholder={'Enter Address'}
             value={this.state.address}
             onChangeText={(text) => {
-        
-               this.setState({
-                   address:text
-               })
+              this.setState({
+                address: text,
+              });
             }}
             style={{height: SIZES.ten * 6, marginTop: SIZES.ten}}
           />
@@ -393,6 +418,11 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
     fontFamily: Constants.fontRegular,
+  },
+  iconBack: {
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    resizeMode: 'contain',
   },
 });
 

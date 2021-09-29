@@ -17,31 +17,29 @@ const {width, height} = Dimensions.get('window');
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function DateTimePickerComponent(props) {
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-//   const showDatePicker = () => {
-//     setDatePickerVisibility(true);
-//   };
+  //   const showDatePicker = () => {
+  //     setDatePickerVisibility(true);
+  //   };
 
-//   const hideDatePicker = () => {
-//     setDatePickerVisibility(false);
-//   };
+  //   const hideDatePicker = () => {
+  //     setDatePickerVisibility(false);
+  //   };
 
-//   const handleConfirm = date => {
-//       const newTime=Moment(date).format('LT');
-//     console.log('A date has been picked: ',newTime);
-//     setTime(newTime);
-//     hideDatePicker();
-//   };
+  //   const handleConfirm = date => {
+  //       const newTime=Moment(date).format('LT');
+  //     console.log('A date has been picked: ',newTime);
+  //     setTime(newTime);
+  //     hideDatePicker();
+  //   };
 
   return (
-    <TouchableOpacity        
-      onPress={() => {
-      }}
-      activeOpacity={0.6} style={styles.contaner}>
-      <TouchableOpacity
-        style={styles.containerView} onPress={props.onPress} >
+    <TouchableOpacity
+      onPress={() => {}}
+      activeOpacity={0.6}
+      style={styles.contaner}>
+      <TouchableOpacity style={styles.containerView} onPress={props.onPress}>
         <Icon
           name="time-outline"
           type="Ionicons"
@@ -49,13 +47,13 @@ export default function DateTimePickerComponent(props) {
         />
         <Text style={styles.text}>{props.time}</Text>
         <DateTimePickerModal
-        {...props}
-        //   isVisible={isDatePickerVisible}
-        //   mode='time'
-        //   onConfirm={props.onConfirm}
-        //   onCancel={hideDatePicker}
-        //   is24Hour={false}
-        //   hideTitleContainerIOS={true}
+          {...props}
+          //   isVisible={isDatePickerVisible}
+          //   mode='time'
+          //   onConfirm={props.onConfirm}
+          //   onCancel={hideDatePicker}
+          //   is24Hour={false}
+          //   hideTitleContainerIOS={true}
           titleStyletitleStyle={{backgroundColor: 'red', color: 'red'}}
           confirmTextStyle={Colors.lightYellowGreen}
         />
@@ -78,7 +76,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: {x: 1, y: 1},
     overflow: 'visible',
-    height: height * 0.07,
+    height: height * 0.085,
     paddingHorizontal: height * 0.02,
   },
   containerView: {

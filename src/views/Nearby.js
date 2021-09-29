@@ -1,179 +1,97 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   Dimensions,
   Image,
   Platform,
   StyleSheet,
   View,
-  Animated,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import Geolocation from '@react-native-community/geolocation';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
 import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
-import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Spinner from 'react-native-loading-spinner-overlay';
 const {height, width} = Dimensions.get('window');
 const CARD_HEIGHT = SIZES.ten * 20;
 const CARD_WIDTH = width * 0.4;
 const SPACING_FOR_CARD_INSET = width * 0.08 - SIZES.ten;
 
 const Nearby = (props) => {
-  const markers = [
-    {
-      coordinate: {
-        latitude: 24.9048005,
-        longitude: 67.0782334,
-      },
-      title: 'Ray Hammond',
-      location: 'Gardening, NY (2km)',
-      image: Images.emp1,
-      type: 'mechanic',
-      rating: '4.6 ratings',
-    },
-    {
-      coordinate: {
-        latitude: 24.9112095,
-        longitude: 67.0893753,
-      },
-      title: 'Gene Mitchell',
-      location: 'Gardening, NY (2km)',
-      image: Images.emp2,
-      type: 'fire',
-      rating: '4.0 ratings',
-    },
-    {
-      coordinate: {
-        latitude: 24.917755,
-        longitude: 67.0949881,
-      },
-      title: 'Sophia Patton',
-      location: 'Gardening, NY (2km)',
-      image: Images.emp3,
-      type: 'repair',
-      rating: '4.9 ratings',
-    },
-    {
-      coordinate: {
-        latitude: 24.9241723,
-        longitude: 67.0892863,
-      },
-      title: 'Jeanette Zimmerman',
-      location: 'Gardening, NY (2km)',
-      type: 'wash',
-      image: Images.emp4,
-      rating: '3.6 ratings',
-    },
-    {
-      coordinate: {
-        latitude: 24.9215856,
-        longitude: 67.0853476,
-      },
-      title: 'Ray Hammond',
-      location: 'Gardening, NY (2km)',
-      type: 'mechanic',
-      image: Images.emp1,
-      rating: '3.8 ratings',
-    },
-  ];
+  const _map = useRef();
 
-  const initialMapState = {
-    markers,
-    region: {
-      latitude: 24.9050562,
-      longitude: 67.0785654,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068,
-    },
-  };
-
-  const [state, setState] = React.useState(initialMapState);
-  const [accessToken, setaccessToken] = React.useState('');
   const [isLoading, setisLoading] = React.useState();
   const [vendorAround, setvendorAround] = React.useState([]);
-
-  let mapIndex = 0;
-  let mapAnimation = new Animated.Value(0);
-
-  useEffect(() => {
-    mapAnimation.addListener(({value}) => {
-      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next
-      if (index >= state.markers.length) {
-        index = state.markers.length - 1;
-      }
-
-      if (index <= 0) {
-        index = 0;
-      }
-
-      clearTimeout(regionTimeOut);
-
-      const regionTimeOut = setTimeout(() => {
-        if (mapIndex !== index) {
-          mapIndex = index;
-          const {coordinate} = state.markers[index];
-          _map.current.animateToRegion(
-            {
-              ...coordinate,
-              latitudeDelta: state.region.latitudeDelta,
-              longitudeDelta: state.region.longitudeDelta,
-            },
-            350,
-          );
-        }
-      }, SIZES.ten);
-    });
+  const [Region, setRegion] = useState({
+    latitude: 0,
+    longitude: 0,
   });
 
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      getUserAccessToken();
-    });
+  var watchID = null;
+  var token = '';
 
-    return unsubscribe;
+  useEffect(() => {
+    const getTokenAndlocation = async () => {
+      token = await AsyncStorage.getItem(Constants.accessToken);
+      // watchID != null && Geolocation.clearWatch(watchID);
+      getLocation();
+
+      props.navigation.addListener('focus', () => {
+        getLocation();
+      });
+    };
+
+    getTokenAndlocation();
   }, [props.navigation]);
 
-  const getUserAccessToken = async () => {
-    const token = await AsyncStorage.getItem(Constants.accessToken);
-    setaccessToken(token);
-    getUserProfile();
-  };
+  const getLocation = async () => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        // _map.current.animateToRegion(
+        //   {
+        //     longitude: Number(position.coords.latitude),
+        //     latitude: Number(position.coords.longitude),
+        //     latitudeDelta: 0.002,
+        //     longitudeDelta: 0.002,
+        //   },
+        //   1500,
+        // );
 
-  getUserProfile = () => {
-    setisLoading(true);
-    const onSuccess = ({data}) => {
-      let latitude = data.data.records.userProfile.latitude;
-      let longitude = data.data.records.userProfile.longitude;
+        getVendorAroundYou(position.coords.latitude, position.coords.longitude);
 
-      getVendorAroundYou(latitude, longitude);
-      setisLoading(false);
-    };
+        setRegion({
+          latitude: Number(position.coords.latitude),
+          longitude: Number(position.coords.longitude),
+          latitudeDelta: 0.002,
+          longitudeDelta: 0.002,
+        });
 
-    const onFailure = (error) => {
-      setisLoading(false);
-      utils.showResponseError(error);
-    };
-
-    setisLoading(false);
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: accessToken,
+        console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
+      (error) => {
+        console.log(
+          'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
+          error,
+        );
+      },
+    );
+
+    // watchID = Geolocation.watchPosition((position) => {
+    //   const lastPosition = JSON.stringify(position);
+    //   console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    // });
   };
 
   // console.log("response =============>", vendorAround)
-  getVendorAroundYou = (latatide, longitude) => {
+  const getVendorAroundYou = (latatide, longitude) => {
     setisLoading(true);
     const onSuccess = ({data}) => {
-      console.log('Around Data ==============', data.data);
+      console.log('Around Data ============== > ', data);
       setvendorAround(data.data);
       setisLoading(false);
     };
@@ -193,39 +111,12 @@ const Nearby = (props) => {
     Axios.get(Constants.getvendorAround, {
       params,
       headers: {
-        Authorization: accessToken,
+        Authorization: token,
       },
     })
       .then(onSuccess)
       .catch(onFailure);
   };
-
-  const interpolations = state.markers.map((marker, index) => {
-    const inputRange = [
-      (index - 1) * CARD_WIDTH,
-      index * CARD_WIDTH,
-      (index + 1) * CARD_WIDTH,
-    ];
-
-    const scale = mapAnimation.interpolate({
-      inputRange,
-      outputRange: [1, 2, 1],
-      extrapolate: 'clamp',
-    });
-
-    return {scale};
-  });
-
-  const onMarkerPress = (mapEventData) => {
-    const markerId = mapEventData._targetInst.return.key;
-    let x = markerId * CARD_WIDTH + markerId * SIZES.twenty;
-    if (Platform.OS === 'ios') x = x - SPACING_FOR_CARD_INSET;
-
-    _scrollView.current.scrollTo({x: x, y: 0, animate: true});
-  };
-
-  const _map = React.useRef(null);
-  const _scrollView = React.useRef(null);
 
   const mapStyle = [
     {
@@ -390,81 +281,102 @@ const Nearby = (props) => {
 
   return (
     <View style={styles.container}>
+      {Region.latitude !== 0 && Region.longitude !== 0 ? (
+        <MapView
+          ref={_map}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: Region.latitude,
+            longitude: Region.longitude,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.04,
+          }}
+          // zoomEnabled
+          showsUserLocation
+          // maxZoomLevel={15}
+          // minZoomLevel={2}
+          customMapStyle={mapStyle}
+          style={[styles.container]}>
+          {/* <Marker
+          coordinate={{
+            latitude: Region.latitude,
+            longitude: Region.longitude,
+          }}>
+          <Image
+            source={{uri: Constants.imageURL + userImage}}
+            style={{
+              height: SIZES.ten * 5,
+              width: SIZES.ten * 5,
+              borderRadius: SIZES.ten * 5,
+            }}
+          />
+        </Marker> */}
+          {vendorAround && vendorAround.length
+            ? vendorAround.map((marker, index) => {
+                return (
+                  <MapView.Marker
+                    key={index}
+                    coordinate={{
+                      latitude: Number(marker.latitude),
+                      longitude: Number(marker.longitude),
+                    }}
+                    onPress={() => {
+                      props.navigation.navigate(Constants.viewVendorProfile, {
+                        item: marker.id,
+                      });
+                    }}>
+                    <View style={styles.markerWrap}>
+                      <Image
+                        source={{uri: Constants.imageURL + marker.image}}
+                        style={[styles.marker]}
+                      />
+                    </View>
+                  </MapView.Marker>
+                );
+              })
+            : null}
+        </MapView>
+      ) : null}
+
       <View
         style={{
-          position: 'absolute',
-          top: 0,
-          width: '90%',
+          width: '100%',
           alignSelf: 'center',
           flexDirection: 'row',
-          elevation: SIZES.ten,
           backgroundColor: Colors.white,
           borderBottomLeftRadius: SIZES.twenty,
           borderBottomRightRadius: SIZES.twenty,
-          padding: SIZES.twenty,
+          alignItems: 'center',
+          height: SIZES.fifty,
+          elevation: SIZES.ten,
           shadowColor: '#000',
           shadowOffset: {width: SIZES.five, height: SIZES.five},
           shadowOpacity: 1.0,
           shadowRadius: SIZES.ten,
-          alignItems: 'center',
         }}>
-        <View style={{flex: 1}}>
-          <RegularTextCB style={[{fontSize: SIZES.twenty, fontWeight: 'bold'}]}>
-            102 Electricians
-          </RegularTextCB>
-          <LightTextCB style={{fontSize: 14, color: Colors.black}}>
-            Near by..
-          </LightTextCB>
-        </View>
         <TouchableOpacity
+          style={{
+            height: SIZES.ten * 6,
+            width: SIZES.ten * 6,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
           onPress={() => {
             props.navigation.goBack();
-          }}>
-          <Image source={Images.iconClose} style={styles.iconBack} />
+          }}
+          activeOpacity={0.6}>
+          <Image
+            source={Images.arrowBack}
+            style={[styles.iconBack, {tintColor: Colors.black}]}
+          />
         </TouchableOpacity>
+        <RegularTextCB style={[{fontSize: SIZES.twenty, fontWeight: '600'}]}>
+          Vendors Around You
+        </RegularTextCB>
       </View>
-      <MapView
-        ref={_map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={state.region}
-        customMapStyle={mapStyle}
-        style={[styles.container]}>
-        {vendorAround.map((marker, index) => {
-          {
-            /* const scaleStyle = {
-            transform: [
-              {
-                scale: interpolations[index].scale,
-              },
-            ],
-          }; */
-          }
 
-          console.log('marker data ==-= ', marker.latitude);
-
-          return (
-            <MapView.Marker
-              key={index}
-              coordinate={{
-                latitude: Number(marker.latitude),
-                longitude: Number(marker.longitude),
-              }}
-              onPress={(e) => {
-                onMarkerPress(e);
-              }}>
-              <Animated.View style={[styles.markerWrap]}>
-                <Animated.Image
-                  source={{uri: Constants.imageURL + marker.image}}
-                  style={styles.marker}
-                />
-              </Animated.View>
-            </MapView.Marker>
-          );
-        })}
-      </MapView>
-
-      <Animated.ScrollView
-        ref={_scrollView}
+      {/* <Animated.ScrollView
+        // ref={_scrollView}
         horizontal
         scrollEventThrottle={1}
         showsHorizontalScrollIndicator={false}
@@ -497,75 +409,8 @@ const Nearby = (props) => {
             },
           ],
           {useNativeDriver: true},
-        )}>
-        {vendorAround.map((marker, index) => {
-          {
-            /* console.log('marker data ==== ', marker) */
-          }
-          return (
-            <TouchableOpacity
-              style={styles.card}
-              key={index}
-              onPress={() => {
-                props.navigation.navigate(Constants.viewVendorProfile, {
-                  item: marker.id,
-                });
-              }}>
-              <View style={[styles.circleCard]}>
-                <Image
-                  source={{uri: Constants.imageURL + marker.image}}
-                  style={styles.iconUser}
-                />
-              </View>
-              <View style={styles.textContent}>
-                <RegularTextCB style={[styles.cardtitle]}>
-                  {marker.name}
-                </RegularTextCB>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    marginTop: SIZES.five,
-                  }}>
-                  <Image
-                    source={Images.iconVerified}
-                    style={{
-                      height: SIZES.fifteen,
-                      width: SIZES.fifteen,
-                      resizeMode: 'contain',
-                    }}
-                  />
-                  <RegularTextCB
-                    style={{
-                      fontSize: 14,
-                      color: Colors.turqoiseGreen,
-                      marginStart: SIZES.five,
-                    }}>
-                    Verified
-                  </RegularTextCB>
-                </View>
-                <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    color: Colors.grey,
-                    marginTop: SIZES.five,
-                  }}>
-                  {marker.location}
-                </RegularTextCB>
-                <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    color: Colors.orangeYellow,
-                    marginTop: SIZES.five,
-                  }}>
-                  {marker.rating}
-                </RegularTextCB>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </Animated.ScrollView>
+        )}></Animated.ScrollView> */}
+
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
@@ -587,6 +432,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    ...StyleSheet.absoluteFill,
   },
   chipsScrollView: {
     position: 'absolute',
@@ -665,16 +511,14 @@ const styles = StyleSheet.create({
     color: '#444',
   },
   markerWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: SIZES.fifty,
-    height: SIZES.fifty,
-    borderRadius: SIZES.fifty,
+    width: SIZES.ten * 6,
+    height: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 6,
     overflow: 'hidden',
   },
   marker: {
-    width: SIZES.ten * 3,
-    height: SIZES.ten * 3,
+    width: '100%',
+    height: '100%',
   },
   button: {
     alignItems: 'center',
@@ -692,5 +536,10 @@ const styles = StyleSheet.create({
   textSign: {
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  iconBack: {
+    height: SIZES.fifteen,
+    width: SIZES.fifteen,
+    resizeMode: 'contain',
   },
 });

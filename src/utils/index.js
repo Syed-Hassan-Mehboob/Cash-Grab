@@ -1,6 +1,6 @@
 import React from 'react';
-import { Toast } from 'native-base';
-import { RefreshControl, Alert, StatusBar, Platform } from 'react-native';
+import {Toast} from 'native-base';
+import {RefreshControl, Alert, StatusBar, Platform} from 'react-native';
 import Colors from '../common/Colors';
 import Constants from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,15 +12,15 @@ class utils {
       title,
       msg,
       [
-        { text: 'NO', onPress: () => callback('error') },
-        { text: 'YES', onPress: () => callback('success') },
+        {text: 'NO', onPress: () => callback('error')},
+        {text: 'YES', onPress: () => callback('success')},
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   }
 
   isEmpty(obj) {
-   console.log('isempty started',obj)
+    console.log('isempty started', obj);
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) return false;
     }
@@ -28,7 +28,7 @@ class utils {
   }
 
   validateEmail(str) {
-    console.log('this.validateEmail ', str)
+    console.log('this.validateEmail ', str);
     var pattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return pattern.test(str);
   }
@@ -108,7 +108,8 @@ class utils {
     console.log(errorCode);
     if (errorCode === '400') {
       let errorData = error.response.data;
-      this.showToast(errorData.message);
+      // this.showToast(errorData.message);
+      this.showToast(JSON.stringify(errorData.data));
     } else if (errorCode === '405') {
       this.showToast('Wrong Api Method');
     } else {

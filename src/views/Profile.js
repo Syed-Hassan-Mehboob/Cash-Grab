@@ -10,13 +10,13 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -29,35 +29,41 @@ export default class Profile extends React.Component {
     name: '',
     email: '',
     countryCode: '',
+    countryFlag: '',
     phone: '',
-    location: '', 
+    location: '',
+    abouteMe: '',
   };
 
   componentDidMount() {
+    this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
     });
   }
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getUserProfile());
+    this.setState({accessToken: token}, () => this.getUserProfile());
   };
 
   getUserProfile = () => {
-    const onSuccess = ({ data }) => {
+    const onSuccess = ({data}) => {
+      console.log('Profile data ==== ', data.data.records);
       this.toggleIsLoading();
       this.setState({
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
+        countryFlag: data.data.records.country_flag,
         phone: data.data.records.phone,
         location: data.data.records.userProfile.location,
+        abouteMe: data.data.records.userProfile.about_me,
       });
     };
 
@@ -65,8 +71,6 @@ export default class Profile extends React.Component {
       this.toggleIsLoading();
       utils.showResponseError(error);
     };
-
-
 
     this.toggleIsLoading();
     Axios.get(Constants.getProfileURL, {
@@ -83,8 +87,8 @@ export default class Profile extends React.Component {
       <View style={styles.container}>
         <View
           style={{
-            borderBottomStartRadius: SIZES.ten*3,
-            borderBottomEndRadius: SIZES.ten*3,
+            borderBottomStartRadius: SIZES.ten * 3,
+            borderBottomEndRadius: SIZES.ten * 3,
             height: height / 2.15,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -98,20 +102,28 @@ export default class Profile extends React.Component {
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
-            <RegularTextCB style={{ fontSize: 30, color: Colors.white }}>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                left: SIZES.ten,
+                width: SIZES.fifteen,
+                height: SIZES.fifteen,
+              }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <Image
+                source={Images.arrowBack}
+                style={[styles.iconBack, {tintColor: Colors.white}]}
+              />
+            </TouchableOpacity>
+            <RegularTextCB style={{fontSize: 30, color: Colors.white}}>
               Profile
             </RegularTextCB>
             <TouchableOpacity
-              style={{ position: 'absolute', right: SIZES.ten }}
+              style={{position: 'absolute', right: SIZES.ten}}
               onPress={() => {
-                this.props.navigation.navigate(Constants.editProfile,{
-                  avatar:Constants.imageURL+this.state.avatar,
-                  name: this.state.name,
-                  email: this.state.email,
-                  countryCode: this.state.countryCode,
-                  phone: this.state.phone,
-                  location:this.state.location,
-                });
+                this.props.navigation.navigate(Constants.editProfile);
               }}>
               <Image
                 source={Images.iconEdit}
@@ -125,7 +137,7 @@ export default class Profile extends React.Component {
           </View>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL+this.state.avatar}}
+              source={{uri: Constants.imageURL + this.state.avatar}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -138,7 +150,11 @@ export default class Profile extends React.Component {
             }}>
             <Image
               source={Images.iconVerified}
-              style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
+              style={{
+                height: SIZES.fifteen,
+                width: SIZES.fifteen,
+                resizeMode: 'contain',
+              }}
             />
             <RegularTextCB
               style={{
@@ -150,7 +166,7 @@ export default class Profile extends React.Component {
             </RegularTextCB>
           </View>
           <RegularTextCB
-            style={{ color: Colors.white, fontSize: 18, marginTop: SIZES.five }}>
+            style={{color: Colors.white, fontSize: 18, marginTop: SIZES.five}}>
             {this.state.name}
           </RegularTextCB>
           <RegularTextCB
@@ -159,28 +175,34 @@ export default class Profile extends React.Component {
               fontSize: 16,
               textAlign: 'center',
               marginTop: SIZES.five,
-            }}>
-            Hello there i am a professional car mechanic,{'\n'}I have 8 years of
-            experience so feel free{'\n'}to contact me.
+            }}
+            numberOfLines={2}>
+            {this.state.abouteMe != null
+              ? this.state.abouteMe
+              : 'Aboute Me is Not Define '}
           </RegularTextCB>
         </View>
         <View
           style={[
             styles.card,
-            { marginHorizontal: SIZES.twenty, marginTop: -SIZES.twenty, padding: SIZES.twenty },
+            {
+              marginHorizontal: SIZES.twenty,
+              marginTop: -SIZES.twenty,
+              padding: SIZES.twenty,
+            },
           ]}>
           <View
             style={[
               styles.card,
               {
-                marginTop: -SIZES.ten*4,
+                marginTop: -SIZES.ten * 4,
                 paddingVertical: SIZES.ten,
                 paddingHorizontal: SIZES.twenty,
                 borderWidth: 1,
                 borderColor: Colors.sickGreen,
               },
             ]}>
-            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               Description
             </RegularTextCB>
           </View>
@@ -191,10 +213,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: SIZES.ten,
             }}>
-            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
               User Name
             </RegularTextCB>
-            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               {this.state.name}
             </RegularTextCB>
           </View>
@@ -205,10 +227,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: SIZES.ten,
             }}>
-            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
               Email Address
             </RegularTextCB>
-            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               {this.state.email}
             </RegularTextCB>
           </View>
@@ -219,10 +241,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: SIZES.ten,
             }}>
-            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
               Phone No.
             </RegularTextCB>
-            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               {this.state.countryCode.concat('', this.state.phone)}
             </RegularTextCB>
           </View>
@@ -233,10 +255,10 @@ export default class Profile extends React.Component {
               width: '100%',
               paddingVertical: SIZES.ten,
             }}>
-            <RegularTextCB style={{ color: Colors.coolGrey, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 16}}>
               Location
             </RegularTextCB>
-            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               {this.state.location}
             </RegularTextCB>
           </View>
@@ -266,24 +288,24 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.ten,
     padding: SIZES.twenty,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.5,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
     alignItems: 'center',
   },
   iconUser: {
-    height: SIZES.ten*9,
-    width: SIZES.ten*9,
-    borderRadius: SIZES.ten*9 / 2,
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
+    borderRadius: (SIZES.ten * 9) / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: SIZES.ten*9,
-    width: SIZES.ten*9,
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
     borderRadius: 45,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,

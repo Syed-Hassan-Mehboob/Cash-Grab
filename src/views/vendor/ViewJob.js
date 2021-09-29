@@ -8,11 +8,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  FlatList
+  FlatList,
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE,Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Colors from '../../common/Colors';
-import Constants, { height, SIZES } from '../../common/Constants';
+import Constants, {height, SIZES, STYLES, FONTS} from '../../common/Constants';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
@@ -21,8 +21,6 @@ import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
 export default class ViewJob extends React.Component {
-  
-
   initialMapState = {
     region: {
       latitude: 24.9050562,
@@ -32,79 +30,79 @@ export default class ViewJob extends React.Component {
     },
   };
 
-
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
       accessToken: '',
       viewJob: [],
-      images:[],
-      userData:{},
-      userImage:'',
-      username:'',
-      title:'',
-      price:'',
-      location:'',
-      time:'',
+      images: [],
+      userData: {},
+      userImage: '',
+      username: '',
+      title: '',
+      price: '',
+      location: '',
+      time: '',
       region: this.initialMapState.region,
-      latitude:'',
-      longitude:''
+      latitude: '',
+      longitude: '',
+      description: '',
+      jobService: [],
     };
   }
 
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.getUserAccessToken()
+    this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
-      this.getUserAccessToken()
+      this.getUserAccessToken();
     });
   }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.viewJob();
     });
   };
 
-  
-
   viewJob = () => {
-    
-    this.setState({isLoading:true}) 
-    const onSuccess = ({ data }) => {
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      console.log(
+        'View Job Data ==== ==== ',
+        JSON.stringify(data.data.records),
+      );
 
-      console.log
-     
-      this.setState({isLoading:false})
+      this.setState({isLoading: false});
       this.setState({
-     userImage:data.data.records.user.userProfile.image,
-     title:data.data.records.title,
-     location:data.data.records.location,
-     time:data.data.records.time,
-     images:data.data.records.images,
-     username:data.data.records.user.name,
-     lat:data.data.records.user.userProfile.latitude,
-     lng:data.data.records.user.userProfile.longitude,
-     price:data.data.records.price,
-     description:data.data.records.description,
-    latitude:data.data.records.user.userProfile.latitude,
-    longitude:data.data.records.user.userProfile.longitude
-      })
+        userImage: data.data.records.user.userProfile.image,
+        title: data.data.records.title,
+        location: data.data.records.location,
+        time: data.data.records.time,
+        images: data.data.records.images,
+        username: data.data.records.user.name,
+        lat: data.data.records.user.userProfile.latitude,
+        lng: data.data.records.user.userProfile.longitude,
+        price: data.data.records.price,
+        description: data.data.records.description,
+        latitude: data.data.records.user.userProfile.latitude,
+        longitude: data.data.records.user.userProfile.longitude,
+        jobService: data.data.records.job_service,
+      });
 
       // utils.showToast(data.message)
 
-      this.setState({ isLoading: false,  });
-
+      this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     let params = {
       jobId: this.props.route.params.item,
     };
@@ -116,24 +114,23 @@ export default class ViewJob extends React.Component {
     })
       .then(onSuccess)
       .catch(onFailure);
-    
   };
 
- 
-
   render() {
-    // this.state.images.map((item)=>{console.log('==========',item)})
+    this.state.jobService.map((item) => {
+      console.log('========== Job Services ==== =', item.name);
+    });
 
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            // width: '100%',
+            padding: SIZES.ten * 2,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: SIZES.ten}}
@@ -142,8 +139,11 @@ export default class ViewJob extends React.Component {
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: SIZES.ten*3}}>View Job</RegularTextCB>
+          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
+            View Job
+          </RegularTextCB>
         </View>
+
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: SIZES.five}}>
             <View style={{padding: SIZES.twenty}}>
@@ -154,7 +154,7 @@ export default class ViewJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri:Constants.imageURL+this.state.userImage}}
+                    source={{uri: Constants.imageURL + this.state.userImage}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -207,18 +207,17 @@ export default class ViewJob extends React.Component {
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  $
-                  {this.state.price}
+                  ${this.state.price}
                 </LightTextCB>
               </View>
-              {/* <RegularTextCB
+
+              <RegularTextCB
                 style={{
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
-                User Type
-                {this.props.route.params.item.user.type}
-              </RegularTextCB> */}
+                {this.state.jobService[0]?.categories.name}
+              </RegularTextCB>
 
               <RegularTextCB
                 style={{
@@ -226,6 +225,7 @@ export default class ViewJob extends React.Component {
                 }}>
                 {this.state.description}
               </RegularTextCB>
+
               <View
                 style={{
                   flexDirection: 'row',
@@ -262,43 +262,43 @@ export default class ViewJob extends React.Component {
                   {this.state.time}
                 </RegularTextCB>
               </View>
-              </View>
+            </View>
 
-          <FlatList
+            <FlatList
               horizontal
               data={this.state.images}
               keyExtractor={(item) => item.id}
-              renderItem={({item})=>{
-                console.log('images===',item.images)
-                return(
-                    <Image source={Images.car1} style={styles.carImage}/>
-          
-                )
+              renderItem={({item}) => {
+                console.log('images===', item.images);
+                return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}
             />
 
             <MapView
               provider={PROVIDER_GOOGLE}
-          
               initialRegion={{
-                latitude:24.90628280557342,
-                longitude:67.07237028142383,
+                latitude: 24.90628280557342,
+                longitude: 67.07237028142383,
                 latitudeDelta: 0.04864195044303443,
-               longitudeDelta: 0.04014281769006
+                longitudeDelta: 0.04014281769006,
               }}
-
               showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
-              style={styles.mapStyle}
-            >
-             <Marker coordinate={{ latitude:Number(this.state.latitude),longitude:Number(this.state.longitude)}} 
-               title={this.state.title}
-             />
-
+              style={styles.mapStyle}>
+              <Marker
+                coordinate={{
+                  latitude: Number(this.state.latitude),
+                  longitude: Number(this.state.longitude),
+                }}
+              />
             </MapView>
-            <View style={{marginVertical: SIZES.ten*3, marginHorizontal: SIZES.twenty}}>
+            <View
+              style={{
+                marginVertical: SIZES.ten * 3,
+                marginHorizontal: SIZES.twenty,
+              }}>
               <ButtonRadius10
                 label="CONTACT"
                 bgColor={Colors.sickGreen}
@@ -312,8 +312,7 @@ export default class ViewJob extends React.Component {
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
-          textStyle={{ color: '#FFF',
-         fontFamily: Constants.fontRegular,}}
+          textStyle={{color: '#FFF', fontFamily: Constants.fontRegular}}
         />
       </View>
     );
@@ -326,7 +325,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   mapStyle: {
-    height:SIZES.ten*40,
+    height: SIZES.ten * 40,
     top: 0,
     left: 0,
     right: 0,
@@ -345,30 +344,30 @@ const styles = StyleSheet.create({
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
   },
   carImage: {
-    height: SIZES.fifty*2,
-    width: SIZES.fifty*2,
+    height: SIZES.fifty * 2,
+    width: SIZES.fifty * 2,
   },
   carImageShadow: {
-    height: SIZES.ten*8,
-    width: SIZES.ten*8,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
     borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   spinnerTextStyle: {
