@@ -10,12 +10,13 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
+import {Text} from 'native-base';
 SIZES;
 export default class SingleCategory extends Component {
   constructor(props) {
@@ -77,151 +78,66 @@ export default class SingleCategory extends Component {
     // console.log('Single Category Item======',item.userProfile)
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
         style={[
           styles.card,
           {
-            padding: SIZES.fifteen,
             marginHorizontal: SIZES.fifteen,
-            marginBottom: SIZES.twenty,
-            marginTop: SIZES.five,
+            marginTop: SIZES.twenty,
+            alignItems: 'center',
           },
         ]}
-        onPress={() => this.props.navigation.navigate(Constants.chat)}>
+        onPress={() =>
+          this.props.navigation.navigate(Constants.singleCategory, {
+            item: item,
+          })
+        }>
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{uri: Constants.imageURL + item.image}}
-              // source={item.image}
-              style={{height: '100%', width: '100%'}}
-              resizeMode="stretch"
-            />
-          </View>
-          <View style={{marginStart: SIZES.ten}}>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-                fontSize: 16,
-              }}>
-              {item.name}
-            </RegularTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: SIZES.five,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{
-                  height: SIZES.fifteen,
-                  width: SIZES.fifteen,
-                  resizeMode: 'contain',
-                }}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 12,
-                  marginStart: SIZES.five,
-                }}>
-                Verified
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <RegularTextCB
+          <Image
+            source={{uri: Constants.imageURL + item.image}}
+            // source={item.image}
             style={{
-              color: Colors.sickGreen,
-              fontSize: 12,
-            }}>
-            {item.services[0]['name']}
-          </RegularTextCB>
-          <LightTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 12,
-            }}>
-            ${item.services[0]['price']}
-          </LightTextCB>
+              height: SIZES.ten * 10,
+              width: SIZES.ten * 10,
+              borderRadius: SIZES.ten * 10,
+            }}
+            resizeMode="cover"
+          />
+          <Text>View Profile</Text>
         </View>
-
         <RegularTextCB
           style={{
+            fontSize: 16,
+            marginTop: SIZES.ten,
             color: Colors.coolGrey,
           }}>
-          {item.bio}
+          {item.name}
         </RegularTextCB>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconLocationPin}
-            style={{
-              height: SIZES.twenty - 3,
-              width: SIZES.twenty - 3,
-              resizeMode: 'contain',
-            }}
-          />
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              marginStart: SIZES.five,
-            }}>
-            {item.address}
-          </RegularTextCB>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{
-              height: SIZES.twenty - 3,
-              width: SIZES.twenty - 3,
-              resizeMode: 'contain',
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: SIZES.five,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB>
-          </View>
-        </View>
       </TouchableOpacity>
     );
   };
 
+  formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
+      numberOfElementsLastRow++;
+    }
+
+    return data;
+  };
+
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container]}>
         <View
           style={{
             flexDirection: 'row',
@@ -259,20 +175,14 @@ export default class SingleCategory extends Component {
             </RegularTextCB>
           </View>
         </View>
+
         <FlatList
-          style={{marginTop: SIZES.ten}}
-          data={this.state.vendors}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          // horizontal
+          data={this.formatData(this.state.vendors, 2)}
+          keyExtractor={(index) => index}
           renderItem={this.renderSingleCategoriesItem}
-          contentInset={{
-            // for ios
-            bottom: SIZES.ten * 10,
-          }}
-          contentContainerStyle={{
-            // for android
-            paddingBottom: SIZES.ten * 10,
-          }}
+          showsHorizontalScrollIndicator={false}
         />
 
         <Spinner
@@ -356,9 +266,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
+    flex: 1,
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
-    flex: 1,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,

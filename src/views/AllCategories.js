@@ -1,4 +1,4 @@
-import {Card} from 'native-base';
+import {Card, Icon} from 'native-base';
 import React, {Component} from 'react';
 import {
   View,
@@ -8,16 +8,18 @@ import {
   FlatList,
   Platform,
   Dimensions,
+  Text,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../network/APIKit';
 import utils from '../utils';
+import LightTextCB from '../components/LightTextCB';
 
 export default class AllCategories extends Component {
   constructor(props) {
@@ -84,14 +86,18 @@ export default class AllCategories extends Component {
 
     return (
       <TouchableOpacity
+        activeOpacity={0.5}
         style={[
           styles.card,
           {
-            padding: 15,
-            marginHorizontal: SIZES.five,
-            marginBottom: SIZES.twenty,
-            marginTop: SIZES.five,
+            marginTop: SIZES.twenty,
+            flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'space-between',
+            marginHorizontal: SIZES.ten,
+            paddingHorizontal: SIZES.twenty,
+            paddingVertical: SIZES.ten * 2,
+            borderRadius: SIZES.ten,
           },
         ]}
         onPress={() =>
@@ -99,21 +105,74 @@ export default class AllCategories extends Component {
             item: item,
           })
         }>
-        <Image
-          source={{uri: Constants.imageURL + item.image}}
-          // source={item.image}
-          style={{height: SIZES.ten * 10, width: SIZES.ten * 10}}
-          resizeMode="cover"
-        />
+        <View style={{flex: 0.95}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <View style={styles.circleCard}>
+              <Image
+                source={{uri: Constants.imageURL + item.image}}
+                // source={item.image}
+                style={{height: '100%', width: '100%'}}
+                resizeMode="stretch"
+              />
+            </View>
 
-        <RegularTextCB
-          style={{
-            fontSize: 16,
-            marginTop: SIZES.ten,
-            color: Colors.coolGrey,
-          }}>
-          {item.name}
-        </RegularTextCB>
+            <View style={{marginStart: SIZES.ten}}>
+              <RegularTextCB
+                style={[
+                  FONTS.boldFont16,
+                  {
+                    color: Colors.black,
+                  },
+                ]}>
+                {item.name}
+              </RegularTextCB>
+              <RegularTextCB
+                style={{
+                  color: Colors.black,
+                  fontSize: 14,
+                  textDecorationLine: 'underline',
+                  paddingVertical: SIZES.five + 2,
+                }}>
+                View Profile
+              </RegularTextCB>
+            </View>
+          </View>
+
+          <Text
+            style={{
+              marginTop: SIZES.ten,
+              color: Colors.coolGrey,
+              fontSize: 14,
+              fontFamily: Constants.fontRegular,
+              lineHeight: 20,
+            }}
+            numberOfLines={3}>
+            Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod
+            temp or incididunt ut labore et dolore...
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          // onPress={() => this.props.navigation.navigate(Constants.home)}
+          style={[
+            styles.card,
+            {
+              backgroundColor: Colors.sickGreen,
+              padding: SIZES.ten * 2,
+              borderRadius: SIZES.ten * 4,
+            },
+          ]}>
+          <Icon
+            type="AntDesign"
+            name="right"
+            style={{color: Colors.white, fontSize: 18}}
+          />
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
@@ -124,7 +183,7 @@ export default class AllCategories extends Component {
 
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
         <View
           style={{
             flexDirection: 'row',
@@ -136,9 +195,14 @@ export default class AllCategories extends Component {
             onPress={() => {
               this.props.navigation.goBack();
             }}>
-            <Image source={Images.arrowBack} style={styles.iconBack} />
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+              onPress={() => props.navigation.goBack()}
+            />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: SIZES.ten * 3, alignSelf: 'center'}}>
+          <RegularTextCB style={[FONTS.boldFont24, {}]}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity
@@ -150,17 +214,17 @@ export default class AllCategories extends Component {
               style={{
                 height: SIZES.twenty,
                 width: SIZES.twenty,
-                resizeMode: 'contain',
               }}
+              resizeMode={'contain'}
             />
           </TouchableOpacity>
         </View>
+
         <View style={{flex: 1, paddingTop: SIZES.ten}}>
           <FlatList
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
-            data={this.formatData(this.state.getAllCategories, 2)}
-            numColumns={2}
+            data={this.state.getAllCategories}
             renderItem={this.renderAllCategoriesItem}
             contentInset={{
               // for ios
@@ -169,6 +233,7 @@ export default class AllCategories extends Component {
             contentContainerStyle={{
               // for android
               paddingBottom: SIZES.ten * 10,
+              marginTop: SIZES.twenty,
             }}
           />
         </View>
@@ -253,11 +318,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
-    backgroundColor: '#fff',
-    height: SIZES.ten * 20,
-    width: SIZES.ten * 10,
-    borderRadius: SIZES.ten * 2,
-    flex: 1,
+    backgroundColor: '#ffff',
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
@@ -265,9 +326,9 @@ const styles = StyleSheet.create({
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten * 6,
-    width: SIZES.ten * 6,
-    borderRadius: SIZES.ten * 3,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: SIZES.ten * 8,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
