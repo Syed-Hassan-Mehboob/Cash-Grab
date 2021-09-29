@@ -24,6 +24,7 @@ import AddServices from '../views/vendor/AddServices';
 import SelectIntrest from '../views/vendor/SelectIntrest';
 import SelectIndustry from '../views/vendor/SelectIndustry';
 import VendorSignUp from '../views/vendor/VendorSignUp';
+
 const Stack = createStackNavigator();
 
 export default class Routes extends Component {

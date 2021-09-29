@@ -12,16 +12,15 @@ import {
   View,
   Platform,
   PermissionsAndroid,
+  Text,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from 'react-native-modal';
-import Constants, {height, SIZES, width} from '../common/Constants';
+import Constants, {FONTS, height, SIZES, width} from '../common/Constants';
 import Axios from '../network/APIKit';
-import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import Geolocation from '@react-native-community/geolocation';
-import {Dimensions} from 'react-native';
 
 export default class Home extends Component {
   constructor(props) {
@@ -56,10 +55,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    console.log('User Home ===== ');
-
     this.checkLocationPermission();
-
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
     this.props.navigation.addListener('focus', () => {
@@ -68,116 +64,62 @@ export default class Home extends Component {
     });
   }
 
+  //  Check user Location Permssion
+  checkLocationPermission = async () => {
+    try {
+      if (Platform.OS === 'ios') {
+        Geolocation.requestAuthorization();
+        this.getLocation();
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          if (this.state.seeAllClicked) {
+            // this.getLocation();
+            // this.getUserAccessToken();
+            this.openNearbyScreen();
+          } else {
+            this.getLocation();
+            this.getUserAccessToken();
+          }
+        } else {
+          this.setState({permissionModalVisibility: true});
+        }
+      }
+    } catch (err) {
+      console.log('getLocation catch: ==================> ', err);
+    }
+  };
+
+  //  Get user Location
   getLocation = async () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        // _map.current.animateToRegion(
-        //   {
-        //     longitude: Number(position.coords.latitude),
-        //     latitude: Number(position.coords.longitude),
-        //     latitudeDelta: 0.002,
-        //     longitudeDelta: 0.002,
-        //   },
-        //   1500,
-        // );
-
-        console.log('======Geolocation ', position.coords);
-
+        console.log('======Geolocation ', position.coords.longitude);
         this.setState({
           currentLat: position.coords.latitude,
           currentLong: position.coords.longitude,
         });
-
-        // //console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        this.getUserAccessToken();
       },
       (error) => {
-        // //console.log(
-        //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
-        //   error,
-        // );
+        console.log('Home Screen Get Location error ', error);
+        this.getUserAccessToken();
       },
     );
-
-    // watchID = Geolocation.watchPosition((position) => {
-    //   const lastPosition = JSON.stringify(position);
-    //   ////console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    // });
   };
 
-  checkLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        if (this.state.seeAllClicked) {
-          // this.getLocation();
-          // this.getUserAccessToken();
-          this.openNearbyScreen();
-        } else {
-          this.getLocation();
-          this.getUserAccessToken();
-        }
-      } else {
-        // ////console.log('location permission denied');
-        this.setState({permissionModalVisibility: true});
-      }
-    } catch (err) {
-      ////console.log('getLocation catch: ==================> ', err);
-    }
-  };
-
-  openNearbyScreen = () => {
-    this.setState({seeAllClicked: false}, () => {
-      this.props.navigation.navigate(Constants.nearby, {
-        avatar: this.state.avatar,
-      });
-    });
-  };
-
+  // Get Access Token
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      this.getUserProfile();
       this.getCategories();
-      this.getTopServices();
-      // //console.log(
-      //   'coordinates',
-      //   this.state.currentLat,
-      //   ' =============>>>>',
-      //   this.state.currentLong,
-      // );
       this.getVendorAroundYou();
     });
   };
 
-  getUserProfile = () => {
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      this.setState({
-        isLoading: false,
-        avatar: data.data.records.userProfile.image,
-        name: data.data.records.name,
-      });
-      let latitude = data.data.records.userProfile.latitude;
-      let longitude = data.data.records.userProfile.longitude;
-      // this.getVendorAroundYou(latitude, longitude);
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    Axios.get(Constants.getProfileURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
+  // Get All Categories Api
   getCategories = () => {
     const onSuccess = ({data}) => {
       this.setState({isLoading: false, categories: data.data.records});
@@ -185,10 +127,8 @@ export default class Home extends Component {
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
-      utils.showResponseError(error);
     };
 
-    // this.setState({isLoading: true});
     Axios.get(Constants.customerCategoriesURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -198,6 +138,7 @@ export default class Home extends Component {
       .catch(onFailure);
   };
 
+  // Get Vendor Arround You Api
   getVendorAroundYou = () => {
     const onSuccess = ({data}) => {
       this.setState({
@@ -208,7 +149,6 @@ export default class Home extends Component {
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
-      utils.showResponseError(error);
     };
 
     let params = {
@@ -216,8 +156,6 @@ export default class Home extends Component {
       longitude: Number(this.state.currentLong),
       limit: 4,
     };
-
-    // console.log('vender Around you Params ', params);
 
     Axios.get(Constants.getvendorAround, {
       params,
@@ -229,38 +167,66 @@ export default class Home extends Component {
       .catch(onFailure);
   };
 
-  getTopServices = () => {
-    const onSuccess = ({data}) => {
-      this.setState({
-        isLoading: false,
-        topServices: data.data.records,
+  openNearbyScreen = () => {
+    this.setState({seeAllClicked: false}, () => {
+      this.props.navigation.navigate(Constants.nearby, {
+        avatar: this.state.avatar,
       });
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    // this.setState({isLoading: true});
-
-    let params = {
-      limit: SIZES.ten,
-    };
-    Axios.get(Constants.getTopSerVices, {
-      params,
-      headers: {Authorization: this.state.accessToken},
-    })
-      .then(onSuccess)
-      .catch(onFailure);
+    });
   };
 
-  toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
-  };
+  // getUserProfile = () => {
+  //   this.setState({isLoading: true});
+  //   const onSuccess = ({data}) => {
+  //     this.setState({
+  //       isLoading: false,
+  //       avatar: data.data.records.userProfile.image,
+  //       name: data.data.records.name,
+  //     });
+  //     let latitude = data.data.records.userProfile.latitude;
+  //     let longitude = data.data.records.userProfile.longitude;
+  //     // this.getVendorAroundYou(latitude, longitude);
+  //   };
+
+  //   const onFailure = (error) => {
+  //     this.setState({isLoading: false});
+  //   };
+
+  //   Axios.get(Constants.getProfileURL, {
+  //     headers: {
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
+
+  // getTopServices = () => {
+  //   const onSuccess = ({data}) => {
+  //     this.setState({
+  //       isLoading: false,
+  //       topServices: data.data.records,
+  //     });
+  //   };
+
+  //   const onFailure = (error) => {
+  //     this.setState({isLoading: false});
+  //   };
+
+  //   // this.setState({isLoading: true});
+
+  //   let params = {
+  //     limit: SIZES.ten,
+  //   };
+  //   Axios.get(Constants.getTopSerVices, {
+  //     params,
+  //     headers: {Authorization: this.state.accessToken},
+  //   })
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
 
   renderCategoryItem = ({item}) => {
-    // ////console.log('Catagory Item ====',item)
     return (
       <TouchableOpacity
         onPress={() =>
@@ -300,8 +266,6 @@ export default class Home extends Component {
   };
 
   renderVendorsAroundYouItem = ({item}) => {
-    // ////console.log('Vender item ======', item);
-
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
@@ -412,99 +376,6 @@ export default class Home extends Component {
     );
   };
 
-  renderUrgentServicesItem = ({item}) => {
-    // ////console.log('Urgent Services =======',item.userProfile)
-    return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        style={[
-          styles.card,
-          {
-            height: SIZES.ten * 20,
-            padding: SIZES.ten,
-            marginHorizontal: SIZES.ten,
-            marginTop: SIZES.five,
-            marginBottom: SIZES.ten * 4,
-          },
-        ]}
-        onPress={() => {
-          this.props.navigation.navigate(Constants.viewVendorProfile, {
-            item: item.id,
-          });
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{uri: Constants.imageURL + item.userProfile.image}}
-              style={styles.iconUser}
-              resizeMode="cover"
-            />
-          </View>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-              textDecorationLine: 'underline',
-              marginStart: SIZES.five,
-              fontSize: 14,
-            }}>
-            View Profile
-          </RegularTextCB>
-        </View>
-        <RegularTextCB
-          style={{
-            color: Colors.black,
-            marginTop: SIZES.ten,
-            fontSize: 14,
-          }}>
-          {item.name}
-        </RegularTextCB>
-        <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-          }}>
-          {item.userProfile.bio}
-        </RegularTextCB>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.star}
-            style={{
-              height: SIZES.fifteen,
-              width: SIZES.fifteen,
-              resizeMode: 'contain',
-              tintColor: Colors.orangeYellow,
-            }}
-          />
-          <RegularTextCB
-            style={{
-              fontSize: 14,
-              color: Colors.orangeYellow,
-              marginStart: 2,
-            }}>
-            {item.ratings}
-          </RegularTextCB>
-        </View>
-        <Image
-          source={Images.circularArrowForward}
-          style={{
-            height: SIZES.fifty,
-            width: SIZES.fifty,
-            position: 'absolute',
-            bottom: -SIZES.twentyFive,
-            alignSelf: 'center',
-          }}
-        />
-      </TouchableOpacity>
-    );
-  };
-
   render() {
     return (
       <View style={styles.container}>
@@ -518,28 +389,24 @@ export default class Home extends Component {
                 width: '100%',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                paddingHorizontal: SIZES.twenty,
+
                 marginTop:
                   Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 6,
               }}>
               <TouchableOpacity
                 style={{
-                  width: SIZES.fifteen * 1,
-                  height: SIZES.fifteen * 1,
+                  padding: 20,
                 }}
                 onPress={() => {
                   this.props.navigation.goBack();
                 }}>
                 <Image
                   source={Images.arrowBack}
-                  style={[
-                    styles.iconBack,
-                    {
-                      tintColor: Colors.black1,
-                      width: SIZES.fifteen * 1,
-                      height: SIZES.fifteen * 1,
-                    },
-                  ]}
+                  style={{
+                    tintColor: Colors.black1,
+                    width: SIZES.fifteen * 1,
+                    height: SIZES.fifteen * 1,
+                  }}
                 />
               </TouchableOpacity>
 
@@ -548,16 +415,18 @@ export default class Home extends Component {
               </RegularTextCB>
 
               <TouchableOpacity
+                style={{
+                  padding: 12,
+                }}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);
-                }}
-                style={{}}>
+                }}>
                 <Image
                   source={Images.iconHamburger}
+                  resizeMode="contain"
                   style={{
-                    height: SIZES.twenty,
-                    width: SIZES.twenty,
-                    resizeMode: 'contain',
+                    width: SIZES.fifteen * 1.5,
+                    height: SIZES.fifteen * 1.5,
                   }}
                 />
               </TouchableOpacity>
@@ -579,6 +448,7 @@ export default class Home extends Component {
                 style={{height: SIZES.fifty, width: SIZES.fifty}}
               />
             </TouchableOpacity>
+
             <View
               style={{
                 paddingHorizontal: SIZES.twenty,
@@ -606,6 +476,7 @@ export default class Home extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
+
             <FlatList
               horizontal
               data={this.state.categories}
@@ -624,6 +495,7 @@ export default class Home extends Component {
                 paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
               }}
             />
+
             <View
               style={{
                 paddingHorizontal: SIZES.twenty,
@@ -654,6 +526,7 @@ export default class Home extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
+
             <FlatList
               numColumns={2}
               // horizontal
@@ -661,23 +534,15 @@ export default class Home extends Component {
               keyExtractor={(index) => index}
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
+              ListEmptyComponent={() => {
+                return (
+                  <View
+                    style={{flex: 1, alignItems: 'center', paddingTop: 100}}>
+                    <Text style={FONTS.mediumFont18}>Vendor Not Found</Text>
+                  </View>
+                );
+              }}
             />
-            {/* <RegularTextCB
-              style={{
-                fontSize: SIZES.twenty,
-                marginTop: SIZES.ten,
-                paddingHorizontal: SIZES.twenty,
-              }}>
-              Top Services
-            </RegularTextCB>
-            <FlatList
-              style={{paddingBottom: SIZES.ten * 10}}
-              numColumns={2}
-              data={this.state.topServices}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={this.renderUrgentServicesItem}
-              showsHorizontalScrollIndicator={false}
-            /> */}
           </View>
         </ScrollView>
         <Spinner
@@ -825,92 +690,3 @@ const styles = StyleSheet.create({
     marginTop: SIZES.five,
   },
 });
-
-vendors = [
-  {
-    id: '1',
-    image: Images.emp1,
-    title: 'Ray Hammond',
-    type: 'Car Mechanic, NY (2km)',
-    ratings: '1.0',
-  },
-  {
-    id: '2',
-    image: Images.emp2,
-    title: 'Jay Almond',
-    type: 'Car Wash, NY (1km)',
-    ratings: '1.1',
-  },
-  {
-    id: '3',
-    image: Images.emp3,
-    title: 'Ray Hammond',
-    type: 'Puncture, NY (1.2km)',
-    ratings: '1.2',
-  },
-  {
-    id: '4',
-    image: Images.emp4,
-    title: 'Jay Almond',
-    type: 'Plumber, NY (0.2km)',
-    ratings: '1.3',
-  },
-  {
-    id: 'SIZES.five',
-    image: Images.emp1,
-    title: 'Ray Hammond',
-    type: 'Bike Electrician, NY (0.5km)',
-    ratings: '1.4',
-  },
-];
-
-urgentServices = [
-  {
-    id: '1',
-    image: Images.emp1,
-    name: 'Ray Hammond',
-    title: 'Home Renovation',
-    type: 'Lorem ipsum',
-    ratings: '1.0',
-  },
-  {
-    id: '2',
-    image: Images.emp2,
-    name: 'Ray Hammond',
-    title: 'Car Mechanic',
-    type: 'Lorem ipsum',
-    ratings: '1.0',
-  },
-  {
-    id: '3',
-    image: Images.emp3,
-    name: 'Ray Hammond',
-    title: 'Home Renovation',
-    type: 'Lorem ipsum',
-    ratings: '1.0',
-  },
-  {
-    id: '4',
-    image: Images.emp1,
-    name: 'Ray Hammond',
-    title: 'Car Mechanic',
-    type: 'Lorem ipsum',
-    ratings: '1.0',
-  },
-  {
-    id: 'SIZES.five',
-    image: Images.emp2,
-    name: 'Ray Hammond',
-    title: 'Home Renovation',
-    type: 'Lorem ipsum',
-    ratings: '1.0',
-  },
-  {
-    id: '6',
-    image: Images.emp1,
-    name: 'Ray Hammond',
-    title: 'Car Mechanic',
-    type: 'Lorem ipsum',
-    ratings: '1.0',
-  },
-];

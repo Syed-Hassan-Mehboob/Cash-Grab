@@ -203,8 +203,9 @@ export default class UserHome extends Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
+        style={STYLES.container}
         contentContainerStyle={[
-          {paddingHorizontal: SIZES.ten * 2, paddingBottom: 70},
+          {paddingHorizontal: SIZES.ten * 2, paddingBottom: 120},
         ]}>
         <View
           style={{
