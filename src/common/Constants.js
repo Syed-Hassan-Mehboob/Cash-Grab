@@ -189,9 +189,14 @@ export const FONTS = {
 export const STYLES = StyleSheet.create({
   container: {
     flex: 1,
+    // paddingTop:
+    //   Platform.OS === 'android'
+    //     ? SIZES.twenty
+    //     : getStatusBarHeight(true) + SIZES.five,
+
     paddingTop:
       Platform.OS === 'android'
-        ? SIZES.twenty
+        ? SIZES.ten
         : getStatusBarHeight(true) + SIZES.five,
     backgroundColor: COLORS.white,
   },

@@ -122,7 +122,11 @@ export default class SingleCategory extends Component {
           </Text>
         </View>
 
-        <View style={{paddingRight: SIZES.ten * 7}}>
+        <View
+          style={{
+            paddingHorizontal: SIZES.ten,
+            paddingVertical: SIZES.ten,
+          }}>
           <RegularTextCB
             style={[
               FONTS.boldFont16,
@@ -202,7 +206,7 @@ export default class SingleCategory extends Component {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
               flex: 0.42,
               alignItems: 'center',
             }}>
@@ -216,7 +220,14 @@ export default class SingleCategory extends Component {
                 borderRadius: SIZES.ten * 6,
               }}
             />
-            <RegularTextCB style={[{color: Colors.black, fontSize: 22}]}>
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  fontSize: 22,
+                  marginStart: SIZES.five * 1,
+                },
+              ]}>
               {this.props.route.params.item.name}
             </RegularTextCB>
           </View>

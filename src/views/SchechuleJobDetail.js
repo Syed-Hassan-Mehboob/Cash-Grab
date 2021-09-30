@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   Platform,
@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
 import Constants, {SIZES, width} from '../common/Constants';
 import BoldTextCB from '../components/BoldTextCB';
@@ -17,6 +18,8 @@ import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
 
 export default function ScheduleJobDetails(props) {
+  const [thankYouModal, setThankYouModal] = useState(false);
+
   return (
     <View style={styles.container}>
       <View
@@ -266,6 +269,7 @@ export default function ScheduleJobDetails(props) {
           }}>
           <TouchableOpacity
             style={{
+              flex: 1,
               backgroundColor: Colors.sickGreen,
               marginRight: SIZES.ten,
               padding: SIZES.fifteen,
@@ -274,35 +278,138 @@ export default function ScheduleJobDetails(props) {
               alignItems: 'center',
             }}
             activeOpacity={0.6}
-            onPress={() => {
-              props.navigation.navigate();
-            }}>
-            <BoldTextCB>RESCHEDULE</BoldTextCB>
+            onPress={() => {}}>
+            <RegularTextCB>RESCHEDULE</RegularTextCB>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
+              flex: 1,
               backgroundColor: Colors.coolGrey,
-              marginRight: SIZES.ten,
+              marginLeft: SIZES.ten,
               padding: SIZES.fifteen,
               borderRadius: SIZES.ten,
               width: SIZES.fifty * 2.5,
               alignItems: 'center',
             }}
-            onPress={() => {
-              // props.navigation.navigate(Constants.VenderBookings);
-            }}
+            onPress={() => {}}
             activeOpacity={0.6}>
-            <BoldTextCB style={{color: Colors.white}}>CANCEL</BoldTextCB>
+            <RegularTextCB style={{color: Colors.white}}>CANCEL</RegularTextCB>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
+
       <View style={{marginTop: SIZES.ten * 5}}>
         <ButtonRadius10
           label="SERVICE COMPLETED"
           bgColor={Colors.sickGreen}
-          onPress={() => {}}
+          onPress={() => {
+            // props.navigation.navigate(Constants.confirmPayment)
+            setThankYouModal(true);
+          }}
         />
       </View>
+
+      <Modal
+        isVisible={thankYouModal}
+        animationIn="zoomInDown"
+        animationOut="zoomOutUp"
+        animationInTiming={600}
+        animationOutTiming={600}
+        backdropTransitionInTiming={600}
+        backdropTransitionOutTiming={600}>
+        <View
+          style={{
+            backgroundColor: Colors.white,
+            padding: SIZES.fifteen,
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+          <Image
+            source={Images.greenTick}
+            resizeMode="contain"
+            style={{
+              height: SIZES.fifteen * 5,
+              width: SIZES.fifteen * 5,
+              marginBottom: 15,
+            }}
+          />
+          <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+            Thank You
+          </BoldTextCB>
+          <RegularTextCB
+            style={{
+              marginVertical: SIZES.ten,
+              fontSize: 16,
+              color: Colors.coolGrey,
+            }}>
+            For your great service
+          </RegularTextCB>
+          <View
+            style={{
+              marginVertical: SIZES.ten * 3,
+              width: '100%',
+            }}>
+            <ButtonRadius10
+              label="JOB COMPLETED"
+              bgColor={Colors.sickGreen}
+              onPress={() => {
+                setThankYouModal(false);
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        isVisible={thankYouModal}
+        animationIn="zoomInDown"
+        animationOut="zoomOutUp"
+        animationInTiming={600}
+        animationOutTiming={600}
+        backdropTransitionInTiming={600}
+        backdropTransitionOutTiming={600}>
+        <View
+          style={{
+            backgroundColor: Colors.white,
+            padding: SIZES.fifteen,
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+          <Image
+            source={Images.greenTick}
+            resizeMode="contain"
+            style={{
+              height: SIZES.fifteen * 5,
+              width: SIZES.fifteen * 5,
+              marginBottom: 15,
+            }}
+          />
+          <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+            Thank You
+          </BoldTextCB>
+          <RegularTextCB
+            style={{
+              marginVertical: SIZES.ten,
+              fontSize: 16,
+              color: Colors.coolGrey,
+            }}>
+            For your great service
+          </RegularTextCB>
+          <View
+            style={{
+              marginVertical: SIZES.ten * 3,
+              width: '100%',
+            }}>
+            <ButtonRadius10
+              label="JOB COMPLETED"
+              bgColor={Colors.sickGreen}
+              onPress={() => {
+                setThankYouModal(false);
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

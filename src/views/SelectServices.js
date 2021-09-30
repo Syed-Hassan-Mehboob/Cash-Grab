@@ -33,7 +33,7 @@ export default function SelectServices(props) {
           borderRadius: SIZES.ten,
           marginTop: SIZES.ten,
           paddingHorizontal: SIZES.twenty,
-          shadowColor: '#000',
+          shadowColor: '#c5c5c5',
           shadowOffset: {width: SIZES.five, height: SIZES.five},
           shadowOpacity: 1.0,
           shadowRadius: SIZES.ten,
@@ -84,7 +84,7 @@ export default function SelectServices(props) {
           bgColor={Colors.sickGreen}
           label="Next"
           onPress={() => {
-            props.navigation.navigate(Constants.SchechuleJobDetail);
+            props.navigation.navigate(Constants.dateTimeSlots);
           }}
         />
       </TouchableOpacity>

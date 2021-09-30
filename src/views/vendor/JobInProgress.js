@@ -20,6 +20,9 @@ import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Modal from 'react-native-modal';
+import BoldTextCB from '../../components/BoldTextCB';
+
 export default class JobInProgress extends React.Component {
   initialMapState = {
     region: {
@@ -49,6 +52,7 @@ export default class JobInProgress extends React.Component {
       longitude: '',
       description: '',
       jobService: [],
+      thankYouModal: false,
     };
   }
 
@@ -326,6 +330,7 @@ export default class JobInProgress extends React.Component {
                 bgColor={Colors.sickGreen}
                 onPress={() => {
                   //   this.props.navigation.navigate(Constants.);
+                  this.setState({thankYouModal: true});
                 }}
               />
             </View>
@@ -336,6 +341,62 @@ export default class JobInProgress extends React.Component {
           textContent={'Loading...'}
           textStyle={{color: '#FFF', fontFamily: Constants.fontRegular}}
         />
+
+        <Modal
+          isVisible={this.state.thankYouModal}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View
+            style={{
+              backgroundColor: Colors.white,
+              padding: SIZES.fifteen,
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+            <Image
+              source={Images.greenTick}
+              resizeMode="contain"
+              style={{
+                height: SIZES.fifteen * 5,
+                width: SIZES.fifteen * 5,
+                marginBottom: 15,
+              }}
+            />
+            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+              Thank You
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.coolGrey,
+              }}>
+              For your great service
+            </RegularTextCB>
+            <View
+              style={{
+                marginVertical: SIZES.ten * 3,
+                width: '100%',
+              }}>
+              <ButtonRadius10
+                label="JOB COMPLETED"
+                bgColor={Colors.sickGreen}
+                onPress={() => {
+                  //   setThankYouModal();
+                  this.setState({thankYouModal: false}, () => {
+                    setTimeout(() => {
+                      this.props.navigation.navigate(Constants.vendorHome);
+                    }, 500);
+                  });
+                }}
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }

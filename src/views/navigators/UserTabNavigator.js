@@ -33,6 +33,8 @@ import UserHome from '../UserHome';
 import SelectServices from '../SelectServices';
 import SchechuleJobDetail from '../SchechuleJobDetail';
 import BookingConfirmed2 from '../vendor/BookingConfirmed2';
+import BookingConfirmed from '../BookingConfirmed';
+import ScheduleJobs from '../ScheduleJobs';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -71,12 +73,14 @@ const HomeNavigator = () => {
         name={Constants.SchechuleJobDetail}
         component={SchechuleJobDetail}
       />
-
+      <HomeStack.Screen
+        name={Constants.ScheduleJobs}
+        component={ScheduleJobs}
+      />
       <HomeStack.Screen
         name={Constants.bookingConfirmed}
-        component={BookingConfirmed2}
+        component={BookingConfirmed}
       />
-
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
@@ -85,7 +89,6 @@ const HomeNavigator = () => {
         name={Constants.confirmPayment}
         component={ConfirmPayment}
       />
-
       <HomeStack.Screen
         name={Constants.dateTimeSlots}
         component={DateTimeSlots}
