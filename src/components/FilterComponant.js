@@ -18,7 +18,7 @@ const FilterComponent = (props) => {
         styles.card,
         {
           padding: SIZES.ten * 3.5,
-          marginHorizontal: SIZES.fifteen,
+          marginHorizontal: SIZES.five,
           marginBottom: SIZES.twenty,
           marginTop: SIZES.five,
         },
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

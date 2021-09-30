@@ -151,10 +151,10 @@ export default class FileredScreen extends Component {
           ? this.props.route.params.location.name
           : 0,
 
-      // lat: this.state.currentLat,
-      // lng: this.state.currentLong,
-      lat: 22.90628280557342,
-      lng: 67.07237028142383,
+      lat: this.state.currentLat,
+      lng: this.state.currentLong,
+      // lat: 22.90628280557342,
+      // lng: 67.07237028142383,
     };
 
     console.log('Post Data  ===== ', postData);
@@ -269,6 +269,7 @@ export default class FileredScreen extends Component {
           renderItem={this.renderSingleCategoriesItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
+            paddingHorizontal: SIZES.twenty,
             alignItems: 'center',
             marginTop: SIZES.ten * 3,
             paddingBottom: SIZES.twenty,

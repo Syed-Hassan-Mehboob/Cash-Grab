@@ -51,7 +51,7 @@ export default function SelectIntrest(props) {
     return (
       <TouchableOpacity
         style={[
-          STYLES.shadow,
+          styles.shadow,
           {
             paddingVertical: SIZES.ten * 1,
             paddingHorizontal: SIZES.ten * 3,
@@ -111,6 +111,7 @@ export default function SelectIntrest(props) {
         renderItem={renderInterest}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
+          // backgroundColor: 'red',
           marginTop: SIZES.twenty,
         }}
       />
@@ -154,6 +155,18 @@ const styles = StyleSheet.create({
     marginHorizontal: SIZES.fifteen,
     marginBottom: SIZES.twenty,
     marginTop: SIZES.five,
+  },
+
+  shadow: {
+    shadowColor: Colors.coolGrey,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 10.0,
+
+    elevation: 15,
   },
 });
 

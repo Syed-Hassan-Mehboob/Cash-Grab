@@ -86,6 +86,22 @@ export default class SignUp extends Component {
     });
   };
 
+  getServices = () => {
+        const onSuccess = ({data}) => {
+          console.log(data.data)
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+
+    this.setState({isLoading: true});
+
+    Axios.get(Constants.loginURL)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   sendDataToVerifyVia = () => {
     let name = this.state.fullName;
     let services = this.state.services;

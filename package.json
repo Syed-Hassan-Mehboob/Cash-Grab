@@ -54,7 +54,6 @@
     "react-native-screens": "^2.18.0",
     "react-native-star-rating": "^1.1.0",
     "react-native-status-bar-height": "^2.6.0",
-    "react-native-svg": "^12.1.1",
     "react-native-swipe-list-view": "^3.2.7",
     "react-native-touchable-graph": "^0.0.15",
     "react-redux": "^7.2.4",
