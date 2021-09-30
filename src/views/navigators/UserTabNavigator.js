@@ -40,7 +40,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.ScheduleJobs}
+      initialRouteName={Constants.UserHome}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,

@@ -45,7 +45,7 @@ export default class Routes extends Component {
 const AppStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName={Constants.ScheduleJobs}
+      initialRouteName={Constants.Splash}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
