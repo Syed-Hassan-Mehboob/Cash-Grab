@@ -217,7 +217,6 @@ export default class SingleCategory extends Component {
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
                 borderRadius: SIZES.ten * 6,
-                backgroundColor: 'red',
               }}
             />
             <RegularTextCB

@@ -18,7 +18,8 @@ import NormalHeader from '../components/NormalHeader';
 // import {Icon} from 'native-base';
 // import Colors from '../../common/Colors';
 // import NormalHeader from '../../components/NormalHeader';
-export default function Bookings(props) {
+
+export default function ScheduleJobs(props) {
   return (
     <View style={STYLES.container}>
       <NormalHeader name="Schedule Jobs" />
@@ -27,7 +28,7 @@ export default function Bookings(props) {
           data={Data}
           renderItem={({item}) => <ScheduleBooking item={item} />}
           keyExtractor={(id) => id.id}
-          contentContainerStyle={{alignItems: 'center'}}
+          contentContainerStyle={{alignItems: 'center', paddingBottom: 150}}
           showsVerticalScrollIndicator={false}
         />
       </View>

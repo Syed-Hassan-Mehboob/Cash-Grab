@@ -1,10 +1,11 @@
 import {Icon} from 'native-base';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Image, TouchableOpacity, View} from 'react-native';
 import Colors from '../common/Colors';
 import {SIZES} from '../common/Constants';
 import RegularTextCB from './RegularTextCB';
 import {useNavigation} from '@react-navigation/native';
+import Images from '../common/Images';
 export default function NormalHeader(props) {
   const navigation = useNavigation();
 
@@ -14,19 +15,14 @@ export default function NormalHeader(props) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: SIZES.ten * 2,
-        marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+        paddingHorizontal: SIZES.ten * 2,
       }}>
       <TouchableOpacity
         style={{position: 'absolute', left: SIZES.ten}}
         onPress={() => {
           navigation.goBack();
         }}>
-        <Icon
-          type="AntDesign"
-          name="left"
-          style={{color: Colors.black, fontSize: SIZES.ten * 2}}
-        />
+        <Image source={Images.arrowBack} style={[styles.iconBack]} />
       </TouchableOpacity>
       <RegularTextCB style={[{color: Colors.black, fontSize: SIZES.ten * 3}]}>
         {props.name}
@@ -35,4 +31,10 @@ export default function NormalHeader(props) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  iconBack: {
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    resizeMode: 'contain',
+  },
+});

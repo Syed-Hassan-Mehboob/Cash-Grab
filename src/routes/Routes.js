@@ -24,7 +24,6 @@ import AddServices from '../views/vendor/AddServices';
 import SelectIntrest from '../views/vendor/SelectIntrest';
 import SelectIndustry from '../views/vendor/SelectIndustry';
 import VendorSignUp from '../views/vendor/VendorSignUp';
-import ScheduleJobs from '../views/ScheduleJobs';
 
 const Stack = createStackNavigator();
 
@@ -56,7 +55,6 @@ const AppStack = () => {
       <Stack.Screen name={Constants.createAccount} component={CreateAccount} />
       <Stack.Screen name={Constants.signUp} component={SignUp} />
       <Stack.Screen name={Constants.VendorSignUp} component={VendorSignUp} />
-      <Stack.Screen name={Constants.ScheduleJobs} component={ScheduleJobs} />
       <Stack.Screen
         name={Constants.SelectIndustry}
         component={SelectIndustry}

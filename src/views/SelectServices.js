@@ -84,7 +84,7 @@ export default function SelectServices(props) {
           bgColor={Colors.sickGreen}
           label="Next"
           onPress={() => {
-            props.navigation.navigate(Constants.SchechuleJobDetail);
+            props.navigation.navigate(Constants.dateTimeSlots);
           }}
         />
       </TouchableOpacity>
