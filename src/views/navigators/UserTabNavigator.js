@@ -30,6 +30,7 @@ import Filtered from '../Filtered';
 import ViewJob from '../vendor/ViewJob';
 import QuickNotify from '../../components/QuickNotify';
 import UserHome from '../UserHome';
+import BookingConfirmed from './../BookingConfirmed';
 import ScheduleJobs from '../ScheduleJobs';
 
 const Tab = createBottomTabNavigator();
@@ -65,10 +66,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
       <HomeStack.Screen name={Constants.nearby} component={Nearby} />
       <HomeStack.Screen name={Constants.QuickNotify} component={QuickNotify} />
-      {/* <HomeStack.Screen
+      <HomeStack.Screen
         name={Constants.bookingConfirmed}
         component={BookingConfirmed}
-      /> */}
+      />
 
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
