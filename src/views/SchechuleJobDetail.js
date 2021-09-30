@@ -16,7 +16,7 @@ import Images from '../common/Images';
 import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
 
-export default function ScheduleJob(props) {
+export default function ScheduleJobDetails(props) {
   return (
     <View style={styles.container}>
       <View
