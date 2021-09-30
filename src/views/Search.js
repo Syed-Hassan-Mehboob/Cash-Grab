@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
+import NormalHeader from '../components/NormalHeader';
 
 export default function Search(props) {
   const [allVender, setAllVender] = useState(null);
@@ -167,27 +168,13 @@ export default function Search(props) {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-        }}>
-        <TouchableOpacity
-          style={{position: 'absolute', left: 0}}
-          onPress={() => {
-            props.navigation.goBack();
-          }}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
-        </TouchableOpacity>
-        <RegularTextCB style={{fontSize: SIZES.ten * 3}}>Search</RegularTextCB>
-      </View>
+      <NormalHeader name="Search" />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          paddingHorizontal: SIZES.twenty,
         }}>
         <TextInput
           keyboardType="default"
@@ -241,8 +228,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: SIZES.twenty,
-    paddingTop: SIZES.twenty,
   },
   iconBack: {
     height: SIZES.twenty,
@@ -307,8 +292,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -316,8 +300,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -325,8 +308,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -334,8 +316,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -343,8 +324,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -352,8 +332,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -361,8 +340,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -370,8 +348,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -379,8 +356,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -388,8 +364,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -397,8 +372,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -406,8 +380,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -415,8 +388,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -424,8 +396,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -433,8 +404,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -442,8 +412,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
 ];

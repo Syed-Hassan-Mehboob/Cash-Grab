@@ -14,34 +14,11 @@ import RegularTextCB from '../../components/RegularTextCB';
 import AllBookings from '../../components/AllBookings';
 import {Icon} from 'native-base';
 import Colors from '../../common/Colors';
-
+import NormalHeader from '../../components/NormalHeader';
 export default function Bookings(props) {
   return (
     <View style={STYLES.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: SIZES.ten * 2,
-          //   marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-        }}>
-        <TouchableOpacity
-          style={{position: 'absolute', left: SIZES.ten}}
-          onPress={() => {
-            props.navigation.navigate(Constants.vendorHome);
-          }}>
-          <Icon
-            type="AntDesign"
-            name="left"
-            style={{color: Colors.black, fontSize: SIZES.ten * 3}}
-          />
-        </TouchableOpacity>
-        <RegularTextCB style={[{color: COLORS.black, fontSize: SIZES.ten * 3}]}>
-          Bookings
-        </RegularTextCB>
-      </View>
-
+      <NormalHeader name="Bookings" />
       <View style={{paddingHorizontal: SIZES.ten * 2}}>
         <FlatList
           data={Data}

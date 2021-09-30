@@ -13,6 +13,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
 import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
+import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
@@ -176,34 +177,7 @@ export default class Notifications extends Component {
     // console.log('Notifications======', this.state.notifications);
     return (
       <View style={[styles.container]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{
-              position: 'absolute',
-              left: SIZES.ten,
-              width: SIZES.fifteen,
-              height: SIZES.fifteen,
-            }}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black1}]}
-            />
-          </TouchableOpacity>
-          <RegularTextCB style={{fontSize: 30, alignSelf: 'center'}}>
-            Notifications
-          </RegularTextCB>
-        </View>
+        <NormalHeader name="Notifications" />
         <SwipeListView
           style={{marginTop: SIZES.ten}}
           data={this.state.notifications}
@@ -259,7 +233,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? SIZES.twenty : 40,
   },
   childContainer: {
     flex: 1,
