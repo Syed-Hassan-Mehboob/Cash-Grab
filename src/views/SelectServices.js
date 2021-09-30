@@ -33,7 +33,7 @@ export default function SelectServices(props) {
           borderRadius: SIZES.ten,
           marginTop: SIZES.ten,
           paddingHorizontal: SIZES.twenty,
-          shadowColor: '#000',
+          shadowColor: '#c5c5c5',
           shadowOffset: {width: SIZES.five, height: SIZES.five},
           shadowOpacity: 1.0,
           shadowRadius: SIZES.ten,

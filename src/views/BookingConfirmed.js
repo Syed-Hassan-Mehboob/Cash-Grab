@@ -113,7 +113,7 @@ export default class BookingConfirmed extends Component {
         {/* <View style={{flex: 1, justifyContent: 'flex-end'}}> */}
         <ButtonRadius10
           onPress={() => this.navigateToHome()}
-          label="BACK TO HOME"
+          label="CONTINUE"
           bgColor={Colors.sickGreen}
         />
         {/* </View> */}

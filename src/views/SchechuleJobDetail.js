@@ -277,7 +277,7 @@ export default function ScheduleJobDetails(props) {
             onPress={() => {
               props.navigation.navigate(Constants.bookingConfirmed);
             }}>
-            <BoldTextCB>RESCHEDULE</BoldTextCB>
+            <RegularTextCB>RESCHEDULE</RegularTextCB>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -292,7 +292,7 @@ export default function ScheduleJobDetails(props) {
               props.navigation.navigate(Constants.VenderBookings);
             }}
             activeOpacity={0.6}>
-            <BoldTextCB style={{color: Colors.white}}>CANCEL</BoldTextCB>
+            <RegularTextCB style={{color: Colors.white}}>CANCEL</RegularTextCB>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -300,7 +300,7 @@ export default function ScheduleJobDetails(props) {
         <ButtonRadius10
           label="SERVICE COMPLETED"
           bgColor={Colors.sickGreen}
-          onPress={() => this.login()}
+          onPress={() => props.navigation.navigate(Constants.bookingConfirmed)}
         />
       </View>
     </View>
