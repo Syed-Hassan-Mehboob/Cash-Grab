@@ -39,7 +39,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.UserHome}
+      initialRouteName={Constants.dateTimeSlots}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
