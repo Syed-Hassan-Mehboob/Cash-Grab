@@ -186,7 +186,7 @@ export default class DrawerScreen extends Component {
                   {
                     this.state.isVendor
                       ? this.props.navigation.navigate(Constants.VenderBookings)
-                      : null;
+                      : this.props.navigation.navigate(Constants.allCategories);
                   }
                 }}>
                 <Image source={Images.bookings} style={styles.iconDrawer} />

@@ -31,6 +31,7 @@ const Constants = {
   editProfile: 'EditProfile',
   vendorEditProfile: 'VendorEditProfile',
   viewVendorProfile: 'ViewVendorProfile',
+  SchechuleJobDetail: 'SchechuleJobDetail',
   chat: 'Chat',
   chatListing: 'ChatListing',
   vendorSingleCategory: 'VendorSingleCategory',
@@ -57,6 +58,7 @@ const Constants = {
   VendorQuickJob: 'VendorQuickJob',
   SelectIntrest: 'SelectIntrest',
   SelectIndustry: 'SelectIndustry',
+  SelectServices: 'SelectServices',
   more: 'More',
   settings: 'Settings',
   /* * drawer * */
