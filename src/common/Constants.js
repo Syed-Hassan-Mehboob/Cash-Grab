@@ -41,6 +41,7 @@ const Constants = {
   search: 'Search',
   confirmPayment: 'ConfirmPayment',
   withDraw: 'WithDraw',
+  ScheduleJobs: 'ScheduleJobs',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
