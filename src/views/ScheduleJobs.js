@@ -8,7 +8,7 @@ import {
   FlatList,
 } from 'react-native';
 import {STYLES, SIZES} from '../common/Constants';
-import AllBookings from '../components/AllBookings';
+import ScheduleBooking from '../components/ScheduleBooking';
 import NormalHeader from '../components/NormalHeader';
 // import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 // import COLORS from '../../common/Colors';
@@ -25,7 +25,7 @@ export default function Bookings(props) {
       <View style={{paddingHorizontal: SIZES.ten * 2}}>
         <FlatList
           data={Data}
-          renderItem={({item}) => <AllBookings item={item} />}
+          renderItem={({item}) => <ScheduleBooking item={item} />}
           keyExtractor={(id) => id.id}
           contentContainerStyle={{alignItems: 'center'}}
           showsVerticalScrollIndicator={false}
@@ -47,34 +47,37 @@ const Data = [
   {
     id: 1,
     name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
+    tittle: 'Home Cleaner Needed',
     price: '300.00',
-    service: 'AutoMobile',
+    service: 'Cleaning',
     description:
       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
     address: '111,NYC Street, NY 1121',
     time: '12:00 - 3:00 ',
+    date: 'September 17, 2021',
   },
   {
     id: 2,
     name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
+    tittle: 'Home Cleaner Needed',
     price: '300.00',
-    service: 'AutoMobile',
+    service: 'Cleaning',
     description:
       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
     address: '111,NYC Street, NY 1121',
     time: '12:00 - 3:00 ',
+    date: 'September 17, 2021',
   },
   {
     id: 3,
     name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
+    tittle: 'Home Cleaner Needed',
     price: '300.00',
-    service: 'AutoMobile',
+    service: 'Cleaning',
     description:
       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
     address: '111,NYC Street, NY 1121',
     time: '12:00 - 3:00 ',
+    date: 'September 17, 2021',
   },
 ];
