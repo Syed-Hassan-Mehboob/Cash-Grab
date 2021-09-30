@@ -34,6 +34,7 @@ import VendorQuickJobs from '../vendor/QuickJob';
 import SelectIntrest from '../vendor/SelectIntrest';
 import SelectIndustry from '../vendor/SelectIndustry';
 import AddTeamMember from '../vendor/AddTeamMember';
+import JobInProgress from '../vendor/JobInProgress';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
@@ -75,6 +76,10 @@ const HomeNavigator = () => {
         component={VenderFileredScreen}
       />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
+      <HomeStack.Screen
+        name={Constants.JobInProgress}
+        component={JobInProgress}
+      />
 
       <HomeStack.Screen
         name={Constants.viewVendorProfile}

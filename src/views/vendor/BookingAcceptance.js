@@ -226,7 +226,7 @@ export default function BookingAcceptance(props) {
             }}
             activeOpacity={0.6}
             onPress={() => {
-              props.navigation.navigate(Constants.bookingConfirmed);
+              props.navigation.navigate(Constants.JobInProgress);
             }}>
             <BoldTextCB>Accept</BoldTextCB>
           </TouchableOpacity>

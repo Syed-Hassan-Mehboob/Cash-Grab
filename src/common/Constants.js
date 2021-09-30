@@ -37,6 +37,7 @@ const Constants = {
   vendorSingleCategory: 'VendorSingleCategory',
   vendorAllJobs: 'vendorAllJobs',
   viewJob: 'ViewJob',
+  JobInProgress: 'JobInProgress',
   faq: 'Faq',
   dateTimeSlots: 'DateTimeSlots',
   search: 'Search',

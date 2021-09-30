@@ -20,7 +20,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
-export default class ViewJob extends React.Component {
+export default class JobInProgress extends React.Component {
   initialMapState = {
     region: {
       latitude: 24.9050562,
@@ -63,7 +63,7 @@ export default class ViewJob extends React.Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      this.viewJob();
+      //   this.viewJob();
     });
   };
 
@@ -140,7 +140,7 @@ export default class ViewJob extends React.Component {
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
           <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
-            View Job
+            Job in Progress
           </RegularTextCB>
         </View>
 
@@ -153,11 +153,20 @@ export default class ViewJob extends React.Component {
                   alignItems: 'center',
                 }}>
                 <View style={styles.circleCard}>
-                  <Image
-                    source={{uri: Constants.imageURL + this.state.userImage}}
-                    style={styles.iconUser}
-                    resizeMode="cover"
-                  />
+                  {this.state.userImage !== '' &&
+                  this.state.userImage !== undefined ? (
+                    <Image
+                      source={{uri: Constants.imageURL + this.state.userImage}}
+                      style={styles.iconUser}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <Image
+                      source={Images.emp2}
+                      style={styles.iconUser}
+                      resizeMode="cover"
+                    />
+                  )}
                 </View>
                 <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
@@ -165,7 +174,10 @@ export default class ViewJob extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.state.username}
+                    {this.state.username !== '' &&
+                    this.state.username !== undefined
+                      ? this.state.username
+                      : 'John Doe'}
                   </RegularTextCB>
                   <View
                     style={{
@@ -197,17 +209,20 @@ export default class ViewJob extends React.Component {
                 }}>
                 <RegularTextCB
                   style={{
-                    color: Colors.black,
+                    color: Colors.sickGreen,
                     fontSize: 16,
                   }}>
-                  {this.state.title}
+                  {this.state.title} AutoMobile
                 </RegularTextCB>
                 <LightTextCB
-                  style={{
-                    color: Colors.black,
-                    fontSize: 12,
-                  }}>
-                  ${this.state.price}
+                  style={[
+                    FONTS.boldFont14,
+                    {
+                      color: Colors.black,
+                      fontSize: 12,
+                    },
+                  ]}>
+                  ${500}
                 </LightTextCB>
               </View>
 
@@ -223,7 +238,11 @@ export default class ViewJob extends React.Component {
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                {this.state.description}
+                {this.state.description}Lorem Ipsum is simply dummy text of the
+                printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an
+                unknown printer took a galley of type and scrambled it to make a
+                type specimen book.
               </RegularTextCB>
 
               <View
@@ -241,13 +260,14 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.state.location}
+                  {/* {this.state.location} */}
+                  111,NY Street, NY 1121
                 </RegularTextCB>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: SIZES.five,
+                  marginTop: SIZES.five * 1.5,
                   alignItems: 'center',
                 }}>
                 <Image
@@ -259,7 +279,8 @@ export default class ViewJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.state.time}
+                  {/* {this.state.time} */}
+                  12:00 - 03:00
                 </RegularTextCB>
               </View>
             </View>
@@ -283,6 +304,7 @@ export default class ViewJob extends React.Component {
                 latitudeDelta: 0.04864195044303443,
                 longitudeDelta: 0.04014281769006,
               }}
+              scrollEnabled={false}
               showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
@@ -296,14 +318,14 @@ export default class ViewJob extends React.Component {
             </MapView>
             <View
               style={{
-                marginVertical: SIZES.ten * 3,
+                marginVertical: SIZES.ten * 1.8,
                 marginHorizontal: SIZES.twenty,
               }}>
               <ButtonRadius10
-                label="CONTACT"
+                label="WORK STARTED"
                 bgColor={Colors.sickGreen}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.chat);
+                  //   this.props.navigation.navigate(Constants.);
                 }}
               />
             </View>
@@ -325,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   mapStyle: {
-    height: SIZES.ten * 40,
+    height: SIZES.ten * 27,
     top: 0,
     left: 0,
     right: 0,

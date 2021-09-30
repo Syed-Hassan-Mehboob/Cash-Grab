@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  Text,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,8 +17,8 @@ import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
-import {Icon, Text} from 'native-base';
-SIZES;
+import {Icon} from 'native-base';
+
 export default class SingleCategory extends Component {
   constructor(props) {
     super(props);
@@ -242,6 +243,13 @@ export default class SingleCategory extends Component {
             keyExtractor={(index) => index}
             renderItem={this.renderSingleCategoriesItem}
             showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={() => {
+              return (
+                <View style={{flex: 1, alignItems: 'center', paddingTop: 100}}>
+                  <Text style={FONTS.mediumFont18}>Not Found</Text>
+                </View>
+              );
+            }}
             contentContainerStyle={{
               paddingBottom: SIZES.ten * 5,
             }}

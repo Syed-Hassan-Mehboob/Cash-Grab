@@ -5,6 +5,7 @@ import Colors from '../common/Colors';
 import {SIZES} from '../common/Constants';
 import RegularTextCB from './RegularTextCB';
 import {useNavigation} from '@react-navigation/native';
+
 export default function NormalHeader(props) {
   const navigation = useNavigation();
 

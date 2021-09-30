@@ -275,7 +275,7 @@ export default function ScheduleJobDetails(props) {
             }}
             activeOpacity={0.6}
             onPress={() => {
-              props.navigation.navigate(Constants.bookingConfirmed);
+              props.navigation.navigate();
             }}>
             <BoldTextCB>RESCHEDULE</BoldTextCB>
           </TouchableOpacity>
@@ -289,7 +289,7 @@ export default function ScheduleJobDetails(props) {
               alignItems: 'center',
             }}
             onPress={() => {
-              props.navigation.navigate(Constants.VenderBookings);
+              // props.navigation.navigate(Constants.VenderBookings);
             }}
             activeOpacity={0.6}>
             <BoldTextCB style={{color: Colors.white}}>CANCEL</BoldTextCB>
@@ -300,7 +300,7 @@ export default function ScheduleJobDetails(props) {
         <ButtonRadius10
           label="SERVICE COMPLETED"
           bgColor={Colors.sickGreen}
-          onPress={() => this.login()}
+          onPress={() => {}}
         />
       </View>
     </View>

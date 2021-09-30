@@ -32,6 +32,8 @@ import QuickNotify from '../../components/QuickNotify';
 import UserHome from '../UserHome';
 import SelectServices from '../SelectServices';
 import SchechuleJobDetail from '../SchechuleJobDetail';
+import BookingConfirmed2 from '../vendor/BookingConfirmed2';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -70,10 +72,10 @@ const HomeNavigator = () => {
         component={SchechuleJobDetail}
       />
 
-      {/* <HomeStack.Screen
+      <HomeStack.Screen
         name={Constants.bookingConfirmed}
-        component={BookingConfirmed}
-      /> */}
+        component={BookingConfirmed2}
+      />
 
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
