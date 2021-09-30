@@ -15,7 +15,7 @@ import RegularTextCB from '../components/RegularTextCB';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{name: Constants.home}],
+  routes: [{name: Constants.UserHome}],
 });
 
 export default class ConfirmPayment extends Component {
