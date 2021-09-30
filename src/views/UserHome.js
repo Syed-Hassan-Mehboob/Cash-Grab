@@ -67,7 +67,7 @@ export default class UserHome extends Component {
   GooglePlacesInput = (props) => {
     return (
       <GooglePlacesAutocomplete
-        placeholder={'Search'}
+        placeholder={'Search Location'}
         //   renderLeftButton={() => }
         minLength={2}
         keyboardKeyType={'search'}
@@ -95,7 +95,7 @@ export default class UserHome extends Component {
         styles={{
           textInputContainer: {
             backgroundColor: '#fff',
-            marginTop: 0,
+            marginTop: Platform.OS === 'ios' ? 20 : 0,
             marginBottom: 0,
             marginLeft: 0,
             marginRight: 0,
@@ -203,6 +203,7 @@ export default class UserHome extends Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps={'always'}
         style={STYLES.container}
         contentContainerStyle={[
           {paddingHorizontal: SIZES.ten * 2, paddingBottom: 120},
@@ -245,8 +246,8 @@ export default class UserHome extends Component {
             shadowColor: '#c5c5c5',
             shadowOffset: {width: SIZES.five, height: SIZES.five},
             shadowOpacity: 1.0,
-            shadowRadius: SIZES.ten,
-            elevation: SIZES.ten,
+            shadowRadius: 10,
+            // elevation: SIZES.ten,
             justifyContent: 'center',
             // paddingLeft: SIZES.twenty,
             marginTop: SIZES.ten,
@@ -309,8 +310,8 @@ export default class UserHome extends Component {
                   showModal: true,
                 });
               }}>
-              <RegularTextCB>
-                {this.state.location ? this.state.location : 'Get Location'}
+              <RegularTextCB style={{fontSize: 16}}>
+                {this.state.location ? this.state.location : 'Enter Location'}
               </RegularTextCB>
             </TouchableOpacity>
           </View>
@@ -329,7 +330,13 @@ export default class UserHome extends Component {
               padding: SIZES.twenty,
               backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
             }}>
-            <View style={{flex: 1, padding: SIZES.five, flexDirection: 'row'}}>
+            <View
+              style={{
+                // flex: 1,
+                padding: SIZES.five,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               {this.GooglePlacesInput()}
               <TouchableOpacity
                 style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
@@ -340,7 +347,7 @@ export default class UserHome extends Component {
                   style={{
                     height: SIZES.fifteen,
                     width: SIZES.fifteen,
-                    tintColor: Colors.turqoiseGreen,
+                    tintColor: Colors.black,
                   }}
                   resizeMode="contain"
                   source={Images.iconClose}
@@ -410,10 +417,7 @@ export default class UserHome extends Component {
               numberOfLines={4}
               multiline={true}
               style={{height: SIZES.twentyFive * 5}}
-              styles={{
-                flex: 1,
-                textAlignVertical: 'top',
-              }}
+              textAlignVertical="top"
             />
           </View>
         </View>

@@ -179,7 +179,9 @@ export function MultiDropdownPicker(props) {
           //   backgroundColor: 'red',
           paddingHorizontal: SIZES.ten,
         }}>
-        <RegularTextCB> {name ? name : 'Select'}</RegularTextCB>
+        <RegularTextCB style={{fontSize: 16}}>
+          {name ? name : 'Select'}
+        </RegularTextCB>
         <Icon
           type="Ionicons"
           name="chevron-down"
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,

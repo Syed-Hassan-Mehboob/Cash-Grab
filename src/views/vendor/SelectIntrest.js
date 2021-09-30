@@ -53,8 +53,9 @@ export default function SelectIntrest(props) {
         style={[
           styles.shadow,
           {
+            flex: 1,
             paddingVertical: SIZES.ten * 1,
-            paddingHorizontal: SIZES.ten * 3,
+            alignItems: 'center',
             backgroundColor: Colors.white,
             borderRadius: SIZES.ten,
             margin: SIZES.ten,
@@ -104,33 +105,25 @@ export default function SelectIntrest(props) {
         </RegularTextCB>
       </View>
 
-      <FlatList
-        numColumns={3}
-        data={formatData(Data, 3)}
-        keyExtractor={(index) => index}
-        renderItem={renderInterest}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          // backgroundColor: 'red',
-          marginTop: SIZES.twenty,
-        }}
-      />
-      <TouchableOpacity
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: Colors.sickGreen,
-          padding: SIZES.twenty,
-          borderRadius: SIZES.ten,
-          position: 'absolute',
-          bottom: SIZES.twenty,
-          right: SIZES.twenty,
-          left: SIZES.twenty,
-        }}
-        activeOpacity={0.6}
-        onPress={() => props.navigation.navigate(Constants.SelectIndustry)}>
-        <Text style={[FONTS.boldFont24, {}]}>Continue</Text>
-      </TouchableOpacity>
+      <View style={{flex: 1}}>
+        <FlatList
+          numColumns={3}
+          data={formatData(Data, 3)}
+          keyExtractor={(index) => index}
+          renderItem={renderInterest}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            marginTop: SIZES.twenty,
+          }}
+        />
+      </View>
+      <View style={{marginVertical: SIZES.ten * 3}}>
+        <ButtonRadius10
+          label="CONTINUE"
+          bgColor={Colors.sickGreen}
+          onPress={() => props.navigation.navigate(Constants.SelectIndustry)}
+        />
+      </View>
     </View>
   );
 }
@@ -163,7 +156,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 5,
     },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.5,
     shadowRadius: 10.0,
 
     elevation: 15,

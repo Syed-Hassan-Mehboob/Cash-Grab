@@ -637,7 +637,11 @@ export default class Dashboard extends Component {
 
             <BarChart
               data={this.data}
-              barWidth={45}
+              barWidth={
+                Platform.OS === 'ios'
+                  ? SIZES.fifteen * 3.5
+                  : SIZES.fifteen * 4.1
+              }
               hideRules={true}
               activeOpacity={0.7}
               animationEasing={Easing.cubic}
@@ -648,7 +652,7 @@ export default class Dashboard extends Component {
               intactTopLabel={50}
               xAxisThickness={0}
               yAxisThickness={0}
-              initialSpacing={-20}
+              initialSpacing={0}
             />
             {/* <TouchableGraph
               onPressBar={(data) => {

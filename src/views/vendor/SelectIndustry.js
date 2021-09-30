@@ -1,5 +1,6 @@
 import {Icon} from 'native-base';
 import React from 'react';
+import {Platform} from 'react-native';
 import {
   FlatList,
   Image,
@@ -10,6 +11,7 @@ import {
 } from 'react-native';
 import Colors from '../../common/Colors';
 import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
+import ButtonRadius10 from '../../components/ButtonRadius10';
 import RegularTextCB from '../../components/RegularTextCB';
 
 export default function SelectIndustry(props) {
@@ -43,13 +45,15 @@ export default function SelectIndustry(props) {
           style={[
             styles.card,
             {
-              paddingHorizontal: SIZES.ten * 3,
-              paddingVertical: SIZES.fifteen,
+              flex: 1,
+              padding: Platform.OS === 'ios' ? SIZES.ten * 2.9 : SIZES.ten * 4,
               alignItems: 'center',
               backgroundColor: Colors.white,
             },
           ]}
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.navigate(Constants.AddServices);
+          }}
           activeOpacity={0.6}>
           <Image
             source={{
@@ -58,7 +62,7 @@ export default function SelectIndustry(props) {
                 '/uploads/category/0ec6a0caaecfa6f3585d71123c4ee44a1630420292.png',
             }}
             // source={item.image}
-            style={{height: SIZES.ten * 8, width: SIZES.ten * 8}}
+            style={{height: SIZES.ten * 4.5, width: SIZES.ten * 4.5}}
             resizeMode="cover"
           />
         </TouchableOpacity>
@@ -111,22 +115,16 @@ export default function SelectIndustry(props) {
           marginTop: SIZES.twenty,
         }}
       />
-      <TouchableOpacity
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: Colors.sickGreen,
-          padding: SIZES.twenty,
-          borderRadius: SIZES.ten,
-          position: 'absolute',
-          bottom: SIZES.twenty,
-          right: SIZES.twenty,
-          left: SIZES.twenty,
-        }}
-        activeOpacity={0.6}
-        onPress={() => {}}>
-        <Text style={[FONTS.boldFont24, {}]}>Continue</Text>
-      </TouchableOpacity>
+
+      <View style={{marginVertical: SIZES.ten * 3}}>
+        <ButtonRadius10
+          label="CONTINUE"
+          bgColor={Colors.sickGreen}
+          onPress={() => {
+            props.navigation.navigate(Constants.otp);
+          }}
+        />
+      </View>
     </View>
   );
 }
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: SIZES.five - 2, height: SIZES.five - 2},
     shadowOpacity: 1.0,
     shadowRadius: 10,
-    elevation: 3,
+    elevation: 15,
   },
 });
 

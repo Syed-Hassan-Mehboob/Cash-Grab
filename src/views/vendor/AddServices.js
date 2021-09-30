@@ -99,7 +99,9 @@ export default function AddServices(props) {
 
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => props.navigation.naviagate(Constants.SelectIndustry)}
+          onPress={() => {
+            props.navigation.navigate(Constants.SelectIndustry);
+          }}
           style={{
             backgroundColor: Colors.sickGreen,
             paddingHorizontal: SIZES.fifteen,

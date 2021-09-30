@@ -394,7 +394,7 @@ export default class EditProfile extends Component {
               justifyContent: 'center',
               width: '100%',
               padding: SIZES.fifteen,
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.five,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.five * 4.5,
               paddingVertical: SIZES.ten,
             }}>
             <TouchableOpacity
@@ -468,6 +468,8 @@ export default class EditProfile extends Component {
               value={this.state.abouteMe}
               style={{
                 fontFamily: Constants.fontRegular,
+                paddingHorizontal: SIZES.ten,
+                paddingVertical: SIZES.fifteen,
                 fontSize: 16,
               }}
               onChangeText={(text) => {

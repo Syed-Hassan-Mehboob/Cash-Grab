@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
@@ -43,7 +43,7 @@ export default function DateTimePickerComponent(props) {
         <Icon
           name="time-outline"
           type="Ionicons"
-          style={{fontSize: height * 0.025, color: Colors.lightYellowGreen}}
+          style={{fontSize: height * 0.025, color: Colors.sickGreen}}
         />
         <Text style={styles.text}>{props.time}</Text>
         <DateTimePickerModal
@@ -65,19 +65,17 @@ export default function DateTimePickerComponent(props) {
 const styles = StyleSheet.create({
   contaner: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    elevation: 15,
+    height: 60,
     backgroundColor: Colors.white,
-    borderRadius: height * 0.01,
-    shadowColor: Colors.grey,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
     shadowRadius: 10,
-    shadowOpacity: 0.25,
-    shadowOffset: {x: 1, y: 1},
-    overflow: 'visible',
-    height: height * 0.085,
-    paddingHorizontal: height * 0.02,
+    elevation: 10,
+    alignItems: 'center',
   },
   containerView: {
     flexDirection: 'row',
@@ -85,10 +83,10 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   text: {
-    fontSize: height * 0.022,
+    fontSize: 16,
     color: Colors.grey,
     fontFamily: Constants.fontRegular,
-    marginLeft: height * 0.03,
+    marginLeft: SIZES.ten,
   },
   datepicker: {
     backgroundColor: Colors.white,

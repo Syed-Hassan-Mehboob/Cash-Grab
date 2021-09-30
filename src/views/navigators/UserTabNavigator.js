@@ -31,7 +31,7 @@ import ViewJob from '../vendor/ViewJob';
 import QuickNotify from '../../components/QuickNotify';
 import UserHome from '../UserHome';
 import SelectServices from '../SelectServices';
-import SchechuleJobDetail from '../SchechuleJobDetail';
+import ScheduleJob from '../SchechuleJobDetail';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();

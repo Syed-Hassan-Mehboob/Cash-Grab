@@ -29,7 +29,8 @@ class utils {
 
   validateEmail(str) {
     console.log('this.validateEmail ', str);
-    var pattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    var pattern =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return pattern.test(str);
   }
 
@@ -109,7 +110,12 @@ class utils {
     if (errorCode === '400') {
       let errorData = error.response.data;
       // this.showToast(errorData.message);
-      this.showToast(JSON.stringify(errorData.data));
+      if (errorData.data && errorData.data.length > 0) {
+        this.showToast(JSON.stringify(errorData.data));
+
+        return;
+      }
+      this.showToast(JSON.stringify(errorData.message));
     } else if (errorCode === '405') {
       this.showToast('Wrong Api Method');
     } else {

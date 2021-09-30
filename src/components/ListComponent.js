@@ -14,7 +14,14 @@ const ListComponent = (props) => {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
-      style={[styles.card, {padding: SIZES.fifteen, margin: SIZES.five}]}
+      style={[
+        styles.card,
+        {
+          padding: SIZES.fifteen,
+          marginHorizontal: SIZES.five / 1.3,
+          marginVertical: SIZES.five * 1.5,
+        },
+      ]}
       onPress={() =>
         navigation.navigate(Constants.viewJob, {
           item: item.id,

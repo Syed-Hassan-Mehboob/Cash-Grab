@@ -27,8 +27,8 @@ export default class Login extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      email: 'babar@cashgrab.com',
-      password: '123456789',
+      email: '',
+      password: '',
       isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,
@@ -145,6 +145,7 @@ export default class Login extends Component {
                 ref={'email'}
                 keyboardType="email-address"
                 placeholder={'Email Address'}
+                secureTextEntry={false}
                 value={this.state.email}
                 onChangeText={(text) => {
                   this.setState({email: text});
@@ -190,9 +191,9 @@ export default class Login extends Component {
                   thumbColor={
                     this.state.isSwitchEnabled
                       ? Colors.sickGreen
-                      : Colors.coolGrey
+                      : Colors.sickGreen
                   }
-                  ios_backgroundColor={Colors.coolGrey}
+                  ios_backgroundColor={Colors.lightGrey}
                   onValueChange={this.toggleIsEnabled}
                   value={this.state.isSwitchEnabled}
                 />

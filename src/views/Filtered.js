@@ -7,6 +7,7 @@ import {
   FlatList,
   Platform,
   LogBox,
+  Text,
 } from 'react-native';
 import Colors from '../common/Colors';
 import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
@@ -278,6 +279,21 @@ export default class FileredScreen extends Component {
             // for ios
             bottom: SIZES.ten,
           }}
+          ListEmptyComponent={
+            this.state.allJobs !== undefined &&
+            this.state.allJobs.length === 0 ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={[FONTS.mediumFont16, {color: Colors.black}]}>
+                  Record not found
+                </Text>
+              </View>
+            ) : null
+          }
         />
 
         <Spinner

@@ -70,6 +70,11 @@ export default class Home extends Component {
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization();
         this.getLocation();
+        if (this.state.seeAllClicked) {
+          // this.getLocation();
+          // this.getUserAccessToken();
+          this.openNearbyScreen();
+        }
       } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -106,6 +111,23 @@ export default class Home extends Component {
       (error) => {
         console.log('Home Screen Get Location error ', error);
         this.getUserAccessToken();
+        if (Platform.OS === 'ios') {
+          if (error.PERMISSION_DENIED === 1) {
+            console.log('Humzaaaaaaa ', 'permission denied ask again');
+
+            Geolocation.requestAuthorization();
+            Geolocation.getCurrentPosition(
+              (position) => {
+                console.log(position);
+              },
+              (error) => {
+                console.log('map error: ', error);
+                console.log(error.code, error.message);
+              },
+              {enableHighAccuracy: false, timeout: 15000, maximumAge: 10000},
+            );
+          }
+        }
       },
     );
   };
@@ -428,7 +450,7 @@ export default class Home extends Component {
                 />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 this.props.navigation.navigate(Constants.filter);
               }}
@@ -441,7 +463,7 @@ export default class Home extends Component {
                   resizeMode: 'contain',
                 }}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View
               style={{
@@ -451,11 +473,14 @@ export default class Home extends Component {
                 alignItems: 'center',
               }}>
               <RegularTextCB
-                style={{
-                  color: Colors.black,
-                  textDecorationLine: 'underline',
-                }}>
-                See All
+                style={[
+                  FONTS.mediumFont16,
+                  {
+                    color: Colors.black,
+                    // textDecorationLine: 'underline',
+                  },
+                ]}>
+                Browse Categories
               </RegularTextCB>
               <TouchableOpacity
                 onPress={() =>
@@ -499,11 +524,13 @@ export default class Home extends Component {
                 alignItems: 'center',
               }}>
               <RegularTextCB
-                style={{
-                  color: Colors.black,
-                  textDecorationLine: 'underline',
-                }}>
-                See All
+                style={[
+                  FONTS.mediumFont16,
+                  {
+                    color: Colors.black,
+                  },
+                ]}>
+                Vendors Around You
               </RegularTextCB>
               <TouchableOpacity
                 onPress={() => {
@@ -528,6 +555,7 @@ export default class Home extends Component {
               keyExtractor={(index) => index}
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{paddingBottom: SIZES.twentyFive * 2.5}}
               ListEmptyComponent={() => {
                 return (
                   <View

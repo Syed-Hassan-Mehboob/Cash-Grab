@@ -365,7 +365,7 @@ export default class VendorHome extends Component {
                 renderItem={this.renderJobsForYouItem}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{
-                  alignItems: 'center',
+                  paddingBottom: SIZES.twentyFive,
                 }}
               />
             </View>
@@ -403,7 +403,7 @@ export default class VendorHome extends Component {
                 renderItem={this.renderJobsForYouItem}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{
-                  alignItems: 'center',
+                  paddingBottom: SIZES.twentyFive,
                 }}
               />
             </View>
@@ -442,7 +442,8 @@ export default class VendorHome extends Component {
                 renderItem={this.renderJobsForYouItem}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{
-                  alignItems: 'center',
+                  paddingBottom: SIZES.twentyFive * 3.5,
+                  //   alignItems: 'center',
                 }}
               />
             </View>
