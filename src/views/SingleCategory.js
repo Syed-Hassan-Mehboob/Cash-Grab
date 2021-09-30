@@ -90,9 +90,7 @@ export default class SingleCategory extends Component {
           },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.viewVendorProfile, {
-            item: item.id,
-          })
+          this.props.navigation.navigate(Constants.SelectServices)
         }>
         <View
           style={{

@@ -30,9 +30,8 @@ import Filtered from '../Filtered';
 import ViewJob from '../vendor/ViewJob';
 import QuickNotify from '../../components/QuickNotify';
 import UserHome from '../UserHome';
-import BookingConfirmed from './../BookingConfirmed';
-import ScheduleJobs from '../ScheduleJobs';
-
+import SelectServices from '../SelectServices';
+import SchechuleJobDetail from '../SchechuleJobDetail';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -50,8 +49,8 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.home} component={Home} />
       <HomeStack.Screen name={Constants.search} component={Search} />
       <HomeStack.Screen
-        name={Constants.ScheduleJobs}
-        component={ScheduleJobs}
+        name={Constants.SelectServices}
+        component={SelectServices}
       />
       <HomeStack.Screen
         name={Constants.allCategories}
@@ -67,9 +66,14 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.nearby} component={Nearby} />
       <HomeStack.Screen name={Constants.QuickNotify} component={QuickNotify} />
       <HomeStack.Screen
+        name={Constants.SchechuleJobDetail}
+        component={SchechuleJobDetail}
+      />
+
+      {/* <HomeStack.Screen
         name={Constants.bookingConfirmed}
         component={BookingConfirmed}
-      />
+      /> */}
 
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
