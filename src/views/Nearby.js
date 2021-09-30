@@ -347,7 +347,7 @@ const Nearby = (props) => {
           borderBottomLeftRadius: SIZES.twenty,
           borderBottomRightRadius: SIZES.twenty,
           alignItems: 'center',
-          height: SIZES.fifty,
+          height: Platform.OS === 'android' ? SIZES.fifty : SIZES.fifty * 1.5,
           elevation: SIZES.ten,
           shadowColor: '#000',
           shadowOffset: {width: SIZES.five, height: SIZES.five},
