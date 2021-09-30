@@ -18,7 +18,7 @@ import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
 
 export default function ScheduleJobDetails(props) {
-  const [thankYouModal, setThankYouModal] = useState(false);
+  const [cancelJobModal, setCancelJobModal] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -291,7 +291,9 @@ export default function ScheduleJobDetails(props) {
               width: SIZES.fifty * 2.5,
               alignItems: 'center',
             }}
-            onPress={() => {}}
+            onPress={() => {
+              setCancelJobModal(true);
+            }}
             activeOpacity={0.6}>
             <RegularTextCB style={{color: Colors.white}}>CANCEL</RegularTextCB>
           </TouchableOpacity>
@@ -303,14 +305,13 @@ export default function ScheduleJobDetails(props) {
           label="SERVICE COMPLETED"
           bgColor={Colors.sickGreen}
           onPress={() => {
-            // props.navigation.navigate(Constants.confirmPayment)
-            setThankYouModal(true);
+            props.navigation.navigate(Constants.confirmPayment);
           }}
         />
       </View>
 
       <Modal
-        isVisible={thankYouModal}
+        isVisible={cancelJobModal}
         animationIn="zoomInDown"
         animationOut="zoomOutUp"
         animationInTiming={600}
@@ -324,17 +325,16 @@ export default function ScheduleJobDetails(props) {
             alignItems: 'center',
             borderRadius: 10,
           }}>
-          <Image
-            source={Images.greenTick}
-            resizeMode="contain"
+          <Icon
+            type={'Ionicons'}
+            name={'information-circle-outline'}
             style={{
-              height: SIZES.fifteen * 5,
-              width: SIZES.fifteen * 5,
-              marginBottom: 15,
+              fontSize: SIZES.twenty * 3.5,
+              color: Colors.sickGreen,
             }}
           />
           <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-            Thank You
+            Are you sure?!
           </BoldTextCB>
           <RegularTextCB
             style={{
@@ -342,71 +342,52 @@ export default function ScheduleJobDetails(props) {
               fontSize: 16,
               color: Colors.coolGrey,
             }}>
-            For your great service
+            You want to cancel this booking?
           </RegularTextCB>
           <View
             style={{
-              marginVertical: SIZES.ten * 3,
-              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: SIZES.twentyFive,
             }}>
-            <ButtonRadius10
-              label="JOB COMPLETED"
-              bgColor={Colors.sickGreen}
-              onPress={() => {
-                setThankYouModal(false);
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                backgroundColor: Colors.sickGreen,
+                marginRight: SIZES.ten,
+                padding: SIZES.fifteen,
+                borderRadius: SIZES.ten,
+                width: SIZES.fifty * 2.5,
+                alignItems: 'center',
               }}
-            />
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
-        isVisible={thankYouModal}
-        animationIn="zoomInDown"
-        animationOut="zoomOutUp"
-        animationInTiming={600}
-        animationOutTiming={600}
-        backdropTransitionInTiming={600}
-        backdropTransitionOutTiming={600}>
-        <View
-          style={{
-            backgroundColor: Colors.white,
-            padding: SIZES.fifteen,
-            alignItems: 'center',
-            borderRadius: 10,
-          }}>
-          <Image
-            source={Images.greenTick}
-            resizeMode="contain"
-            style={{
-              height: SIZES.fifteen * 5,
-              width: SIZES.fifteen * 5,
-              marginBottom: 15,
-            }}
-          />
-          <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-            Thank You
-          </BoldTextCB>
-          <RegularTextCB
-            style={{
-              marginVertical: SIZES.ten,
-              fontSize: 16,
-              color: Colors.coolGrey,
-            }}>
-            For your great service
-          </RegularTextCB>
-          <View
-            style={{
-              marginVertical: SIZES.ten * 3,
-              width: '100%',
-            }}>
-            <ButtonRadius10
-              label="JOB COMPLETED"
-              bgColor={Colors.sickGreen}
+              activeOpacity={0.6}
               onPress={() => {
-                setThankYouModal(false);
+                setCancelJobModal(false);
+                setTimeout(() => {
+                  props.navigation.goBack();
+                }, 500);
+              }}>
+              <RegularTextCB style={{fontSize: 16}}>YES</RegularTextCB>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                backgroundColor: Colors.coolGrey,
+                marginLeft: SIZES.ten,
+                padding: SIZES.fifteen,
+                borderRadius: SIZES.ten,
+                width: SIZES.fifty * 2.5,
+                alignItems: 'center',
               }}
-            />
+              onPress={() => {
+                setCancelJobModal(false);
+              }}
+              activeOpacity={0.6}>
+              <RegularTextCB style={{color: Colors.white, fontSize: 16}}>
+                NO
+              </RegularTextCB>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
