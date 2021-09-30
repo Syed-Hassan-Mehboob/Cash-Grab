@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -12,7 +12,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
@@ -29,7 +29,7 @@ export default class OTP extends Component {
   }
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
 
   verifyOTP = () => {
@@ -40,8 +40,7 @@ export default class OTP extends Component {
       return;
     }
 
-    const onSuccess = ({ data }) => {
-
+    const onSuccess = ({data}) => {
       this.toggleIsLoading();
       utils.showToast(data.message);
 
@@ -69,31 +68,34 @@ export default class OTP extends Component {
     return (
       <ImageBackground
         source={Images.loginBgWeb}
-        style={[styles.container, { width: '100%' }]}>
+        style={[styles.container, {width: '100%'}]}>
         <KeyboardAvoidingView
-          style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty }}>
+          style={{
+            flex: 1,
+            paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+          }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{ marginStart: SIZES.fifteen, alignSelf: 'flex-start' }}>
+            style={{marginStart: SIZES.fifteen, alignSelf: 'flex-start'}}>
             <Image source={Images.arrowBack} style={styles.iconBack} />
           </TouchableOpacity>
-          <View style={{ alignItems: 'center' }}>
+          <View style={{alignItems: 'center'}}>
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
                 height: 70,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: SIZES.ten*4,
+                marginTop: SIZES.ten * 4,
               }}
             />
             <BoldTextCB
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: SIZES.ten*3,
+                marginTop: SIZES.ten * 3,
               }}>
               Verification
             </BoldTextCB>
@@ -110,20 +112,28 @@ export default class OTP extends Component {
           <View style={[styles.childContainer]}>
             <View style={[styles.textInputContainer]}>
               <OTPInputView
-                style={{ width: '90%', height: SIZES.ten*7, marginTop: SIZES.ten*3 }}
+                style={{
+                  width: '90%',
+                  height: SIZES.ten * 7,
+                  marginTop: SIZES.ten * 3,
+                }}
                 pinCount={4}
                 code={this.state.code}
                 onCodeChanged={(code) => {
-                  this.setState({ code });
+                  this.setState({code});
                 }}
                 autoFocusOnLoad
                 codeInputFieldStyle={styles.card}
                 codeInputHighlightStyle={styles.card}
-                onCodeFilled={(code) => { }}
+                onCodeFilled={(code) => {}}
               />
             </View>
           </View>
-          <View style={{ marginVertical: SIZES.fifty, marginHorizontal: SIZES.fifteen }}>
+          <View
+            style={{
+              marginVertical: SIZES.fifty,
+              marginHorizontal: SIZES.fifteen,
+            }}>
             <ButtonRadius10
               label="VERIFY"
               bgColor={Colors.sickGreen}
@@ -175,8 +185,8 @@ const styles = StyleSheet.create({
     marginHorizontal: SIZES.fifteen,
   },
   card: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
     backgroundColor: Colors.white,
     borderColor: Colors.sickGreen,
     borderRadius: SIZES.ten,
@@ -184,7 +194,7 @@ const styles = StyleSheet.create({
     paddingVertical: SIZES.five,
     shadowColor: '#c5c5c5',
     color: Colors.black,
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,

@@ -13,8 +13,18 @@ import Colors from '../../common/Colors';
 import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import RegularTextCB from '../../components/RegularTextCB';
+import {CommonActions} from '@react-navigation/native';
 
 export default function SelectIndustry(props) {
+  const resetAction = CommonActions.reset({
+    index: 0,
+    routes: [
+      {
+        name: Constants.login,
+      },
+    ],
+  });
+
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
     let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
@@ -121,7 +131,8 @@ export default function SelectIndustry(props) {
           label="CONTINUE"
           bgColor={Colors.sickGreen}
           onPress={() => {
-            props.navigation.navigate(Constants.otp);
+            // props.navigation.replace(Constants.login);
+            props.navigation.dispatch(resetAction);
           }}
         />
       </View>

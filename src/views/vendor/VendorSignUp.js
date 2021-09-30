@@ -264,7 +264,7 @@ export default class VendorSignUp extends Component {
               flex: 1,
               paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}
-            contentContainerStyle={{flexGrow: 1}}
+            contentContainerStyle={{flexGrow: 1, paddingBottom: 150}}
             showsVerticalScrollIndicator={false}>
             <View>
               <TouchableOpacity
@@ -526,7 +526,7 @@ export default class VendorSignUp extends Component {
             <View
               style={{
                 justifyContent: 'flex-end',
-                marginHorizontal: SIZES.fifteen,
+                // marginHorizontal: SIZES.fifteen,
               }}>
               {/* <View
                 style={[
@@ -549,7 +549,10 @@ export default class VendorSignUp extends Component {
                 </TouchableOpacity>
               </View> */}
 
-              <View style={{marginVertical: SIZES.twenty}}>
+              <View
+                style={{
+                  marginVertical: SIZES.twenty,
+                }}>
                 <ButtonRadius10
                   label="SIGN UP"
                   bgColor={Colors.sickGreen}
