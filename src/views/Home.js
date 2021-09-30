@@ -15,13 +15,20 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from 'react-native-modal';
-import Constants, {height, SIZES, width} from '../common/Constants';
+import Constants, {
+  FONTS,
+  height,
+  SIZES,
+  STYLES,
+  width,
+} from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import Geolocation from '@react-native-community/geolocation';
 import {Dimensions} from 'react-native';
+import {Icon} from 'native-base';
 
 export default class Home extends Component {
   constructor(props) {
@@ -313,8 +320,7 @@ export default class Home extends Component {
           {
             padding: SIZES.ten,
             marginHorizontal: SIZES.fifteen,
-            marginBottom: SIZES.twenty,
-            marginTop: SIZES.five,
+            marginTop: SIZES.ten,
           },
         ]}
         onPress={() => {
@@ -507,162 +513,147 @@ export default class Home extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}>
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingHorizontal: SIZES.twenty,
-                marginTop:
-                  Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 6,
-              }}>
-              <TouchableOpacity
-                style={{
-                  width: SIZES.fifteen * 1,
-                  height: SIZES.fifteen * 1,
-                }}
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}>
-                <Image
-                  source={Images.arrowBack}
-                  style={[
-                    styles.iconBack,
-                    {
-                      tintColor: Colors.black1,
-                      width: SIZES.fifteen * 1,
-                      height: SIZES.fifteen * 1,
-                    },
-                  ]}
-                />
-              </TouchableOpacity>
-
-              <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
-                Explore
-              </RegularTextCB>
-
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate(Constants.filter);
-                }}
-                style={{}}>
-                <Image
-                  source={Images.iconHamburger}
-                  style={{
-                    height: SIZES.twenty,
-                    width: SIZES.twenty,
-                    resizeMode: 'contain',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
+      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             <TouchableOpacity
-              style={{
-                marginVertical: SIZES.ten,
-                paddingHorizontal: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-              onPress={() => this.props.navigation.navigate(Constants.search)}>
-              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
-                Search Service...
-              </RegularTextCB>
-              <Image
-                source={Images.iconSearch}
-                style={{height: SIZES.fifty, width: SIZES.fifty}}
+              style={{}}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <Icon
+                type="AntDesign"
+                name="left"
+                style={{color: Colors.black, fontSize: SIZES.ten * 3}}
               />
             </TouchableOpacity>
-            <View
-              style={{
-                paddingHorizontal: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+
+            <RegularTextCB style={[{fontSize: 22}]}>Explore</RegularTextCB>
+
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate(Constants.filter);
+              }}
+              style={{}}>
+              <Image
+                source={Images.iconHamburger}
+                style={{
+                  height: SIZES.twenty,
+                  width: SIZES.twenty,
+                  resizeMode: 'contain',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={{
+              marginVertical: SIZES.ten,
+              paddingHorizontal: SIZES.twenty,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+            onPress={() => this.props.navigation.navigate(Constants.search)}>
+            <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+              Search Service...
+            </RegularTextCB>
+            <Image
+              source={Images.iconSearch}
+              style={{height: SIZES.fifty, width: SIZES.fifty}}
+            />
+          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginVertical: SIZES.ten,
+            }}>
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  fontSize: 18,
+                },
+              ]}>
+              Browse categories
+            </RegularTextCB>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate(Constants.allCategories)
+              }>
+              <RegularTextCB
+                style={{
+                  color: Colors.black,
+                  textDecorationLine: 'underline',
+                }}>
+                See All
+              </RegularTextCB>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            horizontal
+            data={this.state.categories}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={this.renderCategoryItem}
+            showsHorizontalScrollIndicator={false}
+            contentInset={{
+              // for ios
+              top: 0,
+              bottom: 0,
+              left: SIZES.ten,
+              right: SIZES.ten,
+            }}
+            contentContainerStyle={{
+              // for android
+              paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginVertical: SIZES.ten,
+            }}>
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  fontSize: 18,
+                },
+              ]}>
+              Vendors Around You
+            </RegularTextCB>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({seeAllClicked: true}, () => {
+                  this.checkLocationPermission();
+                });
               }}>
               <RegularTextCB
                 style={{
-                  fontSize: SIZES.twenty,
                   color: Colors.black,
+                  textDecorationLine: 'underline',
                 }}>
-                Browse categories
+                See All
               </RegularTextCB>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate(Constants.allCategories)
-                }>
-                <RegularTextCB
-                  style={{
-                    color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
-                  See All
-                </RegularTextCB>
-              </TouchableOpacity>
-            </View>
-            <FlatList
-              horizontal
-              data={this.state.categories}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={this.renderCategoryItem}
-              showsHorizontalScrollIndicator={false}
-              contentInset={{
-                // for ios
-                top: 0,
-                bottom: 0,
-                left: SIZES.ten,
-                right: SIZES.ten,
-              }}
-              contentContainerStyle={{
-                // for android
-                paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
-              }}
-            />
-            <View
-              style={{
-                paddingHorizontal: SIZES.twenty,
-                paddingTop: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <RegularTextCB
-                style={{
-                  fontSize: SIZES.twenty,
-                  color: Colors.black,
-                }}>
-                Vendors Around You
-              </RegularTextCB>
-              <TouchableOpacity
-                onPress={() => {
-                  this.setState({seeAllClicked: true}, () => {
-                    this.checkLocationPermission();
-                  });
-                }}>
-                <RegularTextCB
-                  style={{
-                    color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
-                  See All
-                </RegularTextCB>
-              </TouchableOpacity>
-            </View>
-            <FlatList
-              numColumns={2}
-              // horizontal
-              data={this.formatData(this.state.vendorAround, 2)}
-              keyExtractor={(index) => index}
-              renderItem={this.renderVendorsAroundYouItem}
-              showsHorizontalScrollIndicator={false}
-            />
-            {/* <RegularTextCB
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            numColumns={2}
+            // horizontal
+            data={this.formatData(this.state.vendorAround, 2)}
+            keyExtractor={(index) => index}
+            renderItem={this.renderVendorsAroundYouItem}
+            showsHorizontalScrollIndicator={false}
+          />
+          {/* <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,
                 marginTop: SIZES.ten,
@@ -678,7 +669,6 @@ export default class Home extends Component {
               renderItem={this.renderUrgentServicesItem}
               showsHorizontalScrollIndicator={false}
             /> */}
-          </View>
         </ScrollView>
         <Spinner
           visible={this.state.isLoading}

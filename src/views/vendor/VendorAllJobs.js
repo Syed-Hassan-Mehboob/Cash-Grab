@@ -126,7 +126,8 @@ export default class VendorAllJobs extends Component {
             />
           </TouchableOpacity>
 
-          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
+          <RegularTextCB
+            style={[{color: Colors.black, fontSize: SIZES.ten * 3}]}>
             All Jobs
           </RegularTextCB>
         </View>

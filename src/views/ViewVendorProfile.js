@@ -122,21 +122,23 @@ export default class ViewVendorProfile extends React.Component {
         style={[
           styles.card,
           {
+            padding: SIZES.ten,
             borderRadius: SIZES.fifteen,
-            margin: SIZES.five,
+            // margin: SIZES.five,
             flexDirection: 'row',
-            width: width / 2,
+            // width: width / 2,
             backgroundColor: Colors.white,
-            marginBottom: SIZES.twenty,
+            // marginBottom: SIZES.twenty,
+            marginLeft: SIZES.ten,
           },
         ]}
         onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
         <Image
           source={{uri: Constants.imageURL + item.categories.image}}
           style={{
-            height: SIZES.ten * 8,
-            width: SIZES.ten * 8,
-            borderRadius: SIZES.fifteen,
+            height: SIZES.ten * 5.5,
+            width: SIZES.ten * 5.5,
+            borderRadius: SIZES.ten * 5.5,
           }}
         />
         <View

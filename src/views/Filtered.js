@@ -9,7 +9,7 @@ import {
   LogBox,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FilterComponant from '../components/FilterComponant';
 import Geolocation from '@react-native-community/geolocation';
+import {Icon} from 'native-base';
 
 export default class FileredScreen extends Component {
   constructor(props) {
@@ -220,29 +221,27 @@ export default class FileredScreen extends Component {
 
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
+            style={{position: 'absolute', left: 0}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black}]}
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
             />
           </TouchableOpacity>
 
-          <RegularTextCB style={{fontSize: SIZES.ten * 3, color: Colors.black}}>
-            Filtered Job
-          </RegularTextCB>
+          <RegularTextCB style={[{fontSize: 22}]}>Filtered Job</RegularTextCB>
         </View>
 
         {/* <FlatList

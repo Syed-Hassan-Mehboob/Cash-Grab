@@ -10,13 +10,13 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES, width} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
-import {Text} from 'native-base';
+import {Icon, Text} from 'native-base';
 SIZES;
 export default class SingleCategory extends Component {
   constructor(props) {
@@ -76,19 +76,22 @@ export default class SingleCategory extends Component {
 
   renderSingleCategoriesItem = ({item}) => {
     // console.log('Single Category Item======',item.userProfile)
+
+    // console.log('SIngle Category item ====== ', item);
     return (
       <TouchableOpacity
         style={[
           styles.card,
           {
-            marginHorizontal: SIZES.fifteen,
-            marginTop: SIZES.twenty,
+            marginHorizontal: SIZES.fifteen + 2,
+            marginTop: SIZES.ten * 4,
             alignItems: 'center',
+            paddingVertical: SIZES.five,
           },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.singleCategory, {
-            item: item,
+          this.props.navigation.navigate(Constants.viewVendorProfile, {
+            item: item.id,
           })
         }>
         <View
@@ -101,22 +104,63 @@ export default class SingleCategory extends Component {
             source={{uri: Constants.imageURL + item.image}}
             // source={item.image}
             style={{
-              height: SIZES.ten * 10,
-              width: SIZES.ten * 10,
-              borderRadius: SIZES.ten * 10,
+              height: SIZES.ten * 5.5,
+              width: SIZES.ten * 5.5,
+              borderRadius: SIZES.ten * 5.5,
+              marginRight: SIZES.ten,
             }}
             resizeMode="cover"
           />
-          <Text>View Profile</Text>
+          <Text
+            style={[
+              FONTS.mediumFont14,
+              {
+                textDecorationLine: 'underline',
+                color: Colors.black1,
+              },
+            ]}>
+            View Profile
+          </Text>
         </View>
-        <RegularTextCB
-          style={{
-            fontSize: 16,
-            marginTop: SIZES.ten,
-            color: Colors.coolGrey,
-          }}>
-          {item.name}
-        </RegularTextCB>
+
+        <View style={{paddingRight: SIZES.ten * 7}}>
+          <RegularTextCB
+            style={[
+              FONTS.boldFont16,
+              {
+                color: Colors.black,
+              },
+            ]}>
+            {/* {item.services[0]['name']} */}
+            Car Macanice
+          </RegularTextCB>
+          <RegularTextCB
+            style={{
+              fontSize: 16,
+              color: Colors.coolGrey,
+            }}>
+            {/* {item.services[0]['name']} */}
+            Lorem ipSum
+          </RegularTextCB>
+        </View>
+
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: Colors.sickGreen,
+              padding: SIZES.ten * 2,
+              borderRadius: SIZES.ten * 4,
+              zIndex: 1,
+              bottom: -SIZES.ten * 3,
+            },
+          ]}>
+          <Icon
+            type="AntDesign"
+            name="right"
+            style={{color: Colors.white, fontSize: 20}}
+          />
+        </View>
       </TouchableOpacity>
     );
   };
@@ -137,23 +181,23 @@ export default class SingleCategory extends Component {
 
   render() {
     return (
-      <View style={[STYLES.container]}>
+      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            justifyContent: 'space-between',
+            // paddingHorizontal: SIZES.ten,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
+            style={{}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black}]}
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
             />
           </TouchableOpacity>
           <View
@@ -167,23 +211,44 @@ export default class SingleCategory extends Component {
               source={{
                 uri: Constants.imageURL + this.props.route.params.item.image,
               }}
-              style={{height: SIZES.ten * 7, width: SIZES.ten * 7}}
+              style={{
+                height: SIZES.ten * 6,
+                width: SIZES.ten * 6,
+                borderRadius: SIZES.ten * 6,
+              }}
             />
-            <RegularTextCB
-              style={{fontSize: SIZES.ten * 3, color: Colors.black}}>
+            <RegularTextCB style={[{color: Colors.black, fontSize: 22}]}>
               {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              this.openNextScreen(Constants.filter);
+            }}>
+            <Image
+              source={Images.iconHamburger}
+              style={{
+                height: SIZES.twenty,
+                width: SIZES.twenty,
+              }}
+              resizeMode={'contain'}
+            />
+          </TouchableOpacity>
         </View>
 
-        <FlatList
-          numColumns={2}
-          // horizontal
-          data={this.formatData(this.state.vendors, 2)}
-          keyExtractor={(index) => index}
-          renderItem={this.renderSingleCategoriesItem}
-          showsHorizontalScrollIndicator={false}
-        />
+        <View style={{flex: 1}}>
+          <FlatList
+            numColumns={2}
+            // horizontal
+            data={this.formatData(this.state.vendors, 2)}
+            keyExtractor={(index) => index}
+            renderItem={this.renderSingleCategoriesItem}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: SIZES.ten * 5,
+            }}
+          />
+        </View>
 
         <Spinner
           visible={this.state.isLoading}

@@ -9,12 +9,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
 import Colors from '../../common/Colors';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {SIZES, STYLES, FONTS} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
@@ -166,10 +167,10 @@ export default class VendorProfile extends React.Component {
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      console.log(
-        'Vender Profile =========',
-        data.data.records.userProfile.image,
-      );
+      // console.log(
+      //   'Vender Profile =========',
+      //   data.data.records.userProfile.image,
+      // );
       this.toggleIsLoading();
       this.setState({
         avatar: Constants.imageURL + data.data.records.userProfile.image,
@@ -210,51 +211,47 @@ export default class VendorProfile extends React.Component {
         style={[
           styles.card,
           {
-            borderRadius: SIZES.fifteen,
-            padding: SIZES.ten,
-            margin: SIZES.five,
+            padding: SIZES.fifteen,
             flexDirection: 'row',
-            width: width / 2,
-            height: SIZES.ten * 7,
-            backgroundColor: Colors.white,
-            marginBottom: SIZES.twenty,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginVertical: SIZES.fifteen,
           },
         ]}
         activeOpacity={0.6}>
-        <Image
+        {/* <Image
           source={{uri: Constants.imageURL + item.categories.image}}
           style={{
             height: SIZES.ten * 6,
             width: SIZES.ten * 6,
             borderRadius: SIZES.ten * 6,
           }}
+        /> */}
+
+        <Image
+          source={{uri: Constants.imageURL + item.categories.icon}}
+          style={{
+            height: SIZES.ten * 3,
+            width: SIZES.ten * 3,
+            marginRight: SIZES.five,
+          }}
         />
-        <View style={{marginStart: SIZES.ten}}>
-          <Image
-            source={{uri: Constants.imageURL + item.categories.icon}}
-            style={{
-              height: SIZES.twenty,
-              width: SIZES.twenty,
-              justifyContent: 'space-evenly',
-            }}
-          />
-          <RegularTextCB
-            numberOfLines={2}
-            style={{
-              fontSize: 16,
-              color: Colors.black,
-            }}>
-            {item.categories.name}
-          </RegularTextCB>
-          <RegularTextCB
+        <RegularTextCB
+          style={{
+            fontSize: 16,
+            color: Colors.black,
+          }}>
+          {item.categories.name}
+        </RegularTextCB>
+
+        {/* <RegularTextCB
             style={{
               fontSize: 14,
               color: Colors.coolGrey,
               width: width / 1.75 - 100,
             }}>
             {item.price}
-          </RegularTextCB>
-        </View>
+          </RegularTextCB> */}
       </TouchableOpacity>
     );
   };
@@ -342,6 +339,45 @@ export default class VendorProfile extends React.Component {
           </View>
         </View>
       </View>
+    );
+  };
+
+  rendorInterest = ({item}) => {
+    console.log('Dummy data === ==', item);
+    return (
+      <TouchableOpacity
+        style={[
+          {
+            paddingVertical: SIZES.ten * 1,
+            paddingHorizontal: SIZES.ten * 3,
+            backgroundColor: Colors.white,
+            borderRadius: SIZES.ten,
+            margin: SIZES.ten,
+            borderWidth: 1,
+            borderColor: item.isSlected ? Colors.sickGreen : Colors.white,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 5,
+            },
+            shadowOpacity: 0.2,
+            shadowRadius: 16.0,
+
+            elevation: 5,
+          },
+        ]}
+        activeOpacity={0.6}
+        onPress={() => {}}>
+        <Text
+          style={[
+            FONTS.mediumFont16,
+            {
+              color: Colors.black,
+            },
+          ]}>
+          {item.name}
+        </Text>
+      </TouchableOpacity>
     );
   };
 
@@ -683,6 +719,39 @@ export default class VendorProfile extends React.Component {
                     fontSize: 16,
                     color: Colors.black,
                   }}>
+                  Interest
+                </RegularTextCB>
+
+                <FlatList
+                  horizontal
+                  data={DummyData}
+                  keyExtractor={(index) => index}
+                  renderItem={this.rendorInterest}
+                  showsHorizontalScrollIndicator={false}
+                  contentInset={{
+                    // for ios
+                    top: 0,
+                    bottom: SPACING_FOR_CARD_INSET,
+                    left: SPACING_FOR_CARD_INSET,
+                    right: SPACING_FOR_CARD_INSET,
+                  }}
+                  contentContainerStyle={{
+                    // for android
+                    paddingHorizontal:
+                      Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
+                    paddingBottom:
+                      Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
+                  }}
+                />
+              </View>
+
+              <View style={{marginTop: SIZES.twentyFive}}>
+                <RegularTextCB
+                  style={{
+                    marginHorizontal: SIZES.twenty,
+                    fontSize: 16,
+                    color: Colors.black,
+                  }}>
                   Services We Offer
                 </RegularTextCB>
                 <FlatList
@@ -734,7 +803,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
-    borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.5,
@@ -770,3 +838,31 @@ const styles = StyleSheet.create({
     fontFamily: Constants.fontRegular,
   },
 });
+
+const DummyData = [
+  {
+    id: 1,
+    name: 'Gaming',
+    isSlected: false,
+  },
+  {
+    id: 2,
+    name: 'Planting',
+    isSlected: false,
+  },
+  {
+    id: 3,
+    name: 'Bike Riding',
+    isSlected: false,
+  },
+  {
+    id: 4,
+    name: 'Photography',
+    isSlected: false,
+  },
+  {
+    id: 5,
+    name: 'Peotry',
+    isSlected: false,
+  },
+];

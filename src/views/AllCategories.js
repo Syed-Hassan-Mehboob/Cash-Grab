@@ -189,7 +189,6 @@ export default class AllCategories extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.ten * 3,
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -199,10 +198,9 @@ export default class AllCategories extends Component {
               type="AntDesign"
               name="left"
               style={{color: Colors.black, fontSize: SIZES.ten * 3}}
-              onPress={() => props.navigation.goBack()}
             />
           </TouchableOpacity>
-          <RegularTextCB style={[FONTS.boldFont24, {}]}>
+          <RegularTextCB style={[, {fontSize: 22}]}>
             All Categories
           </RegularTextCB>
           <TouchableOpacity

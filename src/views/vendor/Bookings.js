@@ -37,7 +37,7 @@ export default function Bookings(props) {
             style={{color: Colors.black, fontSize: SIZES.ten * 3}}
           />
         </TouchableOpacity>
-        <RegularTextCB style={[FONTS.boldFont24, {color: COLORS.black}]}>
+        <RegularTextCB style={[{color: COLORS.black, fontSize: SIZES.ten * 3}]}>
           Bookings
         </RegularTextCB>
       </View>
