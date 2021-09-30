@@ -31,6 +31,7 @@ import ViewJob from '../vendor/ViewJob';
 import QuickNotify from '../../components/QuickNotify';
 import UserHome from '../UserHome';
 import BookingConfirmed from './../BookingConfirmed';
+import ScheduleJobs from '../ScheduleJobs';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -40,7 +41,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.dateTimeSlots}
+      initialRouteName={Constants.ScheduleJobs}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
@@ -48,6 +49,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.UserHome} component={UserHome} />
       <HomeStack.Screen name={Constants.home} component={Home} />
       <HomeStack.Screen name={Constants.search} component={Search} />
+      <HomeStack.Screen
+        name={Constants.ScheduleJobs}
+        component={ScheduleJobs}
+      />
       <HomeStack.Screen
         name={Constants.allCategories}
         component={AllCategories}
