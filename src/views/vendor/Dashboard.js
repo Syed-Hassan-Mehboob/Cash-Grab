@@ -637,7 +637,7 @@ export default class Dashboard extends Component {
 
             <BarChart
               data={this.data}
-              barWidth={SIZES.twenty}
+              barWidth={45}
               hideRules={true}
               activeOpacity={0.7}
               animationEasing={Easing.cubic}
