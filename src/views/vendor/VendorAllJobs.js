@@ -18,6 +18,7 @@ import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ListComponent from '../../components/ListComponent';
+import NormalHeader from '../../components/NormalHeader';
 
 export default class VendorAllJobs extends Component {
   constructor(props) {
@@ -107,31 +108,7 @@ export default class VendorAllJobs extends Component {
   render() {
     return (
       <View style={STYLES.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.ten,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.navigate(Constants.vendorHome);
-            }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black}]}
-            />
-          </TouchableOpacity>
-
-          <RegularTextCB
-            style={[{color: Colors.black, fontSize: SIZES.ten * 3}]}>
-            All Jobs
-          </RegularTextCB>
-        </View>
-
+        <NormalHeader name="All Jobs" />
         <View style={{paddingHorizontal: SIZES.twenty}}>
           <FlatList
             style={{marginTop: SIZES.ten}}

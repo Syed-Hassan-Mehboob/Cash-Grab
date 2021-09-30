@@ -65,8 +65,7 @@ export default class VendorProfile extends React.Component {
       review: {
         date: '05-12-2020',
         rating: '4.4',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
       },
     },
     {
@@ -78,8 +77,7 @@ export default class VendorProfile extends React.Component {
       review: {
         date: '03-10-2019',
         rating: '4.0',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
       },
     },
     {
@@ -91,8 +89,7 @@ export default class VendorProfile extends React.Component {
       review: {
         date: '15-11-2020',
         rating: '3.4',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
       },
     },
     {
@@ -104,8 +101,7 @@ export default class VendorProfile extends React.Component {
       review: {
         date: '18-01-2021',
         rating: '5.',
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
       },
     },
   ];
@@ -343,7 +339,7 @@ export default class VendorProfile extends React.Component {
   };
 
   rendorInterest = ({item}) => {
-    console.log('Dummy data === ==', item);
+    // console.log('Dummy data === ==', item);
     return (
       <TouchableOpacity
         style={[
