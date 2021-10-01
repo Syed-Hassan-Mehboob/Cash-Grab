@@ -35,6 +35,8 @@ import SchechuleJobDetail from '../SchechuleJobDetail';
 import BookingConfirmed2 from '../vendor/BookingConfirmed2';
 import BookingConfirmed from '../BookingConfirmed';
 import ScheduleJobs from '../ScheduleJobs';
+import WriteReviews from '../WriteReviews';
+import ServiceProviderOnTheWay from '../ServiceProviderOnTheWay';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -44,7 +46,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.UserHome}
+      initialRouteName={Constants.ServiceProviderOnTheWay}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
@@ -68,6 +70,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen name={Constants.Filtered} component={Filtered} />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
       <HomeStack.Screen name={Constants.nearby} component={Nearby} />
+      <HomeStack.Screen
+        name={Constants.ServiceProviderOnTheWay}
+        component={ServiceProviderOnTheWay}
+      />
       <HomeStack.Screen name={Constants.QuickNotify} component={QuickNotify} />
       <HomeStack.Screen
         name={Constants.SchechuleJobDetail}
@@ -84,6 +90,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
+      />
+      <HomeStack.Screen
+        name={Constants.WriteReviews}
+        component={WriteReviews}
       />
       <HomeStack.Screen
         name={Constants.confirmPayment}

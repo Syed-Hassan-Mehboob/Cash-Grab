@@ -12,11 +12,15 @@ import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
+import NormalHeader from '../components/NormalHeader';
+import {Icon} from 'native-base';
+import BoldTextCB from '../components/BoldTextCB';
+import LightTextCB from '../components/LightTextCB';
 const {height, width} = Dimensions.get('window');
 const CARD_HEIGHT = SIZES.ten * 20;
 const CARD_WIDTH = width * 0.4;
@@ -280,7 +284,7 @@ const ServiceProviderOnTheWay = (props) => {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[STYLES.container, {paddingHorizontal: SIZES.twenty}]}>
       {Region.latitude !== 0 && Region.longitude !== 0 ? (
         <MapView
           ref={_map}
@@ -337,42 +341,97 @@ const ServiceProviderOnTheWay = (props) => {
             : null}
         </MapView>
       ) : null}
+      <NormalHeader name="Service Provider On the Way" />
 
       <View
         style={{
-          width: '100%',
-          alignSelf: 'center',
-          flexDirection: 'row',
+          paddingVertical: SIZES.ten,
           backgroundColor: Colors.white,
-          borderBottomLeftRadius: SIZES.twenty,
-          borderBottomRightRadius: SIZES.twenty,
+          justifyContent: 'center',
           alignItems: 'center',
-          height: SIZES.fifty,
-          elevation: SIZES.ten,
-          shadowColor: '#000',
-          shadowOffset: {width: SIZES.five, height: SIZES.five},
-          shadowOpacity: 1.0,
-          shadowRadius: SIZES.ten,
+          position: 'absolute',
+          bottom: SIZES.twenty,
+          alignSelf: 'center',
+          padding: SIZES.ten * 7,
         }}>
-        <TouchableOpacity
+        <View
           style={{
-            height: SIZES.ten * 6,
-            width: SIZES.ten * 6,
+            flexDirection: 'row',
+            // backgroundColor: 'green',
             alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onPress={() => {
-            props.navigation.goBack();
-          }}
-          activeOpacity={0.6}>
+            justifyContent: 'space-between',
+            padding: SIZES.ten,
+          }}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Colors.sickGreen,
+              height: SIZES.ten * 5,
+              width: SIZES.ten * 5,
+              borderRadius: SIZES.ten * 5,
+            }}>
+            <Icon
+              type={'Ionicons'}
+              name={'call-outline'}
+              style={{color: Colors.white, fontSize: SIZES.fifteen + 2}}
+            />
+          </View>
+
           <Image
-            source={Images.arrowBack}
-            style={[styles.iconBack, {tintColor: Colors.black}]}
+            source={Images.emp3}
+            style={{
+              height: SIZES.ten * 7,
+              width: SIZES.ten * 7,
+              borderRadius: SIZES.ten * 7,
+              marginHorizontal: SIZES.twenty,
+            }}
+            resizeMode="cover"
           />
-        </TouchableOpacity>
-        <RegularTextCB style={[{fontSize: SIZES.twenty, fontWeight: '600'}]}>
-          Vendors Around You
-        </RegularTextCB>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Colors.sickGreen,
+              height: SIZES.ten * 5,
+              width: SIZES.ten * 5,
+              borderRadius: SIZES.ten * 5,
+            }}>
+            <Icon
+              type={'MaterialCommunityIcons'}
+              name={'chat-processing-outline'}
+              style={{color: Colors.white, fontSize: SIZES.fifteen + 2}}
+            />
+          </View>
+        </View>
+
+        <BoldTextCB style={{fontSize: 16}}>Freddie Johnson</BoldTextCB>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+          }}>
+          <Image
+            source={Images.iconVerified}
+            style={{
+              height: SIZES.twenty,
+              width: SIZES.twenty,
+              resizeMode: 'contain',
+              tintColor: Colors.turqoiseGreen,
+            }}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.turqoiseGreen,
+              fontSize: 14,
+              marginStart: 5,
+            }}>
+            Verified
+          </RegularTextCB>
+        </View>
+        <BoldTextCB style={{fontSize: 16}}>Car Mechanic Needed</BoldTextCB>
+        <LightTextCB style={{color: Colors.sickGreen}}>Automobile</LightTextCB>
       </View>
 
       {/* <Animated.ScrollView
