@@ -180,8 +180,9 @@ export default class Login extends Component {
                 Rember Me
               </RegularTextCB>
               <TouchableOpacity
+                // style={{backgroundColor: 'red'}}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.login);
+                  // this.props.navigation.navigate(Constants.login);
                 }}>
                 <Switch
                   trackColor={{
