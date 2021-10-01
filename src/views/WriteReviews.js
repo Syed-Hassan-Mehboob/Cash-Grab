@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import BoldTextCB from '../components/BoldTextCB';
 import NormalHeader from '../components/NormalHeader';
@@ -31,7 +31,7 @@ export default function WriteReviews() {
     <ScrollView
       style={[STYLES.container]}
       contentContainerStyle={{
-        paddingHorizontal: SIZES.twenty,
+        // paddingHorizontal: SIZES.twenty,
         paddingBottom: SIZES.twenty,
       }}
       showsVerticalScrollIndicator={false}>
@@ -42,7 +42,8 @@ export default function WriteReviews() {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: SIZES.ten * 5,
+          paddingHorizontal: SIZES.fifteen,
+          marginTop: SIZES.twentyFive * 1.5,
         }}>
         <View
           style={{
@@ -53,21 +54,22 @@ export default function WriteReviews() {
           <Image
             source={Images.emp3}
             style={{
-              height: SIZES.ten * 6,
-              width: SIZES.ten * 6,
-              borderRadius: SIZES.ten * 6,
+              height: SIZES.ten * 7.5,
+              width: SIZES.ten * 7.5,
+              borderRadius: SIZES.ten * 7.5,
             }}
             resizeMode="cover"
           />
 
           <View style={{marginStart: SIZES.five}}>
-            <BoldTextCB style={{color: Colors.black, fontSize: 14}}>
+            <Text style={[FONTS.boldFont18, {color: Colors.black}]}>
               {'Ray Hammond'}
-            </BoldTextCB>
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
+                marginVertical: SIZES.five,
               }}>
               <Image
                 source={Images.iconVerified}
@@ -78,84 +80,66 @@ export default function WriteReviews() {
                   tintColor: Colors.turqoiseGreen,
                 }}
               />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 14,
-                  marginStart: SIZES.five,
-                }}>
+              <Text
+                style={[
+                  FONTS.mediumFont14,
+                  {
+                    color: Colors.turqoiseGreen,
+                    //   fontSize: 14,
+                    marginStart: SIZES.five,
+                  },
+                ]}>
                 Verified
-              </RegularTextCB>
+              </Text>
             </View>
           </View>
         </View>
-        <BoldTextCB>$240.00</BoldTextCB>
+        <Text style={[FONTS.boldFont16]}>$240.00</Text>
       </View>
 
-      <BoldTextCB
-        style={{fontSize: 24, alignSelf: 'center', marginTop: SIZES.ten * 5}}>
-        Write a Review
-      </BoldTextCB>
-
-      <StarRating
-        disabled={false}
-        maxStars={5}
-        containerStyle={{
-          marginTop: SIZES.twenty,
-        }}
-        rating={starCount}
-        fullStarColor={'#ffcc00FF'}
-        emptyStarColor={'#ffcc00FF'}
-        selectedStar={(rating) => onStarRatingPress(rating)}
-      />
-      <RegularTextCB style={{fontSize: 16, marginVertical: SIZES.twenty}}>
-        Description
-      </RegularTextCB>
-
-      {/* <View style={[styles.card, {borderWidth: 1, borderColor: borderColor}]}>
-        <Image
-          source={Images.iconpencil}
-          style={{
-            height: SIZES.ten * 2.5,
-            width: SIZES.ten * 2.5,
-            // backgroundColor: 'red',
-            marginTop: SIZES.ten + 3,
-            marginHorizontal: SIZES.fifteen,
-          }}
-          resizeMode={'cover'}
-        />
-        <TextInput
-          placeholderTextColor={Colors.grey}
-          autoCapitalize="none"
-          blurOnSubmit={true}
-          placeholder={'Write Reviews'}
-          onFocus={() => setBorderColor(Colors.sickGreen)}
-          onBlur={() => setBorderColor('transparent')}
-          selectionColor={Colors.sickGreen}
-          multiline={true}
-          editable={true}
-          textAlignVertical={'top'}
+      <View style={{paddingHorizontal: SIZES.fifteen}}>
+        <Text
           style={[
-            {
-              flex: 1,
-              fontFamily: Constants.fontRegular,
-              color: Colors.black,
-              fontSize: 16,
-              //   backgroundColor: 'red',
-            },
-          ]}
+            FONTS.boldFont22,
+            {alignSelf: 'center', marginTop: SIZES.twentyFive * 1.5},
+          ]}>
+          Write a Review
+        </Text>
+        <View style={{alignItems: 'center'}}>
+          <StarRating
+            disabled={false}
+            maxStars={5}
+            animation="swing"
+            containerStyle={{
+              marginTop: SIZES.fifteen,
+              width: '85%',
+            }}
+            rating={starCount}
+            fullStarColor={'#ffcc00FF'}
+            emptyStarColor={'#ffcc00FF'}
+            selectedStar={(rating) => onStarRatingPress(rating)}
+          />
+        </View>
+
+        <Text
+          style={[
+            FONTS.mediumFont14,
+            {marginTop: SIZES.twentyFive * 1.5, marginBottom: SIZES.fifteen},
+          ]}>
+          Description
+        </Text>
+
+        <MessageEditText
+          placeholder={'Write Review'}
+          height={SIZES.twentyFive * 5.5}
         />
-      </View> */}
 
-      <MessageEditText placeholder={'Write'} height={SIZES.twentyFive * 4.5} />
+        <TouchableOpacity
+          style={{alignSelf: 'center', marginVertical: SIZES.twentyFive * 1.5}}
+          activeOpacity={0.6}>
+          <Text style={[FONTS.mediumFont12]}>I'll do It Later</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={{alignSelf: 'center', marginTop: SIZES.ten * 3}}
-        activeOpacity={0.6}>
-        <RegularTextCB>I'll do It Later</RegularTextCB>
-      </TouchableOpacity>
-
-      <View style={{marginTop: SIZES.ten * 7}}>
         <ButtonRadius10
           label="Submit"
           bgColor={Colors.sickGreen}

@@ -46,7 +46,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.ServiceProviderOnTheWay}
+      initialRouteName={Constants.WriteReviews}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
