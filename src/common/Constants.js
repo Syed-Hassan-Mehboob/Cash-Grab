@@ -62,6 +62,7 @@ const Constants = {
   SelectIndustry: 'SelectIndustry',
   SelectServices: 'SelectServices',
   ServiceProviderOnTheWay: 'ServiceProviderOnTheWay',
+  ThankYou: 'ThankYou',
   more: 'More',
   settings: 'Settings',
   /* * drawer * */

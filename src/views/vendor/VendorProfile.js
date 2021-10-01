@@ -19,6 +19,7 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import Colors from '../../common/Colors';
 import Constants, {SIZES, STYLES, FONTS} from '../../common/Constants';
 import Images from '../../common/Images';
+import ButtonRadius10 from '../../components/ButtonRadius10';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
@@ -131,6 +132,7 @@ export default class VendorProfile extends React.Component {
     services: [],
     review: [],
     abouteMe: '',
+    Interest: DummyData,
   };
 
   componentDidMount() {
@@ -161,6 +163,20 @@ export default class VendorProfile extends React.Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => this.getUserProfile());
+  };
+
+  renderServicePrice = ({item}) => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: SIZES.twenty,
+        }}>
+        <Text style={[FONTS.mediumFont16]}>{item.name}</Text>
+        <Text style={[FONTS.boldFont14]}>{item.price}</Text>
+      </View>
+    );
   };
 
   getUserProfile = () => {
@@ -203,53 +219,38 @@ export default class VendorProfile extends React.Component {
   };
 
   renderServicesItem = ({item}) => {
-    // console.log('Services=============', item);
-    return (
-      <TouchableOpacity
-        style={[
-          styles.card,
-          {
-            padding: SIZES.fifteen,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginVertical: SIZES.fifteen,
-          },
-        ]}
-        activeOpacity={0.6}>
-        {/* <Image
-          source={{uri: Constants.imageURL + item.categories.image}}
-          style={{
-            height: SIZES.ten * 6,
-            width: SIZES.ten * 6,
-            borderRadius: SIZES.ten * 6,
-          }}
-        /> */}
+    //console.log('Services =========', item);
 
-        <Image
+    return (
+      <TouchableOpacity activeOpacity={0.6}>
+        <LinearGradient
+          style={[
+            styles.card,
+            {
+              paddingVertical: SIZES.ten,
+              paddingHorizontal: SIZES.fifteen,
+              alignItems: 'center',
+              // justifyContent: 'space-between',
+              marginVertical: SIZES.fifteen,
+            },
+          ]}
+          colors={[Colors.lightGold, Colors.orange]}>
+          {/* <Image
           source={{uri: Constants.imageURL + item.categories.icon}}
           style={{
             height: SIZES.ten * 3,
             width: SIZES.ten * 3,
             marginRight: SIZES.five,
           }}
-        />
-        <RegularTextCB
-          style={{
-            fontSize: 16,
-            color: Colors.black,
-          }}>
-          {item.categories.name}
-        </RegularTextCB>
-
-        {/* <RegularTextCB
+        /> */}
+          <RegularTextCB
             style={{
-              fontSize: 14,
-              color: Colors.coolGrey,
-              width: width / 1.75 - 100,
+              fontSize: 16,
+              color: Colors.white,
             }}>
-            {item.price}
-          </RegularTextCB> */}
+            {item.categories.name}
+          </RegularTextCB>
+        </LinearGradient>
       </TouchableOpacity>
     );
   };
@@ -339,9 +340,21 @@ export default class VendorProfile extends React.Component {
       </View>
     );
   };
+  onInterestPress = (id, type) => {
+    let newArray = this.state.Interest.map((val, i) => {
+      if (id === val.id) {
+        return {...val, isSlected: type};
+      } else {
+        return val;
+      }
+    });
+    // console.log('Interset ====== Array ', newArray);
+    this.setState({Interest: newArray});
+  };
 
   rendorInterest = ({item}) => {
-    // console.log('Dummy data === ==', item);
+    // //console.log('Dummy data === ==', item);
+    // console.log('=================', item.isSlected);
     return (
       <TouchableOpacity
         style={[
@@ -365,7 +378,7 @@ export default class VendorProfile extends React.Component {
           },
         ]}
         activeOpacity={0.6}
-        onPress={() => {}}>
+        onPress={() => this.onInterestPress(item.id, !item.isSlected)}>
         <Text
           style={[
             FONTS.mediumFont16,
@@ -440,7 +453,10 @@ export default class VendorProfile extends React.Component {
           </View>
         </View>
         <ScrollView
-          contentContainerStyle={{flexGrow: 1}}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: SIZES.twentyFive,
+          }}
           style={{marginTop: SIZES.ten * 8}}
           showsVerticalScrollIndicator={false}>
           <View
@@ -721,19 +737,22 @@ export default class VendorProfile extends React.Component {
           {this.state.isDescriptionSelected && (
             <View>
               <View style={{marginTop: SIZES.twentyFive}}>
-                <RegularTextCB
-                  style={{
-                    marginHorizontal: SIZES.twenty,
-                    fontSize: 16,
-                    color: Colors.black,
-                  }}>
+                <Text
+                  style={[
+                    FONTS.mediumFont16,
+                    {
+                      marginHorizontal: SIZES.twenty,
+                      color: Colors.black,
+                      marginVertical: SIZES.twenty,
+                    },
+                  ]}>
                   Interest
-                </RegularTextCB>
+                </Text>
 
                 <FlatList
                   horizontal
-                  data={DummyData}
-                  keyExtractor={(index) => index}
+                  data={this.state.Interest}
+                  keyExtractor={(item, index) => String(index)}
                   renderItem={this.rendorInterest}
                   showsHorizontalScrollIndicator={false}
                   contentInset={{
@@ -763,7 +782,7 @@ export default class VendorProfile extends React.Component {
                   Services We Offer
                 </RegularTextCB>
                 <FlatList
-                  style={{paddingBottom: SIZES.ten * 10}}
+                  style={{}}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={this.state.services}
@@ -780,9 +799,32 @@ export default class VendorProfile extends React.Component {
                     // for android
                     paddingHorizontal:
                       Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
-                    paddingBottom:
-                      Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
                   }}
+                />
+              </View>
+              <FlatList
+                style={{paddingBottom: SIZES.ten * 4}}
+                showsVerticalScrollIndicator={false}
+                data={services}
+                renderItem={this.renderServicePrice}
+                keyExtractor={(item) => item.id}
+                contentInset={{
+                  // for ios
+                  top: 0,
+                  bottom: SPACING_FOR_CARD_INSET,
+                  left: SPACING_FOR_CARD_INSET,
+                  right: SPACING_FOR_CARD_INSET,
+                }}
+                contentContainerStyle={{
+                  // backgroundColor: 'red',
+                  paddingHorizontal: SIZES.twenty,
+                }}
+              />
+              <View style={{paddingHorizontal: SIZES.twenty}}>
+                <ButtonRadius10
+                  label="+ Add More Services"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {}}
                 />
               </View>
             </View>
@@ -872,5 +914,23 @@ const DummyData = [
     id: 5,
     name: 'Peotry',
     isSlected: false,
+  },
+];
+
+const services = [
+  {
+    id: '1',
+    name: 'House Cleaning',
+    price: '$240.00',
+  },
+  {
+    id: '2',
+    name: 'Garage Cleaning',
+    price: '$550.00',
+  },
+  {
+    id: '3',
+    name: 'Gardern Cleaning',
+    price: '$240.00',
   },
 ];
