@@ -6,6 +6,7 @@ import {SIZES} from '../common/Constants';
 import RegularTextCB from './RegularTextCB';
 import {useNavigation} from '@react-navigation/native';
 import Images from '../common/Images';
+
 export default function NormalHeader(props) {
   const navigation = useNavigation();
 
@@ -15,7 +16,7 @@ export default function NormalHeader(props) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: SIZES.fifteen,
+        // paddingHorizontal: SIZES.ten * 2,
       }}>
       <TouchableOpacity
         style={{position: 'absolute', left: SIZES.fifteen}}

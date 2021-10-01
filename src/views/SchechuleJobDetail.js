@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
@@ -21,7 +22,13 @@ export default function ScheduleJobDetails(props) {
   const [cancelJobModal, setCancelJobModal] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingBottom: SIZES.ten * 3,
+        paddingHorizontal: SIZES.fifteen,
+      }}>
       <View
         style={{
           flexDirection: 'row',
@@ -391,7 +398,7 @@ export default function ScheduleJobDetails(props) {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -399,7 +406,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: SIZES.twenty,
     paddingTop: SIZES.twenty,
   },
   iconBack: {
