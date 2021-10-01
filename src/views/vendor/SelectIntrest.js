@@ -15,6 +15,7 @@ import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import {Icon} from 'native-base';
 import ButtonRadius10 from '../../components/ButtonRadius10';
+import NormalHeader from '../../components/NormalHeader';
 
 export default function SelectIntrest(props) {
   const [Data, setData] = useState(DummyData);
@@ -81,7 +82,7 @@ export default function SelectIntrest(props) {
   //   console.log('========', isSelected);
   return (
     <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -103,7 +104,9 @@ export default function SelectIntrest(props) {
         <RegularTextCB style={[FONTS.boldFont24, {}]}>
           Select Interest
         </RegularTextCB>
-      </View>
+      </View> */}
+
+      <NormalHeader name="Select Interest" />
 
       <View style={{flex: 1}}>
         <FlatList

@@ -139,83 +139,87 @@ export default class Login extends Component {
               Hello there, sign in to continue!
             </RegularTextCB>
           </View>
-          <View>
-            <View style={[styles.textInputContainer, {marginTop: SIZES.fifty}]}>
-              <EditText
-                ref={'email'}
-                keyboardType="email-address"
-                placeholder={'Email Address'}
-                secureTextEntry={false}
-                value={this.state.email}
-                onChangeText={(text) => {
-                  this.setState({email: text});
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
-              <EditText
-                ref={'password'}
-                placeholder={'Password'}
-                secureTextEntry={true}
-                value={this.state.password}
-                onChangeText={(text) => {
-                  this.setState({
-                    password: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-          </View>
-          <View style={{marginHorizontal: SIZES.fifteen}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: SIZES.ten * 3,
-              }}>
-              <RegularTextCB style={styles.noUnderlineText}>
-                Rember Me
-              </RegularTextCB>
-              <TouchableOpacity
-                // style={{backgroundColor: 'red'}}
-                onPress={() => {
-                  // this.props.navigation.navigate(Constants.login);
-                }}>
-                <Switch
-                  trackColor={{
-                    false: Colors.lightGrey,
-                    true: Colors.lighNewGreen,
+          {/* Textinput starts here */}
+          <View style={{paddingHorizontal: SIZES.five}}>
+            <View>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifty}]}>
+                <EditText
+                  ref={'email'}
+                  keyboardType="email-address"
+                  placeholder={'Email Address'}
+                  secureTextEntry={false}
+                  value={this.state.email}
+                  onChangeText={(text) => {
+                    this.setState({email: text});
                   }}
-                  thumbColor={
-                    this.state.isSwitchEnabled
-                      ? Colors.sickGreen
-                      : Colors.sickGreen
-                  }
-                  ios_backgroundColor={Colors.lightGrey}
-                  onValueChange={this.toggleIsEnabled}
-                  value={this.state.isSwitchEnabled}
+                  style={[styles.textInput]}
                 />
+              </View>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
+                <EditText
+                  ref={'password'}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => {
+                    this.setState({
+                      password: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+            </View>
+            <View style={{marginHorizontal: SIZES.fifteen}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: SIZES.ten * 3,
+                }}>
+                <RegularTextCB style={styles.noUnderlineText}>
+                  Rember Me
+                </RegularTextCB>
+                <TouchableOpacity
+                  // style={{backgroundColor: 'red'}}
+                  onPress={() => {
+                    // this.props.navigation.navigate(Constants.login);
+                  }}>
+                  <Switch
+                    trackColor={{
+                      false: Colors.lightGrey,
+                      true: Colors.lighNewGreen,
+                    }}
+                    thumbColor={
+                      this.state.isSwitchEnabled
+                        ? Colors.sickGreen
+                        : Colors.sickGreen
+                    }
+                    ios_backgroundColor={Colors.lightGrey}
+                    onValueChange={this.toggleIsEnabled}
+                    value={this.state.isSwitchEnabled}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{marginVertical: SIZES.ten * 3}}>
+                <ButtonRadius10
+                  label="LOGIN"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => this.login()}
+                />
+              </View>
+              <TouchableOpacity
+                style={{marginTop: SIZES.ten, alignSelf: 'center'}}
+                onPress={() =>
+                  this.props.navigation.navigate(Constants.forgetPassword)
+                }>
+                <RegularTextCB style={styles.noUnderlineText}>
+                  Forgot Password?
+                </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={{marginVertical: SIZES.ten * 3}}>
-              <ButtonRadius10
-                label="LOGIN"
-                bgColor={Colors.sickGreen}
-                onPress={() => this.login()}
-              />
-            </View>
-            <TouchableOpacity
-              style={{marginTop: SIZES.ten, alignSelf: 'center'}}
-              onPress={() =>
-                this.props.navigation.navigate(Constants.forgetPassword)
-              }>
-              <RegularTextCB style={styles.noUnderlineText}>
-                Forgot Password?
-              </RegularTextCB>
-            </TouchableOpacity>
           </View>
           <TouchableOpacity
             style={{

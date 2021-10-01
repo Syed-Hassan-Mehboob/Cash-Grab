@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import {StatusBar} from 'react-native';
 import {
   Dimensions,
   Image,
@@ -85,6 +86,8 @@ export default class Profile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
+
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -101,6 +104,8 @@ export default class Profile extends React.Component {
               width: '100%',
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              marginBottom: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              // backgroundColor: 'red',
             }}>
             <TouchableOpacity
               style={{

@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import {SafeAreaView, View, StyleSheet, Image} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 
 export default class Categories extends Component {
-  
   constructor(props) {
     super(props);
   }
@@ -27,17 +26,17 @@ export default class Categories extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.goBack();
           }}>
           <Image source={Images.arrowBack} style={styles.iconBack} />
         </TouchableOpacity>
-        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten*3}}>
+        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten * 3}}>
           Filter Categories
         </LightTextCB>
-        <LightTextCB style={{fontSize: 18, marginTop: SIZES.ten*3}}>
+        <LightTextCB style={{fontSize: 18, marginTop: SIZES.ten * 3}}>
           Categories
         </LightTextCB>
         <FlatList
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',

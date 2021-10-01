@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import LightTextCB from '../components/LightTextCB';
@@ -27,7 +27,7 @@ export default class BookingConfirmed extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View style={[styles.childContainer, {marginTop: SIZES.five}]}>
           <Image
             source={Images.greenTick}
@@ -110,13 +110,20 @@ export default class BookingConfirmed extends Component {
             </View>
           </View>
         </View>
-        {/* <View style={{flex: 1, justifyContent: 'flex-end'}}> */}
-        <ButtonRadius10
-          onPress={() => this.props.navigation.navigate(Constants.ScheduleJobs)}
-          label="CONTINUE"
-          bgColor={Colors.sickGreen}
-        />
-        {/* </View> */}
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            paddingHorizontal: SIZES.fifteen,
+          }}>
+          <ButtonRadius10
+            onPress={() =>
+              this.props.navigation.navigate(Constants.ScheduleJobs)
+            }
+            label="CONTINUE"
+            bgColor={Colors.sickGreen}
+          />
+        </View>
       </View>
     );
   }
@@ -182,8 +189,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    paddingHorizontal: SIZES.ten * 4,
-    paddingVertical: SIZES.ten * 5,
+    paddingHorizontal: SIZES.ten * 5.5,
+    paddingVertical: SIZES.ten * 3.5,
     alignItems: 'center',
   },
   formLabel: {

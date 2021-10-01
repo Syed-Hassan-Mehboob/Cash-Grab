@@ -24,6 +24,7 @@ import utils from '../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const {width, height} = Dimensions.get('window');
 
@@ -374,8 +375,11 @@ export default class VendorEditProfile extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: SIZES.fifteen,
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              // padding: SIZES.fifteen,
+              marginTop:
+                Platform.OS === 'android'
+                  ? SIZES.ten
+                  : getStatusBarHeight(true) + SIZES.five,
             }}>
             <TouchableOpacity
               style={{position: 'absolute', left: SIZES.ten}}

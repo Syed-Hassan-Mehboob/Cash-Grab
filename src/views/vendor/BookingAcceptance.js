@@ -8,25 +8,27 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import Constants, {SIZES, width} from '../../common/Constants';
+import Constants, {SIZES, STYLES, width} from '../../common/Constants';
 import BoldTextCB from '../../components/BoldTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import {Icon} from 'native-base';
+import NormalHeader from '../../components/NormalHeader';
 
 export default function BookingAcceptance(props) {
   return (
-    <View style={styles.container}>
-      <View
+    <View style={STYLES.container}>
+      {/* <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+          // paddingHorizontal: SIZES.fifteen,
+          // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
         }}>
         <TouchableOpacity
-          style={{position: 'absolute', left: 0}}
+          style={{position: 'absolute', left: }}
           onPress={() => {
             props.navigation.goBack();
           }}>
@@ -39,165 +41,32 @@ export default function BookingAcceptance(props) {
         <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
           Booking Acceptance
         </RegularTextCB>
-      </View>
+      </View> */}
 
-      <TouchableOpacity
-        activeOpacity={1}
-        style={[
-          styles.card,
-          {padding: SIZES.fifteen, marginTop: SIZES.twentyFive * 1.8},
-        ]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-          }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={Images.emp3}
-              style={styles.iconUser}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{marginStart: 10}}>
-            <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-              {'Ray Hammond'}
-            </BoldTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{
-                  height: 25,
-                  width: 25,
-                  resizeMode: 'contain',
-                  tintColor: Colors.turqoiseGreen,
-                }}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 16,
-                  marginStart: 5,
-                }}>
-                Verified
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <View>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              Car Mechanic Needed
-            </RegularTextCB>
-            <RegularTextCB style={{color: Colors.sickGreen, fontSize: 14.5}}>
-              Automobile
-            </RegularTextCB>
-          </View>
-
-          <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
-            $270.00
-          </BoldTextCB>
-        </View>
-        <View style={{marginVertical: SIZES.ten}}>
-          <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
-          </RegularTextCB>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-          }}>
-          <Image
-            source={Images.iconLocationPin}
-            style={{height: 25, width: 25, resizeMode: 'contain'}}
-          />
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              marginStart: 5,
-            }}>
-            111,NYC Street, NY 1121
-          </RegularTextCB>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-          }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{height: 25, width: 25, resizeMode: 'contain'}}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: 5,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-              }}>
-              12:00 - 3:00
-            </RegularTextCB>
-          </View>
-        </View>
-
-        <View
-          style={{
-            height: 0.9,
-            backgroundColor: Colors.grey,
-            marginVertical: SIZES.twenty,
-          }}
-        />
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-            justifyContent: 'space-between',
-          }}>
+      <NormalHeader name="Booking Acceptance" />
+      <View style={{paddingHorizontal: SIZES.fifteen}}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={[
+            styles.card,
+            {padding: SIZES.fifteen, marginTop: SIZES.twentyFive},
+          ]}>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
+              marginVertical: SIZES.fifteen,
             }}>
-            <View>
+            <View style={styles.circleCard}>
               <Image
-                source={Images.emp2}
-                style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: 60 / 2,
-                  resizeMode: 'contain',
-                }}
+                source={Images.emp3}
+                style={styles.iconUser}
                 resizeMode="cover"
               />
             </View>
             <View style={{marginStart: 10}}>
               <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                {'Damian Miller'}
+                {'Ray Hammond'}
               </BoldTextCB>
               <View
                 style={{
@@ -205,89 +74,225 @@ export default function BookingAcceptance(props) {
                   marginTop: 5,
                   alignItems: 'center',
                 }}>
+                <Image
+                  source={Images.iconVerified}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    resizeMode: 'contain',
+                    tintColor: Colors.turqoiseGreen,
+                  }}
+                />
                 <RegularTextCB
                   style={{
-                    color: Colors.coolGrey,
-                    fontSize: 13.5,
+                    color: Colors.turqoiseGreen,
+                    fontSize: 16,
+                    marginStart: 5,
                   }}>
-                  Car Mechanic applied
+                  Verified
                 </RegularTextCB>
               </View>
             </View>
           </View>
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.sickGreen,
-              marginRight: SIZES.ten,
-              padding: SIZES.fifteen,
-              borderRadius: SIZES.ten,
-              width: SIZES.fifty * 1.7,
-              alignItems: 'center',
-            }}
-            activeOpacity={0.6}
-            onPress={() => {
-              props.navigation.navigate(Constants.JobInProgress);
-            }}>
-            <BoldTextCB>Accept</BoldTextCB>
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
           <View
             style={{
               flexDirection: 'row',
               marginTop: 5,
               alignItems: 'center',
-              justifyContent: 'flex-start',
-              paddingHorizontal: SIZES.ten,
+              justifyContent: 'space-between',
             }}>
-            <StarRating
-              disabled={true}
-              maxStars={5}
-              fullStar={Images.starFull}
-              emptyStar={Images.starHalf}
-              starSize={SIZES.fifteen}
-              rating={4}
-              starStyle={{
-                width: SIZES.twenty,
-                height: SIZES.twenty,
-                marginRight: SIZES.five,
-              }}
-              containerStyle={{width: SIZES.fifty * 1.5}}
-            />
+            <View>
+              <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+                Car Mechanic Needed
+              </RegularTextCB>
+              <RegularTextCB style={{color: Colors.sickGreen, fontSize: 14.5}}>
+                Automobile
+              </RegularTextCB>
+            </View>
 
-            <RegularTextCB
-              style={{
-                color: Colors.sunflowerYellow,
-                fontSize: 13.5,
-                marginStart: SIZES.twenty * 1.8,
-                marginTop: SIZES.five / 2,
-              }}>
-              4.4 Ratings
+            <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
+              $270.00
+            </BoldTextCB>
+          </View>
+          <View style={{marginVertical: SIZES.ten}}>
+            <RegularTextCB style={{color: Colors.coolGrey}}>
+              Looking for a car mechanic that can look into the battery setup.
+              The car is in a still position & would require some man power
             </RegularTextCB>
           </View>
-          <TouchableOpacity
+          <View
             style={{
-              backgroundColor: Colors.coolGrey,
-              marginRight: SIZES.ten,
-              padding: SIZES.fifteen,
-              borderRadius: SIZES.ten,
-              width: SIZES.fifty * 1.7,
+              flexDirection: 'row',
+              marginTop: 5,
               alignItems: 'center',
+              marginVertical: SIZES.fifteen,
+            }}>
+            <Image
+              source={Images.iconLocationPin}
+              style={{height: 25, width: 25, resizeMode: 'contain'}}
+            />
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                marginStart: 5,
+              }}>
+              111,NYC Street, NY 1121
+            </RegularTextCB>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+              alignItems: 'center',
+              marginVertical: SIZES.fifteen,
+            }}>
+            <Image
+              source={Images.iconStopWatch}
+              style={{height: 25, width: 25, resizeMode: 'contain'}}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                marginStart: 5,
+                alignItems: 'center',
+                flex: 1,
+                justifyContent: 'space-between',
+              }}>
+              <RegularTextCB
+                style={{
+                  color: Colors.coolGrey,
+                }}>
+                12:00 - 3:00
+              </RegularTextCB>
+            </View>
+          </View>
+
+          <View
+            style={{
+              height: 0.9,
+              backgroundColor: Colors.grey,
+              marginVertical: SIZES.twenty,
             }}
-            onPress={() => {
-              props.navigation.navigate(Constants.VenderBookings);
-            }}
-            activeOpacity={0.6}>
-            <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+          />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginVertical: SIZES.fifteen,
+              justifyContent: 'space-between',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View>
+                <Image
+                  source={Images.emp2}
+                  style={{
+                    height: 50,
+                    width: 50,
+                    borderRadius: 60 / 2,
+                    resizeMode: 'contain',
+                  }}
+                  resizeMode="cover"
+                />
+              </View>
+              <View style={{marginStart: 10}}>
+                <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
+                  {'Damian Miller'}
+                </BoldTextCB>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 5,
+                    alignItems: 'center',
+                  }}>
+                  <RegularTextCB
+                    style={{
+                      color: Colors.coolGrey,
+                      fontSize: 13.5,
+                    }}>
+                    Car Mechanic applied
+                  </RegularTextCB>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Colors.sickGreen,
+                marginRight: SIZES.ten,
+                padding: SIZES.fifteen,
+                borderRadius: SIZES.ten,
+                width: SIZES.fifty * 1.7,
+                alignItems: 'center',
+              }}
+              activeOpacity={0.6}
+              onPress={() => {
+                props.navigation.navigate(Constants.JobInProgress);
+              }}>
+              <BoldTextCB>Accept</BoldTextCB>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingHorizontal: SIZES.ten,
+              }}>
+              <StarRating
+                disabled={true}
+                maxStars={5}
+                fullStar={Images.starFull}
+                emptyStar={Images.starHalf}
+                starSize={SIZES.fifteen}
+                rating={4}
+                starStyle={{
+                  width: SIZES.twenty,
+                  height: SIZES.twenty,
+                  marginRight: SIZES.five,
+                }}
+                containerStyle={{width: SIZES.fifty * 1.5}}
+              />
+
+              <RegularTextCB
+                style={{
+                  color: Colors.sunflowerYellow,
+                  fontSize: 13.5,
+                  marginStart: SIZES.twenty * 1.8,
+                  marginTop: SIZES.five / 2,
+                }}>
+                4.4 Ratings
+              </RegularTextCB>
+            </View>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Colors.coolGrey,
+                marginRight: SIZES.ten,
+                padding: SIZES.fifteen,
+                borderRadius: SIZES.ten,
+                width: SIZES.fifty * 1.7,
+                alignItems: 'center',
+              }}
+              onPress={() => {
+                props.navigation.navigate(Constants.VenderBookings);
+              }}
+              activeOpacity={0.6}>
+              <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

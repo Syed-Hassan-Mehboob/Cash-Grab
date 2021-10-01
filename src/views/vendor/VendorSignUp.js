@@ -306,263 +306,244 @@ export default class VendorSignUp extends Component {
                 </RegularTextCB>
               </View>
             </View>
+            {/* text input start */}
+            <View style={{paddingHorizontal: SIZES.five * 1.3}}>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
+                <EditText
+                  ref={'fullName'}
+                  placeholder={'Full Name'}
+                  value={this.state.fullName}
+                  onChangeText={(text) => {
+                    this.setState({
+                      fullName: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+                <EditText
+                  ref={'email'}
+                  keyboardType="email-address"
+                  placeholder={'Email Address'}
+                  value={this.state.email}
+                  onChangeText={(text) => {
+                    this.setState({email: text});
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+              <View
+                style={[
+                  {
+                    height: 60,
+                    backgroundColor: Colors.white,
+                    borderRadius: height * 0.01,
+                    shadowColor: '#c5c5c5',
+                    shadowOffset: {width: SIZES.five, height: SIZES.five},
+                    shadowOpacity: 1.0,
+                    shadowRadius: SIZES.ten,
+                    elevation: SIZES.ten,
+                    justifyContent: 'center',
+                    paddingLeft: SIZES.twenty,
+                    marginTop: SIZES.ten,
+                  },
+                ]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      showModal: true,
+                    });
+                  }}>
+                  <RegularTextCB
+                    style={[
+                      {
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: Constants.fontLight,
+                      },
+                    ]}>
+                    {this.state.location ? this.state.location : 'Get Location'}
+                  </RegularTextCB>
+                </TouchableOpacity>
+              </View>
 
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
-              <EditText
-                ref={'fullName'}
-                placeholder={'Full Name'}
-                value={this.state.fullName}
-                onChangeText={(text) => {
-                  this.setState({
-                    fullName: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-              <EditText
-                ref={'email'}
-                keyboardType="email-address"
-                placeholder={'Email Address'}
-                value={this.state.email}
-                onChangeText={(text) => {
-                  this.setState({email: text});
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View
-              style={[
-                {
-                  height: 60,
-                  backgroundColor: Colors.white,
-                  borderRadius: height * 0.01,
-                  shadowColor: '#c5c5c5',
-                  shadowOffset: {width: SIZES.five, height: SIZES.five},
-                  shadowOpacity: 1.0,
-                  shadowRadius: SIZES.ten,
-                  elevation: SIZES.ten,
-                  justifyContent: 'center',
-                  paddingLeft: SIZES.twenty,
-                  marginTop: SIZES.ten,
-                },
-              ]}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.setState({
-                    showModal: true,
-                  });
-                }}>
-                <RegularTextCB
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => this.toggleIsCountryCodePickerVisible()}
                   style={[
+                    styles.card,
                     {
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: Constants.fontLight,
+                      borderRadius: SIZES.ten,
+                      height: 60,
+                      padding: SIZES.ten,
+                      marginEnd: SIZES.ten,
+                      flex: 0,
+                      justifyContent: 'center',
+                      alignContent: 'center',
                     },
                   ]}>
-                  {this.state.location ? this.state.location : 'Get Location'}
-                </RegularTextCB>
-              </TouchableOpacity>
-            </View>
+                  <CountryPicker
+                    onSelect={this.onSelect}
+                    countryCode={this.state.countryFlag}
+                    visible={this.state.isCountryCodePickerVisible}
+                    withCallingCode
+                    theme={{
+                      fontFamily: Constants.fontRegular,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                </TouchableOpacity>
+                <EditText
+                  ref={'phone'}
+                  keyboardType="phone-pad"
+                  placeholder={'12345678'}
+                  value={this.state.phone}
+                  onChangeText={(text) => {
+                    this.setState({phone: text});
+                  }}
+                  style={[styles.textInput, {flex: 1}]}
+                />
+              </View>
 
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={this.state.showModal}
-              onRequestClose={() => {
-                this.setState({showModal: false});
-              }}>
+              <View
+                style={[
+                  {
+                    marginTop: SIZES.ten,
+                    height: SIZES.twentyFive * 5,
+                  },
+                ]}>
+                <EditText
+                  placeholderTextColor={Colors.grey}
+                  autoCapitalize="none"
+                  blurOnSubmit={true}
+                  selectionColor={Colors.sickGreen}
+                  placeholder={'Aboute Me'}
+                  keyboardType={'default'}
+                  value={this.state.aboutMe}
+                  onChangeText={(text) => {
+                    this.setState({aboutMe: text});
+                  }}
+                  placeholderTextColor={Colors.coolGrey}
+                  numberOfLines={4}
+                  multiline={true}
+                  style={{height: SIZES.twentyFive * 5}}
+                  styles={{
+                    flex: 1,
+                    textAlignVertical: 'top',
+                  }}
+                />
+              </View>
+
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+                <EditText
+                  ref={'Expreince'}
+                  placeholder={'Expreince'}
+                  value={this.state.experience}
+                  onChangeText={(text) => {
+                    this.setState({
+                      experience: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+                <EditText
+                  ref={'password'}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => {
+                    this.setState({
+                      password: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+                <EditText
+                  ref={'confirm_password'}
+                  placeholder={'Confirm Password'}
+                  secureTextEntry={true}
+                  value={this.state.confirmPassword}
+                  onChangeText={(text) => {
+                    this.setState({
+                      confirmPassword: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+
               <View
                 style={{
-                  flex: 1,
-                  padding: SIZES.twenty,
-                  backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+                  justifyContent: 'flex-end',
+                  // marginHorizontal: SIZES.fifteen,
                 }}>
                 <View
                   style={{
-                    flex: 1,
-                    padding: SIZES.five,
-                    flexDirection: 'row',
+                    marginVertical: SIZES.twenty,
                   }}>
-                  {this.GooglePlacesInput()}
-                  <TouchableOpacity
-                    style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
-                    onPress={() => {
-                      this.setState({showModal: false});
-                    }}>
-                    <Image
-                      style={{
-                        height: SIZES.fifteen,
-                        width: SIZES.fifteen,
-                        tintColor: Colors.turqoiseGreen,
-                      }}
-                      resizeMode="contain"
-                      source={Images.iconClose}
-                    />
-                  </TouchableOpacity>
+                  <ButtonRadius10
+                    label="SIGN UP"
+                    bgColor={Colors.sickGreen}
+                    onPress={() =>
+                      this.props.navigation.navigate(Constants.SelectIntrest)
+                    }
+                  />
                 </View>
-              </View>
-            </Modal>
-
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={() => this.toggleIsCountryCodePickerVisible()}
-                style={[
-                  styles.card,
-                  {
-                    borderRadius: SIZES.ten,
-                    height: 60,
-                    padding: SIZES.ten,
-                    marginEnd: SIZES.ten,
-                    flex: 0,
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                  },
-                ]}>
-                <CountryPicker
-                  onSelect={this.onSelect}
-                  countryCode={this.state.countryFlag}
-                  visible={this.state.isCountryCodePickerVisible}
-                  withCallingCode
-                  theme={{
-                    fontFamily: Constants.fontRegular,
-                    resizeMode: 'contain',
-                  }}
-                />
-              </TouchableOpacity>
-              <EditText
-                ref={'phone'}
-                keyboardType="phone-pad"
-                placeholder={'12345678'}
-                value={this.state.phone}
-                onChangeText={(text) => {
-                  this.setState({phone: text});
-                }}
-                style={[styles.textInput, {flex: 1}]}
-              />
-            </View>
-
-            <View
-              style={[
-                {
-                  marginTop: SIZES.ten,
-                  height: SIZES.twentyFive * 5,
-                },
-              ]}>
-              <EditText
-                placeholderTextColor={Colors.grey}
-                autoCapitalize="none"
-                blurOnSubmit={true}
-                selectionColor={Colors.sickGreen}
-                placeholder={'Aboute Me'}
-                keyboardType={'default'}
-                value={this.state.aboutMe}
-                onChangeText={(text) => {
-                  this.setState({aboutMe: text});
-                }}
-                placeholderTextColor={Colors.coolGrey}
-                numberOfLines={4}
-                multiline={true}
-                style={{height: SIZES.twentyFive * 5}}
-                styles={{
-                  flex: 1,
-                  textAlignVertical: 'top',
-                }}
-              />
-            </View>
-
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-              <EditText
-                ref={'Expreince'}
-                placeholder={'Expreince'}
-                value={this.state.experience}
-                onChangeText={(text) => {
-                  this.setState({
-                    experience: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-              <EditText
-                ref={'password'}
-                placeholder={'Password'}
-                secureTextEntry={true}
-                value={this.state.password}
-                onChangeText={(text) => {
-                  this.setState({
-                    password: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View
-              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-              <EditText
-                ref={'confirm_password'}
-                placeholder={'Confirm Password'}
-                secureTextEntry={true}
-                value={this.state.confirmPassword}
-                onChangeText={(text) => {
-                  this.setState({
-                    confirmPassword: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-
-            <View
-              style={{
-                justifyContent: 'flex-end',
-                // marginHorizontal: SIZES.fifteen,
-              }}>
-              {/* <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: SIZES.ten * 3,
-                  },
-                ]}>
-                <LightTextCB style={styles.noUnderlineText}>
-                  Already have an account?
-                </LightTextCB>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate(Constants.login);
-                  }}>
-                  <LightTextCB style={styles.underlineText}>
-                    Sign In
-                  </LightTextCB>
-                </TouchableOpacity>
-              </View> */}
-
-              <View
-                style={{
-                  marginVertical: SIZES.twenty,
-                }}>
-                <ButtonRadius10
-                  label="SIGN UP"
-                  bgColor={Colors.sickGreen}
-                  onPress={() =>
-                    this.props.navigation.navigate(Constants.SelectIntrest)
-                  }
-                />
               </View>
             </View>
           </KeyboardAwareScrollView>
+
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={this.state.showModal}
+            onRequestClose={() => {
+              this.setState({showModal: false});
+            }}>
+            <View
+              style={{
+                flex: 1,
+                padding: SIZES.twenty,
+                backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  padding: SIZES.five,
+                  flexDirection: 'row',
+                }}>
+                {this.GooglePlacesInput()}
+                <TouchableOpacity
+                  style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                  onPress={() => {
+                    this.setState({showModal: false});
+                  }}>
+                  <Image
+                    style={{
+                      height: SIZES.fifteen,
+                      width: SIZES.fifteen,
+                      tintColor: Colors.turqoiseGreen,
+                    }}
+                    resizeMode="contain"
+                    source={Images.iconClose}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           {/* <Modal
             isVisible={this.state.isSelectionModalVisible}
             coverScreen={false}

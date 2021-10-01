@@ -11,7 +11,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
@@ -176,7 +176,7 @@ export default class Notifications extends Component {
   render() {
     // console.log('Notifications======', this.state.notifications);
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container]}>
         <NormalHeader name="Notifications" />
         <SwipeListView
           style={{marginTop: SIZES.ten}}

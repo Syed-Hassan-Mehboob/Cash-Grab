@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
@@ -31,7 +31,7 @@ export default class ConfirmPayment extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
             flexDirection: 'row',
@@ -39,7 +39,7 @@ export default class ConfirmPayment extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: SIZES.fifteen,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: SIZES.ten}}

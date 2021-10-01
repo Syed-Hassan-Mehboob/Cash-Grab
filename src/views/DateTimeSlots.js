@@ -221,10 +221,15 @@ export default class DateTimeSlots extends Component {
               textDayFontFamily: Constants.fontRegular,
               textMonthFontFamily: Constants.fontRegular,
               textDayHeaderFontFamily: Constants.fontRegular,
+              color: Colors.black,
               dayTextColor: Colors.navy,
               monthTextColor: Colors.navy,
             }}
-            style={{width: width / 1.15, height: height / 2}}
+            style={{
+              width: width / 1.15,
+              height: height / 2,
+              color: Colors.black,
+            }}
           />
         </View>
         <View
@@ -389,7 +394,10 @@ export default class DateTimeSlots extends Component {
             Description
           </Text>
           <View style={{paddingHorizontal: SIZES.fifteen}}>
-            <MessageEditText placeholder={'Write'} />
+            <MessageEditText
+              placeholder={'Write'}
+              height={SIZES.twentyFive * 4.5}
+            />
           </View>
         </View>
 

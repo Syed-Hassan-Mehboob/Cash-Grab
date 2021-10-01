@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
-import Constants, {FONTS, SIZES} from '../../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
@@ -213,9 +213,9 @@ export default class VendorHome extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <>
         <ScrollView
-          style={styles.container}
+          style={STYLES.container}
           showsVerticalScrollIndicator={false}>
           <View>
             <View
@@ -224,10 +224,6 @@ export default class VendorHome extends Component {
                 width: '100%',
                 alignItems: 'center',
                 paddingHorizontal: SIZES.twenty,
-                marginTop:
-                  Platform.OS === 'android'
-                    ? SIZES.twenty
-                    : SIZES.fifty + SIZES.ten,
               }}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -501,7 +497,7 @@ export default class VendorHome extends Component {
             </View>
           </View>
         </Modal>
-      </View>
+      </>
     );
   }
 }

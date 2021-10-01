@@ -208,6 +208,7 @@ export default class UserHome extends Component {
         contentContainerStyle={[
           {paddingHorizontal: SIZES.ten * 2, paddingBottom: 120},
         ]}>
+        <StatusBar backgroundColor={Colors.white} barStyle="dark-content" />
         <View
           style={{
             flexDirection: 'row',

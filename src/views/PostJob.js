@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
@@ -30,6 +30,7 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import axios from 'axios';
 import ImgToBase64 from 'react-native-image-base64';
 import Spinner from 'react-native-loading-spinner-overlay';
+import NormalHeader from '../components/NormalHeader';
 
 export default class postJob extends Component {
   constructor(props) {
@@ -368,11 +369,12 @@ export default class postJob extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <>
         <ScrollView
-          style={styles.container}
+          style={STYLES.container}
+          contentContainerStyle={{paddingBottom: 130}}
           showsVerticalScrollIndicator={false}>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -380,7 +382,7 @@ export default class postJob extends Component {
               width: '100%',
 
               padding: SIZES.fifteen,
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
               style={{
@@ -403,7 +405,9 @@ export default class postJob extends Component {
               }}>
               Post a Job
             </RegularTextCB>
-          </View>
+          </View> */}
+
+          <NormalHeader name="Post a Job" />
 
           <View
             style={{paddingHorizontal: SIZES.twenty, paddingTop: SIZES.ten}}>
@@ -688,7 +692,7 @@ export default class postJob extends Component {
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
-      </View>
+      </>
     );
   }
 }

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import {StatusBar} from 'react-native';
 import {
   Dimensions,
   FlatList,
@@ -14,6 +15,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 import Colors from '../../common/Colors';
 import Constants, {SIZES, STYLES, FONTS} from '../../common/Constants';
 import Images from '../../common/Images';
@@ -380,6 +382,7 @@ export default class VendorProfile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={Colors.navy} />
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -398,8 +401,13 @@ export default class VendorProfile extends React.Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: SIZES.fifteen,
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              marginTop:
+                Platform.OS === 'android'
+                  ? SIZES.ten
+                  : getStatusBarHeight(true) + SIZES.five,
+              // padding: SIZES.fifteen,
+              // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              // marginBottom: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
               style={{position: 'absolute', left: SIZES.ten}}
@@ -435,7 +443,11 @@ export default class VendorProfile extends React.Component {
           contentContainerStyle={{flexGrow: 1}}
           style={{marginTop: SIZES.ten * 8}}
           showsVerticalScrollIndicator={false}>
-          <View style={{alignItems: 'center'}}>
+          <View
+            style={{
+              alignItems: 'center',
+              marginTop: Platform.OS === 'ios' ? SIZES.fifteen * 1.5 : 0,
+            }}>
             <View style={styles.circleCard}>
               <Image
                 source={{uri: this.state.avatar}}

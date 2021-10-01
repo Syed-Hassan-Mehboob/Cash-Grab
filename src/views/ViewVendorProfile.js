@@ -13,13 +13,14 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {Icon} from 'native-base';
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
@@ -273,7 +274,7 @@ export default class ViewVendorProfile extends React.Component {
     // console.log('User Data=============',this.state.userData);
 
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -319,21 +320,29 @@ export default class ViewVendorProfile extends React.Component {
               style={{
                 position: 'absolute',
                 right: SIZES.ten,
-                height: SIZES.twentyFive,
-                width: SIZES.twentyFive,
+                height: SIZES.twentyFive * 1.3,
+                width: SIZES.twentyFive * 1.3,
                 borderRadius: SIZES.twentyFive,
                 overflow: 'hidden',
                 borderWidth: 1,
                 borderColor: Colors.grey,
+                backgroundColor: Colors.sickGreen,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
               onPress={() => {
                 this.props.navigation.navigate(Constants.chat);
               }}>
-              <Image
+              <Icon
+                type="MaterialIcons"
+                name="chat"
+                style={{color: Colors.white, fontSize: SIZES.fifteen * 1.5}}
+              />
+              {/* <Image
                 source={{uri: Constants.imageURL + this.state.image}}
                 style={[styles.iconBack]}
                 resizeMode={'cover'}
-              />
+              /> */}
             </TouchableOpacity>
           </View>
         </View>
@@ -779,8 +788,7 @@ reviews = [
     review: {
       date: '05-12-2020',
       rating: '4.4',
-      text:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
     },
   },
   {
@@ -792,8 +800,7 @@ reviews = [
     review: {
       date: '03-SIZES.ten-2019',
       rating: '4.0',
-      text:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
     },
   },
   {
@@ -805,8 +812,7 @@ reviews = [
     review: {
       date: '15-11-2020',
       rating: '3.4',
-      text:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
     },
   },
   {
@@ -818,8 +824,7 @@ reviews = [
     review: {
       date: '18-01-2021',
       rating: 'SIZES.five.',
-      text:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
     },
   },
 ];

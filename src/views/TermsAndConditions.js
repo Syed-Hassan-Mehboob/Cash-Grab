@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
+import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 
@@ -57,30 +58,8 @@ export default class TermsAndConditions extends React.Component {
 
   render() {
     return (
-      <View style={[styles.container, {padding: 0}]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            padding: SIZES.fifteen,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black}]}
-            />
-          </TouchableOpacity>
-          <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
-            {this.state.title}
-          </RegularTextCB>
-        </View>
+      <View style={[STYLES.container]}>
+        <NormalHeader name={this.state.title} />
         <View style={styles.card}>
           <ScrollView
             style={{height: height - 60 * 5}}

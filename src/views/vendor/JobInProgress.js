@@ -22,6 +22,7 @@ import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from 'react-native-modal';
 import BoldTextCB from '../../components/BoldTextCB';
+import NormalHeader from '../../components/NormalHeader';
 
 export default class JobInProgress extends React.Component {
   initialMapState = {
@@ -127,7 +128,7 @@ export default class JobInProgress extends React.Component {
 
     return (
       <View style={STYLES.container}>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -146,7 +147,9 @@ export default class JobInProgress extends React.Component {
           <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
             Job in Progress
           </RegularTextCB>
-        </View>
+        </View> */}
+
+        <NormalHeader name="Job In Progress" />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: SIZES.five}}>
@@ -241,6 +244,7 @@ export default class JobInProgress extends React.Component {
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
+                  marginVertical: SIZES.ten * 0.5,
                 }}>
                 {this.state.description}Lorem Ipsum is simply dummy text of the
                 printing and typesetting industry. Lorem Ipsum has been the
@@ -271,7 +275,7 @@ export default class JobInProgress extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: SIZES.five * 1.5,
+                  marginVertical: SIZES.ten,
                   alignItems: 'center',
                 }}>
                 <Image

@@ -515,8 +515,8 @@ export default class Dashboard extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: SIZES.ten * 2,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            // padding: SIZES.ten * 2,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{
@@ -596,6 +596,7 @@ export default class Dashboard extends Component {
               style={{
                 marginTop: SIZES.fifteen,
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 flexDirection: 'row',
                 paddingHorizontal: SIZES.fifteen,
               }}>
@@ -652,7 +653,9 @@ export default class Dashboard extends Component {
               intactTopLabel={50}
               xAxisThickness={0}
               yAxisThickness={0}
-              initialSpacing={0}
+              initialSpacing={
+                Platform.OS === 'ios' ? SIZES.five * 0.5 : SIZES.ten * 1.5
+              }
             />
             {/* <TouchableGraph
               onPressBar={(data) => {
@@ -686,11 +689,15 @@ export default class Dashboard extends Component {
               renderItem={this.renderProgressJob}
             />
           </View> */}
-          <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
+          <View
+            style={{
+              marginHorizontal: SIZES.fifteen,
+            }}>
             <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,
                 color: Colors.black,
+                marginVertical: SIZES.ten * 1.5,
               }}>
               Completed Order
             </RegularTextCB>

@@ -1,7 +1,8 @@
 import React from 'react';
 import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
+import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
 
 export default class Settings extends React.Component {
@@ -77,20 +78,21 @@ export default class Settings extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View
+      <View style={STYLES.container}>
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: SIZES.fifteen,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            // padding: SIZES.fifteen,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
-          <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
+           <RegularTextCB style={{fontSize: 30, color: Colors.black}}>
             Settings
-          </RegularTextCB>
-        </View>
+          </RegularTextCB>  */}
+        <NormalHeader name="Settings" />
+        {/* </View> */}
         <View style={{margin: SIZES.ten}}>
           <TouchableOpacity
             style={[
@@ -140,7 +142,10 @@ export default class Settings extends React.Component {
           <TouchableOpacity
             style={[
               styles.card,
-              {padding: SIZES.fifteen, borderWidth: this.state.isChatSelected ? 2 : 0},
+              {
+                padding: SIZES.fifteen,
+                borderWidth: this.state.isChatSelected ? 2 : 0,
+              },
             ]}
             onPress={() => {
               this.selectChat();

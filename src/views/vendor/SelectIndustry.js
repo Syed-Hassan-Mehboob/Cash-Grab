@@ -14,6 +14,7 @@ import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import RegularTextCB from '../../components/RegularTextCB';
 import {CommonActions} from '@react-navigation/native';
+import NormalHeader from '../../components/NormalHeader';
 
 export default function SelectIndustry(props) {
   const resetAction = CommonActions.reset({
@@ -91,7 +92,7 @@ export default function SelectIndustry(props) {
 
   return (
     <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -114,7 +115,8 @@ export default function SelectIndustry(props) {
         <RegularTextCB style={[FONTS.boldFont24, {}]}>
           Select Industry
         </RegularTextCB>
-      </View>
+      </View> */}
+      <NormalHeader name="Select Industry" />
       <FlatList
         numColumns={3}
         data={formatData(Data, 3)}

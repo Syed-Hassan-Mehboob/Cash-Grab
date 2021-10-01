@@ -20,6 +20,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
+import NormalHeader from '../../components/NormalHeader';
 export default class ViewJob extends React.Component {
   initialMapState = {
     region: {
@@ -62,9 +63,10 @@ export default class ViewJob extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
-      this.viewJob();
-    });
+    this.setState({accessToken: token});
+    //   () => {
+    //   // this.viewJob();
+    // });
   };
 
   // viewJob = () => {
@@ -123,7 +125,7 @@ export default class ViewJob extends React.Component {
 
     return (
       <View style={STYLES.container}>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -142,7 +144,8 @@ export default class ViewJob extends React.Component {
           <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
             View Job
           </RegularTextCB>
-        </View>
+        </View> */}
+        <NormalHeader name="View Job" />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: SIZES.five}}>
@@ -286,6 +289,7 @@ export default class ViewJob extends React.Component {
               showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
+              scrollEnabled={false}
               style={styles.mapStyle}>
               <Marker
                 coordinate={{

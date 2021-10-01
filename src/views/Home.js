@@ -16,11 +16,18 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from 'react-native-modal';
-import Constants, {FONTS, height, SIZES, width} from '../common/Constants';
+import Constants, {
+  FONTS,
+  height,
+  SIZES,
+  STYLES,
+  width,
+} from '../common/Constants';
 import Axios from '../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import Geolocation from '@react-native-community/geolocation';
+import NormalHeader from '../components/NormalHeader';
 
 export default class Home extends Component {
   constructor(props) {
@@ -399,9 +406,10 @@ export default class Home extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      // <View style={styles.container}>
+      <>
         <ScrollView
-          style={styles.container}
+          style={STYLES.container}
           showsVerticalScrollIndicator={false}>
           <View>
             <View
@@ -410,14 +418,18 @@ export default class Home extends Component {
                 width: '100%',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                paddingHorizontal: SIZES.fifteen,
+                marginBottom: SIZES.twenty,
 
-                marginTop:
-                  Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 6,
+                // marginTop:
+                //   Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 3.5,
               }}>
               <TouchableOpacity
-                style={{
-                  padding: 20,
-                }}
+                style={
+                  {
+                    // padding: 20,
+                  }
+                }
                 onPress={() => {
                   this.props.navigation.goBack();
                 }}>
@@ -432,11 +444,14 @@ export default class Home extends Component {
               </TouchableOpacity>
 
               <RegularTextCB style={[{fontSize: 22}]}>Explore</RegularTextCB>
+              {/* <NormalHeader name="Explore" /> */}
 
               <TouchableOpacity
-                style={{
-                  padding: 12,
-                }}
+                style={
+                  {
+                    // padding: 12,
+                  }
+                }
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);
                 }}>
@@ -614,7 +629,8 @@ export default class Home extends Component {
             </View>
           </View>
         </Modal>
-      </View>
+        {/* // </View> */}
+      </>
     );
   }
 }

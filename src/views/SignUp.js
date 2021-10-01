@@ -200,7 +200,7 @@ export default class SignUp extends Component {
               flex: 1,
               paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}
-            contentContainerStyle={{flexGrow: 1}}
+            contentContainerStyle={{flexGrow: 1, paddingBottom: 130}}
             showsVerticalScrollIndicator={false}>
             <View>
               <TouchableOpacity
@@ -236,149 +236,167 @@ export default class SignUp extends Component {
                 </RegularTextCB>
               </View>
             </View>
-            <View style={[styles.childContainer]}>
-              <View
-                style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
-                <EditText
-                  ref={'fullName'}
-                  placeholder={'Full Name'}
-                  value={this.state.fullName}
-                  onChangeText={(text) => {
-                    this.setState({
-                      fullName: text,
-                    });
-                  }}
-                  style={[styles.textInput]}
-                />
-              </View>
-              {this.state.isVendor && (
-                <MultiDropdownPicker
-                  viewProperty="name"
-                  value={this.state.services}
-                  data={this.state.selections}
-                  onChangeValue={(val) => {
-                    this.setState(
-                      {services: val},
-                      // () => { console.log("multidropdown picker ", this.state.services, "value", val) }
-                    );
-                  }}
-                />
-              )}
 
-              <View
-                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-                <EditText
-                  ref={'email'}
-                  keyboardType="email-address"
-                  placeholder={'Email Address'}
-                  value={this.state.email}
-                  onChangeText={(text) => {
-                    this.setState({email: text});
-                  }}
-                  style={[styles.textInput]}
-                />
-              </View>
-              <View
-                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => this.toggleIsCountryCodePickerVisible()}
+            <View style={{paddingHorizontal: SIZES.five}}>
+              <View style={[styles.childContainer]}>
+                <View
                   style={[
-                    styles.card,
-                    {
-                      borderRadius: SIZES.ten,
-                      height: 60,
-                      padding: SIZES.ten,
-                      marginEnd: SIZES.ten,
-                      flex: 0,
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                    },
+                    styles.textInputContainer,
+                    {marginTop: SIZES.ten * 3},
                   ]}>
-                  <CountryPicker
-                    onSelect={this.onSelect}
-                    countryCode={this.state.countryFlag}
-                    visible={this.state.isCountryCodePickerVisible}
-                    withCallingCode
-                    theme={{
-                      fontFamily: Constants.fontRegular,
-                      resizeMode: 'contain',
+                  <EditText
+                    ref={'fullName'}
+                    placeholder={'Full Name'}
+                    value={this.state.fullName}
+                    onChangeText={(text) => {
+                      this.setState({
+                        fullName: text,
+                      });
+                    }}
+                    style={[styles.textInput]}
+                  />
+                </View>
+                {this.state.isVendor && (
+                  <MultiDropdownPicker
+                    viewProperty="name"
+                    value={this.state.services}
+                    data={this.state.selections}
+                    onChangeValue={(val) => {
+                      this.setState(
+                        {services: val},
+                        // () => { console.log("multidropdown picker ", this.state.services, "value", val) }
+                      );
                     }}
                   />
-                </TouchableOpacity>
-                <EditText
-                  ref={'phone'}
-                  keyboardType="phone-pad"
-                  placeholder={'12345678'}
-                  value={this.state.phone}
-                  onChangeText={(text) => {
-                    this.setState({phone: text});
-                  }}
-                  style={[styles.textInput, {flex: 1}]}
-                />
+                )}
+
+                <View
+                  style={[
+                    styles.textInputContainer,
+                    {marginTop: SIZES.fifteen},
+                  ]}>
+                  <EditText
+                    ref={'email'}
+                    keyboardType="email-address"
+                    placeholder={'Email Address'}
+                    value={this.state.email}
+                    onChangeText={(text) => {
+                      this.setState({email: text});
+                    }}
+                    style={[styles.textInput]}
+                  />
+                </View>
+                <View
+                  style={[
+                    styles.textInputContainer,
+                    {marginTop: SIZES.fifteen},
+                  ]}>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => this.toggleIsCountryCodePickerVisible()}
+                    style={[
+                      styles.card,
+                      {
+                        borderRadius: SIZES.ten,
+                        height: 60,
+                        padding: SIZES.ten,
+                        marginEnd: SIZES.ten,
+                        flex: 0,
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                      },
+                    ]}>
+                    <CountryPicker
+                      onSelect={this.onSelect}
+                      countryCode={this.state.countryFlag}
+                      visible={this.state.isCountryCodePickerVisible}
+                      withCallingCode
+                      theme={{
+                        fontFamily: Constants.fontRegular,
+                        resizeMode: 'contain',
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <EditText
+                    ref={'phone'}
+                    keyboardType="phone-pad"
+                    placeholder={'12345678'}
+                    value={this.state.phone}
+                    onChangeText={(text) => {
+                      this.setState({phone: text});
+                    }}
+                    style={[styles.textInput, {flex: 1}]}
+                  />
+                </View>
+                <View
+                  style={[
+                    styles.textInputContainer,
+                    {marginTop: SIZES.fifteen},
+                  ]}>
+                  <EditText
+                    ref={'password'}
+                    placeholder={'Password'}
+                    secureTextEntry={true}
+                    value={this.state.password}
+                    onChangeText={(text) => {
+                      this.setState({
+                        password: text,
+                      });
+                    }}
+                    style={[styles.textInput]}
+                  />
+                </View>
+                <View
+                  style={[
+                    styles.textInputContainer,
+                    {marginTop: SIZES.fifteen},
+                  ]}>
+                  <EditText
+                    ref={'confirm_password'}
+                    placeholder={'Confirm Password'}
+                    secureTextEntry={true}
+                    value={this.state.confirmPassword}
+                    onChangeText={(text) => {
+                      this.setState({
+                        confirmPassword: text,
+                      });
+                    }}
+                    style={[styles.textInput]}
+                  />
+                </View>
               </View>
               <View
-                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-                <EditText
-                  ref={'password'}
-                  placeholder={'Password'}
-                  secureTextEntry={true}
-                  value={this.state.password}
-                  onChangeText={(text) => {
-                    this.setState({
-                      password: text,
-                    });
-                  }}
-                  style={[styles.textInput]}
-                />
-              </View>
-              <View
-                style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
-                <EditText
-                  ref={'confirm_password'}
-                  placeholder={'Confirm Password'}
-                  secureTextEntry={true}
-                  value={this.state.confirmPassword}
-                  onChangeText={(text) => {
-                    this.setState({
-                      confirmPassword: text,
-                    });
-                  }}
-                  style={[styles.textInput]}
-                />
-              </View>
-            </View>
-            <View
-              style={{
-                justifyContent: 'flex-end',
-                marginHorizontal: SIZES.fifteen,
-              }}>
-              <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: SIZES.ten * 3,
-                  },
-                ]}>
-                <LightTextCB style={styles.noUnderlineText}>
-                  Already have an account?
-                </LightTextCB>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate(Constants.login);
-                  }}>
-                  <LightTextCB style={styles.underlineText}>
-                    Sign In
+                style={{
+                  justifyContent: 'flex-end',
+                  marginHorizontal: SIZES.fifteen,
+                }}>
+                <View
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginTop: SIZES.ten * 3,
+                    },
+                  ]}>
+                  <LightTextCB style={styles.noUnderlineText}>
+                    Already have an account?
                   </LightTextCB>
-                </TouchableOpacity>
-              </View>
-              <View style={{marginVertical: SIZES.twenty}}>
-                <ButtonRadius10
-                  label="SIGN UP"
-                  bgColor={Colors.sickGreen}
-                  onPress={() => this.sendDataToVerifyVia()}
-                />
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate(Constants.login);
+                    }}>
+                    <LightTextCB style={styles.underlineText}>
+                      Sign In
+                    </LightTextCB>
+                  </TouchableOpacity>
+                </View>
+                <View style={{marginVertical: SIZES.twenty}}>
+                  <ButtonRadius10
+                    label="SIGN UP"
+                    bgColor={Colors.sickGreen}
+                    onPress={() => this.sendDataToVerifyVia()}
+                  />
+                </View>
               </View>
             </View>
           </KeyboardAwareScrollView>

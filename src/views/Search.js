@@ -14,7 +14,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import EditText from '../components/EditText';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
 import utils from '../utils';
@@ -167,7 +167,7 @@ export default function Search(props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={STYLES.container}>
       <NormalHeader name="Search" />
       <View
         style={{

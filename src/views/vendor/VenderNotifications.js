@@ -11,7 +11,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../../common/Colors';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
@@ -174,7 +174,7 @@ export default class VenderNotifications extends Component {
   render() {
     // console.log('Notifications======',this.state.notifications)
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container]}>
         <View
           style={{
             flexDirection: 'row',
@@ -182,7 +182,6 @@ export default class VenderNotifications extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: 15,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{

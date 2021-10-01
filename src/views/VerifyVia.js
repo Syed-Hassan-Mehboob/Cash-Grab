@@ -145,64 +145,68 @@ export default class VerifyVia extends Component {
               Select an option to verify your account with
             </RegularTextCB>
           </View>
-          <View style={{marginHorizontal: SIZES.twenty}}>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={[
-                styles.card,
-                {
-                  marginTop: SIZES.fifty,
-                  height: SIZES.ten * 6,
-                  borderColor:
-                    this.state.verifyVia === 'email'
-                      ? Colors.sickGreen
-                      : Colors.white,
-                },
-              ]}
-              onPress={() => this.setState({verifyVia: 'email'})}>
-              <RegularTextCB
-                style={{
-                  fontSize: 16,
-                  color: Colors.coolGrey,
-                }}>
-                Email
-              </RegularTextCB>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              style={[
-                styles.card,
-                {
-                  marginTop: SIZES.twenty,
-                  height: SIZES.ten * 6,
-                  borderColor:
-                    this.state.verifyVia === 'phone'
-                      ? Colors.sickGreen
-                      : Colors.white,
-                },
-              ]}
-              onPress={() => this.setState({verifyVia: 'phone'})}>
-              <RegularTextCB
-                style={{
-                  fontSize: 16,
-                  color: Colors.coolGrey,
-                }}>
-                Phone Number
-              </RegularTextCB>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              marginVertical: SIZES.ten * 3,
-              marginHorizontal: SIZES.fifteen,
-            }}>
-            <ButtonRadius10
-              label="CONTINUE"
-              bgColor={Colors.sickGreen}
-              onPress={() => {
-                this.signUp();
-              }}
-            />
+
+          <View style={{paddingHorizontal: SIZES.five}}>
+            <View style={{marginHorizontal: SIZES.twenty}}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={[
+                  styles.card,
+                  {
+                    marginTop: SIZES.fifty,
+                    height: SIZES.ten * 6,
+                    borderColor:
+                      this.state.verifyVia === 'email'
+                        ? Colors.sickGreen
+                        : Colors.white,
+                  },
+                ]}
+                onPress={() => this.setState({verifyVia: 'email'})}>
+                <RegularTextCB
+                  style={{
+                    fontSize: 16,
+                    color: Colors.coolGrey,
+                  }}>
+                  Email
+                </RegularTextCB>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={[
+                  styles.card,
+                  {
+                    marginTop: SIZES.twenty,
+                    height: SIZES.ten * 6,
+                    borderColor:
+                      this.state.verifyVia === 'phone'
+                        ? Colors.sickGreen
+                        : Colors.white,
+                  },
+                ]}
+                onPress={() => this.setState({verifyVia: 'phone'})}>
+                <RegularTextCB
+                  style={{
+                    fontSize: 16,
+                    color: Colors.coolGrey,
+                  }}>
+                  Phone Number
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                marginVertical: SIZES.ten * 3,
+                marginHorizontal: SIZES.fifteen,
+              }}>
+              <ButtonRadius10
+                label="CONTINUE"
+                bgColor={Colors.sickGreen}
+                onPress={() => {
+                  this.signUp();
+                }}
+              />
+            </View>
           </View>
         </KeyboardAvoidingView>
         <Spinner

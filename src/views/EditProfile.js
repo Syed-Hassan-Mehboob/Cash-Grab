@@ -25,6 +25,8 @@ import Constants, {SIZES} from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {StatusBar} from 'react-native';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const {width, height} = Dimensions.get('window');
 
@@ -378,7 +380,8 @@ export default class EditProfile extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={[{flex: 1, backgroundColor: Colors.white}]}>
+        <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -386,6 +389,10 @@ export default class EditProfile extends Component {
             height: height / 3.1,
             backgroundColor: Colors.navy,
             alignItems: 'center',
+            paddingTop:
+              Platform.OS === 'android'
+                ? SIZES.ten
+                : getStatusBarHeight(true) + SIZES.five,
           }}>
           <View
             style={{
@@ -393,9 +400,9 @@ export default class EditProfile extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: SIZES.fifteen,
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.five * 4.5,
-              paddingVertical: SIZES.ten,
+              // padding: SIZES.fifteen,
+              // marginTop: Platform.OS === 'android' ? 0 : SIZES.five * 4.5,
+              // paddingVertical: SIZES.ten,
             }}>
             <TouchableOpacity
               style={{position: 'absolute', left: SIZES.ten}}
@@ -466,6 +473,7 @@ export default class EditProfile extends Component {
               multiline={true}
               placeholder="About Me"
               value={this.state.abouteMe}
+              selectionColor={Colors.sickGreen}
               style={{
                 fontFamily: Constants.fontRegular,
                 paddingHorizontal: SIZES.ten,

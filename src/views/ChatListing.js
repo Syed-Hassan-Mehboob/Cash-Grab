@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
@@ -226,11 +226,11 @@ export default class ChatListing extends Component {
   state = {};
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
-            borderBottomStartRadius: SIZES.ten*3,
-            borderBottomEndRadius: SIZES.ten*3,
+            borderBottomStartRadius: SIZES.ten * 3,
+            borderBottomEndRadius: SIZES.ten * 3,
             height: height / 3.75,
             backgroundColor: Colors.navy,
             alignItems: 'center',
@@ -254,7 +254,8 @@ export default class ChatListing extends Component {
                 style={[styles.iconBack, {tintColor: Colors.white}]}
               />
             </TouchableOpacity>
-            <RegularTextCB style={{fontSize: SIZES.ten*3, color: Colors.white}}>
+            <RegularTextCB
+              style={{fontSize: SIZES.ten * 3, color: Colors.white}}>
               Chat
             </RegularTextCB>
             <View
@@ -275,7 +276,11 @@ export default class ChatListing extends Component {
           </View>
           <View>
             <RegularTextCB
-              style={{fontSize: SIZES.twenty, color: Colors.white, marginStart: SIZES.fifteen}}>
+              style={{
+                fontSize: SIZES.twenty,
+                color: Colors.white,
+                marginStart: SIZES.fifteen,
+              }}>
               Favorites
             </RegularTextCB>
             <FlatList
@@ -293,7 +298,7 @@ export default class ChatListing extends Component {
           renderItem={this.renderChatListingItem}
           keyExtractor={(chat) => chat.id}
           contentContainerStyle={{
-            paddingBottom:SIZES.ten*10,
+            paddingBottom: SIZES.ten * 10,
           }}
         />
       </View>
@@ -312,9 +317,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
@@ -322,9 +327,9 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   greenCirclrCard: {
