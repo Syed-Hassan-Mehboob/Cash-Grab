@@ -213,6 +213,20 @@ export const STYLES = StyleSheet.create({
 
     elevation: 20,
   },
+  card: {
+    flexDirection: 'row',
+    height: 60,
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
+    shadowRadius: 10,
+    elevation: 10,
+    alignItems: 'center',
+  },
 });
 
 export default Constants;

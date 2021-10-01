@@ -46,6 +46,7 @@
     "react-native-location": "^2.5.0",
     "react-native-map-picker": "^0.0.2",
     "react-native-maps": "^0.28.0",
+    "react-native-maps-directions": "^1.8.0",
     "react-native-modal": "^11.10.0",
     "react-native-modal-datetime-picker": "^11.0.0",
     "react-native-placesearch": "^3.0.3",
