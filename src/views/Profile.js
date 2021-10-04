@@ -95,7 +95,7 @@ export default class Profile extends React.Component {
           {
             backgroundColor: '#fff',
             padding: SIZES.twenty,
-            marginLeft: SIZES.twenty,
+            marginHorizontal: SIZES.ten,
             borderRadius: SIZES.ten * 2,
             shadowColor: '#c5c5c5',
             shadowOffset: {width: 5, height: 5},
@@ -107,15 +107,17 @@ export default class Profile extends React.Component {
         onPress={() => {}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
-            {/* <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+            <Image
+              source={{
+                uri: 'https://media.istockphoto.com/photos/portrait-concept-picture-id1016761216?k=20&m=1016761216&s=612x612&w=0&h=jEC8voGLjSyhdOO7EMQyrLtZ9m--TEUmd4X56sqyZk0=',
+              }}
               style={styles.iconUser}
               resizeMode="cover"
-            /> */}
+            />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {/* {item.user.name} */} name
+              {/* {item.user.name} */} Ray Hammond
             </RegularTextCB>
             <View
               style={{
@@ -176,11 +178,289 @@ export default class Profile extends React.Component {
       </TouchableOpacity>
     );
   };
+  renderScheduleJob = ({item}) => {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={[
+          {
+            padding: SIZES.twenty,
+            backgroundColor: '#fff',
+            borderRadius: SIZES.ten * 2,
+            shadowColor: '#c5c5c5',
+            shadowOffset: {width: 5, height: 5},
+            shadowOpacity: 1.0,
+            shadowRadius: 10,
+            elevation: 10,
+            marginTop: SIZES.ten,
+          },
+        ]}
+        onPress={
+          () => {}
+          // navigation.navigate(Constants.viewJob, {
+          //   item: item.id,
+          // })
+        }>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.circleCard}>
+            <Image
+              source={{
+                uri: 'https://media.istockphoto.com/photos/portrait-concept-picture-id1016761216?k=20&m=1016761216&s=612x612&w=0&h=jEC8voGLjSyhdOO7EMQyrLtZ9m--TEUmd4X56sqyZk0=',
+              }}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={{marginStart: 10}}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+              {/* {item.user.name} */} $250.00
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{
+                  height: 15,
+                  width: 15,
+                  resizeMode: 'contain',
+                  tintColor: Colors.turqoiseGreen,
+                }}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+                  fontSize: 12,
+                  marginStart: 5,
+                }}>
+                Verified
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
 
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            {/* {item.title} */} Electrician Needed
+          </RegularTextCB>
+
+          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+            {/* ${item.price} */}$250.00
+          </LightTextCB>
+        </View>
+        <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
+          {/* ${item.price} */}Electrician
+        </LightTextCB>
+
+        <View style={{}}>
+          <RegularTextCB style={{color: Colors.coolGrey}}>
+            Looking for a car mechanic that can look into the battery setup. The
+            car is in a still position & would require some man power
+          </RegularTextCB>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconLocationPin}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              marginStart: 5,
+            }}>
+            {/* {item.address} */}111,NYC Street, NY 1121
+          </RegularTextCB>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconStopWatch}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {/* {item.time} */} 12:00 - 3:00
+            </RegularTextCB>
+          </View>
+        </View>
+
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.calender}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {/* {item.time} */} September 17, 2021
+            </RegularTextCB>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  rendeQuickJob = () => {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={[
+          {
+            backgroundColor: '#fff',
+            borderRadius: SIZES.ten * 2,
+            shadowColor: '#c5c5c5',
+            shadowOffset: {width: 5, height: 5},
+            shadowOpacity: 1.0,
+            shadowRadius: 10,
+            elevation: 10,
+            padding: SIZES.fifteen,
+            marginHorizontal: SIZES.five / 1.3,
+            marginVertical: SIZES.five * 1.5,
+          },
+        ]}
+        onPress={() => {}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.circleCard}>
+            <Image
+              source={{
+                uri: 'https://media.istockphoto.com/photos/portrait-concept-picture-id1016761216?k=20&m=1016761216&s=612x612&w=0&h=jEC8voGLjSyhdOO7EMQyrLtZ9m--TEUmd4X56sqyZk0=',
+              }}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={{marginStart: 10}}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+              {/* {item.user.name} */}Ray Hammond
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{
+                  height: 15,
+                  width: 15,
+                  resizeMode: 'contain',
+                  tintColor: Colors.turqoiseGreen,
+                }}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+
+                  fontSize: 12,
+                  marginStart: 5,
+                }}>
+                Verified
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            {/* {item.title} */}Car Mechanic Needed
+          </RegularTextCB>
+
+          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+            {/* ${item.price} */}$240.00
+          </LightTextCB>
+        </View>
+        <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
+          {/* ${item.price} */}Electrician
+        </LightTextCB>
+        <View style={{}}>
+          <RegularTextCB style={{color: Colors.coolGrey}}>
+            Looking for a car mechanic that can look into the battery setup. The
+            car is in a still position & would require some man power
+          </RegularTextCB>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconLocationPin}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              marginStart: 5,
+            }}>
+            {/* {item.address} */}111,NYC Street, NY 1121
+          </RegularTextCB>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconStopWatch}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {/* {item.time} */}12:00 - 3:00
+            </RegularTextCB>
+            <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+              {'View Job >'}
+            </RegularTextCB>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
   render() {
     return (
       <ScrollView
         style={styles.container}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: SIZES.twenty}}>
         <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
 
@@ -403,6 +683,44 @@ export default class Profile extends React.Component {
           </Text>
         </View>
 
+        <FlatList
+          data={Data}
+          keyExtractor={(item) => item.id}
+          renderItem={this.renderScheduleJob}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flex: 1,
+            paddingHorizontal: SIZES.twenty,
+            paddingBottom: SIZES.ten,
+          }}
+        />
+
+        <View
+          style={{
+            paddingVertical: SIZES.ten,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: SIZES.twenty,
+          }}>
+          <Text style={[FONTS.boldFont20, ,]}>Quick Jobs</Text>
+          <Text style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
+            see all
+          </Text>
+        </View>
+
+        <FlatList
+          data={Data}
+          keyExtractor={(item) => item.id}
+          renderItem={this.rendeQuickJob}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flex: 1,
+            paddingHorizontal: SIZES.twenty,
+            paddingBottom: SIZES.ten,
+          }}
+        />
+
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
@@ -437,7 +755,7 @@ const styles = StyleSheet.create({
   iconUser: {
     height: SIZES.ten * 9,
     width: SIZES.ten * 9,
-    borderRadius: (SIZES.ten * 9) / 2,
+    borderRadius: 45,
     resizeMode: 'contain',
   },
   circleCard: {

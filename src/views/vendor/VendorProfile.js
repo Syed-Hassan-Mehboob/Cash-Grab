@@ -162,9 +162,9 @@ export default class VendorProfile extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token});
-
-    // () => this.getUserProfile());
+    this.setState({accessToken: token}, () => {
+      this.getUserProfile();
+    });
   };
 
   renderServicePrice = ({item}) => {
@@ -234,6 +234,7 @@ export default class VendorProfile extends React.Component {
               alignItems: 'center',
               // justifyContent: 'space-between',
               marginVertical: SIZES.fifteen,
+              marginLeft: SIZES.ten,
             },
           ]}
           colors={[Colors.lightGold, Colors.orange]}>
@@ -396,7 +397,10 @@ export default class VendorProfile extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: SIZES.twenty}}>
         <StatusBar barStyle="light-content" backgroundColor={Colors.navy} />
         <View
           style={{
@@ -454,13 +458,7 @@ export default class VendorProfile extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingBottom: SIZES.twentyFive,
-          }}
-          style={{marginTop: SIZES.ten * 8}}
-          showsVerticalScrollIndicator={false}>
+        <View style={{marginTop: SIZES.ten * 8}}>
           <View
             style={{
               alignItems: 'center',
@@ -826,18 +824,22 @@ export default class VendorProfile extends React.Component {
                 <ButtonRadius10
                   label="+ Add More Services"
                   bgColor={Colors.sickGreen}
-                  onPress={() => {}}
+                  onPress={() => {
+                    this.props.navigation.navigate(
+                      Constants.AddProfileServices,
+                    );
+                  }}
                 />
               </View>
             </View>
           )}
-        </ScrollView>
+        </View>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
-      </View>
+      </ScrollView>
     );
   }
 }

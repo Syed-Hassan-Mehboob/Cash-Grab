@@ -64,7 +64,7 @@ export default class VendorEditProfile extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
-    // this.getUserProfile();
+    this.getUserProfile();
   };
 
   changePasswordState() {
@@ -928,6 +928,7 @@ export default class VendorEditProfile extends Component {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                marginTop: SIZES.ten,
               }}>
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Image

@@ -143,6 +143,7 @@ export default class ViewVendorProfile extends React.Component {
               alignItems: 'center',
               // justifyContent: 'space-between',
               marginVertical: SIZES.fifteen,
+              marginLeft: SIZES.ten,
             },
           ]}
           colors={[Colors.lightGold, Colors.orange]}>
@@ -309,7 +310,7 @@ export default class ViewVendorProfile extends React.Component {
     // //console.log('User Data=============',this.state.userData);
 
     return (
-      <View style={STYLES.container}>
+      <ScrollView style={STYLES.container} showsVerticalScrollIndicator={false}>
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -351,7 +352,8 @@ export default class ViewVendorProfile extends React.Component {
               style={{fontSize: SIZES.ten * 3, color: Colors.white}}>
               Profile
             </RegularTextCB>
-            <TouchableOpacity
+
+            {/* <TouchableOpacity
               style={{
                 position: 'absolute',
                 right: SIZES.ten,
@@ -373,18 +375,17 @@ export default class ViewVendorProfile extends React.Component {
                 name="chat"
                 style={{color: Colors.white, fontSize: SIZES.fifteen * 1.5}}
               />
-              {/* <Image
+              <Image
                 source={{uri: Constants.imageURL + this.state.image}}
                 style={[styles.iconBack]}
                 resizeMode={'cover'}
-              /> */}
-            </TouchableOpacity>
+              />
+            </TouchableOpacity> */}
           </View>
         </View>
-        <ScrollView
+        <View
           contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}
-          style={{marginTop: SIZES.ten * 7}}
-          showsVerticalScrollIndicator={false}>
+          style={{marginTop: SIZES.ten * 7}}>
           <View style={{alignItems: 'center'}}>
             <View style={styles.circleCard}>
               <Image
@@ -652,7 +653,7 @@ export default class ViewVendorProfile extends React.Component {
                   renderItem={this.renderReviewsItem}
                   keyExtractor={(item) => item.id}
                 />
-                <View
+                {/* <View
                   style={[
                     styles.card,
                     {
@@ -685,6 +686,7 @@ export default class ViewVendorProfile extends React.Component {
                     />
                   </TouchableOpacity>
                 </View>
+                 */}
               </View>
             )}
           </View>
@@ -778,13 +780,13 @@ export default class ViewVendorProfile extends React.Component {
               />
             </View>
           )}
-        </ScrollView>
+        </View>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
           textStyle={{color: '#FFFf', fontFamily: Constants.fontRegular}}
         />
-      </View>
+      </ScrollView>
     );
   }
 }
