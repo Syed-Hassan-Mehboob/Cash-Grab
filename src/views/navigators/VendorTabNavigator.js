@@ -51,6 +51,8 @@ import AddTeamMember from '../vendor/AddTeamMember';
 import JobInProgress from '../vendor/JobInProgress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddProfileServices from '../vendor/AddProfileServices';
+import History from '../vendor/History';
+import SingleJobHistory from '../vendor/SingleJobHistory';
 
 // import EditText from '../components/EditText';
 const Tab = createBottomTabNavigator();
@@ -97,6 +99,11 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.JobInProgress}
         component={JobInProgress}
+      />
+      <HomeStack.Screen name={Constants.History} component={History} />
+      <HomeStack.Screen
+        name={Constants.SingleJobHistory}
+        component={SingleJobHistory}
       />
 
       <HomeStack.Screen

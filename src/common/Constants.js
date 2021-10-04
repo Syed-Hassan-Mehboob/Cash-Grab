@@ -39,6 +39,8 @@ const Constants = {
   vendorAllJobs: 'vendorAllJobs',
   viewJob: 'ViewJob',
   JobInProgress: 'JobInProgress',
+  History: 'History',
+  SingleJobHistory: 'SingleJobHistory',
   faq: 'Faq',
   dateTimeSlots: 'DateTimeSlots',
   search: 'Search',

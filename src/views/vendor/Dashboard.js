@@ -680,14 +680,34 @@ export default class Dashboard extends Component {
             style={{
               marginHorizontal: SIZES.fifteen,
             }}>
-            <RegularTextCB
+            <View
               style={{
-                fontSize: SIZES.twenty,
-                color: Colors.black,
-                marginVertical: SIZES.ten * 1.5,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}>
-              Completed Order
-            </RegularTextCB>
+              <RegularTextCB
+                style={{
+                  fontSize: SIZES.twenty,
+                  color: Colors.black,
+                  marginVertical: SIZES.ten * 1.5,
+                }}>
+                Completed Order
+              </RegularTextCB>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.History);
+                }}>
+                <Text
+                  style={[
+                    FONTS.lightFont16,
+                    {textDecorationLine: 'underline'},
+                  ]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
+            </View>
             <FlatList
               data={this.state.completeJob}
               keyExtractor={(item) => item.id}
