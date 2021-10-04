@@ -58,8 +58,9 @@ export default class VendorHome extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
+    console.log('access token============>>>', token);
     this.setState({accessToken: token}, async () => {
-      this.getUserProfile();
+      this.getUserProfile(token);
       this.getJobAroundYou();
       this.getCategories();
     });
@@ -68,7 +69,6 @@ export default class VendorHome extends Component {
   getCategories = () => {
     const onSuccess = ({data}) => {
       //console.log('All Category ================', data.data.records);
-
       this.setState({isLoading: false, categories: data.data.records});
     };
 
@@ -91,8 +91,9 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-  getUserProfile = async () => {
+  getUserProfile = async (token) => {
     const onSuccess = ({data}) => {
+      console.log('get profile success===========>>>>', token);
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
@@ -104,6 +105,8 @@ export default class VendorHome extends Component {
     // //console.log('lat',this.state.lat)
 
     const onFailure = (error) => {
+      console.log('get profile success===========>>>>', error);
+
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
@@ -111,7 +114,8 @@ export default class VendorHome extends Component {
     this.setState({isLoading: true});
     Axios.get(Constants.getProfileURL, {
       headers: {
-        Authorization: this.state.accessToken,
+        Authorization: token,
+        // Authorization: this.state.accessToken,
       },
     })
       .then(onSuccess)

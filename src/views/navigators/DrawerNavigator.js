@@ -31,22 +31,22 @@ export default class DrawerNavigator extends React.Component {
     super(props);
   }
 
-  state = {isVendor: false, gotUser: false, isVisible: true};
+  state = {isVendor: false, gotUser: false, isVisible: false};
 
   componentDidMount() {
-    this.interval = setInterval(() => {
-      this.setState({isVisible: true}, () => {
-        console.log(
-          'after two seconds pop is visible========>>>>>',
-          this.state.isVisible,
-        );
-      });
-    }, 10000);
+    // this.interval = setInterval(() => {
+    //   this.setState({isVisible: true}, () => {
+    //     console.log(
+    //       'after two seconds pop is visible========>>>>>',
+    //       this.state.isVisible,
+    //     );
+    //   });
+    // }, 10000);
     this.getUserType();
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   getUserType = async () => {
