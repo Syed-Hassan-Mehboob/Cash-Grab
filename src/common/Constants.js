@@ -30,6 +30,7 @@ const Constants = {
   changePassword: 'ChangePassword',
   editProfile: 'EditProfile',
   vendorEditProfile: 'VendorEditProfile',
+  AddProfileServices: 'AddProfileServices',
   viewVendorProfile: 'ViewVendorProfile',
   SchechuleJobDetail: 'SchechuleJobDetail',
   chat: 'Chat',

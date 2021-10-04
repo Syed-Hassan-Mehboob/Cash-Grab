@@ -50,6 +50,7 @@ import SelectIndustry from '../vendor/SelectIndustry';
 import AddTeamMember from '../vendor/AddTeamMember';
 import JobInProgress from '../vendor/JobInProgress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AddProfileServices from '../vendor/AddProfileServices';
 
 // import EditText from '../components/EditText';
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,10 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
+      />
+      <HomeStack.Screen
+        name={Constants.AddProfileServices}
+        component={AddProfileServices}
       />
       <HomeStack.Screen
         name={Constants.VenderBookings}
