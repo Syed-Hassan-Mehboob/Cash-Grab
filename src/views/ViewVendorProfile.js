@@ -13,14 +13,14 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {Icon} from 'native-base';
+import {Icon, Text} from 'native-base';
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
@@ -44,6 +44,7 @@ export default class ViewVendorProfile extends React.Component {
       customer: '',
       typeReview: '',
       abouteMe: '',
+      Interest: DummyData,
     };
   }
 
@@ -73,10 +74,10 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   getVenderProfile = () => {
-    // console.log('======', this.props.route.params.item)
+    // //console.log('======', this.props.route.params.item)
 
     const onSuccess = ({data}) => {
-      console.log('Vender By catagory =======', data.data.records);
+      //console.log('Vender By catagory =======', data.data.records);
       this.setState({
         name: data.data.records.name,
         email: data.data.records.email,
@@ -115,75 +116,109 @@ export default class ViewVendorProfile extends React.Component {
       .then(onSuccess)
       .catch(onFailure);
   };
-
-  renderServicesItem = ({item}) => {
-    console.log('Services =========', item);
+  renderServicePrice = ({item}) => {
     return (
-      <TouchableOpacity
-        style={[
-          styles.card,
-          {
-            padding: SIZES.ten,
-            borderRadius: SIZES.fifteen,
-            // margin: SIZES.five,
-            flexDirection: 'row',
-            // width: width / 2,
-            backgroundColor: Colors.white,
-            // marginBottom: SIZES.twenty,
-            marginLeft: SIZES.ten,
-          },
-        ]}
-        onPress={() => this.props.navigation.navigate(Constants.dateTimeSlots)}>
-        <Image
-          source={{uri: Constants.imageURL + item.categories.image}}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: SIZES.twenty,
+        }}>
+        <Text style={[FONTS.mediumFont16]}>{item.name}</Text>
+        <Text style={[FONTS.boldFont14]}>{item.price}</Text>
+      </View>
+    );
+  };
+  renderServicesItem = ({item}) => {
+    //console.log('Services =========', item);
+
+    return (
+      <TouchableOpacity activeOpacity={0.6}>
+        <LinearGradient
+          style={[
+            styles.card,
+            {
+              paddingVertical: SIZES.ten,
+              paddingHorizontal: SIZES.fifteen,
+              alignItems: 'center',
+              // justifyContent: 'space-between',
+              marginVertical: SIZES.fifteen,
+            },
+          ]}
+          colors={[Colors.lightGold, Colors.orange]}>
+          {/* <Image
+          source={{uri: Constants.imageURL + item.categories.icon}}
           style={{
-            height: SIZES.ten * 5.5,
-            width: SIZES.ten * 5.5,
-            borderRadius: SIZES.ten * 5.5,
+            height: SIZES.ten * 3,
+            width: SIZES.ten * 3,
+            marginRight: SIZES.five,
           }}
-        />
-        <View
-          style={{
-            marginStart: 10,
-            flex: 1,
-          }}>
-          <Image
-            source={{uri: Constants.imageURL + item.categories.icon}}
-            style={{
-              height: SIZES.twenty,
-              width: 20,
-              justifyContent: 'space-evenly',
-            }}
-          />
+        /> */}
           <RegularTextCB
-            numberOfLines={2}
             style={{
               fontSize: 16,
-              color: Colors.black,
+              color: Colors.white,
             }}>
             {item.categories.name}
           </RegularTextCB>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexShrink: 1,
-            }}>
-            {/* <RegularTextCB
-              style={{
-                fontSize: 14,
-                color: Colors.coolGrey,
-                flex: 1,
-              }}>
-              {item.price}
-            </RegularTextCB> */}
-          </View>
-        </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
+  onInterestPress = (id, type) => {
+    let newArray = this.state.Interest.map((val, i) => {
+      if (id === val.id) {
+        return {...val, isSlected: type};
+      } else {
+        return val;
+      }
+    });
+    // console.log('Interset ====== Array ', newArray);
+    this.setState({Interest: newArray});
+  };
+  rendorInterest = ({item}) => {
+    // //console.log('Dummy data === ==', item);
+    // console.log('=================', item.isSlected);
+    return (
+      <TouchableOpacity
+        style={[
+          {
+            paddingVertical: SIZES.ten * 1,
+            paddingHorizontal: SIZES.ten * 3,
+            backgroundColor: Colors.white,
+            borderRadius: SIZES.ten,
+            margin: SIZES.ten,
+            borderWidth: 1,
+            borderColor: item.isSlected ? Colors.sickGreen : Colors.white,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 5,
+            },
+            shadowOpacity: 0.2,
+            shadowRadius: 16.0,
+
+            elevation: 5,
+          },
+        ]}
+        activeOpacity={0.6}
+        onPress={() => this.onInterestPress(item.id, !item.isSlected)}>
+        <Text
+          style={[
+            FONTS.mediumFont16,
+            {
+              color: Colors.black,
+            },
+          ]}>
+          {item.name}
+        </Text>
       </TouchableOpacity>
     );
   };
 
   renderReviewsItem = ({item}) => {
-    console.log(' Vender view item Reviews Item==========', item);
+    //console.log(' Vender view item Reviews Item==========', item);
     return (
       <View
         style={{
@@ -271,7 +306,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   render() {
-    // console.log('User Data=============',this.state.userData);
+    // //console.log('User Data=============',this.state.userData);
 
     return (
       <View style={STYLES.container}>
@@ -604,7 +639,6 @@ export default class ViewVendorProfile extends React.Component {
                         fontSize: 12,
                       }}>
                       {this.state.customer} Client
-                      {console.log('=====', this.state.customer)}
                     </RegularTextCB>
                   </LinearGradient>
                 </View>
@@ -657,6 +691,41 @@ export default class ViewVendorProfile extends React.Component {
           {this.state.isDescriptionSelected && (
             <View>
               <View style={{marginTop: SIZES.twentyFive}}>
+                <Text
+                  style={[
+                    FONTS.mediumFont16,
+                    {
+                      marginHorizontal: SIZES.twenty,
+                      color: Colors.black,
+                      marginVertical: SIZES.twenty,
+                    },
+                  ]}>
+                  Interest
+                </Text>
+
+                <FlatList
+                  horizontal
+                  data={this.state.Interest}
+                  keyExtractor={(item, index) => String(index)}
+                  renderItem={this.rendorInterest}
+                  showsHorizontalScrollIndicator={false}
+                  contentInset={{
+                    // for ios
+                    top: 0,
+                    bottom: SPACING_FOR_CARD_INSET,
+                    left: SPACING_FOR_CARD_INSET,
+                    right: SPACING_FOR_CARD_INSET,
+                  }}
+                  contentContainerStyle={{
+                    // for android
+                    paddingHorizontal:
+                      Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
+                    paddingBottom:
+                      Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
+                  }}
+                />
+              </View>
+              <View style={{marginTop: SIZES.twentyFive}}>
                 <RegularTextCB
                   style={{
                     marginHorizontal: SIZES.twenty,
@@ -666,7 +735,7 @@ export default class ViewVendorProfile extends React.Component {
                   Services We Offer
                 </RegularTextCB>
                 <FlatList
-                  style={{paddingBottom: SIZES.ten * 10}}
+                  // style={{paddingBottom: SIZES.ten * 10}}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={this.state.services}
@@ -688,6 +757,25 @@ export default class ViewVendorProfile extends React.Component {
                   }}
                 />
               </View>
+
+              <FlatList
+                style={{paddingBottom: SIZES.ten * 10}}
+                showsVerticalScrollIndicator={false}
+                data={services}
+                renderItem={this.renderServicePrice}
+                keyExtractor={(item) => item.id}
+                contentInset={{
+                  // for ios
+                  top: 0,
+                  bottom: SPACING_FOR_CARD_INSET,
+                  left: SPACING_FOR_CARD_INSET,
+                  right: SPACING_FOR_CARD_INSET,
+                }}
+                contentContainerStyle={{
+                  // backgroundColor: 'red',
+                  paddingHorizontal: SIZES.twenty,
+                }}
+              />
             </View>
           )}
         </ScrollView>
@@ -748,34 +836,21 @@ const styles = StyleSheet.create({
   },
 });
 
-services = [
+const services = [
   {
     id: '1',
-    image: Images.iconUserCleaning,
-    icon: Images.iconCleaning1,
-    name: 'Cleaning',
-    desc: 'Car indoor & outdoor cleaning',
+    name: 'House Cleaning',
+    price: '$240.00',
   },
   {
     id: '2',
-    image: Images.iconUserRepairing,
-    icon: Images.iconRepairing,
-    name: 'Repairing',
-    desc: '3 AC split units maintenance',
+    name: 'Garage Cleaning',
+    price: '$550.00',
   },
   {
     id: '3',
-    image: Images.iconUserCleaning,
-    icon: Images.iconCleaning1,
-    name: 'Cleaning',
-    desc: 'Car indoor & outdoor cleaning',
-  },
-  {
-    id: '4',
-    image: Images.iconUserRepairing,
-    icon: Images.iconRepairing,
-    name: 'Repairing',
-    desc: '3 AC split units maintenance',
+    name: 'Gardern Cleaning',
+    price: '$240.00',
   },
 ];
 reviews = [
@@ -826,5 +901,33 @@ reviews = [
       rating: 'SIZES.five.',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...',
     },
+  },
+];
+
+const DummyData = [
+  {
+    id: 1,
+    name: 'Gaming',
+    isSlected: false,
+  },
+  {
+    id: 2,
+    name: 'Planting',
+    isSlected: false,
+  },
+  {
+    id: 3,
+    name: 'Bike Riding',
+    isSlected: false,
+  },
+  {
+    id: 4,
+    name: 'Photography',
+    isSlected: false,
+  },
+  {
+    id: 5,
+    name: 'Peotry',
+    isSlected: false,
   },
 ];

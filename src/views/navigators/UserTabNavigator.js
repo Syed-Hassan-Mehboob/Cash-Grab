@@ -37,6 +37,7 @@ import BookingConfirmed from '../BookingConfirmed';
 import ScheduleJobs from '../ScheduleJobs';
 import WriteReviews from '../WriteReviews';
 import ServiceProviderOnTheWay from '../ServiceProviderOnTheWay';
+import ThankYou from './../ThankYou';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -46,7 +47,7 @@ const SettingsStack = createStackNavigator();
 const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
-      initialRouteName={Constants.WriteReviews}
+      initialRouteName={Constants.UserHome}
       headerMode="none"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
@@ -91,6 +92,7 @@ const HomeNavigator = () => {
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
       />
+      <HomeStack.Screen name={Constants.ThankYou} component={ThankYou} />
       <HomeStack.Screen
         name={Constants.WriteReviews}
         component={WriteReviews}
