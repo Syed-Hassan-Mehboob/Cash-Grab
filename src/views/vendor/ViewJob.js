@@ -63,10 +63,9 @@ export default class ViewJob extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token});
-    //   () => {
-    //   // this.viewJob();
-    // });
+    this.setState({accessToken: token}, () => {
+      // this.viewJob();
+    });
   };
 
   // viewJob = () => {
