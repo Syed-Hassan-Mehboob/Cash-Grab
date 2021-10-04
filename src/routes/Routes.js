@@ -123,7 +123,7 @@ export default function Routes(props) {
           <Stack.Screen name="AddServices" component={AddServices} />
         </Stack.Navigator>
 
-        {isVendor ? (
+        {/* {isVendor ? (
           <View>
             <Modal isVisible={isVisible} style={styles.modal}>
               <View
@@ -271,7 +271,7 @@ export default function Routes(props) {
               </View>
             </Modal>
           </View>
-        ) : null}
+        ) : null} */}
       </View>
     );
   };
