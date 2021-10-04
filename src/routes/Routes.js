@@ -264,7 +264,7 @@ export default function Routes(props) {
                       alignItems: 'center',
                     }}>
                     <Text style={[FONTS.mediumFont18, {color: Colors.white}]}>
-                      Declinee
+                      Decline
                     </Text>
                   </TouchableOpacity>
                 </View>

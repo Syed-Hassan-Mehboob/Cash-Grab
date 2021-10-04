@@ -391,12 +391,12 @@ export default class Dashboard extends Component {
               }}>
               {item.time}
             </RegularTextCB>
-            <RegularTextCB
+            {/* <RegularTextCB
               style={{
                 color: Colors.black,
               }}>
               {'Contact >'}
-            </RegularTextCB>
+            </RegularTextCB> */}
           </View>
         </View>
       </View>
@@ -424,7 +424,6 @@ export default class Dashboard extends Component {
         },
       ],
       frontColor: Colors.sickGreen,
-      topLabel: 's',
       onPress: (value) => {
         this.setState({selectedMonth: this.data[0]});
         console.log(
@@ -461,6 +460,7 @@ export default class Dashboard extends Component {
         },
       ],
       frontColor: Colors.sickGreen,
+      activeOpacity: 0.8,
       onPress: (value) => {
         this.setState({selectedMonth: this.data[2]});
         console.log(
@@ -534,7 +534,11 @@ export default class Dashboard extends Component {
             />
           </TouchableOpacity>
 
-          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
+          <RegularTextCB
+            style={[
+              FONTS.mediumFont20,
+              {color: Colors.black, fontSize: SIZES.ten * 3},
+            ]}>
             Dashboard
           </RegularTextCB>
 
@@ -672,23 +676,6 @@ export default class Dashboard extends Component {
               </VictoryChart>
             </TouchableGraph> */}
           </View>
-
-          {/* <View
-            style={{marginTop: SIZES.fifteen, marginHorizontal: SIZES.fifteen}}>
-            <RegularTextCB
-              style={{
-                fontSize: SIZES.twenty,
-                color: Colors.black,
-              }}>
-              Order In Progress
-            </RegularTextCB>
-            <FlatList
-              data={this.state.progress}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              renderItem={this.renderProgressJob}
-            />
-          </View> */}
           <View
             style={{
               marginHorizontal: SIZES.fifteen,
@@ -702,11 +689,29 @@ export default class Dashboard extends Component {
               Completed Order
             </RegularTextCB>
             <FlatList
-              style={{paddingBottom: SIZES.ten * 10}}
               data={this.state.completeJob}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={this.rendercompletedJobsItem}
+            />
+          </View>
+
+          <View
+            style={{marginTop: SIZES.five, marginHorizontal: SIZES.fifteen}}>
+            <RegularTextCB
+              style={{
+                fontSize: SIZES.twenty,
+                color: Colors.black,
+                marginVertical: SIZES.ten * 1.5,
+              }}>
+              Job in Progress
+            </RegularTextCB>
+            <FlatList
+              data={this.state.progress}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={this.renderProgressJob}
+              style={{paddingBottom: 100}}
             />
           </View>
         </ScrollView>
