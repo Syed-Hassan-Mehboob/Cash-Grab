@@ -7,12 +7,13 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
@@ -21,10 +22,13 @@ import NormalHeader from '../components/NormalHeader';
 import {Icon} from 'native-base';
 import BoldTextCB from '../components/BoldTextCB';
 import LightTextCB from '../components/LightTextCB';
+import {Text} from 'react-native';
 const {height, width} = Dimensions.get('window');
 const CARD_HEIGHT = SIZES.ten * 20;
 const CARD_WIDTH = width * 0.4;
 const SPACING_FOR_CARD_INSET = width * 0.08 - SIZES.ten;
+
+const GOOGLE_MAPS_APIKEY = 'AIzaSyAQcUYPmKrEdyuRFKfl9c1m-F784wcir9g';
 
 const ServiceProviderOnTheWay = (props) => {
   const _map = useRef();
@@ -71,8 +75,10 @@ const ServiceProviderOnTheWay = (props) => {
         setRegion({
           latitude: Number(position.coords.latitude),
           longitude: Number(position.coords.longitude),
-          latitudeDelta: 0.002,
-          longitudeDelta: 0.002,
+          latitudeDelta: 0.0043,
+          longitudeDelta: 0.0034,
+          // latitudeDelta: 0.0041,
+          // longitudeDelta: 0.0041,
         });
 
         console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
@@ -284,7 +290,7 @@ const ServiceProviderOnTheWay = (props) => {
   ];
 
   return (
-    <View style={[STYLES.container, {paddingHorizontal: SIZES.twenty}]}>
+    <View style={[STYLES.container]}>
       {Region.latitude !== 0 && Region.longitude !== 0 ? (
         <MapView
           ref={_map}
@@ -292,30 +298,76 @@ const ServiceProviderOnTheWay = (props) => {
           initialRegion={{
             latitude: Region.latitude,
             longitude: Region.longitude,
-            latitudeDelta: 0.04,
-            longitudeDelta: 0.04,
+            latitudeDelta: 0.0044,
+            longitudeDelta: 0.0054,
+            // latitudeDelta: 0.0041,
+            // longitudeDelta: 0.0041,
           }}
           // zoomEnabled
-          showsUserLocation
+          // showsUserLocation
           // maxZoomLevel={15}
           // minZoomLevel={2}
+          scrollEnabled={false}
+          zoomEnabled={false}
+          // zoomControlEnabled={false}
           customMapStyle={mapStyle}
           style={[styles.container]}>
-          {/* <Marker
-          coordinate={{
-            latitude: Region.latitude,
-            longitude: Region.longitude,
-          }}>
-          <Image
-            source={{uri: Constants.imageURL + userImage}}
-            style={{
-              height: SIZES.ten * 5,
-              width: SIZES.ten * 5,
-              borderRadius: SIZES.ten * 5,
+          <Marker
+            coordinate={{
+              latitude: Region.latitude,
+              longitude: Region.longitude,
+            }}>
+            <View
+              style={{
+                height: SIZES.ten * 4.3,
+                width: SIZES.ten * 4.3,
+                borderRadius: SIZES.ten * 4,
+                borderColor: Colors.sand,
+                borderWidth: 2.5,
+              }}>
+              <Image
+                source={Images.emp3}
+                // source={{uri: Constants.imageURL + userImage}}
+                style={{
+                  height: SIZES.ten * 3.8,
+                  width: SIZES.ten * 3.8,
+                  borderRadius: SIZES.ten * 3.5,
+                }}
+              />
+            </View>
+          </Marker>
+          <MapView.Marker
+            // key={index}
+            // 37.78798240427305, -122.40754292791394
+            coordinate={{
+              latitude: Number(37.78798240427305),
+              longitude: Number(-122.40754292791394),
             }}
-          />
-        </Marker> */}
-          {vendorAround && vendorAround.length
+            onPress={() => {
+              props.navigation.navigate(Constants.viewVendorProfile, {
+                // item: marker.id,
+              });
+            }}>
+            <View style={styles.markerWrap}>
+              <Image
+                // source={{uri: Constants.imageURL + marker.image}}
+                source={Images.markerMechanic}
+                style={[styles.marker]}
+              />
+            </View>
+          </MapView.Marker>
+          {/* <MapViewDirections
+            mode="WALKING"
+            strokeWidth={3.5}
+            strokeColor={Colors.sickGreen}
+            origin={Region}
+            destination={{
+              latitude: Number(37.78798240427305),
+              longitude: Number(-122.40754292791394),
+            }}
+            apikey={GOOGLE_MAPS_APIKEY}
+          /> */}
+          {/* {vendorAround && vendorAround.length
             ? vendorAround.map((marker, index) => {
                 return (
                   <MapView.Marker
@@ -338,37 +390,40 @@ const ServiceProviderOnTheWay = (props) => {
                   </MapView.Marker>
                 );
               })
-            : null}
+            : null} */}
         </MapView>
       ) : null}
       <NormalHeader name="Service Provider On the Way" />
 
       <View
-        style={{
-          paddingVertical: SIZES.ten,
-          backgroundColor: Colors.white,
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          bottom: SIZES.twenty,
-          alignSelf: 'center',
-          padding: SIZES.ten * 7,
-        }}>
+        style={[
+          styles.bottomCard,
+          {
+            paddingVertical: SIZES.ten,
+            // backgroundColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            bottom: SIZES.twentyFive * 1.5,
+            alignSelf: 'center',
+            // padding: SIZES.ten * 7,
+          },
+        ]}>
         <View
           style={{
             flexDirection: 'row',
             // backgroundColor: 'green',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: SIZES.ten,
+            // padding: SIZES.ten,
           }}>
           <View
             style={{
               alignItems: 'center',
               justifyContent: 'center',
               backgroundColor: Colors.sickGreen,
-              height: SIZES.ten * 5,
-              width: SIZES.ten * 5,
+              height: SIZES.ten * 3.5,
+              width: SIZES.ten * 3.5,
               borderRadius: SIZES.ten * 5,
             }}>
             <Icon
@@ -393,8 +448,8 @@ const ServiceProviderOnTheWay = (props) => {
               alignItems: 'center',
               justifyContent: 'center',
               backgroundColor: Colors.sickGreen,
-              height: SIZES.ten * 5,
-              width: SIZES.ten * 5,
+              height: SIZES.ten * 3.5,
+              width: SIZES.ten * 3.5,
               borderRadius: SIZES.ten * 5,
             }}>
             <Icon
@@ -405,7 +460,7 @@ const ServiceProviderOnTheWay = (props) => {
           </View>
         </View>
 
-        <BoldTextCB style={{fontSize: 16}}>Freddie Johnson</BoldTextCB>
+        <Text style={[FONTS.mediumFont16]}>Freddie Johnson</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -422,16 +477,19 @@ const ServiceProviderOnTheWay = (props) => {
             }}
           />
           <RegularTextCB
-            style={{
-              color: Colors.turqoiseGreen,
-              fontSize: 14,
-              marginStart: 5,
-            }}>
+            style={[
+              FONTS.mediumFont14,
+              {color: Colors.turqoiseGreen, marginStart: SIZES.five},
+            ]}>
             Verified
           </RegularTextCB>
         </View>
-        <BoldTextCB style={{fontSize: 16}}>Car Mechanic Needed</BoldTextCB>
-        <LightTextCB style={{color: Colors.sickGreen}}>Automobile</LightTextCB>
+        <RegularTextCB style={{fontSize: 16}}>
+          Car Mechanic Needed
+        </RegularTextCB>
+        <RegularTextCB style={{color: Colors.sickGreen}}>
+          Automobile
+        </RegularTextCB>
       </View>
 
       {/* <Animated.ScrollView
@@ -572,7 +630,6 @@ const styles = StyleSheet.create({
   markerWrap: {
     width: SIZES.ten * 6,
     height: SIZES.ten * 6,
-    borderRadius: SIZES.ten * 6,
     overflow: 'hidden',
   },
   marker: {
@@ -600,5 +657,16 @@ const styles = StyleSheet.create({
     height: SIZES.fifteen,
     width: SIZES.fifteen,
     resizeMode: 'contain',
+  },
+  bottomCard: {
+    backgroundColor: '#fff',
+    borderRadius: SIZES.ten,
+    width: width - SIZES.twentyFive,
+    shadowColor: Colors.lightGrey,
+    // shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 22,
+    shadowRadius: 10,
+    elevation: 15,
   },
 });

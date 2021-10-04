@@ -6,6 +6,7 @@ import {SIZES} from '../common/Constants';
 import RegularTextCB from './RegularTextCB';
 import {useNavigation} from '@react-navigation/native';
 import Images from '../common/Images';
+import {Platform} from 'react-native';
 
 export default function NormalHeader(props) {
   const navigation = useNavigation();
@@ -25,7 +26,17 @@ export default function NormalHeader(props) {
         }}>
         <Image source={Images.arrowBack} style={[styles.iconBack]} />
       </TouchableOpacity>
-      <RegularTextCB style={[{color: Colors.black, fontSize: SIZES.ten * 3}]}>
+      <RegularTextCB
+        style={[
+          {
+            color: Colors.black,
+            fontSize:
+              props.name === 'Service Provider On the Way' &&
+              Platform.OS === 'ios'
+                ? SIZES.ten * 2.5
+                : SIZES.ten * 3,
+          },
+        ]}>
         {props.name}
       </RegularTextCB>
     </View>
