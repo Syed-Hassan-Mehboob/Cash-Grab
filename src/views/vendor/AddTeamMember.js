@@ -76,7 +76,9 @@ export default function AddTeamMember(props) {
         <ButtonRadius10
           bgColor={Colors.sickGreen}
           label="ADD"
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.navigate(Constants.vendorEditProfile);
+          }}
         />
       </View>
     </View>

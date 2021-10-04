@@ -365,6 +365,7 @@ export default class VendorHome extends Component {
                 }}
               />
             </View>
+
             <View
               style={{
                 paddingHorizontal: SIZES.twenty,

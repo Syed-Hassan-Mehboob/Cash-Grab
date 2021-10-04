@@ -162,7 +162,9 @@ export default class VendorProfile extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getUserProfile());
+    this.setState({accessToken: token});
+
+    // () => this.getUserProfile());
   };
 
   renderServicePrice = ({item}) => {

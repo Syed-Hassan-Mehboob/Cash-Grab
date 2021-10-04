@@ -8,6 +8,8 @@ import {
   ScrollView,
   Platform,
   TextInput,
+  Text,
+  FlatList,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal';
@@ -18,13 +20,14 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import LightTextCB from '../../components/LightTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import EditText from '../../components/EditText';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {FONTS, SIZES} from '../../common/Constants';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {Icon} from 'native-base';
 
 const {width, height} = Dimensions.get('window');
 
@@ -46,9 +49,11 @@ export default class VendorEditProfile extends Component {
       isLoading: false,
       accessToken: '',
       showModal: false,
+      showModal2: false,
       lat: '',
       lng: '',
       secureText: false,
+      companyLocation: '',
     };
   }
 
@@ -59,7 +64,7 @@ export default class VendorEditProfile extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
-    this.getUserProfile();
+    // this.getUserProfile();
   };
 
   changePasswordState() {
@@ -73,6 +78,7 @@ export default class VendorEditProfile extends Component {
       isModalVisible: !this.state.isModalVisible,
     });
   };
+
   GooglePlacesInput = () => {
     return (
       <GooglePlacesAutocomplete
@@ -83,18 +89,33 @@ export default class VendorEditProfile extends Component {
         fetchDetails={true}
         onPress={(data, details = null) => {
           // console.log("response===========================================>", details.formatted_address);
-          this.setState(
-            {
-              location: details.formatted_address,
-              lat: details.geometry.location.lat,
-              lng: details.geometry.location.lng,
-            },
-            () => {
-              setTimeout(() => {
-                this.setState({showModal: false});
-              }, 400);
-            },
-          );
+          {
+            this.state.showModal
+              ? this.setState(
+                  {
+                    location: details.formatted_address,
+                    lat: details.geometry.location.lat,
+                    lng: details.geometry.location.lng,
+                  },
+                  () => {
+                    setTimeout(() => {
+                      this.setState({showModal: false});
+                    }, 400);
+                  },
+                )
+              : this.setState(
+                  {
+                    companyLocation: details.formatted_address,
+                    lat: details.geometry.location.lat,
+                    lng: details.geometry.location.lng,
+                  },
+                  () => {
+                    setTimeout(() => {
+                      this.setState({showModal2: false});
+                    }, 400);
+                  },
+                );
+          }
         }}
         query={{
           key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
@@ -358,6 +379,53 @@ export default class VendorEditProfile extends Component {
     });
   };
 
+  renderTeamMember = ({item}) => {
+    return (
+      <View
+        style={{
+          marginLeft: SIZES.ten,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Image
+          source={{uri: item.image}}
+          style={{
+            height: SIZES.twenty * 3,
+            width: SIZES.twenty * 3,
+            borderRadius: SIZES.twenty * 3,
+          }}
+        />
+
+        {item.index == 1 && (
+          <TouchableOpacity
+            style={{
+              height: SIZES.fifty,
+              width: SIZES.fifty,
+              borderRadius: SIZES.fifty,
+              backgroundColor: Colors.sickGreen,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => {
+              // props.navigation.goBack();
+            }}
+            activeOpacity={0.6}>
+            <Icon
+              type="AntDesign"
+              name="plus"
+              style={{
+                color: Colors.black,
+                fontSize: SIZES.fifteen * 2.3,
+              }}
+            />
+          </TouchableOpacity>
+        )}
+
+        <RegularTextCB style={{fontSize: 12}}>{item.name}</RegularTextCB>
+      </View>
+    );
+  };
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: Colors.white}}>
@@ -440,7 +508,10 @@ export default class VendorEditProfile extends Component {
           </RegularTextCB>
         </View>
         <ScrollView
-          contentContainerStyle={{paddingHorizontal: SIZES.ten}}
+          contentContainerStyle={{
+            paddingHorizontal: SIZES.ten,
+            paddingBottom: SIZES.twenty * 2,
+          }}
           style={[styles.container, {paddingVertical: SIZES.twenty}]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps={'always'}>
@@ -596,6 +667,7 @@ export default class VendorEditProfile extends Component {
               style={[styles.textInput]}
             /> */}
           </View>
+
           <Modal
             animationType="fade"
             transparent={true}
@@ -618,6 +690,43 @@ export default class VendorEditProfile extends Component {
                   }}
                   onPress={() => {
                     this.setState({showModal: false});
+                  }}>
+                  <Image
+                    style={{
+                      height: SIZES.fifteen,
+                      width: SIZES.fifteen,
+                      tintColor: '#fff',
+                    }}
+                    resizeMode="contain"
+                    source={Images.iconClose}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={this.state.showModal2}
+            onRequestClose={() => {
+              this.setState({showModal2: false});
+            }}>
+            <View
+              style={{
+                flex: 1,
+                padding: SIZES.twenty,
+                backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+              }}>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                {this.GooglePlacesInput()}
+                <TouchableOpacity
+                  style={{
+                    marginTop: SIZES.fifteen,
+                    marginLeft: SIZES.five * 1.3,
+                  }}
+                  onPress={() => {
+                    this.setState({showModal2: false});
                   }}>
                   <Image
                     style={{
@@ -675,6 +784,201 @@ export default class VendorEditProfile extends Component {
               }}
               style={[styles.textInput, {marginBottom: SIZES.TWENTY}]}
             />
+          </View>
+
+          <Text
+            style={[
+              FONTS.boldFont18,
+              {marginVertical: SIZES.twenty, marginLeft: SIZES.twenty},
+            ]}>
+            Additional information
+          </Text>
+
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 15,
+                flex: 0.37,
+                marginStart: SIZES.fifteen,
+              }}>
+              Company Name
+            </RegularTextCB>
+            <EditText
+              placeholder={'Company Name'}
+              // value={this.state.newPassword}
+              // onChangeText={(text) => {
+              //   this.setState({newPassword: text});
+              // }}
+              style={[styles.textInput, {}]}
+            />
+          </View>
+
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                flex: 0.37,
+                marginStart: SIZES.fifteen,
+              }}>
+              Email address
+            </RegularTextCB>
+            <EditText
+              placeholder={'Email address'}
+              // value={this.state.newPassword}
+              // onChangeText={(text) => {
+              //   this.setState({newPassword: text});
+              // }}
+              style={[styles.textInput, {}]}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                flex: 0.34,
+                marginStart: SIZES.twenty,
+              }}>
+              Location
+            </RegularTextCB>
+            <View
+              style={[
+                styles.textInput,
+                {
+                  height: 53,
+                  paddingHorizontal: SIZES.fifteen,
+                  backgroundColor: Colors.white,
+                  marginVertical: SIZES.ten,
+                  borderRadius: SIZES.ten,
+                  shadowColor: '#c5c5c5',
+                  shadowOffset: {width: 5, height: 5},
+                  shadowOpacity: 1.0,
+                  shadowRadius: 10,
+                  elevation: 10,
+                  justifyContent: 'center',
+                },
+              ]}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    showModal2: true,
+                  });
+                }}>
+                <RegularTextCB>
+                  {this.state.companyLocation
+                    ? this.state.companyLocation
+                    : 'Get Location'}
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            {/* <EditText
+              ref={'location'}
+              placeholder={'Location'}
+              value={this.state.location}
+              onChangeText={(text) => {
+                this.setState({location: text});
+              }}
+              style={[styles.textInput]}
+            /> */}
+          </View>
+
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                flex: 0.9,
+                marginStart: SIZES.fifteen,
+              }}>
+              Team
+            </RegularTextCB>
+            <FlatList
+              horizontal
+              data={TeamData}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={this.renderTeamMember}
+              contentContainerStyle={{
+                marginLeft: SIZES.twenty,
+              }}
+            />
+          </View> */}
+
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                flex: 0.37,
+                marginStart: SIZES.fifteen,
+              }}>
+              Team
+            </RegularTextCB>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Image
+                  source={{
+                    uri: 'https://media.gettyimages.com/photos/smiling-man-outdoors-in-the-city-picture-id1179420343?s=612x612',
+                  }}
+                  style={{
+                    height: SIZES.twenty * 3,
+                    width: SIZES.twenty * 3,
+                    borderRadius: SIZES.twenty * 3,
+                  }}
+                />
+                <Text>Jojn wick</Text>
+              </View>
+
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Image
+                  source={{
+                    uri: 'https://media.gettyimages.com/photos/smiling-man-outdoors-in-the-city-picture-id1179420343?s=612x612',
+                  }}
+                  style={{
+                    height: SIZES.twenty * 3,
+                    width: SIZES.twenty * 3,
+                    borderRadius: SIZES.twenty * 3,
+                  }}
+                />
+                <Text>Devid Jack</Text>
+              </View>
+              <TouchableOpacity
+                style={{
+                  height: SIZES.fifty,
+                  width: SIZES.fifty,
+                  borderRadius: SIZES.fifty,
+                  backgroundColor: Colors.sickGreen,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.AddTeamMember);
+                }}
+                activeOpacity={0.6}>
+                <Icon
+                  type="AntDesign"
+                  name="plus"
+                  style={{
+                    color: Colors.black,
+                    fontSize: SIZES.fifteen * 2.3,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
 
@@ -835,3 +1139,24 @@ const styles = StyleSheet.create({
     fontFamily: Constants.fontRegular,
   },
 });
+
+const TeamData = [
+  {
+    id: 1,
+    image:
+      'https://media.istockphoto.com/photos/indoor-photo-of-handsome-european-guy-pictured-isolated-on-grey-to-picture-id1034357476?k=20&m=1034357476&s=612x612&w=0&h=OpiBGaVDU02LI1WVpb02Wza6AAdTGopRpf0Kx6q8V-Q=',
+    name: 'John Wick',
+  },
+  {
+    id: 2,
+    image:
+      'https://media.istockphoto.com/photos/indoor-photo-of-handsome-european-guy-pictured-isolated-on-grey-to-picture-id1034357476?k=20&m=1034357476&s=612x612&w=0&h=OpiBGaVDU02LI1WVpb02Wza6AAdTGopRpf0Kx6q8V-Q=',
+    name: 'John Wick',
+  },
+  {
+    id: 3,
+    image:
+      'https://media.istockphoto.com/photos/indoor-photo-of-handsome-european-guy-pictured-isolated-on-grey-to-picture-id1034357476?k=20&m=1034357476&s=612x612&w=0&h=OpiBGaVDU02LI1WVpb02Wza6AAdTGopRpf0Kx6q8V-Q=',
+    name: 'John Wick',
+  },
+];

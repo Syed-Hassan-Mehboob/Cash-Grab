@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {FlatList, ScrollViewBase, StatusBar, Text} from 'react-native';
 import {
   Dimensions,
   Image,
@@ -8,14 +8,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FONTS, SIZES} from '../common/Constants';
 import Images from '../common/Images';
+import ListComponent from '../components/ListComponent';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
+import LightTextCB from './../components/LightTextCB';
 
 const {width, height} = Dimensions.get('window');
 
@@ -83,9 +86,102 @@ export default class Profile extends React.Component {
       .catch(onFailure);
   };
 
+  renderPostedJob = ({item}) => {
+    // //console.log('Job Around data ======',item)
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={[
+          {
+            backgroundColor: '#fff',
+            padding: SIZES.twenty,
+            marginLeft: SIZES.twenty,
+            borderRadius: SIZES.ten * 2,
+            shadowColor: '#c5c5c5',
+            shadowOffset: {width: 5, height: 5},
+            shadowOpacity: 1.0,
+            shadowRadius: 10,
+            elevation: 10,
+          },
+        ]}
+        onPress={() => {}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.circleCard}>
+            {/* <Image
+              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              style={styles.iconUser}
+              resizeMode="cover"
+            /> */}
+          </View>
+          <View style={{marginStart: 10}}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+              {/* {item.user.name} */} name
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{
+                  height: 15,
+                  width: 15,
+                  resizeMode: 'contain',
+                  tintColor: Colors.turqoiseGreen,
+                }}
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+
+                  fontSize: 12,
+                  marginStart: 5,
+                }}>
+                {/* {item.email_verified_at !== null ? 'Verified' : 'Unverified'} */}
+                Verified
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            {/* {item.title} */}
+            Car Mechanic Needed
+          </RegularTextCB>
+
+          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+            {/* ${item.price} */}
+            $280.00
+          </LightTextCB>
+        </View>
+        <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
+          Automobile
+        </LightTextCB>
+
+        <RegularTextCB
+          style={{color: Colors.coolGrey, flex: 1}}
+          numberOfLines={3}>
+          Looking for a car mechanic that can look into{'\n'}
+          the battery setup. The car is in a still position {'\n'}& would
+          require some man power
+        </RegularTextCB>
+      </TouchableOpacity>
+    );
+  };
+
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{paddingBottom: SIZES.twenty}}>
         <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
 
         <View
@@ -268,12 +364,51 @@ export default class Profile extends React.Component {
             </RegularTextCB>
           </View>
         </View>
+        <View
+          style={{
+            paddingVertical: SIZES.ten,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: SIZES.twenty,
+          }}>
+          <Text style={[FONTS.boldFont20, ,]}>Posted Jobs</Text>
+          <Text style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
+            see all
+          </Text>
+        </View>
+
+        <FlatList
+          data={Data}
+          horizontal
+          keyExtractor={(item) => item.id}
+          renderItem={this.renderPostedJob}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingVertical: SIZES.twenty,
+          }}
+        />
+
+        <View
+          style={{
+            paddingVertical: SIZES.ten,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: SIZES.twenty,
+          }}>
+          <Text style={[FONTS.boldFont20, ,]}>Schedule Jobs</Text>
+          <Text style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
+            see all
+          </Text>
+        </View>
+
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -320,3 +455,27 @@ const styles = StyleSheet.create({
     fontFamily: Constants.fontRegular,
   },
 });
+
+const Data = [
+  {
+    id: 1,
+    name: 'Jack',
+    title: 'Car Machanic',
+    service: 'autoMobile',
+    dec: '11',
+  },
+  {
+    id: 1,
+    name: 'Jack',
+    title: 'Car Machanic',
+    service: 'autoMobile',
+    dec: '11',
+  },
+  {
+    id: 1,
+    name: 'Jack',
+    title: 'Car Machanic',
+    service: 'autoMobile',
+    dec: '11',
+  },
+];
