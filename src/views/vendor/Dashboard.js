@@ -699,13 +699,13 @@ export default class Dashboard extends Component {
                 onPress={() => {
                   this.props.navigation.navigate(Constants.History);
                 }}>
-                <Text
-                  style={[
-                    FONTS.lightFont16,
-                    {textDecorationLine: 'underline'},
-                  ]}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
                   See All
-                </Text>
+                </RegularTextCB>
               </TouchableOpacity>
             </View>
             <FlatList

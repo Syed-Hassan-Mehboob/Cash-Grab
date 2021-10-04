@@ -167,7 +167,7 @@ export default function SingleJobHistory(props) {
           style={{
             height: 0.9,
             backgroundColor: Colors.grey,
-            marginVertical: SIZES.twenty,
+            // marginVertical: SIZES.twenty,
           }}
         />
 
@@ -175,7 +175,7 @@ export default function SingleJobHistory(props) {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginVertical: SIZES.fifteen,
+            marginTop: SIZES.ten,
             justifyContent: 'space-between',
           }}>
           <View
@@ -202,7 +202,7 @@ export default function SingleJobHistory(props) {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: 3,
                   alignItems: 'center',
                 }}>
                 <RegularTextCB
@@ -231,13 +231,13 @@ export default function SingleJobHistory(props) {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginVertical: SIZES.fifteen,
+            marginVertical: SIZES.ten,
             justifyContent: 'space-between',
           }}>
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 5,
+              //   marginTop: 5,
               alignItems: 'center',
               justifyContent: 'flex-start',
               paddingHorizontal: SIZES.ten,
@@ -263,7 +263,7 @@ export default function SingleJobHistory(props) {
                 color: Colors.sunflowerYellow,
                 fontSize: 13.5,
                 marginStart: SIZES.twenty * 1.8,
-                marginTop: SIZES.five / 2,
+                marginVertical: SIZES.five / 2,
               }}>
               4.4 Ratings
             </RegularTextCB>
@@ -280,7 +280,15 @@ export default function SingleJobHistory(props) {
             </TouchableOpacity> */}
         </View>
 
-        <Text style={[FONTS.lightFont12, {color: Colors.coolGrey}]}>
+        <Text
+          style={[
+            FONTS.lightFont10,
+            {
+              color: Colors.coolGrey,
+              marginTop: SIZES.five,
+              paddingLeft: SIZES.ten,
+            },
+          ]}>
           Completed Job for 05 - 12 - 2021
         </Text>
       </TouchableOpacity>
