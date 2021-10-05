@@ -7,7 +7,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-
 import Colors from '../../common/Colors';
 import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
@@ -120,6 +119,7 @@ export default function History(props) {
       </TouchableOpacity>
     );
   };
+
   return (
     <View style={[STYLES.container]}>
       <NormalHeader name="History" />
