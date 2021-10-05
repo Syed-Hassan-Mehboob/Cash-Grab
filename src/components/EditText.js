@@ -34,6 +34,7 @@ export default class EditText extends Component {
       numberOfLines = 1,
       isEditable = true,
     } = this.props;
+    console.log('=========', secureTextEntry);
     return (
       <View
         style={[
@@ -42,7 +43,7 @@ export default class EditText extends Component {
           {borderColor: this.state.borderColor, borderWidth: 1},
         ]}>
         <TextInput
-          secureTextEntry={secureTextEntry ? this.state.secureText : null}
+          secureTextEntry={secureTextEntry ? this.state.secureText : false}
           placeholderTextColor={Colors.grey}
           autoCapitalize="none"
           blurOnSubmit={true}
