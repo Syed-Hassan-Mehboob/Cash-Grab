@@ -50,6 +50,7 @@ export default class ViewJob extends React.Component {
       longitude: '',
       description: '',
       jobService: [],
+      buttonlabel: 'REQUEST FOR ACCEPTENCE',
     };
   }
 
@@ -64,63 +65,64 @@ export default class ViewJob extends React.Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      // this.viewJob();
+      this.viewJob();
     });
   };
 
-  // viewJob = () => {
-  //   this.setState({isLoading: true});
-  //   const onSuccess = ({data}) => {
-  //     console.log(
-  //       'View Job Data ==== ==== ',
-  //       JSON.stringify(data.data.records),
-  //     );
+  viewJob = () => {
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      console.log(
+        'View Job Data ==== ==== ',
+        JSON.stringify(data.data.records),
+      );
 
-  //     this.setState({isLoading: false});
-  //     this.setState({
-  //       userImage: data.data.records.user.userProfile.image,
-  //       title: data.data.records.title,
-  //       location: data.data.records.location,
-  //       time: data.data.records.time,
-  //       images: data.data.records.images,
-  //       username: data.data.records.user.name,
-  //       lat: data.data.records.user.userProfile.latitude,
-  //       lng: data.data.records.user.userProfile.longitude,
-  //       price: data.data.records.price,
-  //       description: data.data.records.description,
-  //       latitude: data.data.records.user.userProfile.latitude,
-  //       longitude: data.data.records.user.userProfile.longitude,
-  //       jobService: data.data.records.job_service,
-  //     });
+      this.setState({isLoading: false});
+      this.setState({
+        userImage: data.data.records.user.userProfile.image,
+        title: data.data.records.title,
+        location: data.data.records.location,
+        time: data.data.records.time,
+        images: data.data.records.images,
+        username: data.data.records.user.name,
+        lat: data.data.records.user.userProfile.latitude,
+        lng: data.data.records.user.userProfile.longitude,
+        price: data.data.records.price,
+        description: data.data.records.description,
+        latitude: data.data.records.user.userProfile.latitude,
+        longitude: data.data.records.user.userProfile.longitude,
+        // jobService: data.data.records.job_service,
+      });
 
-  //     // utils.showToast(data.message)
+      // utils.showToast(data.message)
 
-  //     this.setState({isLoading: false});
-  //   };
+      this.setState({isLoading: false});
+    };
 
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //     utils.showResponseError(error);
-  //   };
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
 
-  //   this.setState({isLoading: true});
-  //   let params = {
-  //     jobId: this.props.route.params.item,
-  //   };
-  //   Axios.get(Constants.viewJob, {
-  //     params,
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
+    this.setState({isLoading: true});
+    let params = {
+      jobId: this.props.route.params.item,
+    };
+    Axios.get(Constants.viewJob, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   render() {
-    this.state.jobService.map((item) => {
-      console.log('========== Job Services ==== =', item.name);
-    });
+    // this.state.jobService.map((item) => {
+    //   console.log('========== Job Services ==== =', item.name);
+    // });
+    // console.log('View Job ===== ==== ', this.props.route.params.item);
 
     return (
       <View style={STYLES.container}>
@@ -303,10 +305,16 @@ export default class ViewJob extends React.Component {
                 marginHorizontal: SIZES.twenty,
               }}>
               <ButtonRadius10
-                label="CONTACT"
+                label={this.state.buttonlabel}
                 bgColor={Colors.sickGreen}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.chat);
+                  // this.props.navigation.navigate(Constants.chat);
+                  if (this.state.buttonlabel === 'REQUEST FOR ACCEPTENCE') {
+                    this.setState({buttonlabel: 'PENDING'});
+                    if (this.state.buttonlabel === 'PENDING') {
+                      this.setState({buttonlabel: 'PENDING'});
+                    }
+                  }
                 }}
               />
             </View>
@@ -328,7 +336,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   mapStyle: {
-    height: SIZES.ten * 40,
+    height: SIZES.ten * 27,
     top: 0,
     left: 0,
     right: 0,

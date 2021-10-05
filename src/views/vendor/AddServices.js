@@ -1,5 +1,7 @@
 import {Icon} from 'native-base';
 import React, {useRef, useState} from 'react';
+import {StatusBar} from 'react-native';
+import {Platform} from 'react-native';
 import {
   StyleSheet,
   Text,
@@ -74,6 +76,7 @@ export default function AddServices(props) {
   }
   return (
     <View style={[STYLES.container, {paddingHorizontal: SIZES.fifteen}]}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
       <View
         style={{
           flexDirection: 'row',
@@ -93,7 +96,17 @@ export default function AddServices(props) {
             style={{color: Colors.black, fontSize: SIZES.ten * 3}}
           />
         </TouchableOpacity>
-        <RegularTextCB style={[FONTS.boldFont24, {}]}>
+        <RegularTextCB
+          style={[
+            {
+              color: Colors.black,
+              fontSize:
+                props.name === 'Service Provider On the Way' &&
+                Platform.OS === 'ios'
+                  ? SIZES.ten * 2.5
+                  : SIZES.ten * 3,
+            },
+          ]}>
           Add Services
         </RegularTextCB>
 

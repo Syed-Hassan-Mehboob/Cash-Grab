@@ -395,7 +395,7 @@ const ServiceProviderOnTheWay = (props) => {
       ) : null}
       <NormalHeader name="Service Provider On the Way" />
 
-      <View
+      <TouchableOpacity
         style={[
           styles.bottomCard,
           {
@@ -408,7 +408,9 @@ const ServiceProviderOnTheWay = (props) => {
             alignSelf: 'center',
             // padding: SIZES.ten * 7,
           },
-        ]}>
+        ]}
+        activeOpacity={0.6}
+        onPress={() => {}}>
         <View
           style={{
             flexDirection: 'row',
@@ -427,8 +429,8 @@ const ServiceProviderOnTheWay = (props) => {
               borderRadius: SIZES.ten * 5,
             }}>
             <Icon
-              type={'Ionicons'}
-              name={'call-outline'}
+              type={'Feather'}
+              name={'phone-call'}
               style={{color: Colors.white, fontSize: SIZES.fifteen + 2}}
             />
           </View>
@@ -490,7 +492,7 @@ const ServiceProviderOnTheWay = (props) => {
         <RegularTextCB style={{color: Colors.sickGreen}}>
           Automobile
         </RegularTextCB>
-      </View>
+      </TouchableOpacity>
 
       {/* <Animated.ScrollView
         // ref={_scrollView}

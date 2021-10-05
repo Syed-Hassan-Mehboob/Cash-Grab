@@ -174,7 +174,7 @@ export default class ConfirmPayment extends Component {
             onPress={() => {
               this.navigateToHome();
             }}
-            label="PROCEED"
+            label="PAY NOW"
             bgColor={Colors.sickGreen}
           />
         </View>

@@ -28,7 +28,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
 import {MultiDropdownPicker} from '../components/quickNotifyServeses';
-
+import MesageEditText from '../components/MessageEditText';
 export default class UserHome extends Component {
   constructor(props) {
     super(props);
@@ -400,7 +400,7 @@ export default class UserHome extends Component {
             Job Description
           </RegularTextCB>
 
-          <View
+          {/* <View
             style={[
               {
                 marginTop: SIZES.ten,
@@ -420,7 +420,12 @@ export default class UserHome extends Component {
               style={{height: SIZES.twentyFive * 5}}
               textAlignVertical="top"
             />
-          </View>
+          </View> */}
+
+          <MesageEditText
+            placeholder={'Enter Job Description '}
+            height={SIZES.twentyFive * 4.5}
+          />
         </View>
 
         <View
@@ -433,7 +438,7 @@ export default class UserHome extends Component {
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
             onPress={() => {
-              // this.postQuickOrder();
+              this.props.navigation.navigate(Constants.confirmPayment);
             }}
           />
         </View>

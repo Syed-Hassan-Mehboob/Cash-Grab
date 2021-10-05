@@ -7,19 +7,24 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
-import COLORS from '../../common/Colors';
-import IMAGES from '../../common/Images';
-import RegularTextCB from '../../components/RegularTextCB';
-import AllBookings from '../../components/AllBookings';
-import {Icon} from 'native-base';
-import Colors from '../../common/Colors';
-import NormalHeader from '../../components/NormalHeader';
-import Images from '../../common/Images';
-import LightTextCB from '../../components/LightTextCB';
-
-export default function QuickJobs(props) {
-  const renderQuickJob = ({item}) => {
+import {STYLES, SIZES, width} from '../common/Constants';
+import ScheduleBooking from '../components/ScheduleBooking';
+import NormalHeader from '../components/NormalHeader';
+import RegularTextCB from '../components/RegularTextCB';
+import Colors from '../common/Colors';
+import Images from '../common/Images';
+import LightTextCB from '../components/LightTextCB';
+// import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
+// import COLORS from '../../common/Colors';
+// import IMAGES from '../../common/Images';
+// import RegularTextCB from '../../components/RegularTextCB';
+// import AllBookings from '../../components/AllBookings';
+// import {Icon} from 'native-base';
+// import Colors from '../../common/Colors';
+// import NormalHeader from '../../components/NormalHeader';
+export default function PostedJob(props) {
+  const renderPostedJob = ({item}) => {
+    // //console.log('Job Around data ======',item)
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -28,10 +33,9 @@ export default function QuickJobs(props) {
           {
             padding: SIZES.fifteen,
             margin: SIZES.five,
-            // marginTop: SIZES.twenty,
           },
         ]}
-        onPress={() => props.navigation.navigate(Constants.JobInProgress)}>
+        onPress={() => {}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -145,16 +149,33 @@ export default function QuickJobs(props) {
               }}>
               {item.time}
             </RegularTextCB>
-            <View>
-              <RegularTextCB
-                style={{
-                  color: Colors.black,
-                  textDecorationLine: 'underline',
-                  fontSize: 16,
-                }}>
-                View Job
-              </RegularTextCB>
-            </View>
+          </View>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconCalendar}
+            style={{
+              height: 17,
+              width: 17,
+              resizeMode: 'contain',
+              tintColor: Colors.sickGreen,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {item.date}
+            </RegularTextCB>
           </View>
         </View>
       </TouchableOpacity>
@@ -163,14 +184,16 @@ export default function QuickJobs(props) {
 
   return (
     <View style={STYLES.container}>
-      <NormalHeader name="Quick Job" />
-
+      <NormalHeader name="All Posted Jobs" />
       <View style={{paddingHorizontal: SIZES.ten * 2}}>
         <FlatList
           data={Data}
-          renderItem={renderQuickJob}
+          renderItem={renderPostedJob}
           keyExtractor={(id) => id.id}
-          contentContainerStyle={{alignItems: 'center'}}
+          contentContainerStyle={{
+            alignItems: 'center',
+            paddingBottom: 150,
+          }}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -182,6 +205,22 @@ const styles = StyleSheet.create({
   iconBack: {
     height: SIZES.twenty,
     width: SIZES.twenty,
+    resizeMode: 'contain',
+  },
+  circleCard: {
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
+    borderRadius: 45,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOpacity: 0.15,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
+  },
+  iconUser: {
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
+    borderRadius: 45,
     resizeMode: 'contain',
   },
   card: {
@@ -200,34 +239,37 @@ const Data = [
   {
     id: 1,
     name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
+    tittle: 'Home Cleaner Needed',
     price: '300.00',
-    service: 'AutoMobile',
+    service: 'Cleaning',
     description:
       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
     address: '111,NYC Street, NY 1121',
     time: '12:00 - 3:00 ',
+    date: 'September 17, 2021',
   },
   {
     id: 2,
     name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
+    tittle: 'Home Cleaner Needed',
     price: '300.00',
-    service: 'AutoMobile',
+    service: 'Cleaning',
     description:
       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
     address: '111,NYC Street, NY 1121',
     time: '12:00 - 3:00 ',
+    date: 'September 17, 2021',
   },
   {
     id: 3,
     name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
+    tittle: 'Home Cleaner Needed',
     price: '300.00',
-    service: 'AutoMobile',
+    service: 'Cleaning',
     description:
       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
     address: '111,NYC Street, NY 1121',
     time: '12:00 - 3:00 ',
+    date: 'September 17, 2021',
   },
 ];

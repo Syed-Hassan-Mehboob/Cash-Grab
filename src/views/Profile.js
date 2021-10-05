@@ -195,11 +195,8 @@ export default class Profile extends React.Component {
             marginTop: SIZES.ten,
           },
         ]}
-        onPress={
-          () => {}
-          // navigation.navigate(Constants.viewJob, {
-          //   item: item.id,
-          // })
+        onPress={() =>
+          this.props.navigation.navigate(Constants.SchechuleJobDetail)
         }>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
@@ -348,7 +345,9 @@ export default class Profile extends React.Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() => {}}>
+        onPress={() =>
+          this.props.navigation.navigate(Constants.ServiceProviderOnTheWay)
+        }>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -653,9 +652,17 @@ export default class Profile extends React.Component {
             paddingHorizontal: SIZES.twenty,
           }}>
           <Text style={[FONTS.boldFont20, ,]}>Posted Jobs</Text>
-          <Text style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
-            see all
-          </Text>
+
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => {
+              this.props.navigation.navigate(Constants.PostedJob);
+            }}>
+            <Text
+              style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
+              see all
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <FlatList
@@ -678,9 +685,17 @@ export default class Profile extends React.Component {
             paddingHorizontal: SIZES.twenty,
           }}>
           <Text style={[FONTS.boldFont20, ,]}>Schedule Jobs</Text>
-          <Text style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
-            see all
-          </Text>
+
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => {
+              this.props.navigation.navigate(Constants.ScheduleJobs);
+            }}>
+            <Text
+              style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
+              see all
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <FlatList
@@ -704,9 +719,17 @@ export default class Profile extends React.Component {
             paddingHorizontal: SIZES.twenty,
           }}>
           <Text style={[FONTS.boldFont20, ,]}>Quick Jobs</Text>
-          <Text style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
-            see all
-          </Text>
+
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => {
+              this.props.navigation.navigate(Constants.UserQuickJobs);
+            }}>
+            <Text
+              style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
+              see all
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <FlatList

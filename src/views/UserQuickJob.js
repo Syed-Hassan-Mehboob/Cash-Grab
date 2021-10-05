@@ -7,24 +7,26 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
-import COLORS from '../../common/Colors';
-import IMAGES from '../../common/Images';
-import RegularTextCB from '../../components/RegularTextCB';
-import AllBookings from '../../components/AllBookings';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
+import COLORS from '../common/Colors';
+import IMAGES from '../common/Images';
+import RegularTextCB from '../components/RegularTextCB';
+import AllBookings from '../components/AllBookings';
 import {Icon} from 'native-base';
-import Colors from '../../common/Colors';
-import NormalHeader from '../../components/NormalHeader';
-export default function Bookings(props) {
+import Colors from '../common/Colors';
+import NormalHeader from '../components/NormalHeader';
+
+export default function UserQuickJobs(props) {
   return (
     <View style={STYLES.container}>
-      <NormalHeader name="Bookings" />
+      <NormalHeader name="Quick Job" />
+
       <View style={{paddingHorizontal: SIZES.ten * 2}}>
         <FlatList
           data={Data}
           renderItem={({item}) => <AllBookings item={item} />}
           keyExtractor={(id) => id.id}
-          contentContainerStyle={{alignItems: 'center', paddingBottom: 100}}
+          contentContainerStyle={{alignItems: 'center'}}
           showsVerticalScrollIndicator={false}
         />
       </View>

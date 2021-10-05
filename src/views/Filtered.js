@@ -10,7 +10,7 @@ import {
   Text,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, height, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
@@ -21,12 +21,13 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import FilterComponant from '../components/FilterComponant';
 import Geolocation from '@react-native-community/geolocation';
 import {Icon} from 'native-base';
+import NormalHeader from '../components/NormalHeader';
 
 export default class FileredScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       accessToken: '',
       allJobs: [],
       seeAllClicked: false,
@@ -209,6 +210,7 @@ export default class FileredScreen extends Component {
 
     return data;
   };
+
   renderSingleCategoriesItem = ({item}) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
@@ -223,7 +225,7 @@ export default class FileredScreen extends Component {
   render() {
     return (
       <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -243,7 +245,9 @@ export default class FileredScreen extends Component {
           </TouchableOpacity>
 
           <RegularTextCB style={[{fontSize: 22}]}>Filtered Job</RegularTextCB>
-        </View>
+        </View> */}
+
+        <NormalHeader name="Filtered Job" />
 
         {/* <FlatList
           style={{marginTop: SIZES.ten}}
@@ -262,39 +266,39 @@ export default class FileredScreen extends Component {
             alignItems: 'center',
           }}
         /> */}
-
-        <FlatList
-          numColumns={2}
-          data={this.formatData(this.state.allJobs, 2)}
-          keyExtractor={(index) => index}
-          renderItem={this.renderSingleCategoriesItem}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: SIZES.twenty,
-            alignItems: 'center',
-            marginTop: SIZES.ten * 3,
-            paddingBottom: SIZES.twenty,
-          }}
-          contentInset={{
-            // for ios
-            bottom: SIZES.ten,
-          }}
-          ListEmptyComponent={
-            this.state.allJobs !== undefined &&
-            this.state.allJobs.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={[FONTS.mediumFont16, {color: Colors.black}]}>
-                  Record not found
-                </Text>
-              </View>
-            ) : null
-          }
-        />
+        <View style={{alignItems: 'center'}}>
+          <FlatList
+            numColumns={2}
+            data={this.formatData(this.state.allJobs, 2)}
+            keyExtractor={(item) => item.id}
+            renderItem={this.renderSingleCategoriesItem}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              // alignItems: 'center',
+              marginTop: SIZES.ten * 3,
+              paddingBottom: 100,
+            }}
+            contentInset={{
+              // for ios
+              bottom: SIZES.ten,
+            }}
+            ListEmptyComponent={
+              !this.state.isLoading ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: height / 1.5,
+                  }}>
+                  <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
+                    Record not found
+                  </Text>
+                </View>
+              ) : null
+            }
+          />
+        </View>
 
         <Spinner
           visible={this.state.isLoading}
@@ -397,19 +401,24 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   item: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    margin: 1,
+    // backgroundColor: '#fff',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // flex: 1,
+    // margin: 1,
     // height: Dimensions.get('window').width / 2, // approximate a square
   },
   itemInvisible: {
-    backgroundColor: 'transparent',
-    padding: SIZES.ten,
-    marginHorizontal: SIZES.fifteen,
-    marginBottom: SIZES.twenty,
-    marginTop: SIZES.five,
+    // backgroundColor: 'transparent',
+    // padding: SIZES.ten,
+    // marginHorizontal: SIZES.fifteen,
+    // marginBottom: SIZES.twenty,
+    // marginTop: SIZES.five,
+    // padding: SIZES.ten * 3,
+    // marginHorizontal: SIZES.five,
+    // marginBottom: SIZES.twenty,
+    alignSelf: 'flex-end',
+    // marginTop: SIZES.five,
   },
   spinnerTextStyle: {
     color: '#FFF',

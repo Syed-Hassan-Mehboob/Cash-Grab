@@ -333,8 +333,8 @@ export default function ScheduleJobDetails(props) {
             borderRadius: 10,
           }}>
           <Icon
-            type={'Ionicons'}
-            name={'information-circle-outline'}
+            type={'MaterialCommunityIcons'}
+            name={'information-outline'}
             style={{
               fontSize: SIZES.twenty * 3.5,
               color: Colors.sickGreen,

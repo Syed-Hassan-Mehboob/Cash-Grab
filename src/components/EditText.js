@@ -11,7 +11,7 @@ export default class EditText extends Component {
 
   state = {
     secureText: true,
-    eyeIcon: 'eye-off',
+    eyeIcon: 'eye-closed',
     borderColor: 'transparent',
   };
 
@@ -19,7 +19,7 @@ export default class EditText extends Component {
     if (secureTextEntry) {
       if (this.state.secureText)
         this.setState({secureText: false, eyeIcon: 'eye'});
-      else this.setState({secureText: true, eyeIcon: 'eye-off'});
+      else this.setState({secureText: true, eyeIcon: 'eye-closed'});
     }
   }
 
@@ -71,7 +71,7 @@ export default class EditText extends Component {
               this.changePasswordState(secureTextEntry);
             }}>
             <Icon
-              type={'Ionicons'}
+              type={'Octicons'}
               name={this.state.eyeIcon}
               style={styles.iconPassword}
             />

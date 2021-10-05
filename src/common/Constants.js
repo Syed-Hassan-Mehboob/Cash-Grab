@@ -47,6 +47,8 @@ const Constants = {
   confirmPayment: 'ConfirmPayment',
   withDraw: 'WithDraw',
   ScheduleJobs: 'ScheduleJobs',
+  UserQuickJobs: 'UserQuickJobs',
+  PostedJob: 'PostedJob',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',

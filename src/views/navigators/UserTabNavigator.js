@@ -38,6 +38,8 @@ import ScheduleJobs from '../ScheduleJobs';
 import WriteReviews from '../WriteReviews';
 import ServiceProviderOnTheWay from '../ServiceProviderOnTheWay';
 import ThankYou from './../ThankYou';
+import UserQuickJobs from '../UserQuickJob';
+import PostedJob from '../PostedJob';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -77,6 +79,10 @@ const HomeNavigator = () => {
       />
       <HomeStack.Screen name={Constants.QuickNotify} component={QuickNotify} />
       <HomeStack.Screen
+        name={Constants.UserQuickJobs}
+        component={UserQuickJobs}
+      />
+      <HomeStack.Screen
         name={Constants.SchechuleJobDetail}
         component={SchechuleJobDetail}
       />
@@ -84,6 +90,7 @@ const HomeNavigator = () => {
         name={Constants.ScheduleJobs}
         component={ScheduleJobs}
       />
+      <HomeStack.Screen name={Constants.PostedJob} component={PostedJob} />
       <HomeStack.Screen
         name={Constants.bookingConfirmed}
         component={BookingConfirmed}
@@ -139,6 +146,23 @@ const ProfileNavigator = () => {
         name={Constants.editProfile}
         component={EditProfile}
       />
+      <ProfileStack.Screen
+        name={Constants.UserQuickJobs}
+        component={UserQuickJobs}
+      />
+      <ProfileStack.Screen
+        name={Constants.ServiceProviderOnTheWay}
+        component={ServiceProviderOnTheWay}
+      />
+      <ProfileStack.Screen
+        name={Constants.ScheduleJobs}
+        component={ScheduleJobs}
+      />
+      <ProfileStack.Screen
+        name={Constants.SchechuleJobDetail}
+        component={SchechuleJobDetail}
+      />
+      <ProfileStack.Screen name={Constants.PostedJob} component={PostedJob} />
     </ProfileStack.Navigator>
   );
 };
