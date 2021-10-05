@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import LightTextCB from '../components/LightTextCB';
@@ -27,18 +27,23 @@ export default class BookingConfirmed extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={[styles.childContainer, {marginTop: SIZES.ten*3}]}>
-          <Image source={Images.greenTick} style={{height: SIZES.ten*SIZES.ten*10, width: SIZES.ten*10}} />
-          <BoldTextCB style={{fontSize: SIZES.ten*3, marginTop: SIZES.ten*3}}>
+      <View style={STYLES.container}>
+        <View style={[styles.childContainer, {marginTop: SIZES.five}]}>
+          <Image
+            source={Images.greenTick}
+            resizeMode="contain"
+            style={{height: SIZES.fifteen * 7.5, width: SIZES.fifteen * 7.5}}
+          />
+          <BoldTextCB
+            style={{fontSize: SIZES.ten * 3, marginTop: SIZES.ten * 2.5}}>
             Booking Confirmed
           </BoldTextCB>
           <RegularTextCB
             style={{
               fontSize: 18,
-              marginTop: SIZES.ten*10,
-              marginStart: SIZES.ten*3,
-              marginEnd: SIZES.ten*3,
+              marginTop: SIZES.five * 4.5,
+              marginStart: SIZES.ten * 3,
+              marginEnd: SIZES.ten * 3,
               textAlign: 'center',
               color: Colors.coolGrey,
             }}>
@@ -59,18 +64,23 @@ export default class BookingConfirmed extends Component {
                   resizeMode="cover"
                 />
               </View>
-              <RegularTextCB style={{fontSize: SIZES.twenty, marginTop: SIZES.ten*10}}>
+              <RegularTextCB
+                style={{fontSize: SIZES.twenty, marginTop: SIZES.five * 4}}>
                 Ray Hammond
               </RegularTextCB>
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  marginTop: SIZES.five,
+                  marginTop: SIZES.five / 2,
                 }}>
                 <Image
                   source={Images.iconVerified}
-                  style={{height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain'}}
+                  style={{
+                    height: SIZES.twentyFive,
+                    width: SIZES.twentyFive,
+                    resizeMode: 'contain',
+                  }}
                 />
                 <RegularTextCB
                   style={{
@@ -82,7 +92,11 @@ export default class BookingConfirmed extends Component {
                 </RegularTextCB>
               </View>
               <RegularTextCB
-                style={{fontSize: 18, color: Colors.coolGrey, marginTop: SIZES.five}}>
+                style={{
+                  fontSize: 18,
+                  color: Colors.coolGrey,
+                  marginTop: SIZES.five,
+                }}>
                 Gardening, NY (2km)
               </RegularTextCB>
               <RegularTextCB
@@ -96,10 +110,17 @@ export default class BookingConfirmed extends Component {
             </View>
           </View>
         </View>
-        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            paddingHorizontal: SIZES.fifteen,
+          }}>
           <ButtonRadius10
-            onPress={() => this.navigateToHome()}
-            label="BACK TO HOME"
+            onPress={() =>
+              this.props.navigation.navigate(Constants.ScheduleJobs)
+            }
+            label="CONTINUE"
             bgColor={Colors.sickGreen}
           />
         </View>
@@ -116,25 +137,25 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: SIZES.fifteen-3,
-    width: SIZES.fifteen-3,
+    height: SIZES.fifteen - 3,
+    width: SIZES.fifteen - 3,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*8,
-    width: SIZES.ten*8,
-    borderRadius: SIZES.ten*8 / 2,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: (SIZES.ten * 8) / 2,
     resizeMode: 'contain',
   },
   circleCard: {
-    height: SIZES.ten*8,
-    width: SIZES.ten*8,
-    borderRadius: SIZES.ten*4,
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: SIZES.ten * 4,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
@@ -147,8 +168,8 @@ const styles = StyleSheet.create({
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius: SIZES.ten*10,
-    elevation: SIZES.ten*10,
+    shadowRadius: SIZES.ten * 10,
+    elevation: SIZES.ten * 10,
   },
   iconPassword: {
     fontSize: SIZES.twenty,
@@ -168,8 +189,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   itemContainer: {
-    paddingHorizontal: SIZES.ten*4,
-    paddingVertical: SIZES.ten*10,
+    paddingHorizontal: SIZES.ten * 5.5,
+    paddingVertical: SIZES.ten * 3.5,
     alignItems: 'center',
   },
   formLabel: {
@@ -184,7 +205,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',

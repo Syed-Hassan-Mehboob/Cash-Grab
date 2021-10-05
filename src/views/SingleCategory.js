@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,26 +6,27 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  Text,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES, width} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import LightTextCB from '../components/LightTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
-SIZES
+import {Icon} from 'native-base';
+
 export default class SingleCategory extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      vendors:[],
+      vendors: [],
     };
   }
-
 
   componentDidMount() {
     this.getUserAccessToken();
@@ -36,20 +37,20 @@ export default class SingleCategory extends Component {
   };
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getCategoryData());
+    this.setState({accessToken: token}, () => this.getCategoryData());
     this.getCategoryData();
   };
 
   getCategoryData = () => {
-    const onSuccess = ({ data }) => {
-      console.log('==== catagory data ====',data);
+    const onSuccess = ({data}) => {
+      console.log('==== catagory data ====', data);
       this.toggleIsLoading();
-      this.setState({ vendors: data.data });
+      this.setState({vendors: data.data});
       // utils.showToast(data.message)
     };
 
@@ -74,182 +75,197 @@ export default class SingleCategory extends Component {
       .catch(onFailure);
   };
 
-
-  renderSingleCategoriesItem = ({ item }) => {
-
+  renderSingleCategoriesItem = ({item}) => {
     // console.log('Single Category Item======',item.userProfile)
+
+    // console.log('SIngle Category item ====== ', item);
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
         style={[
           styles.card,
-          { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five },
-        ]}
-        onPress={() => this.props.navigation.navigate(Constants.chat)}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
+          {
+            marginHorizontal: SIZES.fifteen + 2,
+            marginTop: SIZES.ten * 4,
             alignItems: 'center',
-          }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{ uri: Constants.imageURL + item.image }}
-              // source={item.image}
-              style={{ height: '100%', width: '100%' }}
-              resizeMode="stretch"
-            />
-          </View>
-          <View style={{ marginStart: SIZES.ten }}>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-                fontSize: 16,
-              }}>
-              {item.name}
-            </RegularTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: SIZES.five,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain' }}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-                  fontSize: 12,
-                  marginStart: SIZES.five,
-                }}>
-                Verified
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
+            paddingVertical: SIZES.five,
+          },
+        ]}
+        onPress={() =>
+          this.props.navigation.navigate(Constants.SelectServices)
+        }>
         <View
           style={{
             flexDirection: 'row',
-            marginTop: SIZES.five,
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-         <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {item.services[0]['name']}
-        </RegularTextCB>
-          <LightTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 12,
-            }}>
-             ${item.services[0]['price']}
-          </LightTextCB>
-        </View>
-       
-        <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-          }}>
-          {item.bio}
-        </RegularTextCB>
-        <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
           <Image
-            source={Images.iconLocationPin}
-            style={{ height: SIZES.twenty-3, width: SIZES.twenty-3, resizeMode: 'contain' }}
+            source={{uri: Constants.imageURL + item.image}}
+            // source={item.image}
+            style={{
+              height: SIZES.ten * 5.5,
+              width: SIZES.ten * 5.5,
+              borderRadius: SIZES.ten * 5.5,
+              marginRight: SIZES.ten,
+            }}
+            resizeMode="cover"
           />
+          <Text
+            style={[
+              FONTS.mediumFont14,
+              {
+                textDecorationLine: 'underline',
+                color: Colors.black1,
+              },
+            ]}>
+            View Profile
+          </Text>
+        </View>
+
+        <View
+          style={{
+            paddingHorizontal: SIZES.ten,
+            paddingVertical: SIZES.ten,
+          }}>
+          <RegularTextCB
+            style={[
+              FONTS.boldFont16,
+              {
+                color: Colors.black,
+              },
+            ]}>
+            {/* {item.services[0]['name']} */}
+            Car Macanice
+          </RegularTextCB>
           <RegularTextCB
             style={{
+              fontSize: 16,
               color: Colors.coolGrey,
-              marginStart: SIZES.five,
             }}>
-            {item.address}
+            {/* {item.services[0]['name']} */}
+            Lorem ipSum
           </RegularTextCB>
-
         </View>
+
         <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{ height: SIZES.twenty-3, width: SIZES.twenty-3, resizeMode: 'contain' }}
+          style={[
+            styles.card,
+            {
+              backgroundColor: Colors.sickGreen,
+              padding: SIZES.ten * 2,
+              borderRadius: SIZES.ten * 4,
+              zIndex: 1,
+              bottom: -SIZES.ten * 3,
+            },
+          ]}>
+          <Icon
+            type="AntDesign"
+            name="right"
+            style={{color: Colors.white, fontSize: 20}}
           />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: SIZES.five,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-        
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB>
-          </View>
         </View>
       </TouchableOpacity>
-    )
+    );
   };
 
- 
+  formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
+    while (
+      numberOfElementsLastRow !== numColumns &&
+      numberOfElementsLastRow !== 0
+    ) {
+      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
+      numberOfElementsLastRow++;
+    }
+
+    return data;
+  };
 
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            justifyContent: 'space-between',
+            // paddingHorizontal: SIZES.ten,
           }}>
           <TouchableOpacity
-            style={{ position: 'absolute', left: SIZES.ten }}
+            style={{}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, { tintColor: Colors.black }]}
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
             />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row',justifyContent:'center',alignItems:'center' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              flex: 0.42,
+              alignItems: 'center',
+            }}>
             <Image
               source={{
                 uri: Constants.imageURL + this.props.route.params.item.image,
               }}
-              style={{ height:SIZES.ten*8, width:SIZES.ten*8}}
+              style={{
+                height: SIZES.ten * 6,
+                width: SIZES.ten * 6,
+                borderRadius: SIZES.ten * 6,
+              }}
             />
-            <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  fontSize: 22,
+                  marginStart: SIZES.five * 1,
+                },
+              ]}>
               {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              this.openNextScreen(Constants.filter);
+            }}>
+            <Image
+              source={Images.iconHamburger}
+              style={{
+                height: SIZES.twenty,
+                width: SIZES.twenty,
+              }}
+              resizeMode={'contain'}
+            />
+          </TouchableOpacity>
         </View>
-        <FlatList
-          style={{ marginTop: SIZES.ten }}
-          data={this.state.vendors}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={this.renderSingleCategoriesItem}
-          contentInset={{
-            // for ios
-            bottom: SIZES.ten*10,
-          }}
-          contentContainerStyle={{
-            // for android
-            paddingBottom: SIZES.ten*10,
-          }}
-        />
+
+        <View style={{flex: 1}}>
+          <FlatList
+            numColumns={2}
+            // horizontal
+            data={this.formatData(this.state.vendors, 2)}
+            keyExtractor={(index) => index}
+            renderItem={this.renderSingleCategoriesItem}
+            showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={() => {
+              return (
+                <View style={{flex: 1, alignItems: 'center', paddingTop: 100}}>
+                  <Text style={FONTS.mediumFont18}>Not Found</Text>
+                </View>
+              );
+            }}
+            contentContainerStyle={{
+              paddingBottom: SIZES.ten * 5,
+            }}
+          />
+        </View>
 
         <Spinner
           visible={this.state.isLoading}
@@ -268,19 +284,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: SIZES.ten*10,
-    width: SIZES.ten*10,
+    height: SIZES.ten * 10,
+    width: SIZES.ten * 10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -316,7 +332,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -332,25 +348,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
+    flex: 1,
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
-    flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
-    overflow:'hidden'
+    overflow: 'hidden',
   },
   spinnerTextStyle: {
     color: '#FFF',

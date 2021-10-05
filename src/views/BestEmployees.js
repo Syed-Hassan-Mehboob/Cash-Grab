@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {SafeAreaView, View, StyleSheet, Image} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
 
@@ -184,7 +184,8 @@ export default class BestEmployees extends Component {
                 style={styles.iconUser}
                 resizeMode="cover"
               />
-              <View style={{marginStart: SIZES.twenty, marginEnd: SIZES.twenty}}>
+              <View
+                style={{marginStart: SIZES.twenty, marginEnd: SIZES.twenty}}>
                 <LightTextCB style={{fontSize: 18, color: Colors.black1}}>
                   {item.name}
                 </LightTextCB>
@@ -194,7 +195,11 @@ export default class BestEmployees extends Component {
                   </LightTextCB>
                   <Image
                     source={Images.tickVerified}
-                    style={{height: SIZES.twenty, width: SIZES.twenty, marginStart: SIZES.five}}
+                    style={{
+                      height: SIZES.twenty,
+                      width: SIZES.twenty,
+                      marginStart: SIZES.five,
+                    }}
                   />
                 </View>
               </View>
@@ -202,7 +207,11 @@ export default class BestEmployees extends Component {
             <Image source={Images.arrowForward} style={[styles.iconForward]} />
           </View>
           <LightTextCB
-            style={{fontSize: 18, color: Colors.black1, marginTop: SIZES.twenty}}>
+            style={{
+              fontSize: 18,
+              color: Colors.black1,
+              marginTop: SIZES.twenty,
+            }}>
             {item.location}
           </LightTextCB>
           <LightTextCB
@@ -216,10 +225,10 @@ export default class BestEmployees extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
-            marginTop: SIZES.twenty,
+            // marginTop: SIZES.twenty,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -237,10 +246,10 @@ export default class BestEmployees extends Component {
             <Image source={Images.iconFilter} style={styles.iconFilter} />
           </TouchableOpacity>
         </View>
-        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten*3}}>
+        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten * 3}}>
           Best Employees
         </LightTextCB>
-        <LightTextCB style={{fontSize: 18, marginTop: SIZES.ten*3}}>
+        <LightTextCB style={{fontSize: 18, marginTop: SIZES.ten * 3}}>
           201 people available around you
         </LightTextCB>
         <FlatList
@@ -262,19 +271,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: SIZES.fifteen-3,
-    width: SIZES.fifteen-3,
+    height: SIZES.fifteen - 3,
+    width: SIZES.fifteen - 3,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -310,7 +319,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',

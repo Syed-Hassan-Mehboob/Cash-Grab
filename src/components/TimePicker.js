@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
@@ -17,45 +17,43 @@ const {width, height} = Dimensions.get('window');
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function DateTimePickerComponent(props) {
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-//   const showDatePicker = () => {
-//     setDatePickerVisibility(true);
-//   };
+  //   const showDatePicker = () => {
+  //     setDatePickerVisibility(true);
+  //   };
 
-//   const hideDatePicker = () => {
-//     setDatePickerVisibility(false);
-//   };
+  //   const hideDatePicker = () => {
+  //     setDatePickerVisibility(false);
+  //   };
 
-//   const handleConfirm = date => {
-//       const newTime=Moment(date).format('LT');
-//     console.log('A date has been picked: ',newTime);
-//     setTime(newTime);
-//     hideDatePicker();
-//   };
+  //   const handleConfirm = date => {
+  //       const newTime=Moment(date).format('LT');
+  //     console.log('A date has been picked: ',newTime);
+  //     setTime(newTime);
+  //     hideDatePicker();
+  //   };
 
   return (
-    <TouchableOpacity        
-      onPress={() => {
-      }}
-      activeOpacity={0.6} style={styles.contaner}>
-      <TouchableOpacity
-        style={styles.containerView} onPress={props.onPress} >
+    <TouchableOpacity
+      onPress={() => {}}
+      activeOpacity={0.6}
+      style={styles.contaner}>
+      <TouchableOpacity style={styles.containerView} onPress={props.onPress}>
         <Icon
           name="time-outline"
           type="Ionicons"
-          style={{fontSize: height * 0.025, color: Colors.lightYellowGreen}}
+          style={{fontSize: height * 0.025, color: Colors.sickGreen}}
         />
         <Text style={styles.text}>{props.time}</Text>
         <DateTimePickerModal
-        {...props}
-        //   isVisible={isDatePickerVisible}
-        //   mode='time'
-        //   onConfirm={props.onConfirm}
-        //   onCancel={hideDatePicker}
-        //   is24Hour={false}
-        //   hideTitleContainerIOS={true}
+          {...props}
+          //   isVisible={isDatePickerVisible}
+          //   mode='time'
+          //   onConfirm={props.onConfirm}
+          //   onCancel={hideDatePicker}
+          //   is24Hour={false}
+          //   hideTitleContainerIOS={true}
           titleStyletitleStyle={{backgroundColor: 'red', color: 'red'}}
           confirmTextStyle={Colors.lightYellowGreen}
         />
@@ -67,19 +65,17 @@ export default function DateTimePickerComponent(props) {
 const styles = StyleSheet.create({
   contaner: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    elevation: 15,
+    height: 60,
     backgroundColor: Colors.white,
-    borderRadius: height * 0.01,
-    shadowColor: Colors.grey,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 1.0,
     shadowRadius: 10,
-    shadowOpacity: 0.25,
-    shadowOffset: {x: 1, y: 1},
-    overflow: 'visible',
-    height: height * 0.07,
-    paddingHorizontal: height * 0.02,
+    elevation: 10,
+    alignItems: 'center',
   },
   containerView: {
     flexDirection: 'row',
@@ -87,10 +83,10 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   text: {
-    fontSize: height * 0.022,
+    fontSize: 16,
     color: Colors.grey,
     fontFamily: Constants.fontRegular,
-    marginLeft: height * 0.03,
+    marginLeft: SIZES.ten,
   },
   datepicker: {
     backgroundColor: Colors.white,

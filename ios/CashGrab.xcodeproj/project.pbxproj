@@ -23,14 +23,14 @@
 		5AB2F65FD39640A59644A2A4 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8807867C3584217811532F5 /* FontAwesome5_Brands.ttf */; };
 		64CBFC2D001A452082CE0882 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2D9B83018994B439B4FF94A /* Roboto_medium.ttf */; };
 		7182D24323CA49958D7DBA5A /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7766133F9764648AF71455C /* AntDesign.ttf */; };
+		7803D8EBAC2240EE981C88BD /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8393063E45554C87B2F8DA34 /* Entypo.ttf */; };
 		79599BA24AB44728A20EEB55 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30343D6EFF414061B8C8F27B /* rubicon-icon-font.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8386ED7F924440E8AD985FD7 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FFD2423CB274101A5B10BD4 /* MaterialIcons.ttf */; };
 		89A2D6DD4ECA437D90DC12B3 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58556B904BCB4DE4A247BA57 /* SimpleLineIcons.ttf */; };
 		901284CDE24341ADA26E66D4 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2B2F7E511C9457983D792A2 /* Octicons.ttf */; };
+		940E3E0756184C03A5AEE1EB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7070173C3964CA2BEEFBE86 /* Ionicons.ttf */; };
 		9DFD73F0A6FE497E8CEB1D90 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4113B31433B4C4CB3755A15 /* FontAwesome5_Solid.ttf */; };
-		A602C08E2666205000BA20C5 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFDB266619AB00BA20C5 /* Entypo.ttf */; };
-		A602C0932666205400BA20C5 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFD7266619AB00BA20C5 /* Ionicons.ttf */; };
 		A602C098266620A900BA20C5 /* Jost-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFDC266619AB00BA20C5 /* Jost-Light.ttf */; };
 		A602C0A22666212200BA20C5 /* Jost-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFD9266619AB00BA20C5 /* Jost-Regular.ttf */; };
 		A602C0A72666212600BA20C5 /* Jost-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A602BFD8266619AB00BA20C5 /* Jost-Medium.ttf */; };
@@ -375,8 +375,9 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 74B3D25UJJ;
+						DevelopmentTeam = 2NN5AT2VND;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -427,8 +428,6 @@
 				A602C098266620A900BA20C5 /* Jost-Light.ttf in Resources */,
 				A602C0A22666212200BA20C5 /* Jost-Regular.ttf in Resources */,
 				A602C0A72666212600BA20C5 /* Jost-Medium.ttf in Resources */,
-				A602C08E2666205000BA20C5 /* Entypo.ttf in Resources */,
-				A602C0932666205400BA20C5 /* Ionicons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7182D24323CA49958D7DBA5A /* AntDesign.ttf in Resources */,
 				3A7F223BF6C2479EA09A1B0C /* EvilIcons.ttf in Resources */,
@@ -771,10 +770,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74B3D25UJJ;
+				DEVELOPMENT_TEAM = 2NN5AT2VND;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CashGrab/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -783,6 +784,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.demo.cashgrab;
 				PRODUCT_NAME = CashGrab;
+				PROVISIONING_PROFILE_SPECIFIER = "Provisioning Development Wildcard";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -795,9 +797,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74B3D25UJJ;
+				DEVELOPMENT_TEAM = 2NN5AT2VND;
 				INFOPLIST_FILE = CashGrab/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -806,6 +810,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.demo.cashgrab;
 				PRODUCT_NAME = CashGrab;
+				PROVISIONING_PROFILE_SPECIFIER = "Provisioning Development Wildcard";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

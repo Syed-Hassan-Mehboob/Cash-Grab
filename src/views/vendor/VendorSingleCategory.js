@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
-  LogBox
+  LogBox,
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants, { SIZES } from '../../common/Constants';
+import Constants, {SIZES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
@@ -124,38 +124,36 @@ export default class VendorSingleCategory extends Component {
     this.state = {
       isLoading: false,
       accessToken: '',
-      getJobsByCatagory: []
+      getJobsByCatagory: [],
     };
-
   }
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.getUserAccessToken()
+    this.getUserAccessToken();
     // this.props.navigation.addListener('focus', () => {
     //   this.getUserAccessToken()
     // });
   }
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.getJobsByCategory();
     });
   };
 
   getJobsByCategory = () => {
-    console.log('==================',this.props.route.params.item.id)
-    const onSuccess = ({ data }) => {
-     
+    console.log('==================', this.props.route.params.item.id);
+    const onSuccess = ({data}) => {
       // utils.showToast(data.message)
-      this.setState({ isLoading: false,  getJobsByCatagory: data.data });
+      this.setState({isLoading: false, getJobsByCatagory: data.data});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     let params = {
       categoryId: this.props.route.params.item.id,
     };
@@ -169,69 +167,105 @@ export default class VendorSingleCategory extends Component {
       .catch(onFailure);
   };
 
+  renderSingleCategoriesItem = ({item}) => {
+    console.log('======================single ', item);
 
-  renderSingleCategoriesItem = ({ item }) => {
-
-    console.log('======================single ',item)
-    
     return (
       <TouchableOpacity
         activeOpacity={0.5}
-        style={[styles.card, { padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginBottom: SIZES.twenty, marginTop: SIZES.five},]}
-        onPress={() => 
-        this.props.navigation.navigate(Constants.viewJob,{
-          item:item.id })   
-          } 
-          >
-
-        <View
-          style={{ flexDirection: 'row', alignItems: 'center' }}>
+        style={[
+          styles.card,
+          {
+            padding: SIZES.fifteen,
+            marginHorizontal: SIZES.fifteen,
+            marginBottom: SIZES.twenty,
+            marginTop: SIZES.five,
+          },
+        ]}
+        onPress={() =>
+          this.props.navigation.navigate(Constants.viewJob, {
+            item: item.id,
+          })
+        }>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
-              source={{ uri: Constants.imageURL +item.user.userProfile.image }}
+              source={{uri: Constants.imageURL + item.user.userProfile.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{ marginStart: SIZES.ten }}>
-            <RegularTextCB
-              style={{ color: Colors.black, fontSize: 16, }}>
+          <View style={{marginStart: SIZES.ten}}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
               {item.user.name}
             </RegularTextCB>
             <View
-              style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center', }}>
-              <Image source={Images.iconVerified} style={{ height: SIZES.fifteen, width: SIZES.fifteen, resizeMode: 'contain', tintColor: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red' }} />
-              <RegularTextCB style={{ color: item.user.email_verified_at !== null ? Colors.turqoiseGreen : 'red', fontSize: 12, marginStart: SIZES.five, }}>
-                {item.user.email_verified_at !== null ? "Verified" : "Unverified"}
+              style={{
+                flexDirection: 'row',
+                marginTop: SIZES.five,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{
+                  height: SIZES.fifteen,
+                  width: SIZES.fifteen,
+                  resizeMode: 'contain',
+                  tintColor:
+                    item.user.email_verified_at !== null
+                      ? Colors.turqoiseGreen
+                      : 'red',
+                }}
+              />
+              <RegularTextCB
+                style={{
+                  color:
+                    item.user.email_verified_at !== null
+                      ? Colors.turqoiseGreen
+                      : 'red',
+                  fontSize: 12,
+                  marginStart: SIZES.five,
+                }}>
+                {item.user.email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center', justifyContent: 'space-between' }}>
-          <RegularTextCB style={{ color: Colors.black, fontSize: 16, }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.five,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
             {item.title}
           </RegularTextCB>
 
-          <LightTextCB
-            style={{ color: Colors.black, fontSize: 12, }}>
+          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
             ${item.price}
           </LightTextCB>
-
         </View>
 
-        <RegularTextCB
-          style={{ color: Colors.sickGreen, fontSize: 12, }}>
-          { item.service.length > 0 ? item.service[0]['name'] : 'No Service Found'}
+        <RegularTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
+          {item.service.length > 0
+            ? item.service[0]['name']
+            : 'No Service Found'}
         </RegularTextCB>
-        <RegularTextCB
-          style={{ color: Colors.coolGrey, }}>
+        <RegularTextCB style={{color: Colors.coolGrey}}>
           {item.description}
         </RegularTextCB>
         <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.five,
+            alignItems: 'center',
+          }}>
           <Image
             source={Images.iconLocationPin}
-            style={{ height: 17, width: 17, resizeMode: 'contain' }}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
           />
           <RegularTextCB
             style={{
@@ -242,10 +276,14 @@ export default class VendorSingleCategory extends Component {
           </RegularTextCB>
         </View>
         <View
-          style={{ flexDirection: 'row', marginTop: SIZES.five, alignItems: 'center' }}>
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.five,
+            alignItems: 'center',
+          }}>
           <Image
             source={Images.iconStopWatch}
-            style={{ height: 17, width: 17, resizeMode: 'contain' }}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
           />
           <View
             style={{
@@ -271,16 +309,13 @@ export default class VendorSingleCategory extends Component {
         </View>
       </TouchableOpacity>
     );
-
   };
 
   openNextScreen = (nextScreen) => {
     this.props.navigation.navigate(nextScreen);
   };
 
-
   render() {
-
     return (
       <View style={[styles.container]}>
         <View
@@ -292,38 +327,51 @@ export default class VendorSingleCategory extends Component {
             marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{ position: 'absolute', left: SIZES.ten }}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
             <Image
               source={Images.arrowBack}
-              style={[styles.iconBack, { tintColor: Colors.black }]}
+              style={[styles.iconBack, {tintColor: Colors.black}]}
             />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row',alignItems:"center",justifyContent:'center' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              // backgroundColor: 'red',
+            }}>
             <Image
-              source={{ uri: Constants.imageURL + this.props.route.params.image }}
-              style={{ height: SIZES.fifty, width: SIZES.fifty }}
+              source={{uri: Constants.imageURL + this.props.route.params.image}}
+              style={{
+                height: SIZES.fifty,
+                width: SIZES.fifty,
+              }}
             />
-            <RegularTextCB style={{ fontSize: SIZES.ten*3, color: Colors.black }}>
+            <RegularTextCB
+              style={{
+                fontSize: SIZES.ten * 3,
+                color: Colors.black,
+              }}>
               {this.props.route.params.name}
             </RegularTextCB>
           </View>
         </View>
         <FlatList
-          style={{ marginTop: SIZES.ten }}
+          style={{marginTop: SIZES.ten}}
           data={this.state.getJobsByCatagory}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           renderItem={this.renderSingleCategoriesItem}
           contentInset={{
             // for ios
-            bottom: SIZES.ten*10,
+            bottom: SIZES.ten * 10,
           }}
           contentContainerStyle={{
             // for android
-            paddingBottom: SIZES.ten*10,
+            paddingBottom: SIZES.ten * 10,
           }}
         />
         <Spinner
@@ -343,19 +391,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
-    height: SIZES.ten*10,
-    width: SIZES.ten*10,
+    height: SIZES.ten * 10,
+    width: SIZES.ten * 10,
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -391,7 +439,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderBottomWidth: 0.3,
-    height: SIZES.fifty-5,
+    height: SIZES.fifty - 5,
     borderColor: Colors.grey,
     flexDirection: 'row',
     alignItems: 'center',
@@ -411,17 +459,17 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,

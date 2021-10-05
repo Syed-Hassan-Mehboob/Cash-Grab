@@ -1,3 +1,4 @@
+import {CommonActions} from '@react-navigation/native';
 import React, {Component} from 'react';
 import {
   Image,
@@ -7,10 +8,16 @@ import {
   View,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
+
+const resetAction = CommonActions.reset({
+  index: 0,
+  routes: [{name: Constants.UserHome}],
+});
+
 export default class ConfirmPayment extends Component {
   constructor(props) {
     super(props);
@@ -18,9 +25,13 @@ export default class ConfirmPayment extends Component {
 
   state = {};
 
+  navigateToHome() {
+    this.props.navigation.dispatch(resetAction);
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <View
           style={{
             flexDirection: 'row',
@@ -28,7 +39,7 @@ export default class ConfirmPayment extends Component {
             justifyContent: 'center',
             width: '100%',
             padding: SIZES.fifteen,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: SIZES.ten}}
@@ -37,7 +48,9 @@ export default class ConfirmPayment extends Component {
             }}>
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
-          <RegularTextCB style={{fontSize: SIZES.ten*3}}>Confirm Payment</RegularTextCB>
+          <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
+            Confirm Payment
+          </RegularTextCB>
         </View>
         <View
           style={{
@@ -74,7 +87,11 @@ export default class ConfirmPayment extends Component {
           }}>
           <Image
             source={Images.iconRepairing}
-            style={{height: SIZES.ten*3, width: SIZES.ten*3, resizeMode: 'contain'}}
+            style={{
+              height: SIZES.ten * 3,
+              width: SIZES.ten * 3,
+              resizeMode: 'contain',
+            }}
           />
           <View style={{marginStart: SIZES.ten}}>
             <RegularTextCB style={{fontSize: 16}}>Repairing</RegularTextCB>
@@ -85,7 +102,11 @@ export default class ConfirmPayment extends Component {
         </View>
         <View style={{padding: SIZES.fifteen}}>
           <RegularTextCB
-            style={{color: Colors.black, fontSize: 18, marginTop: SIZES.twenty}}>
+            style={{
+              color: Colors.black,
+              fontSize: 18,
+              marginTop: SIZES.twenty,
+            }}>
             Payment Details
           </RegularTextCB>
           <View
@@ -151,7 +172,7 @@ export default class ConfirmPayment extends Component {
           }}>
           <ButtonRadius10
             onPress={() => {
-              this.props.navigation.navigate(Constants.bookingConfirmed);
+              this.navigateToHome();
             }}
             label="PROCEED"
             bgColor={Colors.sickGreen}
@@ -179,9 +200,9 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
@@ -190,7 +211,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    height: SIZES.ten*12,
+    height: SIZES.ten * 12,
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     padding: SIZES.twenty,
@@ -202,9 +223,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   dashBorder: {

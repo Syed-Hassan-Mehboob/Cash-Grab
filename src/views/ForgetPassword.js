@@ -11,7 +11,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
@@ -30,42 +30,43 @@ export default class ForgetPassword extends Component {
   }
 
   forgotPassword = () => {
-    let email = this.state.email;
+    this.props.navigation.goBack();
+    // let email = this.state.email;
 
-    if (utils.isEmpty(email)) {
-      utils.showToast('Invalid Email');
-      return;
-    }
+    // if (utils.isEmpty(email)) {
+    //   utils.showToast('Invalid Email');
+    //   return;
+    // }
 
-    if (!utils.validateEmail(email)) {
-      utils.showToast('Invalid Email');
-      return;
-    }
+    // if (!utils.validateEmail(email)) {
+    //   utils.showToast('Invalid Email');
+    //   return;
+    // }
 
-    const onSuccess = ({data}) => {
-      this.setState({isLoading: false});
-      utils.showToast(data.message);
+    // const onSuccess = ({data}) => {
+    //   this.setState({isLoading: false});
+    //   utils.showToast(data.message);
 
-      setTimeout(() => {
-        this.props.navigation.goBack();
-      }, 1000);
-    };
+    //   setTimeout(() => {
+    //     this.props.navigation.goBack();
+    //   }, 1000);
+    // };
 
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
+    // const onFailure = (error) => {
+    //   this.setState({isLoading: false});
+    //   utils.showResponseError(error);
+    // };
 
-    this.setState({isLoading: true});
-    let params = {
-      email: email,
-    };
+    // this.setState({isLoading: true});
+    // let params = {
+    //   email: email,
+    // };
 
-    Axios.get(Constants.forgotPasswordURL, {
-      params: params,
-    })
-      .then(onSuccess)
-      .catch(onFailure);
+    // Axios.get(Constants.forgotPasswordURL, {
+    //   params: params,
+    // })
+    //   .then(onSuccess)
+    //   .catch(onFailure);
   };
 
   render() {
@@ -74,7 +75,10 @@ export default class ForgetPassword extends Component {
         source={Images.loginBgWeb}
         style={[styles.container, {width: '100%'}]}>
         <KeyboardAvoidingView
-          style={{flex: 1, paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty}}>
+          style={{
+            flex: 1,
+            paddingTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+          }}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.goBack();
@@ -86,7 +90,7 @@ export default class ForgetPassword extends Component {
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: SIZES.ten*7,
+                height: SIZES.ten * 7,
                 width: '60%',
                 resizeMode: 'contain',
                 marginTop: 40,
@@ -96,7 +100,7 @@ export default class ForgetPassword extends Component {
               style={{
                 fontSize: 28,
                 color: Colors.black,
-                marginTop: SIZES.ten*3,
+                marginTop: SIZES.ten * 3,
               }}>
               Forgot Password
             </BoldTextCB>
@@ -123,7 +127,11 @@ export default class ForgetPassword extends Component {
               />
             </View>
           </View>
-          <View style={{marginVertical: SIZES.ten*3, marginHorizontal: SIZES.fifteen}}>
+          <View
+            style={{
+              marginVertical: SIZES.ten * 3,
+              marginHorizontal: SIZES.fifteen,
+            }}>
             <ButtonRadius10
               label="CONTINUE"
               bgColor={Colors.sickGreen}

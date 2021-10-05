@@ -12,6 +12,7 @@ export default class EditText extends Component {
   state = {
     secureText: true,
     eyeIcon: 'eye-off',
+    borderColor: 'transparent',
   };
 
   changePasswordState(secureTextEntry = false) {
@@ -33,13 +34,21 @@ export default class EditText extends Component {
       numberOfLines = 1,
       isEditable = true,
     } = this.props;
+    console.log('=========', secureTextEntry);
     return (
-      <View style={[styles.card, this.props.style]}>
+      <View
+        style={[
+          styles.card,
+          this.props.style,
+          {borderColor: this.state.borderColor, borderWidth: 1},
+        ]}>
         <TextInput
-          secureTextEntry={secureTextEntry ? this.state.secureText : null}
+          secureTextEntry={secureTextEntry ? this.state.secureText : false}
           placeholderTextColor={Colors.grey}
           autoCapitalize="none"
           blurOnSubmit={true}
+          onFocus={() => this.setState({borderColor: Colors.sickGreen})}
+          onBlur={() => this.setState({borderColor: 'transparent'})}
           selectionColor={Colors.sickGreen}
           placeholder={placeholder}
           keyboardType={keyboardType}
@@ -50,6 +59,11 @@ export default class EditText extends Component {
           multiline={multiline}
           numberOfLines={numberOfLines}
           editable={isEditable}
+          style={[
+            this.props.styles,
+            styles.textInput,
+            {flex: 1, fontFamily: Constants.fontRegular, color: Colors.black},
+          ]}
         />
         {secureTextEntry && (
           <TouchableOpacity

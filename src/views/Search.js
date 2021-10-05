@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,34 +6,35 @@ import {
   View,
   TextInput,
   Platform,
-  FlatList,Text,ActivityIndicator
+  FlatList,
+  Text,
+  ActivityIndicator,
 } from 'react-native';
 import RegularTextCB from '../components/RegularTextCB';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import EditText from '../components/EditText';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
+import NormalHeader from '../components/NormalHeader';
 
 export default function Search(props) {
-
-  const[allVender,setAllVender]=useState(null);
-  const[isLoading,setIsloading]=useState(false);
-  const renderBestEmployeesItem = ({ item }) => {
-
+  const [allVender, setAllVender] = useState(null);
+  const [isLoading, setIsloading] = useState(false);
+  const renderBestEmployeesItem = ({item}) => {
     // console.log("sdsadsadsadsa==============",item)
 
     return (
-      <View style={[styles.card, { margin: SIZES.ten }]}>
+      <View style={[styles.card, {margin: SIZES.ten}]}>
         <TouchableOpacity
           style={styles.itemContainer}
           onPress={() => {
-            props.navigation.navigate(Constants.viewVendorProfile,
-            {item:item.id}
-            );
+            props.navigation.navigate(Constants.viewVendorProfile, {
+              item: item.id,
+            });
           }}>
           <View
             style={{
@@ -41,7 +42,7 @@ export default function Search(props) {
               alignItems: 'center',
               justifyContent: 'space-around',
             }}>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -49,7 +50,9 @@ export default function Search(props) {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri:Constants.imageURL+item.user_profiles.image}}
+                    source={{
+                      uri: Constants.imageURL + item.user_profiles.image,
+                    }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -62,14 +65,14 @@ export default function Search(props) {
                     alignItems: 'center',
                     flexShrink: 1,
                   }}>
-                  <View style={{ flex: 1 }}>
+                  <View style={{flex: 1}}>
                     <View
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}>
                       <RegularTextCB
-                        style={{ fontSize: 16, color: Colors.black }}>
+                        style={{fontSize: 16, color: Colors.black}}>
                         {item.name}
                       </RegularTextCB>
                       <View
@@ -90,7 +93,7 @@ export default function Search(props) {
                           style={{
                             fontSize: 14,
                             color: Colors.orangeYellow,
-                            marginStart: SIZES.five-3,
+                            marginStart: SIZES.five - 3,
                           }}>
                           {item.ratings}
                         </RegularTextCB>
@@ -101,7 +104,9 @@ export default function Search(props) {
                         fontSize: 14,
                         color: Colors.coolGrey,
                       }}>
-                     {item.services.length > 0 ? item.services[0]['name']  : 'no service registered'}
+                      {item.services.length > 0
+                        ? item.services[0]['name']
+                        : 'no service registered'}
                     </RegularTextCB>
                   </View>
                 </View>
@@ -114,7 +119,7 @@ export default function Search(props) {
                   marginTop: SIZES.five,
                 }}>
                 <RegularTextCB
-                  style={{ flex: 1, fontSize: 16, color: Colors.coolGrey }}>
+                  style={{flex: 1, fontSize: 16, color: Colors.coolGrey}}>
                   {item.user_profiles.bio}
                 </RegularTextCB>
                 <Image
@@ -125,118 +130,104 @@ export default function Search(props) {
             </View>
           </View>
         </TouchableOpacity>
-      
-
       </View>
     );
   };
 
+  // console.log('All Venders======',allVender.data.records.name);
 
+  const [searchText, setSearchText] = useState('');
 
-// console.log('All Venders======',allVender.data.records.name);
-
-const [searchText, setSearchText] = useState('')
-  
-const getData = async () => {
-
-  const token = await AsyncStorage.getItem(Constants.accessToken);
-      // console.log('=======',token);
-      setIsloading(true);
+  const getData = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    // console.log('=======',token);
+    setIsloading(true);
     const onSuccess = ({data}) => {
       setIsloading(false);
-      let data1=data.data;
+      let data1 = data.data;
       setAllVender(data1);
-      console.log('data========',data);
-    
+      console.log('data========', data);
     };
-    const onFailure = error => {
+    const onFailure = (error) => {
+      console.log('data========', error);
+
       utils.showResponseError(error);
       setIsloading(false);
     };
 
-    Axios.post(Constants.search,{name:searchText},
+    Axios.post(
+      Constants.search,
+      {name: searchText},
       {
-      headers: { Authorization: token },
-    }).
-    then(onSuccess).
-    catch(onFailure);
-
-}
+        headers: {Authorization: token},
+      },
+    )
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-
-        }}>
-        <TouchableOpacity
-          style={{ position: 'absolute', left: 0 }}
-          onPress={() => {
-            props.navigation.goBack();
-          }}>
-          <Image source={Images.arrowBack} style={styles.iconBack} />
-        </TouchableOpacity>
-        <RegularTextCB style={{ fontSize: SIZES.ten*3 }}>Search</RegularTextCB>
-      </View>
+    <View style={STYLES.container}>
+      <NormalHeader name="Search" />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          paddingHorizontal: SIZES.twenty,
         }}>
         <TextInput
           keyboardType="default"
           returnKeyType="search"
           placeholder={'Search Here'}
           value={searchText}
-          onChange={(txt)=>{setSearchText(txt)}}
-          onChangeText={(txt)=>{setSearchText(txt)}}
-
+          onChange={(txt) => {
+            setSearchText(txt);
+          }}
+          onChangeText={(txt) => {
+            setSearchText(txt);
+          }}
           style={styles.textInput}
         />
-        <TouchableOpacity onPress={()=>getData(searchText)}>
+        <TouchableOpacity onPress={() => getData(searchText)}>
           <Image
             source={Images.iconSearch}
-            style={{ height: SIZES.fifty, width: SIZES.fifty, resizeMode: 'stretch' }}
+            style={{
+              height: SIZES.fifty,
+              width: SIZES.fifty,
+              resizeMode: 'stretch',
+            }}
           />
         </TouchableOpacity>
       </View>
-        <FlatList
-        style={{ marginTop: SIZES.ten }}
+      <FlatList
+        style={{marginTop: SIZES.ten}}
         data={allVender}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={renderBestEmployeesItem}
         contentInset={{
           // for ios
-          bottom: SIZES.ten*10,
+          bottom: SIZES.ten * 10,
         }}
         contentContainerStyle={{
           // for android
-          paddingBottom: SIZES.ten*10,
+          paddingBottom: SIZES.ten * 10,
         }}
       />
-     <Spinner
-          visible={isLoading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-    
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: SIZES.twenty,
-    paddingTop: SIZES.twenty,
   },
   iconBack: {
     height: SIZES.twenty,
@@ -244,8 +235,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   textInput: {
@@ -263,25 +254,25 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / SIZES.five-3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / SIZES.five - 3,
     resizeMode: 'contain',
   },
   iconForward: {
@@ -295,15 +286,13 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const bestEmployees = [
   {
     id: '1',
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -311,8 +300,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -320,8 +308,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -329,8 +316,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -338,8 +324,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -347,8 +332,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -356,8 +340,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -365,8 +348,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -374,8 +356,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -383,8 +364,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -392,8 +372,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -401,8 +380,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -410,8 +388,7 @@ const bestEmployees = [
     title: 'Home Cleaner',
     name: 'Mark Ruffalo',
     image: Images.emp1,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -419,8 +396,7 @@ const bestEmployees = [
     title: 'Automobile',
     name: 'Mark Ruffalo',
     image: Images.emp2,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -428,8 +404,7 @@ const bestEmployees = [
     title: 'Home Renovation',
     name: 'Mark Ruffalo',
     image: Images.emp3,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
   {
@@ -437,8 +412,7 @@ const bestEmployees = [
     title: 'Electrician',
     name: 'Mark Ruffalo',
     image: Images.emp4,
-    desc:
-      'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
+    desc: 'Lorem ipsum dolor sit amet, consecte adipiscing elit, sed do eiusmod temp or incididunt ut labore et dolore...',
     ratings: '1.0',
   },
 ];

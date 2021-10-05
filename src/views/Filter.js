@@ -17,8 +17,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../network/APIKit';
 import utils from '../utils';
-import Constants, {SIZES} from '../common/Constants';
-
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
+import Geolocation from '@react-native-community/geolocation';
+import {Icon} from 'native-base';
 const resetAction = CommonActions.reset({
   index: 0,
   routes: [{name: 'BookingConfirmed'}],
@@ -87,9 +88,6 @@ export default class Filter extends Component {
       .catch(onFailure);
   };
 
-
-
-
   renderCategoriesItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -121,6 +119,7 @@ export default class Filter extends Component {
   };
 
   renderPriceItem = ({item, index}) => {
+    console.log('price ==== ', item.isSelected);
     return (
       <TouchableOpacity
         style={
@@ -179,175 +178,118 @@ export default class Filter extends Component {
     );
   };
 
-  // getUserProfile = () => {
-  //   const onSuccess = ({ data }) => {
-  //     let latitude=data.data.records.userProfile.latitude
-  //     let longitude=data.data.records.userProfile.longitude
-  //     let type=data.data.records.type
-      
-  //     this.getFilterData(latitude,longitude,type);
-  //   };
-
-  //   const onFailure = (error) => {
-  //     utils.showResponseError(error);
-  //   };
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
-
-  // getFilterData = (latitude,longitude,type) => {
-
-  //   const postData = {
-  //     type: type,
-  //     categoryId: this.state.selectedCategory !== null&& this.state.selectedCategory !== undefined  ? this.state.selectedCategory.id :null,
-  //     min_price: this.state.minPrice !== null && this.state.minPrice !==undefined ?this.state.minPrice:null,
-  //     max_price: this.state.maxPrice !== null && this.state.maxPrice !==undefined ?this.state.maxPrice:null,
-  //     distance: this.state.selectedLocation !==null && this.state.selectedLocation !==undefined ? this.state.selectedLocation.name :null,
-  //     lat:latitude,
-  //     lng:longitude
-      
-  //   };
-    
-  //   // console.log('Post Data  ===== ',postData)
-  
-
-  //   this.setState({isLoading: true});
-
-  //   const onSuccess = ({data}) => {
-  //     // console.log('========================Filter Data==',data)
-  //     utils.showToast(data.message);
-  //     this.setState({isLoading: false});
-  //   };
-  //   const onFailure = (error) => {
-  //     //
-  //     utils.showResponseError(error.massage);
-  //     this.setState({isLoading: false});
-  //   };
-  //   const options = {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //       // 'Content-Type':'application/x-www-form-urlencoded'
-  //     },
-  //   };
-  //   Axios.post(Constants.venderFilter,postData, options)
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
   render() {
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+      <ScrollView
+        style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}
+        showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity
+            style={{}}
+            onPress={() => {
+              this.props.navigation.goBack();
             }}>
-            <TouchableOpacity
-              style={{position: 'absolute', left: 0}}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}>
-              <Image source={Images.arrowBack} style={styles.iconBack} />
-            </TouchableOpacity>
-            <RegularTextCB style={{fontSize: 30}}>
-              Furniture service
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+            />
+          </TouchableOpacity>
+          <RegularTextCB style={[{fontSize: 22}]}>
+            Furniture service
+          </RegularTextCB>
+          <TouchableOpacity
+            style={{}}
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}>
+            <RegularTextCB
+              style={{fontSize: 14, textDecorationLine: 'underline'}}>
+              RESET
             </RegularTextCB>
-            <TouchableOpacity
-              style={{position: 'absolute', right: 0}}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}>
-              <RegularTextCB
-                style={{fontSize: 14, textDecorationLine: 'underline'}}>
-                RESET
-              </RegularTextCB>
-            </TouchableOpacity>
-          </View>
-          <View style={{marginTop: SIZES.twenty}}>
-            <RegularTextCB style={{fontSize: 18}}>Categories</RegularTextCB>
-            <FlatList
-              style={{marginTop: SIZES.ten}}
-              data={this.state.categories}
-              numColumns={3}
-              keyExtractor={(date) => date.id}
-              renderItem={this.renderCategoriesItem}
-              extraData={this.state}
-              contentInset={{
-                // for ios
-                bottom: SIZES.ten,
-              }}
-              contentContainerStyle={{
-                // for android
-                paddingBottom: SIZES.ten,
-              }}
-            />
-          </View>
-          <View style={{marginTop: SIZES.twenty}}>
-            <RegularTextCB style={{fontSize: 18}}>Price</RegularTextCB>
-            <FlatList
-              style={{marginTop: SIZES.ten}}
-              data={this.state.prices}
-              numColumns={3}
-              keyExtractor={(date) => date.id}
-              renderItem={this.renderPriceItem}
-              extraData={this.state}
-              contentInset={{
-                // for ios
-                bottom: SIZES.ten,
-              }}
-              contentContainerStyle={{
-                // for android
-                paddingBottom: SIZES.ten,
-              }}
-            />
-          </View>
-          <View style={{marginTop: SIZES.twenty}}>
-            <RegularTextCB style={{fontSize: 18}}>
-              Location (within)
-            </RegularTextCB>
-            <FlatList
-              style={{marginTop: SIZES.ten}}
-              data={this.state.locations}
-              numColumns={3}
-              keyExtractor={(slot) => slot.id}
-              showsVerticalScrollIndicator={false}
-              renderItem={this.renderLocationItem}
-              extraData={this.state}
-              contentInset={{
-                // for ios
-                bottom: SIZES.ten,
-              }}
-              contentContainerStyle={{
-                // for android
-                paddingBottom: SIZES.ten,
-              }}
-            />
-          </View>
-          <View style={styles.childContainer}>
-            <ButtonRadius10
-              label="APPLY"
-              bgColor={Colors.sickGreen}
-              onPress={() => {
-                // this.getUserProfile();
-                this.props.navigation.navigate(Constants.Filtered,{
-                  id:this.state.selectedCategory.id,
-                  minPrice:this.state.minPrice,
-                  max_price:this.state.maxPrice,
-                  location:this.state.selectedLocation.name
-                })
-              }}
-            />
-          </View>
+          </TouchableOpacity>
         </View>
+        <View style={{marginTop: SIZES.twenty}}>
+          <RegularTextCB style={{fontSize: 18}}>Categories</RegularTextCB>
+          <FlatList
+            style={{marginTop: SIZES.ten}}
+            data={this.state.categories}
+            numColumns={3}
+            keyExtractor={(date) => date.id}
+            renderItem={this.renderCategoriesItem}
+            extraData={this.state}
+            contentInset={{
+              // for ios
+              bottom: SIZES.ten,
+            }}
+            contentContainerStyle={{
+              // for android
+              paddingBottom: SIZES.ten,
+            }}
+          />
+        </View>
+        <View style={{marginTop: SIZES.twenty}}>
+          <RegularTextCB style={{fontSize: 18}}>Price</RegularTextCB>
+          <FlatList
+            style={{marginTop: SIZES.ten}}
+            data={this.state.prices}
+            numColumns={3}
+            keyExtractor={(date) => date.id}
+            renderItem={this.renderPriceItem}
+            extraData={this.state}
+            contentInset={{
+              // for ios
+              bottom: SIZES.ten,
+            }}
+            contentContainerStyle={{
+              // for android
+              paddingBottom: SIZES.ten,
+            }}
+          />
+        </View>
+        <View style={{marginTop: SIZES.twenty}}>
+          <RegularTextCB style={{fontSize: 18}}>
+            Location (within)
+          </RegularTextCB>
+          <FlatList
+            style={{marginTop: SIZES.ten}}
+            data={this.state.locations}
+            numColumns={3}
+            keyExtractor={(slot) => slot.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={this.renderLocationItem}
+            extraData={this.state}
+            contentInset={{
+              // for ios
+              bottom: SIZES.ten,
+            }}
+            contentContainerStyle={{
+              // for android
+              paddingBottom: SIZES.ten,
+            }}
+          />
+        </View>
+        <View style={styles.childContainer}>
+          <ButtonRadius10
+            label="APPLY"
+            bgColor={Colors.sickGreen}
+            onPress={() => {
+              console.log('========', this.state.maxPrice);
+              this.props.navigation.navigate(Constants.Filtered, {
+                selectedCategory: this.state.selectedCategory,
+                minPrice: this.state.minPrice,
+                maxPrice: this.state.maxPrice,
+                location: this.state.selectedLocation,
+              });
+            }}
+          />
+        </View>
+
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
@@ -362,8 +304,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 15,
-    paddingTop: SIZES.twenty,
   },
   childContainer: {
     marginTop: SIZES.ten * 4,
@@ -403,5 +343,9 @@ const styles = StyleSheet.create({
     height: SIZES.twenty,
     width: SIZES.twenty,
     resizeMode: 'contain',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

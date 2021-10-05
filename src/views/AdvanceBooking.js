@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import {CommonActions} from '@react-navigation/native';
-import { SIZES } from '../common/Constants';
+import {SIZES, STYLES} from '../common/Constants';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -150,21 +150,23 @@ export default class AdvanceBooking extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={STYLES.container}>
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.goBack();
           }}>
           <Image source={Images.arrowBack} style={styles.iconBack} />
         </TouchableOpacity>
-        <LightTextCB style={{fontSize:30, marginTop:SIZES.ten*3}}>
+        <LightTextCB style={{fontSize: 30, marginTop: SIZES.ten * 3}}>
           Furniture service
         </LightTextCB>
         <LightTextCB style={{fontSize: 16, marginTop: SIZES.ten}}>
           Advance Booking
         </LightTextCB>
         <View>
-          <LightTextCB style={{fontSize: 18, marginTop: SIZES.twenty}}>Date</LightTextCB>
+          <LightTextCB style={{fontSize: 18, marginTop: SIZES.twenty}}>
+            Date
+          </LightTextCB>
           <FlatList
             style={{marginTop: SIZES.ten}}
             data={this.state.dates}

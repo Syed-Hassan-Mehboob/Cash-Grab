@@ -8,10 +8,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  PermissionsAndroid,
 } from 'react-native';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
-import Constants, {SIZES} from '../../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
@@ -21,6 +22,10 @@ import Axios from '../../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ListComponent from '../../components/ListComponent';
+import Geolocation from '@react-native-community/geolocation';
+import BoldTextCB from '../../components/BoldTextCB';
+import Modal from 'react-native-modal';
+
 export default class VendorHome extends Component {
   openDrawer = () => {
     this.props.navigation.openDrawer();
@@ -33,37 +38,37 @@ export default class VendorHome extends Component {
       categories: [],
       accessToken: '',
       jobAround: [],
-      avatar:'',
-      name:''
+      avatar: '',
+      name: '',
+      currentLat: '',
+      currentLong: '',
+      permissionModalVisibility: false,
     };
   }
 
   componentDidMount() {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    console.log('Vendor Home ===== ');
     this.getUserAccessToken();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.props.navigation.addListener('focus', () => {
+      // this.checkLocationPermission();
       this.getUserAccessToken();
     });
   }
 
-  componentWillMount(){
-    
-  }
-
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
+    console.log('access token============>>>', token);
     this.setState({accessToken: token}, async () => {
       this.getUserProfile(token);
+      this.getJobAroundYou();
       this.getCategories();
-
     });
   };
 
   getCategories = () => {
-
     const onSuccess = ({data}) => {
-      // console.log('All Job ================',data.data.records)
-
+      //console.log('All Category ================', data.data.records);
       this.setState({isLoading: false, categories: data.data.records});
     };
 
@@ -88,27 +93,62 @@ export default class VendorHome extends Component {
 
   getUserProfile = async (token) => {
     const onSuccess = ({data}) => {
-      
+      console.log('get profile success===========>>>>', token);
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,
         name: data.data.records.name,
       });
-      const latitude = data.data.records.userProfile.latitude;
-      const longitude=data.data.records.userProfile.longitude;
-        this.getJobAroundYou(latitude,longitude,token); 
-    
+      // this.getJobAroundYou(latitude, longitude, token);
     };
 
-    // console.log('lat',this.state.lat)
+    // //console.log('lat',this.state.lat)
 
     const onFailure = (error) => {
+      console.log('get profile success===========>>>>', error);
+
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
     this.setState({isLoading: true});
     Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: token,
+        // Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getJobAroundYou = async () => {
+    // let params = {
+    //   lat: this.state.currentLat,
+    //   lng: this.state.currentLong,
+    // };
+
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      //console.log(' Job for You =====', data);
+      // utils.showToast(data.message)
+      this.setState({
+        isLoading: false,
+        jobAround: data.data.records,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+      //console.log('==================Error', error);
+    };
+
+    Axios.get(Constants.getAllJobs, {
+      params: {
+        limit: 1,
+        offset: 0,
+      },
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -117,57 +157,43 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-
-
-  getJobAroundYou = async (latitude,longitude,token) => {
-
-    let params = {
-      lat:latitude,
-      lng: longitude,
-    }; 
-
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      // console.log(' Job Around You =====', data);
-      // utils.showToast(data.message)
-      this.setState({
-        isLoading:false,
-        jobAround:data.data
-      })
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    Axios.post(Constants.getJobAround, params, {
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
-
   toggleIsLoading = () => {
     this.setState({isLoading: !this.state.isLoading});
   };
 
+  checkLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.props.navigation.navigate(Constants.venderFilter);
+      } else {
+        // ////console.log('location permission denied');
+        this.setState({permissionModalVisibility: true});
+      }
+    } catch (err) {
+      ////console.log('getLocation catch: ==================> ', err);
+    }
+  };
+
   renderCategoryItem = ({item}) => {
-    // console.log('All Category Home ite======',item);
+    // //console.log('All Category Home ite======',item);
 
     return (
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate(Constants.vendorSingleCategory, {
-              image:item.image,
-              name:item.name,
-              item:item.id
+            image: item.image,
+            name: item.name,
+            item: item.id,
           });
         }}
-        style={{alignItems: 'center'}}>
+        style={{
+          alignItems: 'center',
+          paddingHorizontal: SIZES.ten,
+          paddingVertical: SIZES.five,
+        }}>
         <Image
           style={styles.circle}
           source={{uri: Constants.imageURL + item.image}}
@@ -175,7 +201,7 @@ export default class VendorHome extends Component {
         <RegularTextCB
           style={{
             fontSize: 14,
-            marginTop: -SIZES.twenty,
+            marginTop: SIZES.ten,
             color: Colors.coolGrey,
           }}>
           {item.name}
@@ -185,15 +211,15 @@ export default class VendorHome extends Component {
   };
 
   renderJobsForYouItem = ({item}) => {
-    // console.log('Job Around data ======',item)
+    // //console.log('Job Around data ======',item)
     return <ListComponent item={item} />;
   };
 
   render() {
     return (
-      <View style={styles.container}>
+      <>
         <ScrollView
-          style={styles.container}
+          style={STYLES.container}
           showsVerticalScrollIndicator={false}>
           <View>
             <View
@@ -202,10 +228,6 @@ export default class VendorHome extends Component {
                 width: '100%',
                 alignItems: 'center',
                 paddingHorizontal: SIZES.twenty,
-                marginTop:
-                  Platform.OS === 'android'
-                    ? SIZES.twenty
-                    : SIZES.fifty + SIZES.ten,
               }}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -224,17 +246,14 @@ export default class VendorHome extends Component {
                   Welcome,
                 </RegularTextCB>
                 <RegularTextCB
-                  style={{
-                    fontSize: 16,
-                    marginStart: SIZES.five - 2,
-                    color: Colors.sickGreen,
-                  }}>
+                  style={[FONTS.boldFont18, {color: Colors.black}]}>
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
-              <TouchableOpacity
+
+              {/* <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.venderFilter);
+                  this.checkLocationPermission();
                 }}
                 style={{position: 'absolute', right: SIZES.twenty}}>
                 <Image
@@ -245,8 +264,9 @@ export default class VendorHome extends Component {
                     resizeMode: 'contain',
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
+
             <TouchableOpacity
               style={{
                 marginVertical: SIZES.ten,
@@ -261,10 +281,10 @@ export default class VendorHome extends Component {
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
+                style={{height: SIZES.fifty, width: SIZES.fifty}}
               />
             </TouchableOpacity>
-            <View
+            {/* <View
               style={{
                 paddingHorizontal: SIZES.twenty,
                 flexDirection: 'row',
@@ -308,17 +328,16 @@ export default class VendorHome extends Component {
                 // for android
                 paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
               }}
-            />
+            /> */}
             <View
               style={{
                 paddingHorizontal: SIZES.twenty,
-                paddingTop: SIZES.twenty,
+                paddingVertical: SIZES.twenty,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <RegularTextCB
-                style={{fontSize: SIZES.twenty, color: Colors.black}}>
+              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
                 Jobs For You
               </RegularTextCB>
 
@@ -337,17 +356,98 @@ export default class VendorHome extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={{}}>
-            <FlatList
-              data={this.state.jobAround}
-              horizontal
-              keyExtractor={(item) => item.id}
-              renderItem={this.renderJobsForYouItem}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{}}
-            />
+
+            <View style={{paddingHorizontal: SIZES.twenty}}>
+              <FlatList
+                data={this.state.jobAround}
+                // horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={this.renderJobsForYouItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: SIZES.twentyFive,
+                }}
+              />
             </View>
-           
+
+            <View
+              style={{
+                paddingHorizontal: SIZES.twenty,
+                paddingVertical: SIZES.twenty,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                Quick Job
+              </RegularTextCB>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.VendorQuickJob);
+                }}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{paddingHorizontal: SIZES.twenty}}>
+              <FlatList
+                data={this.state.jobAround}
+                // horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={this.renderJobsForYouItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: SIZES.twentyFive,
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                paddingHorizontal: SIZES.twenty,
+                paddingVertical: SIZES.twenty,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                Bookings
+              </RegularTextCB>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.VenderBookings, {});
+                }}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{paddingHorizontal: SIZES.twenty}}>
+              <FlatList
+                data={this.state.jobAround}
+                // horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={this.renderJobsForYouItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: SIZES.twentyFive * 3.5,
+                  //   alignItems: 'center',
+                }}
+              />
+            </View>
           </View>
         </ScrollView>
         <Spinner
@@ -355,7 +455,54 @@ export default class VendorHome extends Component {
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
         />
-      </View>
+
+        <Modal
+          isVisible={this.state.permissionModalVisibility}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View
+            style={{
+              backgroundColor: Colors.navy,
+              padding: SIZES.fifteen,
+            }}>
+            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
+              CashGrab
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.white,
+              }}>
+              Please enable your location to see nearby vendors...
+            </RegularTextCB>
+            <View
+              style={{
+                marginTop: SIZES.ten,
+                alignSelf: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({permissionModalVisibility: false});
+                }}
+                style={{
+                  padding: SIZES.ten,
+                  width: SIZES.fifty,
+                  alignItems: 'center',
+                  borderRadius: SIZES.fifteen,
+                  marginTop: SIZES.ten,
+                  backgroundColor: Colors.white,
+                }}>
+                <RegularTextCB style={{color: Colors.navy}}>Ok</RegularTextCB>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </>
     );
   }
 }
@@ -381,9 +528,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   circle: {
-    height: SIZES.ten * 12,
-    width: SIZES.ten * 12,
-    resizeMode: 'stretch',
+    height: SIZES.ten * 8,
+    width: SIZES.ten * 8,
+    borderRadius: SIZES.ten * 8,
   },
   circleCard: {
     height: SIZES.fifty + SIZES.ten,

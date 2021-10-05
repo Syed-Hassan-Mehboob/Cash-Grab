@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,10 +9,11 @@ import {
   Platform,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
+import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
@@ -20,16 +21,16 @@ import utils from '../utils';
 export default class Notifications extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       isLoading: false,
-      notifications:[]
-    }
+      notifications: [],
+      accessToken: '',
+    };
   }
 
   componentDidMount() {
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
-
 
   renderHiddenItem = (data, rowMap) => {
     const rowActionAnimatedValue = new Animated.Value(75);
@@ -47,13 +48,16 @@ export default class Notifications extends Component {
     );
   };
 
-  renderNotificationsItem = ({ item }) => {
-    console.log("Item  ===============>", item.notifications.map((item) => {
-      console.log(item)
-    }))
+  renderNotificationsItem = ({item}) => {
+    console.log(
+      'Item  ===============>',
+      item.notifications.map((item) => {
+        console.log(item);
+      }),
+    );
     return (
-      <View style={{ marginHorizontal: SIZES.fifteen }}>
-        <RegularTextCB style={{ color: Colors.black, fontSize: 18 }}>
+      <View style={{marginHorizontal: SIZES.fifteen}}>
+        <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
           {item.date}
         </RegularTextCB>
 
@@ -71,7 +75,7 @@ export default class Notifications extends Component {
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.itemContainer}
-                onPress={() => { }}>
+                onPress={() => {}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -79,7 +83,7 @@ export default class Notifications extends Component {
                   }}>
                   <View style={styles.circleCard}>
                     <Image
-                      source={{ uri: Constants.imageURL + notification.image }}
+                      source={{uri: Constants.imageURL + notification.image}}
                       style={styles.iconUser}
                       resizeMode="cover"
                     />
@@ -95,7 +99,8 @@ export default class Notifications extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}>
-                      <RegularTextCB style={{ fontSize: 16, color: Colors.black }}>
+                      <RegularTextCB
+                        style={{fontSize: 16, color: Colors.black}}>
                         {notification.title}
                       </RegularTextCB>
                       <RegularTextCB>{item.time}</RegularTextCB>
@@ -113,14 +118,13 @@ export default class Notifications extends Component {
                 </View>
               </TouchableOpacity>
             </View>
-
           );
         })}
       </View>
     );
   };
 
-  renderDeleteButton = ({ item }) => {
+  renderDeleteButton = ({item}) => {
     return (
       <View
         style={{
@@ -133,33 +137,31 @@ export default class Notifications extends Component {
         }}>
         <Image
           source={Images.iconSwipeToDelete}
-          style={{ height: SIZES.twenty, width: SIZES.twenty }}
+          style={{height: SIZES.twenty, width: SIZES.twenty}}
         />
       </View>
     );
   };
 
   toggleIsLoading = () => {
-    this.setState({ isLoading: !this.state.isLoading });
+    this.setState({isLoading: !this.state.isLoading});
   };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => this.getNotifications());
+    this.setState({accessToken: token}, () => this.getNotifications());
   };
 
   getNotifications = () => {
-    const onSuccess = ({ data }) => {
-     
+    const onSuccess = ({data}) => {
       this.toggleIsLoading();
-      this.setState({ notifications: data.data });
+      this.setState({notifications: data.data});
     };
 
     const onFailure = (error) => {
       this.toggleIsLoading();
       utils.showResponseError(error);
     };
-
 
     this.toggleIsLoading();
     Axios.get(Constants.notificationsURL, {
@@ -172,14 +174,12 @@ export default class Notifications extends Component {
   };
 
   render() {
-    console.log('Notifications======',this.state.notifications)
+    // console.log('Notifications======', this.state.notifications);
     return (
-      <View style={[styles.container]}>
-        <RegularTextCB style={{ fontSize: 30, alignSelf: 'center' }}>
-          Notifications
-        </RegularTextCB>
+      <View style={[STYLES.container]}>
+        <NormalHeader name="Notifications" />
         <SwipeListView
-          style={{ marginTop: SIZES.ten }}
+          style={{marginTop: SIZES.ten}}
           data={this.state.notifications}
           renderItem={this.renderNotificationsItem}
           contentInset={{
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconFilter: {
-    height: SIZES.ten*3,
-    width: SIZES.ten*3,
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
     resizeMode: 'contain',
   },
   iconForward: {
@@ -218,9 +218,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   iconUser: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*6 / 2,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
   },
   iconPassword: {
@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? SIZES.twenty : 40,
   },
   childContainer: {
     flex: 1,
@@ -276,17 +275,17 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*6,
-    width: SIZES.ten*6,
-    borderRadius: SIZES.ten*3,
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
     shadowColor: '#c5c5c5',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
@@ -294,11 +293,11 @@ const styles = StyleSheet.create({
   rowFront: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     margin: SIZES.five,
     marginBottom: SIZES.fifteen,
     shadowColor: '#999',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.five,
@@ -306,7 +305,7 @@ const styles = StyleSheet.create({
   rowFrontVisible: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     padding: SIZES.ten,
     marginBottom: SIZES.fifteen,
   },
@@ -327,11 +326,11 @@ const styles = StyleSheet.create({
   rowFront: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     margin: SIZES.five,
     marginBottom: SIZES.fifteen,
     shadowColor: '#999',
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.five,
@@ -339,7 +338,7 @@ const styles = StyleSheet.create({
   rowFrontVisible: {
     backgroundColor: '#FFF',
     borderRadius: SIZES.five,
-    height: SIZES.ten*6,
+    height: SIZES.ten * 6,
     padding: SIZES.ten,
     marginBottom: SIZES.fifteen,
   },
@@ -360,12 +359,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
-    width: SIZES.ten*7,
+    width: SIZES.ten * 7,
     paddingRight: 17,
   },
   backRightBtnLeft: {
     backgroundColor: '#1f65ff',
-    right: SIZES.ten*7,
+    right: SIZES.ten * 7,
   },
   backRightBtnRight: {
     backgroundColor: 'red',

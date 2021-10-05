@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
@@ -27,8 +27,8 @@ export default class Login extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      email: 'babar@cashgrab.com',
-      password: '123456789',
+      email: '',
+      password: '',
       isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,
@@ -55,7 +55,7 @@ export default class Login extends Component {
       await AsyncStorage.setItem(Constants.accessToken, 'Bearer ' + user.token);
       var data = JSON.stringify(user);
       // console.log('User======',user)
-      await AsyncStorage.setItem('user',data);
+      await AsyncStorage.setItem('user', data);
       this.setState({isLoading: false});
       setTimeout(() => {
         this.props.navigation.dispatch(resetAction);
@@ -84,6 +84,8 @@ export default class Login extends Component {
       return;
     }
 
+    this.setState({isLoading: true});
+
     const onSuccess = ({data}) => {
       if (data.status === 2) {
         this.setState({isLoading: false});
@@ -99,8 +101,6 @@ export default class Login extends Component {
       this.setState({isLoading: false});
     };
 
-    this.setState({isLoading: true});
-
     Axios.post(Constants.loginURL, {
       email: email,
       password: password,
@@ -110,6 +110,7 @@ export default class Login extends Component {
       .catch(onFailure);
   };
 
+  // mera comment
   render() {
     return (
       <ImageBackground
@@ -120,7 +121,7 @@ export default class Login extends Component {
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: SIZES.ten*7,
+                height: SIZES.ten * 7,
                 width: '60%',
                 resizeMode: 'contain',
                 marginTop: 85,
@@ -138,80 +139,87 @@ export default class Login extends Component {
               Hello there, sign in to continue!
             </RegularTextCB>
           </View>
-          <View>
-            <View style={[styles.textInputContainer, {marginTop: SIZES.fifty}]}>
-              <EditText
-                ref={'email'}
-                keyboardType="email-address"
-                placeholder={'Email Address'}
-                value={this.state.email}
-                onChangeText={(text) => {
-                  this.setState({email: text});
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-            <View style={[styles.textInputContainer, {marginTop: SIZES.ten*3}]}>
-              <EditText
-                ref={'password'}
-                placeholder={'Password'}
-                secureTextEntry={true}
-                value={this.state.password}
-                onChangeText={(text) => {
-                  this.setState({
-                    password: text,
-                  });
-                }}
-                style={[styles.textInput]}
-              />
-            </View>
-          </View>
-          <View style={{marginHorizontal: SIZES.fifteen}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: SIZES.ten*3,
-              }}>
-              <RegularTextCB style={styles.noUnderlineText}>
-                Rember Me
-              </RegularTextCB>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate(Constants.login);
-                }}>
-                <Switch
-                  trackColor={{
-                    false: Colors.lightGrey,
-                    true: Colors.lighNewGreen,
+          {/* Textinput starts here */}
+          <View style={{paddingHorizontal: SIZES.five}}>
+            <View>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.fifty}]}>
+                <EditText
+                  ref={'email'}
+                  keyboardType="email-address"
+                  placeholder={'Email Address'}
+                  secureTextEntry={false}
+                  value={this.state.email}
+                  onChangeText={(text) => {
+                    this.setState({email: text});
                   }}
-                  thumbColor={
-                    this.state.isSwitchEnabled
-                      ? Colors.sickGreen
-                      : Colors.coolGrey
-                  }
-                  ios_backgroundColor={Colors.coolGrey}
-                  onValueChange={this.toggleIsEnabled}
-                  value={this.state.isSwitchEnabled}
+                  style={[styles.textInput]}
                 />
+              </View>
+              <View
+                style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
+                <EditText
+                  ref={'password'}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  value={this.state.password}
+                  onChangeText={(text) => {
+                    this.setState({
+                      password: text,
+                    });
+                  }}
+                  style={[styles.textInput]}
+                />
+              </View>
+            </View>
+            <View style={{marginHorizontal: SIZES.fifteen}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: SIZES.ten * 3,
+                }}>
+                <RegularTextCB style={styles.noUnderlineText}>
+                  Rember Me
+                </RegularTextCB>
+                <TouchableOpacity
+                  // style={{backgroundColor: 'red'}}
+                  onPress={() => {
+                    // this.props.navigation.navigate(Constants.login);
+                  }}>
+                  <Switch
+                    trackColor={{
+                      false: Colors.lightGrey,
+                      true: Colors.lighNewGreen,
+                    }}
+                    thumbColor={
+                      this.state.isSwitchEnabled
+                        ? Colors.sickGreen
+                        : Colors.sickGreen
+                    }
+                    ios_backgroundColor={Colors.lightGrey}
+                    onValueChange={this.toggleIsEnabled}
+                    value={this.state.isSwitchEnabled}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{marginVertical: SIZES.ten * 3}}>
+                <ButtonRadius10
+                  label="LOGIN"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => this.login()}
+                />
+              </View>
+              <TouchableOpacity
+                style={{marginTop: SIZES.ten, alignSelf: 'center'}}
+                onPress={() =>
+                  this.props.navigation.navigate(Constants.forgetPassword)
+                }>
+                <RegularTextCB style={styles.noUnderlineText}>
+                  Forgot Password?
+                </RegularTextCB>
               </TouchableOpacity>
             </View>
-            <View style={{marginVertical: SIZES.ten*3}}>
-              <ButtonRadius10
-                label="LOGIN"
-                bgColor={Colors.sickGreen}
-                onPress={() => this.login()}
-              />
-            </View>
-            <TouchableOpacity
-              style={{marginTop: SIZES.ten, alignSelf: 'center'}}
-              onPress={() =>
-                this.props.navigation.navigate(Constants.forgetPassword)
-              }>
-              <RegularTextCB style={styles.noUnderlineText}>
-                Forgot Password?
-              </RegularTextCB>
-            </TouchableOpacity>
           </View>
           <TouchableOpacity
             style={{

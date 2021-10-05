@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Icon} from 'native-base';
 import React from 'react';
 import {
   Image,
@@ -10,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {FONTS, SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
@@ -46,16 +47,25 @@ export default class CreateAccount extends React.Component {
             onPress={() => {
               this.props.navigation.goBack();
             }}
-            style={{marginStart: SIZES.fifteen, alignSelf: 'flex-start'}}>
-            <Image source={Images.arrowBack} style={styles.iconBack} />
+            style={{
+              position: 'absolute',
+              top: SIZES.twenty,
+              left: SIZES.five,
+            }}>
+            <Icon
+              type="AntDesign"
+              name="left"
+              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+            />
           </TouchableOpacity>
+
           <Image
             source={Images.cashGrabLogoNew2}
             style={{
-              height: SIZES.ten*7,
+              height: SIZES.ten * 7,
               width: '60%',
               resizeMode: 'contain',
-              marginTop: SIZES.ten*10,
+              marginTop: SIZES.ten * 10,
             }}
           />
           <BoldTextCB
@@ -71,7 +81,9 @@ export default class CreateAccount extends React.Component {
                 isUserSelected: true,
                 isVendorSelected: false,
               });
-              this.openSignUp(false);
+              setTimeout(() => {
+                this.props.navigation.navigate(Constants.signUp);
+              }, 500);
             }}
             style={[
               styles.card,
@@ -84,21 +96,24 @@ export default class CreateAccount extends React.Component {
             ]}>
             <Image source={Images.becomeAUser} style={styles.circularImage} />
             <View style={{marginHorizontal: SIZES.ten, flexShrink: 1}}>
-              <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-                Become a user
+              <RegularTextCB style={[FONTS.boldFont22, {color: Colors.black}]}>
+                Need Help
               </RegularTextCB>
               <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
                 Lorem ipsum eluit fold sed, fludin gem
               </RegularTextCB>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => {
               this.setState({
                 isUserSelected: false,
                 isVendorSelected: true,
               });
-              this.openSignUp(true);
+              setTimeout(() => {
+                this.props.navigation.navigate(Constants.VendorSignUp);
+              }, 500);
             }}
             style={[
               styles.card,
@@ -110,9 +125,9 @@ export default class CreateAccount extends React.Component {
               },
             ]}>
             <Image source={Images.becomeAVendor} style={styles.circularImage} />
-            <View style={{marginHorizontal:SIZES.ten, flexShrink: 1}}>
-              <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-                Become a vendor
+            <View style={{marginHorizontal: SIZES.ten, flexShrink: 1}}>
+              <RegularTextCB style={[FONTS.boldFont22, {color: Colors.black}]}>
+                Make Money
               </RegularTextCB>
               <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
                 Lorem ipsum eluit fold sed, fludin gem
@@ -151,8 +166,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   circularImage: {
-    height: SIZES.ten*9,
-    width: SIZES.ten*9,
+    height: SIZES.ten * 9,
+    width: SIZES.ten * 9,
     borderRadius: 45,
   },
 });
