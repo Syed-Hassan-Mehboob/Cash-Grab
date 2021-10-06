@@ -410,7 +410,9 @@ const ServiceProviderOnTheWay = (props) => {
           },
         ]}
         activeOpacity={0.6}
-        onPress={() => {}}>
+        onPress={() => {
+          props.navigation.navigate(Constants.QuickJobDetail);
+        }}>
         <View
           style={{
             flexDirection: 'row',

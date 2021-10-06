@@ -37,6 +37,7 @@ export default class Profile extends React.Component {
     phone: '',
     location: '',
     abouteMe: '',
+    postedJob: [],
   };
 
   componentDidMount() {
@@ -52,12 +53,15 @@ export default class Profile extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getUserProfile());
+    this.setState({accessToken: token}, () => {
+      this.getUserProfile();
+      this.getPostedJob();
+    });
   };
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      console.log('Profile data ==== ', data.data.records);
+      // console.log('Profile data ==== ', data.data.records);
       this.toggleIsLoading();
       this.setState({
         avatar: data.data.records.userProfile.image,
@@ -76,7 +80,7 @@ export default class Profile extends React.Component {
       utils.showResponseError(error);
     };
 
-    this.toggleIsLoading();
+    // this.toggleIsLoading();
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -86,8 +90,38 @@ export default class Profile extends React.Component {
       .catch(onFailure);
   };
 
+  getPostedJob = () => {
+    const onSuccess = ({data}) => {
+      // console.log('Posted Job Data  ====>>>>>>>>>> ', data.data.records);
+      this.setState({
+        postedJob: data.data.records,
+      });
+      this.toggleIsLoading();
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    let params = {
+      offset: 0,
+      limit: 4,
+    };
+
+    // this.toggleIsLoading();
+    Axios.get(Constants.getMyJob, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   renderPostedJob = ({item}) => {
-    // //console.log('Job Around data ======',item)
+    // console.log('posted Job Item ====== ======>>>>>>>>', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -104,12 +138,18 @@ export default class Profile extends React.Component {
             elevation: 10,
           },
         ]}
-        onPress={() => {}}>
+        onPress={() => {
+          this.props.navigation.navigate(Constants.JobAcceptance);
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
               source={{
-                uri: 'https://media.istockphoto.com/photos/portrait-concept-picture-id1016761216?k=20&m=1016761216&s=612x612&w=0&h=jEC8voGLjSyhdOO7EMQyrLtZ9m--TEUmd4X56sqyZk0=',
+                uri:
+                  item.user.userProfile.image !== null &&
+                  item.user.userProfile.image !== undefined
+                    ? Constants.imageURL + item.user.userProfile.image
+                    : '',
               }}
               style={styles.iconUser}
               resizeMode="cover"
@@ -117,7 +157,9 @@ export default class Profile extends React.Component {
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {/* {item.user.name} */} Ray Hammond
+              {item.user.name !== null && item.user.name !== undefined
+                ? item.user.name
+                : ''}
             </RegularTextCB>
             <View
               style={{
@@ -155,13 +197,11 @@ export default class Profile extends React.Component {
             justifyContent: 'space-between',
           }}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {/* {item.title} */}
-            Car Mechanic Needed
+            {item.title !== null && item.price !== undefined ? item.title : ''}
           </RegularTextCB>
 
           <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            {/* ${item.price} */}
-            $280.00
+            ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
         <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
@@ -169,11 +209,14 @@ export default class Profile extends React.Component {
         </LightTextCB>
 
         <RegularTextCB
-          style={{color: Colors.coolGrey, flex: 1}}
+          style={{
+            color: Colors.coolGrey,
+            width: width * 0.75,
+          }}
           numberOfLines={3}>
-          Looking for a car mechanic that can look into{'\n'}
-          the battery setup. The car is in a still position {'\n'}& would
-          require some man power
+          {item.description !== null && item.description !== undefined
+            ? item.description
+            : ''}
         </RegularTextCB>
       </TouchableOpacity>
     );
@@ -456,6 +499,7 @@ export default class Profile extends React.Component {
     );
   };
   render() {
+    // console.log('Posted Job  ======>>>>>>>>>>>>>>>>', this.state.postedJob);
     return (
       <ScrollView
         style={styles.container}
@@ -666,9 +710,9 @@ export default class Profile extends React.Component {
         </View>
 
         <FlatList
-          data={Data}
+          data={this.state.postedJob}
           horizontal
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={this.renderPostedJob}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
@@ -700,7 +744,7 @@ export default class Profile extends React.Component {
 
         <FlatList
           data={Data}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={this.renderScheduleJob}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -734,7 +778,7 @@ export default class Profile extends React.Component {
 
         <FlatList
           data={Data}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={this.rendeQuickJob}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -806,14 +850,14 @@ const Data = [
     dec: '11',
   },
   {
-    id: 1,
+    id: 2,
     name: 'Jack',
     title: 'Car Machanic',
     service: 'autoMobile',
     dec: '11',
   },
   {
-    id: 1,
+    id: 3,
     name: 'Jack',
     title: 'Car Machanic',
     service: 'autoMobile',

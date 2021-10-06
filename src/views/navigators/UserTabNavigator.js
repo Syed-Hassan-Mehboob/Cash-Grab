@@ -40,6 +40,8 @@ import ServiceProviderOnTheWay from '../ServiceProviderOnTheWay';
 import ThankYou from './../ThankYou';
 import UserQuickJobs from '../UserQuickJob';
 import PostedJob from '../PostedJob';
+import JobAcceptance from '../JobAcceptance';
+import QuickJobDetail from './../QuickJobDetail';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -83,6 +85,10 @@ const HomeNavigator = () => {
         component={UserQuickJobs}
       />
       <HomeStack.Screen
+        name={Constants.QuickJobDetail}
+        component={QuickJobDetail}
+      />
+      <HomeStack.Screen
         name={Constants.SchechuleJobDetail}
         component={SchechuleJobDetail}
       />
@@ -92,9 +98,13 @@ const HomeNavigator = () => {
       />
       <HomeStack.Screen name={Constants.PostedJob} component={PostedJob} />
       <HomeStack.Screen
+        name={Constants.JobAcceptance}
+        component={JobAcceptance}
+      />
+      {/* <HomeStack.Screen
         name={Constants.bookingConfirmed}
         component={BookingConfirmed}
-      />
+      /> */}
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
         component={ViewVendorProfile}
@@ -104,10 +114,7 @@ const HomeNavigator = () => {
         name={Constants.WriteReviews}
         component={WriteReviews}
       />
-      <HomeStack.Screen
-        name={Constants.confirmPayment}
-        component={ConfirmPayment}
-      />
+
       <HomeStack.Screen
         name={Constants.dateTimeSlots}
         component={DateTimeSlots}
@@ -116,6 +123,10 @@ const HomeNavigator = () => {
         name={Constants.termsAndConditionsScreen}
         component={TermsAndConditions}
       />
+      {/* <HomeStack.Screen
+        name={Constants.confirmPayment}
+        component={ConfirmPayment}
+      /> */}
       <HomeStack.Screen name={Constants.support} component={Support} />
       <HomeStack.Screen name={Constants.faq} component={Faq} />
       <HomeStack.Screen
@@ -151,6 +162,10 @@ const ProfileNavigator = () => {
         component={UserQuickJobs}
       />
       <ProfileStack.Screen
+        name={Constants.QuickJobDetail}
+        component={QuickJobDetail}
+      />
+      <ProfileStack.Screen
         name={Constants.ServiceProviderOnTheWay}
         component={ServiceProviderOnTheWay}
       />
@@ -163,6 +178,10 @@ const ProfileNavigator = () => {
         component={SchechuleJobDetail}
       />
       <ProfileStack.Screen name={Constants.PostedJob} component={PostedJob} />
+      <ProfileStack.Screen
+        name={Constants.JobAcceptance}
+        component={JobAcceptance}
+      />
     </ProfileStack.Navigator>
   );
 };

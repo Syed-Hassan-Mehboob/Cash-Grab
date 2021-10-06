@@ -23,6 +23,8 @@ import UserTabNavigator from './UserTabNavigator';
 import VendorTabNavigator from './VendorTabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import ConfirmPayment from './../ConfirmPayment';
+import BookingConfirmed from '../BookingConfirmed';
 
 const Drawer = createDrawerNavigator();
 
@@ -82,6 +84,14 @@ export default class DrawerNavigator extends React.Component {
         initialRouteName={Constants.home}
         drawerContent={(props) => <DrawerScreen {...props} />}>
         <Drawer.Screen name="Tab" component={UserTabNavigator} />
+        <Drawer.Screen
+          name={Constants.confirmPayment}
+          component={ConfirmPayment}
+        />
+        <Drawer.Screen
+          name={Constants.bookingConfirmed}
+          component={BookingConfirmed}
+        />
       </Drawer.Navigator>
     ) : (
       <View style={{flex: 1}}>

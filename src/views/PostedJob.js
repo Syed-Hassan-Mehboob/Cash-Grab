@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StyleSheet,
   Text,
@@ -7,24 +8,62 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {STYLES, SIZES, width} from '../common/Constants';
+import Constants, {STYLES, SIZES, width} from '../common/Constants';
 import ScheduleBooking from '../components/ScheduleBooking';
 import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
 import LightTextCB from '../components/LightTextCB';
-// import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
-// import COLORS from '../../common/Colors';
-// import IMAGES from '../../common/Images';
-// import RegularTextCB from '../../components/RegularTextCB';
-// import AllBookings from '../../components/AllBookings';
-// import {Icon} from 'native-base';
-// import Colors from '../../common/Colors';
-// import NormalHeader from '../../components/NormalHeader';
+import utils from '../utils';
+import Axios from '../network/APIKit';
+
 export default function PostedJob(props) {
+  const [isLoading, setIsloading] = useState(false);
+  const [accessToken, setAccessToken] = useState();
+  const [allPostedJob, setAllPostedJob] = useState();
+
+  useEffect(() => {
+    const getToken = async () => {
+      getPostedJob();
+      const unsubscribe = props.navigation.addListener('focus', () => {
+        console.log('working ==== ......');
+        getPostedJob();
+      });
+      return unsubscribe;
+    };
+
+    getToken();
+  }, [props.navigation]);
+
+  const getPostedJob = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsloading(true);
+
+    const onSuccess = ({data}) => {
+      // console.log('Posted Job Data  ====>>>>>>>>>> ', data.data.records);
+      setAllPostedJob(data.data.records);
+      setIsloading(false);
+    };
+
+    const onFailure = (error) => {
+      setIsloading(false);
+
+      utils.showResponseError('=====>>>>>>>>>>', Object.keys(error));
+      console.log('++++==========', error);
+    };
+
+    Axios.get(Constants.getMyJob, {
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   const renderPostedJob = ({item}) => {
-    // //console.log('Job Around data ======',item)
+    console.log('Job Around data ======', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -35,7 +74,9 @@ export default function PostedJob(props) {
             margin: SIZES.five,
           },
         ]}
-        onPress={() => {}}>
+        onPress={() => {
+          props.navigation.replace(Constants.JobAcceptance);
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -93,26 +134,30 @@ export default function PostedJob(props) {
           }}>
           <View>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.tittle}
+              {item.title !== null && item.title !== undefined
+                ? item.title
+                : ''}
             </RegularTextCB>
 
-            <RegularTextCB
+            {/* <RegularTextCB
               style={{
                 color: Colors.sickGreen,
                 fontSize: 14,
                 //   marginVertical: SIZES.ten,
               }}>
               {item.service}
-            </RegularTextCB>
+            </RegularTextCB> */}
           </View>
 
           <LightTextCB style={{color: Colors.black, fontSize: 14}}>
-            ${item.price}
+            ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey, fontSize: 15}}>
-            {item.description}
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -126,7 +171,9 @@ export default function PostedJob(props) {
               color: Colors.coolGrey,
               // marginVertical: SIZES.ten,
             }}>
-            {item.address}
+            {item.address !== null && item.address !== undefined
+              ? item.address
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -147,7 +194,7 @@ export default function PostedJob(props) {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.time}
+              {item.time !== null && item.time !== undefined ? item.time : ''}
             </RegularTextCB>
           </View>
         </View>
@@ -185,9 +232,9 @@ export default function PostedJob(props) {
   return (
     <View style={STYLES.container}>
       <NormalHeader name="All Posted Jobs" />
-      <View style={{paddingHorizontal: SIZES.ten * 2}}>
+      <View style={{}}>
         <FlatList
-          data={Data}
+          data={allPostedJob}
           renderItem={renderPostedJob}
           keyExtractor={(id) => id.id}
           contentContainerStyle={{
@@ -224,6 +271,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   card: {
+    width: width - 20,
     backgroundColor: '#fff',
     borderRadius: 20,
     // width: width - SIZES.fifteen,

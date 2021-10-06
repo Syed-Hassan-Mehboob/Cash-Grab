@@ -48,7 +48,9 @@ const Constants = {
   withDraw: 'WithDraw',
   ScheduleJobs: 'ScheduleJobs',
   UserQuickJobs: 'UserQuickJobs',
+  QuickJobDetail: 'QuickJobDetail',
   PostedJob: 'PostedJob',
+  JobAcceptance: 'JobAcceptance',
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -118,6 +120,7 @@ const Constants = {
   UserHome: 'UserHome',
   AddServices: 'AddServices',
   AddTeamMember: 'AddTeamMember',
+  getMyJob: 'customer/jobs/my-jobs',
 };
 
 export const SIZES = {

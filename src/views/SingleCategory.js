@@ -91,8 +91,11 @@ export default class SingleCategory extends Component {
           },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.SelectServices)
-        }>
+          this.props.navigation.navigate(Constants.viewVendorProfile, {
+            item: item.id,
+          })
+        }
+        activeOpacity={0.6}>
         <View
           style={{
             flexDirection: 'row',
@@ -147,7 +150,7 @@ export default class SingleCategory extends Component {
           </RegularTextCB>
         </View>
 
-        <View
+        <TouchableOpacity
           style={[
             styles.card,
             {
@@ -157,13 +160,17 @@ export default class SingleCategory extends Component {
               zIndex: 1,
               bottom: -SIZES.ten * 3,
             },
-          ]}>
+          ]}
+          onPress={() =>
+            this.props.navigation.navigate(Constants.SelectServices)
+          }
+          activeOpacity={0.6}>
           <Icon
             type="AntDesign"
             name="right"
             style={{color: Colors.white, fontSize: 20}}
           />
-        </View>
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };

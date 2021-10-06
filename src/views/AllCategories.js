@@ -86,7 +86,7 @@ export default class AllCategories extends Component {
 
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={1}
         style={[
           styles.card,
           {
@@ -99,12 +99,7 @@ export default class AllCategories extends Component {
             paddingVertical: SIZES.ten * 2,
             borderRadius: SIZES.ten,
           },
-        ]}
-        onPress={() =>
-          this.props.navigation.navigate(Constants.singleCategory, {
-            item: item,
-          })
-        }>
+        ]}>
         <View style={{flex: 0.95}}>
           <View
             style={{
@@ -130,7 +125,7 @@ export default class AllCategories extends Component {
                 ]}>
                 {item.name}
               </RegularTextCB>
-              <RegularTextCB
+              {/* <RegularTextCB
                 style={{
                   color: Colors.black,
                   fontSize: 14,
@@ -138,7 +133,7 @@ export default class AllCategories extends Component {
                   paddingVertical: SIZES.five + 2,
                 }}>
                 View Profile
-              </RegularTextCB>
+              </RegularTextCB> */}
             </View>
           </View>
 
@@ -166,7 +161,12 @@ export default class AllCategories extends Component {
               padding: SIZES.ten * 2,
               borderRadius: SIZES.ten * 4,
             },
-          ]}>
+          ]}
+          onPress={() =>
+            this.props.navigation.navigate(Constants.singleCategory, {
+              item: item,
+            })
+          }>
           <Icon
             type="AntDesign"
             name="right"
