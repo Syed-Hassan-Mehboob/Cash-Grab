@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import {FlatList, ScrollViewBase, StatusBar, Text} from 'react-native';
+import {FlatList, ScrollViewBase, StatusBar, Text, Image} from 'react-native';
 import {
   Dimensions,
-  Image,
   Platform,
   StyleSheet,
   TouchableOpacity,
@@ -38,6 +37,8 @@ export default class Profile extends React.Component {
     location: '',
     abouteMe: '',
     postedJob: [],
+    scheduleJobs: [],
+    quickJobs: [],
   };
 
   componentDidMount() {
@@ -56,10 +57,13 @@ export default class Profile extends React.Component {
     this.setState({accessToken: token}, () => {
       this.getUserProfile();
       this.getPostedJob();
+      this.getScheduleJob();
+      this.getQuickJob();
     });
   };
 
   getUserProfile = () => {
+    this.toggleIsLoading();
     const onSuccess = ({data}) => {
       // console.log('Profile data ==== ', data.data.records);
       this.toggleIsLoading();
@@ -96,11 +100,9 @@ export default class Profile extends React.Component {
       this.setState({
         postedJob: data.data.records,
       });
-      this.toggleIsLoading();
     };
 
     const onFailure = (error) => {
-      this.toggleIsLoading();
       utils.showResponseError(error);
     };
 
@@ -111,6 +113,63 @@ export default class Profile extends React.Component {
 
     // this.toggleIsLoading();
     Axios.get(Constants.getMyJob, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getScheduleJob = () => {
+    const onSuccess = ({data}) => {
+      // console.log('Schedule Job Data  ====>>>>>>>>>> ', data.data.records);
+      this.setState({
+        scheduleJobs: data.data.records,
+      });
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+
+    let params = {
+      offset: 0,
+      limit: 4,
+    };
+
+    // this.toggleIsLoading();
+    Axios.get(Constants.scheduleJob, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getQuickJob = () => {
+    const onSuccess = ({data}) => {
+      // console.log('Quick Job Data  ====>>>>>>>>>> ', data.data.records);
+
+      this.setState({
+        quickJobs: data.data.records,
+      });
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+
+    let params = {
+      offset: 0,
+      limit: 2,
+    };
+
+    // this.toggleIsLoading();
+    Axios.get(Constants.quickOrder, {
       params,
       headers: {
         Authorization: this.state.accessToken,
@@ -141,54 +200,6 @@ export default class Profile extends React.Component {
         onPress={() => {
           this.props.navigation.navigate(Constants.JobAcceptance);
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{
-                uri:
-                  item.user.userProfile.image !== null &&
-                  item.user.userProfile.image !== undefined
-                    ? Constants.imageURL + item.user.userProfile.image
-                    : '',
-              }}
-              style={styles.iconUser}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{marginStart: 10}}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.user.name !== null && item.user.name !== undefined
-                ? item.user.name
-                : ''}
-            </RegularTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{
-                  height: 15,
-                  width: 15,
-                  resizeMode: 'contain',
-                  tintColor: Colors.turqoiseGreen,
-                }}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-
-                  fontSize: 12,
-                  marginStart: 5,
-                }}>
-                {/* {item.email_verified_at !== null ? 'Verified' : 'Unverified'} */}
-                Verified
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -196,17 +207,16 @@ export default class Profile extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title !== null && item.price !== undefined ? item.title : ''}
-          </RegularTextCB>
+          <LightTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+            {item.category.name !== null && item.category.name !== undefined
+              ? item.category.name
+              : ''}
+          </LightTextCB>
 
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
             ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
-        <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
-          Automobile
-        </LightTextCB>
 
         <RegularTextCB
           style={{
@@ -222,6 +232,7 @@ export default class Profile extends React.Component {
     );
   };
   renderScheduleJob = ({item}) => {
+    // console.log('Schedule job ====>>>>>>>>>>', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -239,21 +250,28 @@ export default class Profile extends React.Component {
           },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.SchechuleJobDetail)
+          this.props.navigation.navigate(Constants.SchechuleJobDetail, {
+            catName: item.category.name,
+            joid: item.id,
+          })
         }>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
               source={{
-                uri: 'https://media.istockphoto.com/photos/portrait-concept-picture-id1016761216?k=20&m=1016761216&s=612x612&w=0&h=jEC8voGLjSyhdOO7EMQyrLtZ9m--TEUmd4X56sqyZk0=',
+                uri:
+                  item.vendorProfile.image !== undefined &&
+                  item.vendorProfile.image !== null
+                    ? Constants.imageURL + item.vendorProfile.image
+                    : '',
               }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {/* {item.user.name} */} $250.00
+            <RegularTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+              {item.name !== null && item.name !== undefined ? item.name : ''}
             </RegularTextCB>
             <View
               style={{
@@ -289,22 +307,27 @@ export default class Profile extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {/* {item.title} */} Electrician Needed
-          </RegularTextCB>
-
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            {/* ${item.price} */}$250.00
+          {/* <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            {item.title}
+          </RegularTextCB> */}
+          <LightTextCB style={[FONTS.boldFont16, {color: Colors.sickGreen}]}>
+            {item.category.name !== null && item.category.name !== undefined
+              ? item.category.name
+              : ''}
+          </LightTextCB>
+          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+            $
+            {item.grandTotal !== null && item.grandTotal !== undefined
+              ? item.grandTotal
+              : ''}
           </LightTextCB>
         </View>
-        <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
-          {/* ${item.price} */}Electrician
-        </LightTextCB>
 
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -318,7 +341,9 @@ export default class Profile extends React.Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {/* {item.address} */}111,NYC Street, NY 1121
+            {item.address !== null && item.address !== undefined
+              ? item.address
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -339,7 +364,13 @@ export default class Profile extends React.Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {/* {item.time} */} 12:00 - 3:00
+              {item.start_time !== null && start_time !== undefined
+                ? start_time
+                : ''}{' '}
+              -{' '}
+              {item.end_time !== null && item.end_time !== undefined
+                ? item.end_time
+                : ''}
             </RegularTextCB>
           </View>
         </View>
@@ -362,7 +393,7 @@ export default class Profile extends React.Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {/* {item.time} */} September 17, 2021
+              {item.date !== null && item.date !== undefined ? item.date : ''}
             </RegularTextCB>
           </View>
         </View>
@@ -370,13 +401,14 @@ export default class Profile extends React.Component {
     );
   };
 
-  rendeQuickJob = () => {
+  rendeQuickJob = ({item}) => {
+    // console.log('Quick Job Item =====>>>>', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
         style={[
           {
-            backgroundColor: '#fff',
+            backgroundColor: '#ffff',
             borderRadius: SIZES.ten * 2,
             shadowColor: '#c5c5c5',
             shadowOffset: {width: 5, height: 5},
@@ -391,47 +423,6 @@ export default class Profile extends React.Component {
         onPress={() =>
           this.props.navigation.navigate(Constants.ServiceProviderOnTheWay)
         }>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{
-                uri: 'https://media.istockphoto.com/photos/portrait-concept-picture-id1016761216?k=20&m=1016761216&s=612x612&w=0&h=jEC8voGLjSyhdOO7EMQyrLtZ9m--TEUmd4X56sqyZk0=',
-              }}
-              style={styles.iconUser}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{marginStart: 10}}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {/* {item.user.name} */}Ray Hammond
-            </RegularTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <Image
-                source={Images.iconVerified}
-                style={{
-                  height: 15,
-                  width: 15,
-                  resizeMode: 'contain',
-                  tintColor: Colors.turqoiseGreen,
-                }}
-              />
-              <RegularTextCB
-                style={{
-                  color: Colors.turqoiseGreen,
-
-                  fontSize: 12,
-                  marginStart: 5,
-                }}>
-                Verified
-              </RegularTextCB>
-            </View>
-          </View>
-        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -439,21 +430,27 @@ export default class Profile extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {/* {item.title} */}Car Mechanic Needed
-          </RegularTextCB>
+          {/* <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            {item.title}
+          </RegularTextCB> */}
 
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            {/* ${item.price} */}$240.00
+          <LightTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+            {item.category_name !== null && item.category_name !== undefined
+              ? item.category_name
+              : ''}
+          </LightTextCB>
+          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+            $
+            {item.grand_total !== null && item.grand_total !== undefined
+              ? item.grand_total
+              : ''}
           </LightTextCB>
         </View>
-        <LightTextCB style={{color: Colors.sickGreen, fontSize: 12}}>
-          {/* ${item.price} */}Electrician
-        </LightTextCB>
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -467,7 +464,9 @@ export default class Profile extends React.Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {/* {item.address} */}111,NYC Street, NY 1121
+            {item.location !== null && item.location !== undefined
+              ? item.location
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -488,7 +487,9 @@ export default class Profile extends React.Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {/* {item.time} */}12:00 - 3:00
+              {item.from_time !== null && item.from_time !== undefined
+                ? item.from_time
+                : ''}
             </RegularTextCB>
             <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
               {'View Job >'}
@@ -499,7 +500,6 @@ export default class Profile extends React.Component {
     );
   };
   render() {
-    // console.log('Posted Job  ======>>>>>>>>>>>>>>>>', this.state.postedJob);
     return (
       <ScrollView
         style={styles.container}
@@ -718,6 +718,21 @@ export default class Profile extends React.Component {
           contentContainerStyle={{
             paddingVertical: SIZES.twenty,
           }}
+          ListEmptyComponent={
+            !this.state.isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: height / 1.5,
+                }}>
+                <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
+                  Record not found
+                </Text>
+              </View>
+            ) : null
+          }
         />
 
         <View
@@ -728,7 +743,7 @@ export default class Profile extends React.Component {
             justifyContent: 'space-between',
             paddingHorizontal: SIZES.twenty,
           }}>
-          <Text style={[FONTS.boldFont20, ,]}>Schedule Jobs</Text>
+          <Text style={[FONTS.boldFont20]}>Schedule Jobs</Text>
 
           <TouchableOpacity
             activeOpacity={0.6}
@@ -743,7 +758,7 @@ export default class Profile extends React.Component {
         </View>
 
         <FlatList
-          data={Data}
+          data={this.state.scheduleJobs}
           keyExtractor={(item) => item.id.toString()}
           renderItem={this.renderScheduleJob}
           showsVerticalScrollIndicator={false}
@@ -752,6 +767,21 @@ export default class Profile extends React.Component {
             paddingHorizontal: SIZES.twenty,
             paddingBottom: SIZES.ten,
           }}
+          ListEmptyComponent={
+            !this.state.isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: height / 1.5,
+                }}>
+                <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
+                  Record not found
+                </Text>
+              </View>
+            ) : null
+          }
         />
 
         <View
@@ -777,7 +807,7 @@ export default class Profile extends React.Component {
         </View>
 
         <FlatList
-          data={Data}
+          data={this.state.quickJobs}
           keyExtractor={(item) => item.id.toString()}
           renderItem={this.rendeQuickJob}
           showsVerticalScrollIndicator={false}

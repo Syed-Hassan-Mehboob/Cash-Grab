@@ -11,7 +11,7 @@ import {Calendar} from 'react-native-calendars';
 const ScheduleBooking = (props) => {
   const navigation = useNavigation();
   const item = props.item;
-  console.log('List Componant=======', item);
+  // console.log('List Componant=======', item);
   return (
     <TouchableOpacity
       activeOpacity={0.5}

@@ -121,6 +121,9 @@ const Constants = {
   AddServices: 'AddServices',
   AddTeamMember: 'AddTeamMember',
   getMyJob: 'customer/jobs/my-jobs',
+  scheduleJob: 'order/get-schedule-bookings',
+  quickOrder: 'order/get-quick-bookings',
+  orderDetail: 'order/details?',
 };
 
 export const SIZES = {

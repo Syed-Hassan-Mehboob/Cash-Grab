@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
   Image,
   Platform,
@@ -7,6 +9,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
@@ -17,9 +20,59 @@ import Colors from '../common/Colors';
 import Images from '../common/Images';
 import {Icon} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
+import utils from '../utils';
+import Axios from '../network/APIKit';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function ScheduleJobDetails(props) {
   const [cancelJobModal, setCancelJobModal] = useState(false);
+  const [scheduleJobdetail, setAllScheduleJobDetail] = useState();
+  const [isLoading, setIsloading] = useState(false);
+  const [RescheduleJobModal, setRescheduleJobModal] = useState(false);
+
+  useEffect(() => {
+    const getToken = async () => {
+      getScheduleJob();
+      const unsubscribe = props.navigation.addListener('focus', () => {
+        console.log('working ==== ......');
+        getScheduleJob();
+      });
+      return unsubscribe;
+    };
+
+    getToken();
+  }, [props.navigation]);
+
+  const getScheduleJob = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsloading(true);
+
+    const onSuccess = ({data}) => {
+      // console.log('Order Job Data  ====>>>>>>>>>> ', data.data);
+
+      setAllScheduleJobDetail(data.data);
+      setIsloading(false);
+    };
+
+    const onFailure = (error) => {
+      setIsloading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const params = {
+      orderId: props.route.params.joid,
+    };
+    Axios.get(Constants.orderDetail, {
+      params,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   return (
     <ScrollView
@@ -48,7 +101,7 @@ export default function ScheduleJobDetails(props) {
           />
         </TouchableOpacity>
         <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
-          Home Cleaner
+          {props.route.params.catName}
         </RegularTextCB>
       </View>
 
@@ -66,14 +119,24 @@ export default function ScheduleJobDetails(props) {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={Images.emp3}
+              source={{
+                uri:
+                  scheduleJobdetail?.vendor?.user_profiles?.image !== null &&
+                  scheduleJobdetail?.vendor?.user_profiles?.image !== undefined
+                    ? Constants?.imageURL +
+                      scheduleJobdetail.vendor?.user_profiles?.image
+                    : '',
+              }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
             <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-              {'Ray Hammond'}
+              {scheduleJobdetail?.name !== null &&
+              scheduleJobdetail?.name !== undefined
+                ? scheduleJobdetail?.name
+                : ''}
             </BoldTextCB>
             <View
               style={{
@@ -106,25 +169,70 @@ export default function ScheduleJobDetails(props) {
             flexDirection: 'row',
             marginTop: 5,
             alignItems: 'center',
+            justifyContent: 'flex-start',
+            paddingHorizontal: SIZES.ten,
+          }}>
+          {/* {console.log('=====........>>>>>', scheduleJobdetail)} */}
+          <StarRating
+            disabled={true}
+            maxStars={5}
+            fullStar={Images.starFull}
+            emptyStar={Images.starHalf}
+            starSize={SIZES.fifteen}
+            rating={scheduleJobdetail?.vendor?.ratings}
+            starStyle={{
+              width: SIZES.twenty,
+              height: SIZES.twenty,
+              marginRight: SIZES.five,
+            }}
+            containerStyle={{width: SIZES.fifty * 1.5}}
+          />
+
+          <RegularTextCB
+            style={{
+              color: Colors.sunflowerYellow,
+              fontSize: 13.5,
+              marginStart: SIZES.twenty * 1.8,
+              marginTop: SIZES.five / 2,
+            }}>
+            {scheduleJobdetail?.vendor?.ratings_count !== null &&
+            scheduleJobdetail?.vendor?.ratings_count !== undefined
+              ? scheduleJobdetail?.vendor?.ratings_count
+              : ''}{' '}
+            Ratings
+          </RegularTextCB>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
             justifyContent: 'space-between',
           }}>
           <View>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              Car Mechanic Needed
-            </RegularTextCB>
             <RegularTextCB style={{color: Colors.sickGreen, fontSize: 14.5}}>
-              Automobile
+              {scheduleJobdetail?.category?.name !== null &&
+              scheduleJobdetail?.category?.name !== undefined
+                ? scheduleJobdetail?.category?.name
+                : ''}
             </RegularTextCB>
           </View>
 
           <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
-            $270.00
+            {scheduleJobdetail?.grandTotal !== null &&
+            scheduleJobdetail?.grandTotal !== undefined
+              ? scheduleJobdetail?.grandTotal
+              : ''}
           </BoldTextCB>
         </View>
+
         <View style={{marginVertical: SIZES.ten}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {scheduleJobdetail?.description !== null &&
+            scheduleJobdetail?.description !== undefined
+              ? scheduleJobdetail?.description
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -143,7 +251,10 @@ export default function ScheduleJobDetails(props) {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            111,NYC Street, NY 1121
+            {scheduleJobdetail?.address !== null &&
+            scheduleJobdetail?.address !== undefined
+              ? scheduleJobdetail?.address
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -169,7 +280,15 @@ export default function ScheduleJobDetails(props) {
               style={{
                 color: Colors.coolGrey,
               }}>
-              12:00 - 3:00
+              {scheduleJobdetail?.start_time !== null &&
+              scheduleJobdetail?.start_time !== undefined
+                ? scheduleJobdetail?.start_time
+                : ''}
+              -{' '}
+              {scheduleJobdetail?.end_time !== null &&
+              scheduleJobdetail?.end_time !== undefined
+                ? scheduleJobdetail?.end_time
+                : ''}
             </RegularTextCB>
           </View>
         </View>
@@ -189,7 +308,8 @@ export default function ScheduleJobDetails(props) {
             marginVertical: SIZES.fifteen,
             justifyContent: 'space-between',
           }}> */}
-        <View
+
+        {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -225,8 +345,7 @@ export default function ScheduleJobDetails(props) {
               </RegularTextCB>
             </View>
           </View>
-          {/* </View> */}
-        </View>
+        </View> */}
 
         {/* <View
           style={{
@@ -234,7 +353,7 @@ export default function ScheduleJobDetails(props) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}> */}
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             marginTop: 5,
@@ -266,7 +385,8 @@ export default function ScheduleJobDetails(props) {
             }}>
             4.4 Ratings
           </RegularTextCB>
-        </View>
+        </View> */}
+
         <View
           style={{
             flexDirection: 'row',
@@ -285,7 +405,9 @@ export default function ScheduleJobDetails(props) {
               alignItems: 'center',
             }}
             activeOpacity={0.6}
-            onPress={() => {}}>
+            onPress={() => {
+              setRescheduleJobModal(true);
+            }}>
             <RegularTextCB>RESCHEDULE</RegularTextCB>
           </TouchableOpacity>
           <TouchableOpacity
@@ -398,6 +520,109 @@ export default function ScheduleJobDetails(props) {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        isVisible={RescheduleJobModal}
+        animationIn="zoomInDown"
+        animationOut="zoomOutUp"
+        animationInTiming={600}
+        animationOutTiming={600}
+        backdropTransitionInTiming={600}
+        backdropTransitionOutTiming={600}>
+        <View style={{alignItems: 'center', backgroundColor: '#fff'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: SIZES.fifteen,
+              marginTop: SIZES.fifteen,
+            }}>
+            <View
+              style={[
+                styles.card,
+                {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+              ]}>
+              <View style={{alignItems: 'center'}}>
+                <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+                  From
+                </RegularTextCB>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Hr'}
+                    style={styles.textInput}
+                    maxLength={2}
+                    // value={this.state.hrFrom}
+                    keyboardType={'numeric'}
+                    // onChangeText={(text) =>
+                    //   this.setState({hrFrom: text.replace(/[^0-9]/g, '')})
+                    // }
+                  />
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Min'}
+                    style={styles.textInput}
+                    maxLength={2}
+                    keyboardType={'numeric'}
+                    // value={this.state.minFrom}
+                    // onChangeText={(text) =>
+                    //   this.setState({minFrom: text.replace(/[^0-9]/g, '')})
+                    // }
+                  />
+                </View>
+              </View>
+            </View>
+            <View
+              style={[
+                styles.card,
+                {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+              ]}>
+              <View style={{alignItems: 'center'}}>
+                <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+                  To
+                </RegularTextCB>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Hr'}
+                    placeholderTextColor={Colors.black}
+                    style={styles.textInput}
+                    maxLength={2}
+                    // value={this.state.hrTo}
+                    keyboardType={'numeric'}
+                    // onChangeText={(text) =>
+                    //   this.setState({hrTo: text.replace(/[^0-9]/g, '')})
+                    // }
+                  />
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Min'}
+                    style={styles.textInput}
+                    maxLength={2}
+                    // value={this.state.hrMin}
+                    keyboardType={'numeric'}
+                    // onChangeText={(text) =>
+                    //   this.setState({hrMin: text.replace(/[^0-9]/g, '')})
+                    // }
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: Colors.sickGreen,
+              paddingHorizontal: SIZES.twenty * 5,
+              paddingVertical: SIZES.fifteen,
+              borderRadius: SIZES.ten,
+              marginVertical: SIZES.twenty,
+            }}
+            onPress={() => setRescheduleJobModal(false)}
+            activeOpacity={0.6}>
+            <Text>save</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -437,5 +662,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 5,
+  },
+  textInput: {
+    fontSize: 16,
+    fontFamily: Constants.fontBold,
+    color: Colors.black,
+    borderColor: Colors.sickGreen,
+    borderBottomWidth: SIZES.five,
+    margin: SIZES.five,
+    flex: 1,
+    textAlign: 'center',
   },
 });
