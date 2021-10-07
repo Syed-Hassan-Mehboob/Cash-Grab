@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Image,
   Platform,
@@ -16,8 +17,62 @@ import Colors from '../common/Colors';
 import Images from '../common/Images';
 import {Icon} from 'native-base';
 import NormalHeader from '../components/NormalHeader';
+import utils from '../utils';
+import Axios from '../network/APIKit';
 
 export default function JobAcceptance(props) {
+  const [isLoading, setIsloading] = useState(true);
+  const [jobAccept, setJobAccept] = useState([]);
+
+  useEffect(async () => {
+    getUserAccessToken();
+  }, []);
+
+  const getUserAccessToken = async () => {
+    setIsloading(true);
+    const value = await AsyncStorage.getItem('user');
+    const accessToken = JSON.parse(value);
+    if (accessToken !== undefined) {
+      getJobAcceptance(accessToken.token);
+    }
+  };
+
+  const getJobAcceptance = async () => {
+    const value = await AsyncStorage.getItem(Constants.accessToken);
+    let config = {
+      params: {
+        jobId: '1',
+      },
+      headers: {
+        Authorization: value,
+      },
+    };
+
+    // console.log('tokennnnn', token);
+
+    const onSuccess = ({data}) => {
+      console.log('Job Acceptanceeeeeeeee ======================>', data.data);
+      setJobAccept(data);
+      setIsloading(false);
+    };
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+      setIsloading(false);
+      console.log('===============>', error);
+    };
+    // const onSuccess = ({data}) => {
+    //   console.log('asdsdasdsadasd ======================>', data.data);
+    //   setJobAccept(data.data);
+    //   setIsloading(false);
+    // };
+    // const onFailure = (error) => {
+    //   utils.showResponseError(error);
+    //   setIsloading(false);
+    //   console.log('===============>', error);
+    // };
+    Axios.get(Constants.jobAcceptance, config).then(onSuccess).catch(onFailure);
+  };
+
   const renderJobRequest = ({item}) => {
     return (
       <View

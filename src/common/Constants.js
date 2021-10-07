@@ -123,6 +123,7 @@ const Constants = {
   AddServices: 'AddServices',
   AddTeamMember: 'AddTeamMember',
   getMyJob: 'customer/jobs/my-jobs',
+  jobAcceptance: 'customer/jobs/detail?',
 };
 
 export const SIZES = {
