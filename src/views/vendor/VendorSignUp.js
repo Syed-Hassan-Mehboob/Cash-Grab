@@ -102,75 +102,75 @@ export default class VendorSignUp extends Component {
     let location = this.state.location;
     let experience = this.state.experience;
     let aboutMe = this.state.aboutMe;
-    // if (name === '' || name === undefined) {
-    //   utils.showToast('Invalid Name');
-    //   return;
-    // }
+    if (name === '' || name === undefined) {
+      utils.showToast('Invalid Name');
+      return;
+    }
 
-    // if (name.length < 3) {
-    //   utils.showToast('Name Should Not Be Less Than 3 Characters');
-    //   return;
-    // }
+    if (name.length < 3) {
+      utils.showToast('Name Should Not Be Less Than 3 Characters');
+      return;
+    }
 
-    // if (name.length > 55) {
-    //   utils.showToast('Name Should Not Be Greater Than 55 Characters');
-    //   return;
-    // }
+    if (name.length > 55) {
+      utils.showToast('Name Should Not Be Greater Than 55 Characters');
+      return;
+    }
 
-    // if (!utils.validateEmail(email)) {
-    //   utils.showToast('Invalid Email');
-    //   return;
-    // }
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
 
-    // if (this.state.isVendor && services.length === 0) {
-    //   utils.showToast('Please Select Any Service');
-    //   return;
-    // }
+    if (this.state.isVendor && services.length === 0) {
+      utils.showToast('Please Select Any Service');
+      return;
+    }
 
-    // if (utils.isEmpty(phone)) {
-    //   utils.showToast('Invalid Phone Number');
-    //   return;
-    // }
+    if (utils.isEmpty(phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
 
-    // if (phone.length < 9) {
-    //   utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
-    //   return;
-    // }
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
 
-    // if (phone.length > 14) {
-    //   utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
-    //   return;
-    // }
+    if (phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
 
-    // if (utils.isEmpty(password)) {
-    //   utils.showToast('Invalid Password');
-    //   return;
-    // }
+    if (utils.isEmpty(password)) {
+      utils.showToast('Invalid Password');
+      return;
+    }
 
-    // if (password.length < 8) {
-    //   utils.showToast('Password Should Not Be Less Than 8 Digits');
-    //   return;
-    // }
+    if (password.length < 8) {
+      utils.showToast('Password Should Not Be Less Than 8 Digits');
+      return;
+    }
 
-    // if (password_confirmation !== password) {
-    //   utils.showToast('Passwords Did Not Match');
-    //   return;
-    // }
+    if (password_confirmation !== password) {
+      utils.showToast('Passwords Did Not Match');
+      return;
+    }
 
-    // if (location === '') {
-    //   utils.showToast('Select Location');
-    //   return;
-    // }
+    if (location === '') {
+      utils.showToast('Select Location');
+      return;
+    }
 
-    // if (experience === '' || experience === undefined) {
-    //   utils.showToast('Experience is required');
-    //   return;
-    // }
+    if (experience === '' || experience === undefined) {
+      utils.showToast('Experience is required');
+      return;
+    }
 
-    // if (aboutMe === '' || aboutMe === undefined) {
-    //   utils.showToast('Aboute Me is Required');
-    //   return;
-    // }
+    if (aboutMe === '' || aboutMe === undefined) {
+      utils.showToast('Aboute Me is Required');
+      return;
+    }
 
     const payload = {
       name,
@@ -538,6 +538,7 @@ export default class VendorSignUp extends Component {
                   flex: 1,
                   padding: SIZES.five,
                   flexDirection: 'row',
+                  justifyContent: 'space-between',
                 }}>
                 {this.GooglePlacesInput()}
                 <TouchableOpacity
@@ -547,9 +548,9 @@ export default class VendorSignUp extends Component {
                   }}>
                   <Image
                     style={{
-                      height: SIZES.fifteen,
-                      width: SIZES.fifteen,
-                      tintColor: Colors.turqoiseGreen,
+                      height: SIZES.twenty,
+                      width: SIZES.twenty,
+                      tintColor: Colors.black,
                     }}
                     resizeMode="contain"
                     source={Images.iconClose}

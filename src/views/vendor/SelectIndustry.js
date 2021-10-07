@@ -17,6 +17,7 @@ import RegularTextCB from '../../components/RegularTextCB';
 import {CommonActions} from '@react-navigation/native';
 import NormalHeader from '../../components/NormalHeader';
 import Axios from '../../network/APIKit';
+import utils from '../../utils';
 
 export default class SelectIndustry extends Component {
   constructor(props) {
@@ -119,21 +120,30 @@ export default class SelectIndustry extends Component {
       const harami = await AsyncStorage.getItem('SelectedServices');
       // console.log('ffffffff======>>>>', JSON.parse(harami));
       var parsedHarami = JSON.parse(harami);
-      console.log('parsedHarami============>>>', JSON.stringify(parsedHarami));
+      // console.log('parsedHarami============>>>', JSON.stringify(parsedHarami));
 
-      data.data.records.map((rec) => {
-        parsedHarami.map((ph) => {
-          if (rec.id === ph.cat_id) {
-            temp.push({...rec, isSelected: true});
-          } else {
-            temp.push({...rec, isSelected: false});
-          }
-        });
-      });
+      // data.data.records.map((rec) => {
+      //   // console.log('parentID==========>>>', rec.id);
+      //   parsedHarami.map((ph) => {
+      //     // console.log('child==========>>>', ph.cat_id);
 
-      this.setState({Data: temp}, () => {
+      //     if (rec.id === ph.cat_id) {
+      //       // return;
+      //       temp.push({...rec, isSelected: true});
+
+      //       console.log('parent', true, rec.id, ' ', ph.cat_id);
+      //       return;
+      //     } else {
+      //       console.log('child', false, rec.id, ' ', ph.cat_id);
+
+      //       temp.push({...rec, isSelected: false});
+      //     }
+      //   });
+      // });
+
+      this.setState({Data: data.data.records}, () => {
         this.setState({isLoading: false}, () => {
-          console.log('after loading========>>>>>>', temp);
+          // console.log('after loading========>>>>>>', temp);
         });
       });
       // });
@@ -225,7 +235,55 @@ export default class SelectIndustry extends Component {
     );
   };
 
+  signUp = async () => {
+    const asyncData = await AsyncStorage.getItem('SelectedServices');
+
+    const body = {
+      name: this.props.route.params.venderData.name,
+      email: this.props.route.params.venderData.email,
+      country_flag: this.props.route.params.venderData.country_flag,
+      country_code: this.props.route.params.venderData.country_code,
+      phone: this.props.route.params.venderData.phone,
+      type: this.props.route.params.venderData.type,
+      password: this.props.route.params.venderData.password,
+      password_confirmation:
+        this.props.route.params.venderData.password_confirmation,
+      verified_by: 'email',
+      experience: this.props.route.params.venderData.experience,
+      interest_id: this.props.route.params.interestId,
+      categories: JSON.parse(asyncData),
+    };
+    if (asyncData !== null) {
+      console.log('datas===========>>>>>>>', JSON.stringify(body));
+
+      const onSuccess = ({data}) => {
+        console.log('data', data.data);
+        AsyncStorage.clear();
+        this.props.navigation.navigate(Constants.otp, {
+          email: this.props.route.params.venderData.email,
+        });
+        this.setState({isLoading: false});
+      };
+
+      const onFailure = (error) => {
+        console.log('eeeeeeeeeeeeeeeeeeeeeeeee', error);
+        utils.showResponseError(error);
+
+        this.setState({isLoading: false});
+      };
+
+      // Show spinner when call is made
+      this.setState({isLoading: true});
+
+      Axios.post(Constants.signUpURL, body).then(onSuccess).catch(onFailure);
+    } else {
+      utils.showToast('Please Select Industry and Enter services first...');
+    }
+  };
+
   render() {
+    console.log(this.props.route.params);
+
     return (
       <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
         <NormalHeader name="Select Industry" />
@@ -257,10 +315,11 @@ export default class SelectIndustry extends Component {
             label="CONTINUE"
             bgColor={Colors.sickGreen}
             onPress={() => {
+              this.signUp();
               // props.navigation.replace(Constants.login);
               // props.navigation.dispatch(resetAction);
               // console.log(this.state.myServices);
-              console.log(this.state.newData);
+              // console.log(this.state.newData);
             }}
           />
         </View>

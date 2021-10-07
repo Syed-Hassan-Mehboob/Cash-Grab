@@ -29,11 +29,23 @@ export default function AddServices(props) {
   const scrollViewRef = useRef();
   const refService = useRef([textValue]);
 
-  useEffect(async () => {
-    const harami = await AsyncStorage.getItem('SelectedServices');
-    // console.log('ffffffff======>>>>', JSON.parse(harami));
-    var parsedHarami = JSON.parse(harami);
-    console.log('parsedHarami============>>>', JSON.stringify(parsedHarami));
+  useEffect(() => {
+    async function getServices() {
+      const harami = await AsyncStorage.getItem('SelectedServices');
+
+      if (harami !== null) {
+        var parsedHarami = JSON.parse(harami);
+
+        parsedHarami.map((e) => {
+          if (props.route.params.id === e.cat_id) {
+            console.log(e);
+            setTextVlaue(e.services);
+            setNumInputs(e.services.length);
+          }
+        });
+      }
+    }
+    getServices();
   }, []);
 
   const addInputFields = () => {
@@ -53,8 +65,6 @@ export default function AddServices(props) {
   };
 
   const saveCategoriesToStorage = async () => {
-    // console.log('myservices==========>>>> ', textValue);
-
     // AsyncStorage.clear();
 
     textValue.map((inputss) => {
@@ -97,12 +107,12 @@ export default function AddServices(props) {
           if (x.cat_id.toString() === props.route.params.id.toString()) {
             x.services = data.services;
           } else {
-            // something.push(data);
+            something.push(data);
           }
         });
 
         // something.push(data);
-        console.log('bhen ki annkh==========>>>> ', JSON.stringify(something));
+        // console.log('bhen ki annkh==========>>>> ', JSON.stringify(something));
         await AsyncStorage.setItem(
           'SelectedServices',
           JSON.stringify(something),
