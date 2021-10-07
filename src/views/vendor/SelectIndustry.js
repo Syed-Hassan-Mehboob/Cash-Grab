@@ -116,17 +116,27 @@ export default class SelectIndustry extends Component {
     var temp = [];
 
     const onSuccess = async ({data}) => {
-      this.setState({
-        Data: data.data.records.map((el) => {
-          return {...el, isSelected: false};
-        }),
-      });
-      var result = [];
-
       const harami = await AsyncStorage.getItem('SelectedServices');
-      console.log('ffffffff======>>>>', JSON.parse(harami));
+      // console.log('ffffffff======>>>>', JSON.parse(harami));
+      var parsedHarami = JSON.parse(harami);
+      console.log('parsedHarami============>>>', JSON.stringify(parsedHarami));
 
-      this.setState({isLoading: false});
+      data.data.records.map((rec) => {
+        parsedHarami.map((ph) => {
+          if (rec.id === ph.cat_id) {
+            temp.push({...rec, isSelected: true});
+          } else {
+            temp.push({...rec, isSelected: false});
+          }
+        });
+      });
+
+      this.setState({Data: temp}, () => {
+        this.setState({isLoading: false}, () => {
+          console.log('after loading========>>>>>>', temp);
+        });
+      });
+      // });
     };
     const onFaliure = (error) => {
       console.log('get industry error=============>>>', error);
@@ -172,9 +182,6 @@ export default class SelectIndustry extends Component {
           margin: SIZES.ten / 1.1,
           marginTop: SIZES.twenty,
           paddingHorizontal: SIZES.fifteen,
-          borderColor: Colors.sickGreen,
-          borderRadius: SIZES.ten,
-          borderWidth: item.isSelected ? 1.5 : 0,
         }}>
         <TouchableOpacity
           style={[
@@ -183,6 +190,9 @@ export default class SelectIndustry extends Component {
               flex: 1,
               padding: Platform.OS === 'ios' ? SIZES.ten * 2.9 : SIZES.ten * 4,
               alignItems: 'center',
+              borderColor: Colors.sickGreen,
+              borderRadius: SIZES.ten,
+              borderWidth: item.isSelected ? 1.5 : 0,
               backgroundColor: Colors.white,
             },
           ]}

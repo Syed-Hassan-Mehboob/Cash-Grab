@@ -34,7 +34,7 @@ export default class EditText extends Component {
       numberOfLines = 1,
       isEditable = true,
     } = this.props;
-    console.log('=========', secureTextEntry);
+    // console.log('=========', secureTextEntry);
     return (
       <View
         style={[
