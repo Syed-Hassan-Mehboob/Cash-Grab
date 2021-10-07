@@ -17,7 +17,7 @@ const FilterComponent = (props) => {
       style={[
         styles.card,
         {
-          padding: SIZES.ten * 3.5,
+          padding: SIZES.ten * 3,
           marginHorizontal: SIZES.five,
           marginBottom: SIZES.twenty,
           marginTop: SIZES.five,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},

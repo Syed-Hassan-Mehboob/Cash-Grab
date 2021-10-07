@@ -98,7 +98,128 @@ export default class VendorAllJobs extends Component {
   };
 
   renderSingleCategoriesItem = ({item}) => {
-    return <ListComponent item={item} />;
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={[
+          styles.card,
+          {
+            padding: SIZES.fifteen,
+            marginHorizontal: SIZES.five / 1.3,
+            marginVertical: SIZES.five * 1.5,
+          },
+        ]}
+        onPress={() =>
+          this.props.navigation.navigate(Constants.viewJob, {
+            item: item.id,
+          })
+        }>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.circleCard}>
+            <Image
+              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={{marginStart: 10}}>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+              {item.user.name}
+            </RegularTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{
+                  height: 15,
+                  width: 15,
+                  resizeMode: 'contain',
+                  tintColor:
+                    item.email_verified_at !== null
+                      ? Colors.turqoiseGreen
+                      : 'red',
+                }}
+              />
+              <RegularTextCB
+                style={{
+                  color:
+                    item.email_verified_at !== null
+                      ? Colors.turqoiseGreen
+                      : 'red',
+                  fontSize: 12,
+                  marginStart: 5,
+                }}>
+                {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
+              </RegularTextCB>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            {item.title}
+          </RegularTextCB>
+
+          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+            ${item.price}
+          </LightTextCB>
+        </View>
+        <View style={{}}>
+          <RegularTextCB style={{color: Colors.coolGrey}}>
+            Looking for a car mechanic that can look into the battery setup. The
+            car is in a still position & would require some man power
+          </RegularTextCB>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconLocationPin}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              marginStart: 5,
+            }}>
+            {item.address}
+          </RegularTextCB>
+        </View>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <Image
+            source={Images.iconStopWatch}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginStart: 5,
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+              }}>
+              {item.time}
+            </RegularTextCB>
+            <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+              {'View Job >'}
+            </RegularTextCB>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
   };
 
   openNextScreen = (nextScreen) => {
@@ -211,7 +332,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
-    flex: 1,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,

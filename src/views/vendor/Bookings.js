@@ -24,7 +24,7 @@ export default function Bookings(props) {
           data={Data}
           renderItem={({item}) => <AllBookings item={item} />}
           keyExtractor={(id) => id.id}
-          contentContainerStyle={{alignItems: 'center'}}
+          contentContainerStyle={{alignItems: 'center', paddingBottom: 100}}
           showsVerticalScrollIndicator={false}
         />
       </View>

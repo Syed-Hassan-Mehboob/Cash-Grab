@@ -49,8 +49,11 @@ export default class CreateAccount extends React.Component {
             }}
             style={{
               position: 'absolute',
-              top: SIZES.twenty,
-              left: SIZES.five,
+              // top: SIZES.twenty * 2.5,
+              // left: SIZES.twenty * 1.3,
+              top:
+                Platform.OS === 'android' ? SIZES.twenty : SIZES.twenty * 2.5,
+              left: Platform.OS === 'android' ? SIZES.five : SIZES.twenty * 1.3,
             }}>
             <Icon
               type="AntDesign"

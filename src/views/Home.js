@@ -33,7 +33,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
       permissionModalVisibility: false,
@@ -571,14 +571,21 @@ export default class Home extends Component {
               renderItem={this.renderVendorsAroundYouItem}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: SIZES.twentyFive * 2.5}}
-              ListEmptyComponent={() => {
-                return (
+              ListEmptyComponent={
+                !this.state.isLoading ? (
                   <View
-                    style={{flex: 1, alignItems: 'center', paddingTop: 100}}>
-                    <Text style={FONTS.mediumFont18}>Vendor Not Found</Text>
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: height / 1.5,
+                    }}>
+                    <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
+                      Record not found
+                    </Text>
                   </View>
-                );
-              }}
+                ) : null
+              }
             />
           </View>
         </ScrollView>

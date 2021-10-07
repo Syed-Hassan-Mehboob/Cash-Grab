@@ -13,7 +13,7 @@ import BoldTextCB from '../components/BoldTextCB';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{name: Constants.home}],
+  routes: [{name: 'Tab'}],
 });
 
 export default class BookingConfirmed extends Component {
@@ -117,9 +117,7 @@ export default class BookingConfirmed extends Component {
             paddingHorizontal: SIZES.fifteen,
           }}>
           <ButtonRadius10
-            onPress={() =>
-              this.props.navigation.navigate(Constants.ScheduleJobs)
-            }
+            onPress={() => this.navigateToHome()}
             label="CONTINUE"
             bgColor={Colors.sickGreen}
           />

@@ -182,11 +182,7 @@ export function MultiDropdownPicker(props) {
         <RegularTextCB style={{fontSize: 16}}>
           {name ? name : 'Select'}
         </RegularTextCB>
-        <Icon
-          type="Ionicons"
-          name="chevron-down"
-          style={{fontSize: SIZES.twentyFive}}
-        />
+        <Icon type="AntDesign" name="down" style={{fontSize: SIZES.twenty}} />
       </TouchableOpacity>
     </View>
   );

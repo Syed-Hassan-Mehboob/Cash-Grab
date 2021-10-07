@@ -21,7 +21,7 @@ import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import ImagePicker from 'react-native-image-crop-picker';
 import EditText from '../components/EditText';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FONTS, SIZES} from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
@@ -464,22 +464,20 @@ export default class EditProfile extends Component {
           <View
             style={{
               backgroundColor: Colors.white,
-              // paddingHorizontal: SIZES.ten * 3,
+              paddingHorizontal: SIZES.ten,
               borderRadius: SIZES.ten,
-              width: SIZES.ten * 30,
-              marginVertical: SIZES.five,
+              width: width / 1.65,
+              height: width * 0.15,
+              // marginVertical: SIZES.five,
+              // marginBottom: SIZES.twenty,
             }}>
             <TextInput
               multiline={true}
               placeholder="About Me"
               value={this.state.abouteMe}
+              // numberOfLines={2}
               selectionColor={Colors.sickGreen}
-              style={{
-                fontFamily: Constants.fontRegular,
-                paddingHorizontal: SIZES.ten,
-                paddingVertical: SIZES.fifteen,
-                fontSize: 16,
-              }}
+              style={[FONTS.mediumFont12]}
               onChangeText={(text) => {
                 this.setState({abouteMe: text});
               }}

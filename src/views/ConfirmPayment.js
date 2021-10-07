@@ -15,7 +15,7 @@ import RegularTextCB from '../components/RegularTextCB';
 
 const resetAction = CommonActions.reset({
   index: 0,
-  routes: [{name: Constants.UserHome}],
+  routes: [{name: 'Tab'}],
 });
 
 export default class ConfirmPayment extends Component {
@@ -26,6 +26,7 @@ export default class ConfirmPayment extends Component {
   state = {};
 
   navigateToHome() {
+    // this.props.navigation.replace(Constants.profile);
     this.props.navigation.dispatch(resetAction);
   }
 
@@ -174,7 +175,7 @@ export default class ConfirmPayment extends Component {
             onPress={() => {
               this.navigateToHome();
             }}
-            label="PROCEED"
+            label="PAY NOW"
             bgColor={Colors.sickGreen}
           />
         </View>

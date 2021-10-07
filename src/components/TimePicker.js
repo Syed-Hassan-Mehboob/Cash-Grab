@@ -41,8 +41,8 @@ export default function DateTimePickerComponent(props) {
       style={styles.contaner}>
       <TouchableOpacity style={styles.containerView} onPress={props.onPress}>
         <Icon
-          name="time-outline"
-          type="Ionicons"
+          name="timer"
+          type="MaterialIcons"
           style={{fontSize: height * 0.025, color: Colors.sickGreen}}
         />
         <Text style={styles.text}>{props.time}</Text>

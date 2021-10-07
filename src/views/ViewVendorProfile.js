@@ -728,14 +728,34 @@ export default class ViewVendorProfile extends React.Component {
                 />
               </View>
               <View style={{marginTop: SIZES.twentyFive}}>
-                <RegularTextCB
+                <View
                   style={{
-                    marginHorizontal: SIZES.twenty,
-                    fontSize: 16,
-                    color: Colors.black,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: SIZES.twenty,
                   }}>
-                  Services We Offer
-                </RegularTextCB>
+                  <RegularTextCB
+                    style={{
+                      fontSize: 16,
+                      color: Colors.black,
+                    }}>
+                    Services We Offer
+                  </RegularTextCB>
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() =>
+                      this.props.navigation.navigate(Constants.SelectServices)
+                    }>
+                    <Text
+                      style={[
+                        FONTS.boldFont16,
+                        {textDecorationLine: 'underline'},
+                      ]}>
+                      Book Now ?
+                    </Text>
+                  </TouchableOpacity>
+                </View>
                 <FlatList
                   // style={{paddingBottom: SIZES.ten * 10}}
                   horizontal
