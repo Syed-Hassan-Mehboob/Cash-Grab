@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
-import Constants, {SIZES, width} from '../common/Constants';
+import Constants, {FONTS, SIZES, width} from '../common/Constants';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
@@ -23,6 +23,7 @@ import ButtonRadius10 from '../components/ButtonRadius10';
 import utils from '../utils';
 import Axios from '../network/APIKit';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {Calendar} from 'react-native-calendars';
 
 export default function ScheduleJobDetails(props) {
   const [cancelJobModal, setCancelJobModal] = useState(false);
@@ -73,7 +74,9 @@ export default function ScheduleJobDetails(props) {
       .then(onSuccess)
       .catch(onFailure);
   };
-
+  const onDayPress = (day) => {
+    console.log('day press===============>>>>', day);
+  };
   return (
     <ScrollView
       style={styles.container}
@@ -530,6 +533,15 @@ export default function ScheduleJobDetails(props) {
         backdropTransitionInTiming={600}
         backdropTransitionOutTiming={600}>
         <View style={{alignItems: 'center', backgroundColor: '#fff'}}>
+          <Calendar
+            firstDay={1}
+            minDate={new Date()}
+            monthFormat={'MMM yyyy'}
+            disabledByDefault={true}
+            hideExtraDays
+            onDayPress={onDayPress}
+            markingType={'custom'}
+          />
           <View
             style={{
               flexDirection: 'row',
@@ -619,7 +631,7 @@ export default function ScheduleJobDetails(props) {
             }}
             onPress={() => setRescheduleJobModal(false)}
             activeOpacity={0.6}>
-            <Text>save</Text>
+            <Text style={[FONTS.boldFont16, {}]}>RESCHEDULE</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -672,5 +684,44 @@ const styles = StyleSheet.create({
     margin: SIZES.five,
     flex: 1,
     textAlign: 'center',
+  },
+  selectedTimeBG: {
+    paddingHorizontal: SIZES.fifteen,
+    paddingVertical: SIZES.fifteen,
+    marginHorizontal: SIZES.five,
+    marginVertical: SIZES.five,
+    backgroundColor: Colors.sickGreen,
+    borderRadius: SIZES.fifteen,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOpacity: 1.0,
+    shadowRadius: SIZES.ten,
+    alignItems: 'center',
+    elevation: SIZES.ten,
+    marginBottom: SIZES.fifteen,
+  },
+  unSelectedTimeBG: {
+    paddingHorizontal: SIZES.fifteen,
+    paddingVertical: SIZES.fifteen,
+    borderRadius: SIZES.fifteen,
+    marginHorizontal: SIZES.five,
+    marginVertical: SIZES.five,
+    alignItems: 'center',
+    backgroundColor: Colors.white,
+    marginBottom: SIZES.fifteen,
+  },
+  selectedDateBG: {
+    height: SIZES.ten * 3,
+    width: SIZES.ten * 3,
+    padding: 2,
+    backgroundColor: Colors.sickGreen,
+    borderRadius: SIZES.fifteen,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOpacity: 1.0,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
 });

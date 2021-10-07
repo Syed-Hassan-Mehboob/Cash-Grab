@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Constants, {SIZES, STYLES, FONTS} from '../../common/Constants';
 import BoldTextCB from '../../components/BoldTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
@@ -16,9 +17,13 @@ import Images from '../../common/Images';
 import {Icon} from 'native-base';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import NormalHeader from '../../components/NormalHeader';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 
 export default function SelectIntrest(props) {
-  const [Data, setData] = useState(DummyData);
+  const [Data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [interestId, setInterestId] = useState([]);
 
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -34,12 +39,52 @@ export default function SelectIntrest(props) {
     return data;
   };
 
+  useEffect(() => {
+    const onSuccess = ({data}) => {
+      console.log('get intrests success=============>>>', data.data);
+      let temp = [];
+      data.data.interests.map((e) => {
+        temp.push({...e, isSlected: false});
+      });
+      setData(temp);
+      setIsLoading(false);
+    };
+    const onFaliure = (error) => {
+      console.log('get intrests error=============>>>', error);
+      setIsLoading(false);
+    };
+    Axios.get(Constants.getInterests).then(onSuccess).catch(onFaliure);
+  }, []);
+
+  const setInterestIdOnClick = () => {
+    // let temp = [];
+    setInterestId([]);
+    Data.map((val) => {
+      if (val.isSlected) {
+        interestId.push(val.id);
+        console.log(val.id);
+      }
+    });
+
+    if (interestId.length === 0) {
+      utils.showToast('Specify atleast 1 interest');
+    } else {
+      // let;
+      props.navigation.navigate(Constants.SelectIndustry, {
+        interestId: interestId,
+        venderData: props.route.params.payload,
+      });
+    }
+  };
+
   const onPress = (id, type) => {
-    let newArray = Data.map((val, i) => {
+    let newArray = [];
+    Data.map((val, i) => {
       if (id === val.id) {
-        return {...val, isSlected: type};
+        val.isSlected = !val.isSlected;
+        newArray.push(val);
       } else {
-        return val;
+        newArray.push(val);
       }
     });
     setData(newArray);
@@ -109,22 +154,33 @@ export default function SelectIntrest(props) {
       <NormalHeader name="Select Interest" />
 
       <View style={{flex: 1}}>
-        <FlatList
-          numColumns={3}
-          data={formatData(Data, 3)}
-          keyExtractor={(index) => index}
-          renderItem={renderInterest}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            marginTop: SIZES.twenty,
-          }}
-        />
+        {isLoading ? (
+          <Spinner
+            visible={isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+          />
+        ) : (
+          <FlatList
+            numColumns={3}
+            data={formatData(Data, 3)}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderInterest}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              marginTop: SIZES.twenty,
+            }}
+          />
+        )}
       </View>
       <View style={{marginVertical: SIZES.ten * 3}}>
         <ButtonRadius10
           label="CONTINUE"
           bgColor={Colors.sickGreen}
-          onPress={() => props.navigation.navigate(Constants.SelectIndustry)}
+          onPress={() => {
+            setInterestIdOnClick();
+            // props.navigation.navigate(Constants.SelectIndustry)}
+          }}
         />
       </View>
     </View>
@@ -163,6 +219,10 @@ const styles = StyleSheet.create({
     shadowRadius: 10.0,
 
     elevation: 15,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });
 

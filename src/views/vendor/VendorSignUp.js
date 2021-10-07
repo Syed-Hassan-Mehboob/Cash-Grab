@@ -99,7 +99,9 @@ export default class VendorSignUp extends Component {
     let email = this.state.email;
     let password = this.state.password;
     let password_confirmation = this.state.confirmPassword;
-
+    let location = this.state.location;
+    let experience = this.state.experience;
+    let aboutMe = this.state.aboutMe;
     if (name === '' || name === undefined) {
       utils.showToast('Invalid Name');
       return;
@@ -155,30 +157,37 @@ export default class VendorSignUp extends Component {
       return;
     }
 
-    const payload = this.state.isVendor
-      ? {
-          name,
-          services,
-          email,
-          password,
-          password_confirmation,
-          type: 'vendor',
-          country_code,
-          country_flag,
-          phone,
-        }
-      : {
-          name,
-          email,
-          password,
-          password_confirmation,
-          type: 'customer',
-          country_code,
-          country_flag,
-          phone,
-        };
+    if (location === '') {
+      utils.showToast('Select Location');
+      return;
+    }
 
-    this.props.navigation.navigate(Constants.verifyVia, {payload});
+    if (experience === '' || experience === undefined) {
+      utils.showToast('Experience is required');
+      return;
+    }
+
+    if (aboutMe === '' || aboutMe === undefined) {
+      utils.showToast('Aboute Me is Required');
+      return;
+    }
+
+    const payload = {
+      name,
+      services,
+      email,
+      password,
+      password_confirmation,
+      type: 'vendor',
+      country_code,
+      country_flag,
+      phone,
+      location,
+      experience,
+      aboutMe,
+    };
+
+    this.props.navigation.navigate(Constants.SelectIntrest, {payload});
   };
 
   GooglePlacesInput = (props) => {
@@ -368,7 +377,9 @@ export default class VendorSignUp extends Component {
                         fontFamily: Constants.fontLight,
                       },
                     ]}>
-                    {this.state.location ? this.state.location : 'Get Location'}
+                    {this.state.location
+                      ? this.state.location
+                      : 'Select Location'}
                   </RegularTextCB>
                 </TouchableOpacity>
               </View>
@@ -500,9 +511,9 @@ export default class VendorSignUp extends Component {
                   <ButtonRadius10
                     label="SIGN UP"
                     bgColor={Colors.sickGreen}
-                    onPress={() =>
-                      this.props.navigation.navigate(Constants.SelectIntrest)
-                    }
+                    onPress={() => {
+                      this.sendDataToVerifyVia();
+                    }}
                   />
                 </View>
               </View>
@@ -527,6 +538,7 @@ export default class VendorSignUp extends Component {
                   flex: 1,
                   padding: SIZES.five,
                   flexDirection: 'row',
+                  justifyContent: 'space-between',
                 }}>
                 {this.GooglePlacesInput()}
                 <TouchableOpacity
@@ -536,9 +548,9 @@ export default class VendorSignUp extends Component {
                   }}>
                   <Image
                     style={{
-                      height: SIZES.fifteen,
-                      width: SIZES.fifteen,
-                      tintColor: Colors.turqoiseGreen,
+                      height: SIZES.twenty,
+                      width: SIZES.twenty,
+                      tintColor: Colors.black,
                     }}
                     resizeMode="contain"
                     source={Images.iconClose}

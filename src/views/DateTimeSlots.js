@@ -184,7 +184,7 @@ export default class DateTimeSlots extends Component {
             hideExtraDays
             onDayPress={this.onDayPress}
             markingType={'custom'}
-            renderArrow={(direction) =>
+            renderrArow={(direction) =>
               direction === 'left' ? (
                 <Image
                   source={Images.arrowBack}

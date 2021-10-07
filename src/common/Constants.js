@@ -85,6 +85,8 @@ const Constants = {
   imageURL: 'https://cash-grab.reignsol.net',
   signUpURL: 'auth/register',
   loginURL: 'auth/login',
+  getCategories: 'auth/get-categories',
+  getInterests: 'auth/get-interest',
   verifyOtpURL: 'auth/verify-otp',
   resendOtpURL: 'auth/resend-otp',
   forgotPasswordURL: 'auth/forgot-password',
@@ -124,6 +126,7 @@ const Constants = {
   scheduleJob: 'order/get-schedule-bookings',
   quickOrder: 'order/get-quick-bookings',
   orderDetail: 'order/details?',
+  jobAcceptance: 'customer/jobs/detail?',
 };
 
 export const SIZES = {
