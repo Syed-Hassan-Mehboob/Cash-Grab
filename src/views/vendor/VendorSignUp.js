@@ -99,86 +99,95 @@ export default class VendorSignUp extends Component {
     let email = this.state.email;
     let password = this.state.password;
     let password_confirmation = this.state.confirmPassword;
+    let location = this.state.location;
+    let experience = this.state.experience;
+    let aboutMe = this.state.aboutMe;
+    // if (name === '' || name === undefined) {
+    //   utils.showToast('Invalid Name');
+    //   return;
+    // }
 
-    if (name === '' || name === undefined) {
-      utils.showToast('Invalid Name');
-      return;
-    }
+    // if (name.length < 3) {
+    //   utils.showToast('Name Should Not Be Less Than 3 Characters');
+    //   return;
+    // }
 
-    if (name.length < 3) {
-      utils.showToast('Name Should Not Be Less Than 3 Characters');
-      return;
-    }
+    // if (name.length > 55) {
+    //   utils.showToast('Name Should Not Be Greater Than 55 Characters');
+    //   return;
+    // }
 
-    if (name.length > 55) {
-      utils.showToast('Name Should Not Be Greater Than 55 Characters');
-      return;
-    }
+    // if (!utils.validateEmail(email)) {
+    //   utils.showToast('Invalid Email');
+    //   return;
+    // }
 
-    if (!utils.validateEmail(email)) {
-      utils.showToast('Invalid Email');
-      return;
-    }
+    // if (this.state.isVendor && services.length === 0) {
+    //   utils.showToast('Please Select Any Service');
+    //   return;
+    // }
 
-    if (this.state.isVendor && services.length === 0) {
-      utils.showToast('Please Select Any Service');
-      return;
-    }
+    // if (utils.isEmpty(phone)) {
+    //   utils.showToast('Invalid Phone Number');
+    //   return;
+    // }
 
-    if (utils.isEmpty(phone)) {
-      utils.showToast('Invalid Phone Number');
-      return;
-    }
+    // if (phone.length < 9) {
+    //   utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+    //   return;
+    // }
 
-    if (phone.length < 9) {
-      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
-      return;
-    }
+    // if (phone.length > 14) {
+    //   utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+    //   return;
+    // }
 
-    if (phone.length > 14) {
-      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
-      return;
-    }
+    // if (utils.isEmpty(password)) {
+    //   utils.showToast('Invalid Password');
+    //   return;
+    // }
 
-    if (utils.isEmpty(password)) {
-      utils.showToast('Invalid Password');
-      return;
-    }
+    // if (password.length < 8) {
+    //   utils.showToast('Password Should Not Be Less Than 8 Digits');
+    //   return;
+    // }
 
-    if (password.length < 8) {
-      utils.showToast('Password Should Not Be Less Than 8 Digits');
-      return;
-    }
+    // if (password_confirmation !== password) {
+    //   utils.showToast('Passwords Did Not Match');
+    //   return;
+    // }
 
-    if (password_confirmation !== password) {
-      utils.showToast('Passwords Did Not Match');
-      return;
-    }
+    // if (location === '') {
+    //   utils.showToast('Select Location');
+    //   return;
+    // }
 
-    const payload = this.state.isVendor
-      ? {
-          name,
-          services,
-          email,
-          password,
-          password_confirmation,
-          type: 'vendor',
-          country_code,
-          country_flag,
-          phone,
-        }
-      : {
-          name,
-          email,
-          password,
-          password_confirmation,
-          type: 'customer',
-          country_code,
-          country_flag,
-          phone,
-        };
+    // if (experience === '' || experience === undefined) {
+    //   utils.showToast('Experience is required');
+    //   return;
+    // }
 
-    this.props.navigation.navigate(Constants.verifyVia, {payload});
+    // if (aboutMe === '' || aboutMe === undefined) {
+    //   utils.showToast('Aboute Me is Required');
+    //   return;
+    // }
+
+    const payload = {
+      name,
+      services,
+      email,
+      password,
+      password_confirmation,
+      type: 'vendor',
+      country_code,
+      country_flag,
+      phone,
+      location,
+      experience,
+      aboutMe,
+    };
+
+    this.props.navigation.navigate(Constants.SelectIntrest, {payload});
   };
 
   GooglePlacesInput = (props) => {
@@ -365,7 +374,9 @@ export default class VendorSignUp extends Component {
                         fontFamily: Constants.fontLight,
                       },
                     ]}>
-                    {this.state.location ? this.state.location : 'Get Location'}
+                    {this.state.location
+                      ? this.state.location
+                      : 'Select Location'}
                   </RegularTextCB>
                 </TouchableOpacity>
               </View>
@@ -497,9 +508,9 @@ export default class VendorSignUp extends Component {
                   <ButtonRadius10
                     label="SIGN UP"
                     bgColor={Colors.sickGreen}
-                    onPress={() =>
-                      this.props.navigation.navigate(Constants.SelectIntrest)
-                    }
+                    onPress={() => {
+                      this.sendDataToVerifyVia();
+                    }}
                   />
                 </View>
               </View>
