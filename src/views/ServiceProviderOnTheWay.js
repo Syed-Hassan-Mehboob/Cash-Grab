@@ -300,16 +300,16 @@ const ServiceProviderOnTheWay = (props) => {
             longitude: Region.longitude,
             latitudeDelta: 0.0044,
             longitudeDelta: 0.0054,
-            // latitudeDelta: 0.0041,
-            // longitudeDelta: 0.0041,
+            latitudeDelta: 0.0041,
+            longitudeDelta: 0.0041,
           }}
-          // zoomEnabled
-          // showsUserLocation
-          // maxZoomLevel={15}
-          // minZoomLevel={2}
+          zoomEnabled
+          showsUserLocation
+          maxZoomLevel={15}
+          minZoomLevel={2}
           scrollEnabled={false}
           zoomEnabled={false}
-          // zoomControlEnabled={false}
+          zoomControlEnabled={false}
           customMapStyle={mapStyle}
           style={[styles.container]}>
           <Marker
@@ -431,8 +431,8 @@ const ServiceProviderOnTheWay = (props) => {
               borderRadius: SIZES.ten * 5,
             }}>
             <Icon
-              type={'Feather'}
-              name={'phone-call'}
+              type={'Ionicons'}
+              name={'call-outline'}
               style={{color: Colors.white, fontSize: SIZES.fifteen + 2}}
             />
           </View>

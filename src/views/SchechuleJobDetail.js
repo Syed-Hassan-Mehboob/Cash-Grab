@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
@@ -18,18 +19,29 @@ import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
-import {Icon} from 'native-base';
+import {Icon, Radio, ListItem} from 'native-base';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import utils from '../utils';
 import Axios from '../network/APIKit';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Calendar} from 'react-native-calendars';
+import {Toast} from 'native-base';
 
 export default function ScheduleJobDetails(props) {
   const [cancelJobModal, setCancelJobModal] = useState(false);
   const [scheduleJobdetail, setAllScheduleJobDetail] = useState();
   const [isLoading, setIsloading] = useState(false);
   const [RescheduleJobModal, setRescheduleJobModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState();
+  const [hrfrom, sethrfrom] = useState();
+  const [minfrom, setminfrom] = useState();
+  const [hrto, sethrto] = useState();
+  const [minto, setminto] = useState();
+  const [value, setValue] = useState('one');
+  const [fromItemSelected, setfromItemSelected] = useState('');
+  const [toItemSelected, settoItemSelected] = useState('');
+  const [orderId, setOrderId] = useState();
+  const [errorMassage, setErrormsg] = useState('');
 
   useEffect(() => {
     const getToken = async () => {
@@ -49,8 +61,9 @@ export default function ScheduleJobDetails(props) {
     setIsloading(true);
 
     const onSuccess = ({data}) => {
-      // console.log('Order Job Data  ====>>>>>>>>>> ', data.data);
+      // console.log('Order Job Data  ====>>>>>>>>>> ', data.data.id);
 
+      setOrderId(data.data.id);
       setAllScheduleJobDetail(data.data);
       setIsloading(false);
     };
@@ -62,6 +75,7 @@ export default function ScheduleJobDetails(props) {
       console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
+
     const params = {
       orderId: props.route.params.joid,
     };
@@ -74,9 +88,190 @@ export default function ScheduleJobDetails(props) {
       .then(onSuccess)
       .catch(onFailure);
   };
-  const onDayPress = (day) => {
-    console.log('day press===============>>>>', day);
+
+  const cancelOrder = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsloading(true);
+
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+
+      setIsloading(false);
+    };
+
+    const onFailure = (error) => {
+      setIsloading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const params = {
+      orderId: orderId,
+    };
+    Axios.post(Constants.orderCancel, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+
+    setCancelJobModal(false);
+    setTimeout(() => {
+      props.navigation.goBack();
+    }, 500);
   };
+
+  const onDayPress = (day) => {
+    setSelectedDate(day.dateString);
+    // console.log('day press===============>>>>', day);
+  };
+
+  const handelReschedule = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    let from_time;
+    let to_time;
+    let orderid = orderId;
+    let date = selectedDate;
+    // console.log('=====>>>', hrfrom);
+
+    if (date === undefined) {
+      setErrormsg('Please select a date to reschedule');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (hrfrom === undefined) {
+      setErrormsg('From Hour should not be empty');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (Number(hrfrom) < 1 || Number(hrfrom) > 12) {
+      setErrormsg('From Hour should be in between 1 and 12');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (minfrom === undefined) {
+      setErrormsg('From Minutes should not be empty');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (Number(minfrom) < 1 || Number(minfrom) > 59) {
+      setErrormsg('From Minutes should be in between 1 and 59');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (hrto === undefined) {
+      setErrormsg('To Hour should not be empty');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (Number(hrto) < 1 || Number(hrto) > 12) {
+      setErrormsg('To Hour should be in between 1 and 12');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (minto === undefined) {
+      setErrormsg('To Minutes should not be empty');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (Number(minto) < 1 || Number(minto) > 59) {
+      setErrormsg('To Minutes should be in between 1 and 59');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (fromItemSelected === '') {
+      setErrormsg('Please select whether From Time is am/pm');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (toItemSelected === '') {
+      setErrormsg('Please select whether To Time is am/pm');
+      setTimeout(() => {
+        setErrormsg('');
+      }, 5000);
+      return;
+    }
+
+    if (fromItemSelected === 'pm') {
+      from_time = (Number(hrfrom) + 12).toString() + ':' + minfrom;
+    } else {
+      from_time = hrfrom + ':' + minfrom;
+    }
+
+    if (toItemSelected === 'pm') {
+      to_time = (Number(hrto) + 12).toString() + ':' + minto;
+    } else {
+      to_time = hrto + ':' + minto;
+    }
+
+    const params = {
+      orderId: orderid,
+      date: date,
+      from_time: from_time,
+      to_time: to_time,
+    };
+    console.log(params);
+
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+
+    const onSuccess = ({data}) => {
+      console.log('reschedule  Data  ====>>>>>>>>>> ', data.data);
+      setIsloading(false);
+    };
+
+    const onFailure = (error) => {
+      setIsloading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+
+    setIsloading(true);
+    Axios.post(Constants.rescheduleBooking, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+
+    setRescheduleJobModal(false);
+  };
+
   return (
     <ScrollView
       style={styles.container}
@@ -494,12 +689,7 @@ export default function ScheduleJobDetails(props) {
                 alignItems: 'center',
               }}
               activeOpacity={0.6}
-              onPress={() => {
-                setCancelJobModal(false);
-                setTimeout(() => {
-                  props.navigation.goBack();
-                }, 500);
-              }}>
+              onPress={cancelOrder}>
               <RegularTextCB style={{fontSize: 16}}>YES</RegularTextCB>
             </TouchableOpacity>
             <TouchableOpacity
@@ -531,8 +721,16 @@ export default function ScheduleJobDetails(props) {
         animationInTiming={600}
         animationOutTiming={600}
         backdropTransitionInTiming={600}
-        backdropTransitionOutTiming={600}>
+        backdropTransitionOutTiming={600}
+        style={{
+          borderRadius: SIZES.five,
+          borderWidth: 1,
+          borderColor: Colors.sickGreen,
+          backgroundColor: '#fff',
+        }}>
         <View style={{alignItems: 'center', backgroundColor: '#fff'}}>
+          <Text style={{color: 'red'}}>{errorMassage}</Text>
+
           <Calendar
             firstDay={1}
             minDate={new Date()}
@@ -541,53 +739,117 @@ export default function ScheduleJobDetails(props) {
             hideExtraDays
             onDayPress={onDayPress}
             markingType={'custom'}
+            markedDates={{
+              [selectedDate]: {
+                customStyles: {
+                  container: styles.selectedDateBG,
+                  text: {
+                    color: Colors.white,
+                    fontFamily: Constants.fontRegular,
+                    fontSize: 14,
+                  },
+                },
+              },
+            }}
+            theme={{
+              textDayFontFamily: Constants.fontRegular,
+              textMonthFontFamily: Constants.fontRegular,
+              textDayHeaderFontFamily: Constants.fontRegular,
+              color: Colors.black,
+              dayTextColor: Colors.navy,
+              monthTextColor: Colors.navy,
+            }}
           />
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginHorizontal: SIZES.fifteen,
               marginTop: SIZES.fifteen,
+              justifyContent: 'space-between',
+
+              width: '100%',
+              paddingHorizontal: SIZES.fifteen,
             }}>
             <View
               style={[
                 styles.card,
-                {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+                {
+                  borderWidth: 2,
+                  borderColor: Colors.sickGreen,
+                  width: '45%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
               ]}>
-              <View style={{alignItems: 'center'}}>
-                <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}>
+                <RegularTextCB
+                  style={{
+                    fontSize: 12,
+                    color: Colors.coolGrey,
+                    marginTop: SIZES.five,
+                  }}>
                   From
                 </RegularTextCB>
                 <View style={{flexDirection: 'row'}}>
                   <TextInput
                     placeholderTextColor={Colors.black}
                     placeholder={'Hr'}
-                    style={styles.textInput}
+                    style={[styles.textInput, {alignItems: 'center'}]}
                     maxLength={2}
-                    // value={this.state.hrFrom}
+                    value={hrfrom}
                     keyboardType={'numeric'}
-                    // onChangeText={(text) =>
-                    //   this.setState({hrFrom: text.replace(/[^0-9]/g, '')})
-                    // }
+                    onChangeText={(text) => sethrfrom(text)}
                   />
+
                   <TextInput
                     placeholderTextColor={Colors.black}
                     placeholder={'Min'}
                     style={styles.textInput}
                     maxLength={2}
                     keyboardType={'numeric'}
-                    // value={this.state.minFrom}
-                    // onChangeText={(text) =>
-                    //   this.setState({minFrom: text.replace(/[^0-9]/g, '')})
-                    // }
+                    value={minfrom}
+                    onChangeText={(text) => setminfrom(text)}
                   />
                 </View>
               </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <ListItem>
+                  <Radio
+                    onPress={() => setfromItemSelected('am')}
+                    selected={fromItemSelected === 'am'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>AM</Text>
+                </ListItem>
+                <ListItem>
+                  <Radio
+                    onPress={() => setfromItemSelected('pm')}
+                    selected={fromItemSelected === 'pm'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>PM</Text>
+                </ListItem>
+              </View>
             </View>
+
             <View
               style={[
                 styles.card,
-                {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+                {
+                  borderWidth: 2,
+                  borderColor: Colors.sickGreen,
+                  width: '45%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
               ]}>
               <View style={{alignItems: 'center'}}>
                 <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
@@ -600,24 +862,40 @@ export default function ScheduleJobDetails(props) {
                     placeholderTextColor={Colors.black}
                     style={styles.textInput}
                     maxLength={2}
-                    // value={this.state.hrTo}
+                    value={hrto}
                     keyboardType={'numeric'}
-                    // onChangeText={(text) =>
-                    //   this.setState({hrTo: text.replace(/[^0-9]/g, '')})
-                    // }
+                    onChangeText={(text) => sethrto(text)}
                   />
                   <TextInput
                     placeholderTextColor={Colors.black}
                     placeholder={'Min'}
                     style={styles.textInput}
                     maxLength={2}
-                    // value={this.state.hrMin}
+                    value={minto}
                     keyboardType={'numeric'}
-                    // onChangeText={(text) =>
-                    //   this.setState({hrMin: text.replace(/[^0-9]/g, '')})
-                    // }
+                    onChangeText={(text) => setminto(text)}
                   />
                 </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <ListItem>
+                  <Radio
+                    onPress={() => settoItemSelected('am')}
+                    selected={toItemSelected === 'am'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>AM</Text>
+                </ListItem>
+                <ListItem>
+                  <Radio
+                    onPress={() => settoItemSelected('pm')}
+                    selected={toItemSelected === 'pm'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>PM</Text>
+                </ListItem>
               </View>
             </View>
           </View>
@@ -627,14 +905,19 @@ export default function ScheduleJobDetails(props) {
               paddingHorizontal: SIZES.twenty * 5,
               paddingVertical: SIZES.fifteen,
               borderRadius: SIZES.ten,
-              marginVertical: SIZES.twenty,
+              marginTop: SIZES.twenty * 2,
             }}
-            onPress={() => setRescheduleJobModal(false)}
+            onPress={handelReschedule}
             activeOpacity={0.6}>
             <Text style={[FONTS.boldFont16, {}]}>RESCHEDULE</Text>
           </TouchableOpacity>
         </View>
       </Modal>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </ScrollView>
   );
 }
@@ -723,5 +1006,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

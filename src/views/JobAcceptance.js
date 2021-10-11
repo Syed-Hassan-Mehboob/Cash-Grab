@@ -24,9 +24,9 @@ export default function JobAcceptance(props) {
   const [isLoading, setIsloading] = useState(true);
   const [jobAccept, setJobAccept] = useState([]);
 
-  useEffect(async () => {
-    getUserAccessToken();
-  }, []);
+  // useEffect(async () => {
+  //   getUserAccessToken();
+  // }, []);
 
   const getUserAccessToken = async () => {
     setIsloading(true);

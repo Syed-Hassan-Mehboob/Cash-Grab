@@ -93,7 +93,7 @@ export default class VendorHome extends Component {
 
   getUserProfile = async (token) => {
     const onSuccess = ({data}) => {
-      console.log('get profile success===========>>>>', token);
+      // console.log('get profile success===========>>>>', token);
       this.setState({
         isLoading: false,
         avatar: data.data.records.userProfile.image,

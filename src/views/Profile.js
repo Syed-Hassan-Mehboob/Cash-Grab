@@ -364,8 +364,8 @@ export default class Profile extends React.Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.start_time !== null && start_time !== undefined
-                ? start_time
+              {item.start_time !== null && item.start_time !== undefined
+                ? item.start_time
                 : ''}{' '}
               -{' '}
               {item.end_time !== null && item.end_time !== undefined
