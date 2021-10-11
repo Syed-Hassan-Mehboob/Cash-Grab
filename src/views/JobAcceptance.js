@@ -19,10 +19,13 @@ import {Icon} from 'native-base';
 import NormalHeader from '../components/NormalHeader';
 import utils from '../utils';
 import Axios from '../network/APIKit';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function JobAcceptance(props) {
   const [isLoading, setIsloading] = useState(true);
-  const [jobAccept, setJobAccept] = useState([]);
+  const [jobAccept, setJobAccept] = useState();
+  const [jobAcceptList, setJobAcceptList] = useState([]);
+  const [jobRequest, setJobRequest] = useState([]);
 
   useEffect(async () => {
     getUserAccessToken();
@@ -34,6 +37,7 @@ export default function JobAcceptance(props) {
     const accessToken = JSON.parse(value);
     if (accessToken !== undefined) {
       getJobAcceptance(accessToken.token);
+      // postJobRequest(accessToken.token);
     }
   };
 
@@ -52,7 +56,8 @@ export default function JobAcceptance(props) {
 
     const onSuccess = ({data}) => {
       console.log('Job Acceptanceeeeeeeee ======================>', data.data);
-      setJobAccept(data);
+      setJobAccept(data.data.records);
+      setJobAcceptList(data.data.records.requests);
       setIsloading(false);
     };
     const onFailure = (error) => {
@@ -73,7 +78,59 @@ export default function JobAcceptance(props) {
     Axios.get(Constants.jobAcceptance, config).then(onSuccess).catch(onFailure);
   };
 
+  const postJobRequest = async () => {
+    const value2 = await AsyncStorage.getItem(Constants.accessToken);
+    let config2 = {
+      params: {
+        request_id: '1',
+        status: 'accepted',
+      },
+      headers: {
+        Authorization: value2,
+      },
+    };
+
+    // console.log('tokennnnn', token);
+
+    const onSuccess = ({data}) => {
+      console.log('Job Requesttttt ======================>', data.data);
+      setJobRequest(data);
+      setIsloading(false);
+    };
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+      setIsloading(false);
+      console.log('==============222222222222222=>', error);
+    };
+    // const onSuccess = ({data}) => {
+    //   console.log('asdsdasdsadasd ======================>', data.data);
+    //   setJobAccept(data.data);
+    //   setIsloading(false);
+    // };
+    // const onFailure = (error) => {
+    //   utils.showResponseError(error);
+    //   setIsloading(false);
+    //   console.log('===============>', error);
+    // };
+    Axios.post(
+      Constants.jobRequest,
+      {
+        request_id: '1',
+        status: 'accepted',
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: value2,
+        },
+      },
+    )
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   const renderJobRequest = ({item}) => {
+    console.log('==================>>>>>>> ', item);
     return (
       <View
         style={[styles.card, {marginTop: SIZES.twenty, padding: SIZES.ten}]}>
@@ -103,7 +160,7 @@ export default function JobAcceptance(props) {
             </View>
             <View style={{marginStart: 10}}>
               <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                {item.name}
+                {/* {item.name} */}
               </BoldTextCB>
               <View
                 style={{
@@ -116,7 +173,7 @@ export default function JobAcceptance(props) {
                     color: Colors.coolGrey,
                     fontSize: 13.5,
                   }}>
-                  {item.tittle}
+                  {/* {item.tittle} */}
                 </RegularTextCB>
               </View>
             </View>
@@ -198,8 +255,16 @@ export default function JobAcceptance(props) {
   };
 
   return (
-    <View style={STYLES.container}>
-      {/* <View
+    <>
+      {isLoading ? (
+        <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
+      ) : (
+        <View style={STYLES.container}>
+          {/* <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -223,144 +288,148 @@ export default function JobAcceptance(props) {
         </RegularTextCB>
       </View> */}
 
-      <NormalHeader name="Job Acceptance" />
-      <View style={{paddingHorizontal: SIZES.fifteen}}>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={[
-            styles.card,
-            {padding: SIZES.fifteen, marginTop: SIZES.twentyFive},
-          ]}
-          onPress={() => {
-            //   props.navigation.navigate(Constants.JobAcceptance)
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: SIZES.ten,
-            }}>
-            <View style={styles.circleCard}>
-              <Image
-                source={Images.emp3}
-                style={styles.iconUser}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={{marginStart: 10}}>
-              <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                {'Ray Hammond'}
-              </BoldTextCB>
+          <NormalHeader name="Job Acceptance" />
+          <View style={{paddingHorizontal: SIZES.fifteen}}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={[
+                styles.card,
+                {padding: SIZES.fifteen, marginTop: SIZES.twentyFive},
+              ]}
+              onPress={() => {
+                //   props.navigation.navigate(Constants.JobAcceptance)
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginVertical: SIZES.ten,
+                }}>
+                <View style={styles.circleCard}>
+                  <Image
+                    source={{uri: Constants.imageURL + jobAccept.user.image}}
+                    style={styles.iconUser}
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={{marginStart: 10}}>
+                  <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
+                    {jobAccept.user.name}
+                  </BoldTextCB>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: 5,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      source={Images.iconVerified}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        resizeMode: 'contain',
+                        tintColor: Colors.turqoiseGreen,
+                      }}
+                    />
+                    <RegularTextCB
+                      style={{
+                        color: Colors.turqoiseGreen,
+                        fontSize: 16,
+                        marginStart: 5,
+                      }}>
+                      Verified
+                    </RegularTextCB>
+                  </View>
+                </View>
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
                   marginTop: 5,
                   alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <View>
+                  <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+                    Car Mechanic Needed
+                  </RegularTextCB>
+                  <RegularTextCB
+                    style={{color: Colors.sickGreen, fontSize: 14.5}}>
+                    Automobile
+                  </RegularTextCB>
+                </View>
+
+                <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
+                  $270.00
+                </BoldTextCB>
+              </View>
+              <View style={{marginVertical: SIZES.ten}}>
+                <RegularTextCB style={{color: Colors.coolGrey}}>
+                  Looking for a car mechanic that can look into the battery
+                  setup. The car is in a still position & would require some man
+                  power
+                </RegularTextCB>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 5,
+                  alignItems: 'center',
+                  marginVertical: SIZES.fifteen,
                 }}>
                 <Image
-                  source={Images.iconVerified}
-                  style={{
-                    height: 25,
-                    width: 25,
-                    resizeMode: 'contain',
-                    tintColor: Colors.turqoiseGreen,
-                  }}
+                  source={Images.iconLocationPin}
+                  style={{height: 25, width: 25, resizeMode: 'contain'}}
                 />
                 <RegularTextCB
                   style={{
-                    color: Colors.turqoiseGreen,
-                    fontSize: 16,
+                    color: Colors.coolGrey,
                     marginStart: 5,
                   }}>
-                  Verified
+                  111,NYC Street, NY 1121
                 </RegularTextCB>
               </View>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 5,
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <View>
-              <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                Car Mechanic Needed
-              </RegularTextCB>
-              <RegularTextCB style={{color: Colors.sickGreen, fontSize: 14.5}}>
-                Automobile
-              </RegularTextCB>
-            </View>
-
-            <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
-              $270.00
-            </BoldTextCB>
-          </View>
-          <View style={{marginVertical: SIZES.ten}}>
-            <RegularTextCB style={{color: Colors.coolGrey}}>
-              Looking for a car mechanic that can look into the battery setup.
-              The car is in a still position & would require some man power
-            </RegularTextCB>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 5,
-              alignItems: 'center',
-              marginVertical: SIZES.fifteen,
-            }}>
-            <Image
-              source={Images.iconLocationPin}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
-            />
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-                marginStart: 5,
-              }}>
-              111,NYC Street, NY 1121
-            </RegularTextCB>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: SIZES.ten,
-            }}>
-            <Image
-              source={Images.iconStopWatch}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                marginStart: 5,
-                alignItems: 'center',
-                flex: 1,
-                justifyContent: 'space-between',
-              }}>
-              <RegularTextCB
+              <View
                 style={{
-                  color: Colors.coolGrey,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: SIZES.ten,
                 }}>
-                12:00 - 3:00
-              </RegularTextCB>
-            </View>
+                <Image
+                  source={Images.iconStopWatch}
+                  style={{height: 25, width: 25, resizeMode: 'contain'}}
+                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginStart: 5,
+                    alignItems: 'center',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                  }}>
+                  <RegularTextCB
+                    style={{
+                      color: Colors.coolGrey,
+                    }}>
+                    12:00 - 3:00
+                  </RegularTextCB>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </View>
-      <FlatList
-        data={Data}
-        renderItem={renderJobRequest}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 100,
-          paddingHorizontal: SIZES.fifteen,
-        }}
-      />
-    </View>
+          <FlatList
+            data={jobAcceptList}
+            renderItem={renderJobRequest}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 100,
+              paddingHorizontal: SIZES.fifteen,
+            }}
+          />
+        </View>
+      )}
+    </>
   );
 }
 
@@ -400,6 +469,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 5,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });
 const Data = [

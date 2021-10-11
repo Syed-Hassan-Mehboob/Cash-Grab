@@ -126,7 +126,8 @@ const Constants = {
   scheduleJob: 'order/get-schedule-bookings',
   quickOrder: 'order/get-quick-bookings',
   orderDetail: 'order/details?',
-  jobAcceptance: 'customer/jobs/detail?',
+  jobAcceptance: 'customer/jobs/detail',
+  jobRequest: 'customer/job-request',
 };
 
 export const SIZES = {
