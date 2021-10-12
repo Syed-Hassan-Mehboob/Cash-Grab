@@ -8,7 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import Colors from "../common/Colors";
-import Constants, { SIZES, STYLES } from "../common/Constants";
+import Constants, { SIZES, STYLES, FONTS } from "../common/Constants";
 import BoldTextCB from "../components/BoldTextCB";
 import ButtonRadius10 from "../components/ButtonRadius10";
 import NormalHeader from "../components/NormalHeader";
@@ -138,7 +138,7 @@ export default function SelectServices(props) {
     >
       <NormalHeader name="Select Services" />
       <BoldTextCB style={{ marginLeft: SIZES.twenty, fontSize: 16 }}>
-        Cleaning
+        {/* Cleaning */}
       </BoldTextCB>
 
       <FlatList
@@ -152,8 +152,16 @@ export default function SelectServices(props) {
         }}
         ListEmptyComponent={() => {
           return (
-            <View style={{ alignItems: "center" }}>
-              <Text>Data not Found</Text>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={[FONTS.mediumFont18, { color: Colors.black }]}>
+                Record not found
+              </Text>
             </View>
           );
         }}
