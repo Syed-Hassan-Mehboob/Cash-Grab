@@ -23,7 +23,15 @@ const AllBookings = (props) => {
           margin: SIZES.five,
         },
       ]}
-      onPress={() => navigation.navigate(Constants.BookingAcceptance)}>
+      onPress={() => {
+        item.order_status === 'pending' || item.order_status === 'cancelled'
+          ? navigation.navigate(Constants.BookingAcceptance, {
+              orderId: item.id,
+            })
+          : navigation.navigate(Constants.JobInProgress, {
+              orderId: item.id,
+            });
+      }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={styles.circleCard}>
           <Image
@@ -47,22 +55,22 @@ const AllBookings = (props) => {
                 height: 15,
                 width: 15,
                 resizeMode: 'contain',
-                // tintColor:
-                //   item.user.email_verified_at !== null
-                //     ? Colors.turqoiseGreen
-                //     : 'red',
+                tintColor:
+                  item.user_email_verified_at !== null
+                    ? Colors.turqoiseGreen
+                    : 'red',
               }}
             />
             <RegularTextCB
               style={{
-                color: Colors.turqoiseGreen,
-                //   item.email_verified_at !== null
-                //     ? Colors.turqoiseGreen
-                //     : 'red',
+                color:
+                  item.user_email_verified_at !== null
+                    ? Colors.turqoiseGreen
+                    : 'red',
                 fontSize: 12,
                 marginStart: 5,
               }}>
-              {/* {item.user.email_verified_at !== null ? 'Verified' : 'Unverified'} */}
+              {item.user_email_verified_at !== null ? 'Verified' : 'Unverified'}
             </RegularTextCB>
           </View>
         </View>

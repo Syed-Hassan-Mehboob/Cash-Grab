@@ -135,6 +135,7 @@ const Constants = {
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
+  orderStatus: 'order/order-status?',
 };
 
 export const SIZES = {

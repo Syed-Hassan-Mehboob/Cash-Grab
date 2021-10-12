@@ -40,20 +40,13 @@ export default class JobInProgress extends React.Component {
       isLoading: false,
       accessToken: '',
       viewJob: [],
-      images: [],
       userData: {},
-      userImage: '',
-      username: '',
-      title: '',
-      price: '',
-      location: '',
-      time: '',
       region: this.initialMapState.region,
       latitude: '',
       longitude: '',
-      description: '',
       jobService: [],
       thankYouModal: false,
+      address: '',
     };
   }
 
@@ -68,87 +61,87 @@ export default class JobInProgress extends React.Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      //   this.viewJob();
+      this.getBookingDetail(token);
     });
   };
 
-  // viewJob = () => {
-  //   this.setState({isLoading: true});
-  //   const onSuccess = ({data}) => {
-  //     console.log(
-  //       'View Job Data ==== ==== ',
-  //       JSON.stringify(data.data.records),
-  //     );
+  getBookingDetail = async (token) => {
+    this.setState({
+      isLoading: true,
+    });
+    const onSuccess = ({data}) => {
+      console.log(' Schedule Bookings Detail  =====', data.data);
+      this.setState({
+        userData: data.data,
+      });
+      this.setState({
+        isLoading: false,
+      });
+    };
 
-  //     this.setState({isLoading: false});
-  //     this.setState({
-  //       userImage: data.data.records.user.userProfile.image,
-  //       title: data.data.records.title,
-  //       location: data.data.records.location,
-  //       time: data.data.records.time,
-  //       images: data.data.records.images,
-  //       username: data.data.records.user.name,
-  //       lat: data.data.records.user.userProfile.latitude,
-  //       lng: data.data.records.user.userProfile.longitude,
-  //       price: data.data.records.price,
-  //       description: data.data.records.description,
-  //       latitude: data.data.records.user.userProfile.latitude,
-  //       longitude: data.data.records.user.userProfile.longitude,
-  //       jobService: data.data.records.job_service,
-  //     });
+    const onFailure = (error) => {
+      this.setState({
+        isLoading: false,
+      });
+      utils.showResponseError(error);
+      console.log('==================Error', error);
+    };
+    let params = {
+      orderId: this.props.route.params.orderId,
+    };
+    Axios.get(Constants.orderDetail, {
+      params: params,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
-  //     // utils.showToast(data.message)
+  progressOrder = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({
+      isLoading: true,
+    });
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+      this.setState({
+        isLoading: false,
+      });
+      utils.showToast('Work Has Been Started');
+    };
 
-  //     this.setState({isLoading: false});
-  //   };
-
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //     utils.showResponseError(error);
-  //   };
-
-  //   this.setState({isLoading: true});
-  //   let params = {
-  //     jobId: this.props.route.params.item,
-  //   };
-  //   Axios.get(Constants.viewJob, {
-  //     params,
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
+    const onFailure = (error) => {
+      this.setState({
+        isLoading: false,
+      });
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const params = {
+      order_id: this.state.userData?.id,
+      status: 'progress',
+    };
+    Axios.post(Constants.orderStatus, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+    setTimeout(() => {
+      this.props.navigation.goBack();
+    }, 500);
+  };
 
   render() {
-    this.state.jobService.map((item) => {
-      console.log('========== Job Services ==== =', item.name);
-    });
+    // console.log('>>>>>>>>>>>>', this.props.route.params.orderId);
 
     return (
       <View style={STYLES.container}>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // width: '100%',
-            padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image source={Images.arrowBack} style={[styles.iconBack]} />
-          </TouchableOpacity>
-          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
-            Job in Progress
-          </RegularTextCB>
-        </View> */}
-
         <NormalHeader name="Job In Progress" />
 
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -167,13 +160,7 @@ export default class JobInProgress extends React.Component {
                       style={styles.iconUser}
                       resizeMode="cover"
                     />
-                  ) : (
-                    <Image
-                      source={Images.emp2}
-                      style={styles.iconUser}
-                      resizeMode="cover"
-                    />
-                  )}
+                  ) : null}
                 </View>
                 <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
@@ -181,10 +168,10 @@ export default class JobInProgress extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.state.username !== '' &&
-                    this.state.username !== undefined
-                      ? this.state.username
-                      : 'John Doe'}
+                    {this.state.userData?.name !== null &&
+                    this.state.userData.name !== undefined
+                      ? this.state.userData.name
+                      : ''}
                   </RegularTextCB>
                   <View
                     style={{
@@ -219,7 +206,7 @@ export default class JobInProgress extends React.Component {
                     color: Colors.sickGreen,
                     fontSize: 16,
                   }}>
-                  {this.state.title} AutoMobile
+                  {this.state.userData?.category?.name}
                 </RegularTextCB>
                 <LightTextCB
                   style={[
@@ -229,28 +216,16 @@ export default class JobInProgress extends React.Component {
                       fontSize: 12,
                     },
                   ]}>
-                  ${500}
+                  ${this.state.userData?.grandTotal}
                 </LightTextCB>
               </View>
-
-              <RegularTextCB
-                style={{
-                  color: Colors.sickGreen,
-                  fontSize: 12,
-                }}>
-                {this.state.jobService[0]?.categories.name}
-              </RegularTextCB>
 
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                   marginVertical: SIZES.ten * 0.5,
                 }}>
-                {this.state.description}Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy text ever since the 1500s, when an
-                unknown printer took a galley of type and scrambled it to make a
-                type specimen book.
+                {this.state.userData?.description}
               </RegularTextCB>
 
               <View
@@ -268,8 +243,7 @@ export default class JobInProgress extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {/* {this.state.location} */}
-                  111,NY Street, NY 1121
+                  {this.state.userData?.address}
                 </RegularTextCB>
               </View>
               <View
@@ -287,8 +261,7 @@ export default class JobInProgress extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {/* {this.state.time} */}
-                  12:00 - 03:00
+                  {this.state.userData?.end_time}
                 </RegularTextCB>
               </View>
             </View>
@@ -329,12 +302,26 @@ export default class JobInProgress extends React.Component {
                 marginVertical: SIZES.ten * 1.8,
                 marginHorizontal: SIZES.twenty,
               }}>
+              {/* {this.state.userData?.orderStatus === 'accepted' && (
+                <ButtonRadius10
+                  label="START NOW"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.progressOrder();
+                  }}
+                />
+              )} */}
+
               <ButtonRadius10
-                label="WORK STARTED"
+                label={
+                  this.state.userData?.orderStatus === 'accepted'
+                    ? 'START NOW'
+                    : 'WORK STARTED'
+                }
                 bgColor={Colors.sickGreen}
                 onPress={() => {
-                  //   this.props.navigation.navigate(Constants.);
-                  this.setState({thankYouModal: true});
+                  // //   this.props.navigation.navigate(Constants.);
+                  // this.setState({thankYouModal: true});
                 }}
               />
             </View>
@@ -434,10 +421,6 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: SIZES.ten * 3,
-    shadowColor: '#c5c5c5',
-    shadowOpacity: 0.15,
-    shadowRadius: SIZES.five,
-    elevation: SIZES.five,
   },
   carImage: {
     height: SIZES.fifty * 2,

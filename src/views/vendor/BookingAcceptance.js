@@ -17,6 +17,8 @@ import Images from '../../common/Images';
 import {Icon} from 'native-base';
 import NormalHeader from '../../components/NormalHeader';
 import Axios from '../../network/APIKit';
+import Spinner from 'react-native-loading-spinner-overlay';
+import utils from '../../utils';
 
 export default function BookingAcceptance(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +40,7 @@ export default function BookingAcceptance(props) {
     let token = await AsyncStorage.getItem(Constants.accessToken);
     setIsLoading(true);
     const onSuccess = ({data}) => {
-      // console.log(' Schedule Bookings Detail  =====', data);
+      console.log(' Schedule Bookings Detail  =====', data);
       setBookingDetail(data.data);
       // setscheduleBookings(data.data.records);
       setIsLoading(false);
@@ -50,7 +52,7 @@ export default function BookingAcceptance(props) {
       console.log('==================Error', error);
     };
     let params = {
-      orderId: 6,
+      orderId: props.route.params.orderId,
     };
     Axios.get(Constants.orderDetail, {
       params: params,
@@ -62,7 +64,71 @@ export default function BookingAcceptance(props) {
       .catch(onFailure);
   };
 
-  // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', bookingDetail?.user.name);
+  const acceptOrder = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsLoading(true);
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+      setIsLoading(false);
+      utils.showToast('Booking Has Been Accepted');
+    };
+
+    const onFailure = (error) => {
+      setIsLoading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const params = {
+      order_id: bookingDetail?.id,
+      status: 'accepted',
+    };
+    Axios.post(Constants.orderStatus, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+    setTimeout(() => {
+      props.navigation.goBack();
+    }, 500);
+  };
+
+  const cancelOrder = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsLoading(true);
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+      setIsLoading(false);
+      utils.showToast('Your order has been canceled');
+    };
+
+    const onFailure = (error) => {
+      setIsLoading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const params = {
+      order_id: bookingDetail?.id,
+      status: 'cancelled',
+    };
+    Axios.post(Constants.orderStatus, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+    setTimeout(() => {
+      props.navigation.goBack();
+    }, 500);
+  };
 
   return (
     <View style={STYLES.container}>
@@ -263,36 +329,26 @@ export default function BookingAcceptance(props) {
                     flexDirection: 'row',
                     marginTop: 5,
                     alignItems: 'center',
-                  }}>
-                  <RegularTextCB
-                    style={{
-                      color: Colors.coolGrey,
-                      fontSize: 13.5,
-                    }}>
-                    {bookingDetail?.category.name !== null &&
-                    bookingDetail?.category.name !== undefined
-                      ? bookingDetail?.category.name
-                      : ''}{' '}
-                    {'applied'}
-                  </RegularTextCB>
-                </View>
+                  }}></View>
               </View>
             </View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: Colors.sickGreen,
-                marginRight: SIZES.ten,
-                padding: SIZES.fifteen,
-                borderRadius: SIZES.ten,
-                width: SIZES.fifty * 1.7,
-                alignItems: 'center',
-              }}
-              activeOpacity={0.6}
-              onPress={() => {
-                props.navigation.navigate(Constants.JobInProgress);
-              }}>
-              <BoldTextCB>Accept</BoldTextCB>
-            </TouchableOpacity>
+            {bookingDetail?.orderStatus === 'pending' ? (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.sickGreen,
+                  marginRight: SIZES.ten,
+                  padding: SIZES.fifteen,
+                  borderRadius: SIZES.ten,
+                  width: SIZES.fifty * 1.7,
+                  alignItems: 'center',
+                }}
+                activeOpacity={0.6}
+                onPress={() => {
+                  acceptOrder();
+                }}>
+                <BoldTextCB>Accept</BoldTextCB>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           <View
@@ -304,10 +360,10 @@ export default function BookingAcceptance(props) {
             <View
               style={{
                 flexDirection: 'row',
-                marginTop: 5,
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 paddingHorizontal: SIZES.ten,
+                paddingBottom: SIZES.twenty,
               }}>
               <StarRating
                 disabled={true}
@@ -315,7 +371,12 @@ export default function BookingAcceptance(props) {
                 fullStar={Images.starFull}
                 emptyStar={Images.starHalf}
                 starSize={SIZES.fifteen}
-                rating={bookingDetail?.vendor.ratings}
+                rating={
+                  bookingDetail?.vendor.ratings !== null &&
+                  bookingDetail?.vendor.ratings !== undefined
+                    ? bookingDetail?.vendor.ratings
+                    : ''
+                }
                 starStyle={{
                   width: SIZES.twenty,
                   height: SIZES.twenty,
@@ -331,27 +392,45 @@ export default function BookingAcceptance(props) {
                   marginStart: SIZES.twenty * 1.8,
                   marginTop: SIZES.five / 2,
                 }}>
-                4.4 Ratings
+                {bookingDetail?.vendor.ratings !== null &&
+                bookingDetail?.vendor.ratings !== undefined
+                  ? bookingDetail?.vendor.ratings
+                  : ''}{' '}
+                Ratings
               </RegularTextCB>
             </View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: Colors.coolGrey,
-                marginRight: SIZES.ten,
-                padding: SIZES.fifteen,
-                borderRadius: SIZES.ten,
-                width: SIZES.fifty * 1.7,
-                alignItems: 'center',
-              }}
-              onPress={() => {
-                props.navigation.navigate(Constants.VenderBookings);
-              }}
-              activeOpacity={0.6}>
-              <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
-            </TouchableOpacity>
+
+            {bookingDetail?.orderStatus === 'pending' ? (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.coolGrey,
+                  marginRight: SIZES.ten,
+                  padding: SIZES.fifteen,
+                  borderRadius: SIZES.ten,
+                  width: SIZES.fifty * 1.7,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  cancelOrder();
+                }}
+                activeOpacity={0.6}>
+                <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </TouchableOpacity>
+
+        {bookingDetail?.orderStatus === 'cancelled' && (
+          <Text style={{marginTop: SIZES.twenty, alignSelf: 'center'}}>
+            You Have cancel this order{' '}
+          </Text>
+        )}
       </View>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
@@ -386,5 +465,9 @@ const styles = StyleSheet.create({
   circleCard: {
     height: 64,
     width: 64,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

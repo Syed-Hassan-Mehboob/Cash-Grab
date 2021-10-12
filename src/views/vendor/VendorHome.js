@@ -44,6 +44,7 @@ export default class VendorHome extends Component {
       currentLong: '',
       permissionModalVisibility: false,
       scheduleBookings: [],
+      ordrStatus: '',
     };
   }
 
@@ -183,39 +184,6 @@ export default class VendorHome extends Component {
     } catch (err) {
       ////console.log('getLocation catch: ==================> ', err);
     }
-  };
-
-  renderCategoryItem = ({item}) => {
-    // //console.log('All Category Home ite======',item);
-
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate(Constants.vendorSingleCategory, {
-            image: item.image,
-            name: item.name,
-            item: item.id,
-          });
-        }}
-        style={{
-          alignItems: 'center',
-          paddingHorizontal: SIZES.ten,
-          paddingVertical: SIZES.five,
-        }}>
-        <Image
-          style={styles.circle}
-          source={{uri: Constants.imageURL + item.image}}
-        />
-        <RegularTextCB
-          style={{
-            fontSize: 14,
-            marginTop: SIZES.ten,
-            color: Colors.coolGrey,
-          }}>
-          {item.name}
-        </RegularTextCB>
-      </TouchableOpacity>
-    );
   };
 
   renderJobsForYouItem = ({item}) => {
@@ -476,7 +444,7 @@ export default class VendorHome extends Component {
     );
   };
   renderBookings = ({item}) => {
-    console.log('Schedule Bookings item>>>>>> ======', item.userProfile.image);
+    // console.log('...................', item.order_status);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -488,17 +456,22 @@ export default class VendorHome extends Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() =>
-          this.props.navigation.navigate(Constants.BookingAcceptance)
-        }>
+        onPress={() => {
+          item.order_status === 'pending' || item.order_status === 'cancelled'
+            ? this.props.navigation.navigate(Constants.BookingAcceptance, {
+                orderId: item.id,
+              })
+            : this.props.navigation.navigate(Constants.JobInProgress, {
+                orderId: item.id,
+              });
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
               source={{
                 uri:
-                  item.userProfile.image !== null &&
-                  item.userProfile.image !== undefined
-                    ? Constants.imageURL + item.userProfile.image
+                  item.user_image !== null && item.user_image !== undefined
+                    ? Constants.imageURL + item.user_image
                     : '',
               }}
               style={styles.iconUser}
@@ -507,8 +480,8 @@ export default class VendorHome extends Component {
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.user.name !== null && item.user.name !== undefined
-                ? item.user.name
+              {item.user_name !== null && item.user_name !== undefined
+                ? item.user_name
                 : ''}
             </RegularTextCB>
             <View
@@ -524,7 +497,7 @@ export default class VendorHome extends Component {
                   width: 15,
                   resizeMode: 'contain',
                   tintColor:
-                    item.user.email_verified_at !== null
+                    item.user_email_verified_at !== null
                       ? Colors.turqoiseGreen
                       : 'red',
                 }}
@@ -532,13 +505,13 @@ export default class VendorHome extends Component {
               <RegularTextCB
                 style={{
                   color:
-                    item.user.email_verified_at !== null
+                    item.user_email_verified_at !== null
                       ? Colors.turqoiseGreen
                       : 'red',
                   fontSize: 12,
                   marginStart: 5,
                 }}>
-                {item.user.email_verified_at !== null
+                {item.user_email_verified_at !== null
                   ? 'Verified'
                   : 'Unverified'}
               </RegularTextCB>
@@ -553,24 +526,28 @@ export default class VendorHome extends Component {
             justifyContent: 'space-between',
           }}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.category.name !== null && item.category.name !== undefined
-              ? item.category.name
+            {item.category_name !== null && item.category_name !== undefined
+              ? item.category_name
               : ''}
           </RegularTextCB>
 
           <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
             $
-            {item.grandTotal !== null && item.grandTotal !== undefined
-              ? item.grandTotal
+            {item.grand_total !== null && item.grand_total !== undefined
+              ? item.grand_total
               : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
-          <RegularTextCB style={{color: Colors.coolGrey}}>
-            {item.description !== null && item.description !== undefined
-              ? item.description
-              : ''}
-          </RegularTextCB>
+          {item.description ? (
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 15,
+              }}>
+              {item.description}
+            </RegularTextCB>
+          ) : null}
         </View>
         <View
           style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
@@ -583,8 +560,8 @@ export default class VendorHome extends Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.address !== null && item.address !== undefined
-              ? item.address
+            {item.location !== null && item.location !== undefined
+              ? item.location
               : ''}
           </RegularTextCB>
         </View>
@@ -606,8 +583,8 @@ export default class VendorHome extends Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.end_time !== null && item.end_time !== undefined
-                ? item.end_time
+              {item.from_time !== null && item.from_time !== undefined
+                ? item.from_time
                 : ''}
             </RegularTextCB>
             <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
