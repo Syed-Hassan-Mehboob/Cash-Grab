@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Image,
   Platform,
@@ -8,41 +9,129 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import Constants, {SIZES, STYLES, width} from '../../common/Constants';
+import Constants, {FONTS, SIZES, STYLES, width} from '../../common/Constants';
 import BoldTextCB from '../../components/BoldTextCB';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import {Icon} from 'native-base';
 import NormalHeader from '../../components/NormalHeader';
+import Axios from '../../network/APIKit';
+import Spinner from 'react-native-loading-spinner-overlay';
+import utils from '../../utils';
 
 export default function BookingAcceptance(props) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [bookingDetail, setBookingDetail] = useState();
+  useEffect(() => {
+    const getToken = async () => {
+      getBookingDetail();
+      const unsubscribe = props.navigation.addListener('focus', () => {
+        console.log('working ==== ......');
+        getBookingDetail();
+      });
+      return unsubscribe;
+    };
+
+    getToken();
+  }, [props.navigation]);
+
+  const getBookingDetail = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsLoading(true);
+    const onSuccess = ({data}) => {
+      console.log(' Schedule Bookings Detail  =====', data);
+      setBookingDetail(data.data);
+      // setscheduleBookings(data.data.records);
+      setIsLoading(false);
+    };
+
+    const onFailure = (error) => {
+      setIsLoading(false);
+      utils.showResponseError(error);
+      console.log('==================Error', error);
+    };
+    let params = {
+      orderId: props.route.params.orderId,
+    };
+    Axios.get(Constants.orderDetail, {
+      params: params,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  const acceptOrder = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsLoading(true);
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+      setIsLoading(false);
+      utils.showToast('Booking Has Been Accepted');
+    };
+
+    const onFailure = (error) => {
+      setIsLoading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const params = {
+      order_id: bookingDetail?.id,
+      status: 'accepted',
+    };
+    Axios.post(Constants.orderStatus, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+    setTimeout(() => {
+      props.navigation.goBack();
+    }, 500);
+  };
+
+  const cancelOrder = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsLoading(true);
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+      setIsLoading(false);
+      utils.showToast('Your order has been canceled');
+    };
+
+    const onFailure = (error) => {
+      setIsLoading(false);
+
+      utils.showResponseError(error);
+      console.log('++++==========', error);
+    };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
+    const options = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const params = {
+      order_id: bookingDetail?.id,
+      status: 'cancelled',
+    };
+    Axios.post(Constants.orderStatus, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
+    setTimeout(() => {
+      props.navigation.goBack();
+    }, 500);
+  };
+
   return (
     <View style={STYLES.container}>
-      {/* <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          // paddingHorizontal: SIZES.fifteen,
-          // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-        }}>
-        <TouchableOpacity
-          style={{position: 'absolute', left: }}
-          onPress={() => {
-            props.navigation.goBack();
-          }}>
-          <Icon
-            type="AntDesign"
-            name="left"
-            style={{color: Colors.black, fontSize: SIZES.ten * 3}}
-          />
-        </TouchableOpacity>
-        <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
-          Booking Acceptance
-        </RegularTextCB>
-      </View> */}
-
       <NormalHeader name="Booking Acceptance" />
       <View style={{paddingHorizontal: SIZES.fifteen}}>
         <TouchableOpacity
@@ -59,14 +148,21 @@ export default function BookingAcceptance(props) {
             }}>
             <View style={styles.circleCard}>
               <Image
-                source={Images.emp3}
+                source={{
+                  uri:
+                    bookingDetail?.user?.user_profiles?.image !== null &&
+                    bookingDetail?.user?.user_profiles?.image !== undefined
+                      ? Constants.imageURL +
+                        bookingDetail?.user.user_profiles.image
+                      : '',
+                }}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
             </View>
             <View style={{marginStart: 10}}>
               <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                {'Ray Hammond'}
+                {bookingDetail?.user.name}
               </BoldTextCB>
               <View
                 style={{
@@ -77,10 +173,13 @@ export default function BookingAcceptance(props) {
                 <Image
                   source={Images.iconVerified}
                   style={{
-                    height: 25,
-                    width: 25,
+                    height: 20,
+                    width: 20,
                     resizeMode: 'contain',
-                    tintColor: Colors.turqoiseGreen,
+                    tintColor:
+                      bookingDetail?.user.email_verified_at !== null
+                        ? Colors.turqoiseGreen
+                        : 'red',
                   }}
                 />
                 <RegularTextCB
@@ -89,7 +188,9 @@ export default function BookingAcceptance(props) {
                     fontSize: 16,
                     marginStart: 5,
                   }}>
-                  Verified
+                  {bookingDetail?.email_verified_at !== null
+                    ? 'Verified'
+                    : 'Unverified'}
                 </RegularTextCB>
               </View>
             </View>
@@ -102,22 +203,28 @@ export default function BookingAcceptance(props) {
               justifyContent: 'space-between',
             }}>
             <View>
-              <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-                Car Mechanic Needed
-              </RegularTextCB>
-              <RegularTextCB style={{color: Colors.sickGreen, fontSize: 14.5}}>
-                Automobile
+              <RegularTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+                {bookingDetail?.category.name !== null &&
+                bookingDetail?.category.name !== undefined
+                  ? bookingDetail?.category.name
+                  : ''}
               </RegularTextCB>
             </View>
 
             <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
-              $270.00
+              $
+              {bookingDetail?.grandTotal !== null &&
+              bookingDetail?.grandTotal !== undefined
+                ? bookingDetail?.grandTotal
+                : ''}
             </BoldTextCB>
           </View>
           <View style={{marginVertical: SIZES.ten}}>
             <RegularTextCB style={{color: Colors.coolGrey}}>
-              Looking for a car mechanic that can look into the battery setup.
-              The car is in a still position & would require some man power
+              {bookingDetail?.description !== null &&
+              bookingDetail?.description !== undefined
+                ? bookingDetail?.description
+                : ''}
             </RegularTextCB>
           </View>
           <View
@@ -136,7 +243,10 @@ export default function BookingAcceptance(props) {
                 color: Colors.coolGrey,
                 marginStart: 5,
               }}>
-              111,NYC Street, NY 1121
+              {bookingDetail?.address !== null &&
+              bookingDetail?.address !== undefined
+                ? bookingDetail?.address
+                : ''}
             </RegularTextCB>
           </View>
           <View
@@ -162,7 +272,15 @@ export default function BookingAcceptance(props) {
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                12:00 - 3:00
+                {bookingDetail?.start_time !== null &&
+                bookingDetail?.start_time !== undefined
+                  ? bookingDetail?.start_time
+                  : ''}{' '}
+                -{' '}
+                {bookingDetail?.end_time !== null &&
+                bookingDetail?.end_time !== undefined
+                  ? bookingDetail?.end_time
+                  : ''}
               </RegularTextCB>
             </View>
           </View>
@@ -201,39 +319,36 @@ export default function BookingAcceptance(props) {
               </View>
               <View style={{marginStart: 10}}>
                 <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                  {'Damian Miller'}
+                  {bookingDetail?.vendor.name !== null &&
+                  bookingDetail?.vendor.name !== undefined
+                    ? bookingDetail?.vendor.name
+                    : ''}
                 </BoldTextCB>
                 <View
                   style={{
                     flexDirection: 'row',
                     marginTop: 5,
                     alignItems: 'center',
-                  }}>
-                  <RegularTextCB
-                    style={{
-                      color: Colors.coolGrey,
-                      fontSize: 13.5,
-                    }}>
-                    Car Mechanic applied
-                  </RegularTextCB>
-                </View>
+                  }}></View>
               </View>
             </View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: Colors.sickGreen,
-                marginRight: SIZES.ten,
-                padding: SIZES.fifteen,
-                borderRadius: SIZES.ten,
-                width: SIZES.fifty * 1.7,
-                alignItems: 'center',
-              }}
-              activeOpacity={0.6}
-              onPress={() => {
-                props.navigation.navigate(Constants.JobInProgress);
-              }}>
-              <BoldTextCB>Accept</BoldTextCB>
-            </TouchableOpacity>
+            {bookingDetail?.orderStatus === 'pending' ? (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.sickGreen,
+                  marginRight: SIZES.ten,
+                  padding: SIZES.fifteen,
+                  borderRadius: SIZES.ten,
+                  width: SIZES.fifty * 1.7,
+                  alignItems: 'center',
+                }}
+                activeOpacity={0.6}
+                onPress={() => {
+                  acceptOrder();
+                }}>
+                <BoldTextCB>Accept</BoldTextCB>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           <View
@@ -245,10 +360,10 @@ export default function BookingAcceptance(props) {
             <View
               style={{
                 flexDirection: 'row',
-                marginTop: 5,
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 paddingHorizontal: SIZES.ten,
+                paddingBottom: SIZES.twenty,
               }}>
               <StarRating
                 disabled={true}
@@ -256,7 +371,12 @@ export default function BookingAcceptance(props) {
                 fullStar={Images.starFull}
                 emptyStar={Images.starHalf}
                 starSize={SIZES.fifteen}
-                rating={4}
+                rating={
+                  bookingDetail?.vendor.ratings !== null &&
+                  bookingDetail?.vendor.ratings !== undefined
+                    ? bookingDetail?.vendor.ratings
+                    : ''
+                }
                 starStyle={{
                   width: SIZES.twenty,
                   height: SIZES.twenty,
@@ -272,27 +392,45 @@ export default function BookingAcceptance(props) {
                   marginStart: SIZES.twenty * 1.8,
                   marginTop: SIZES.five / 2,
                 }}>
-                4.4 Ratings
+                {bookingDetail?.vendor.ratings !== null &&
+                bookingDetail?.vendor.ratings !== undefined
+                  ? bookingDetail?.vendor.ratings
+                  : ''}{' '}
+                Ratings
               </RegularTextCB>
             </View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: Colors.coolGrey,
-                marginRight: SIZES.ten,
-                padding: SIZES.fifteen,
-                borderRadius: SIZES.ten,
-                width: SIZES.fifty * 1.7,
-                alignItems: 'center',
-              }}
-              onPress={() => {
-                props.navigation.navigate(Constants.VenderBookings);
-              }}
-              activeOpacity={0.6}>
-              <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
-            </TouchableOpacity>
+
+            {bookingDetail?.orderStatus === 'pending' ? (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.coolGrey,
+                  marginRight: SIZES.ten,
+                  padding: SIZES.fifteen,
+                  borderRadius: SIZES.ten,
+                  width: SIZES.fifty * 1.7,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  cancelOrder();
+                }}
+                activeOpacity={0.6}>
+                <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </TouchableOpacity>
+
+        {bookingDetail?.orderStatus === 'cancelled' && (
+          <Text style={{marginTop: SIZES.twenty, alignSelf: 'center'}}>
+            You Have cancel this order{' '}
+          </Text>
+        )}
       </View>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
@@ -327,11 +465,9 @@ const styles = StyleSheet.create({
   circleCard: {
     height: 64,
     width: 64,
-    borderRadius: 30,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    elevation: 5,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

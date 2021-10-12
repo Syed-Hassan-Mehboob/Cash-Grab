@@ -112,38 +112,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const Data = [
-  {
-    id: 1,
-    name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
-    price: '300.00',
-    service: 'AutoMobile',
-    description:
-      'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-    address: '111,NYC Street, NY 1121',
-    time: '12:00 - 3:00 ',
-  },
-  {
-    id: 2,
-    name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
-    price: '300.00',
-    service: 'AutoMobile',
-    description:
-      'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-    address: '111,NYC Street, NY 1121',
-    time: '12:00 - 3:00 ',
-  },
-  {
-    id: 3,
-    name: 'Ray Hammad',
-    tittle: 'Car Machanic Needed',
-    price: '300.00',
-    service: 'AutoMobile',
-    description:
-      'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-    address: '111,NYC Street, NY 1121',
-    time: '12:00 - 3:00 ',
-  },
-];
+// const Data = [
+//   {
+//     id: 1,
+//     name: 'Ray Hammad',
+//     tittle: 'Car Machanic Needed',
+//     price: '300.00',
+//     service: 'AutoMobile',
+//     description:
+//       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+//     address: '111,NYC Street, NY 1121',
+//     time: '12:00 - 3:00 ',
+//   },
+//   circleCard: {
+//     height: SIZES.ten * 6,
+//     width: SIZES.ten * 6,
+//     borderRadius: SIZES.ten * 6,
+//     overflow: 'hidden',
+//   },
+//   spinnerTextStyle: {
+//     color: '#FFF',
+//     fontFamily: Constants.fontRegular,
+//   },
+// });

@@ -22,7 +22,7 @@ const ButtonRadius10 = ({
 
 const styles = StyleSheet.create({
   loginBtnBg: {
-    height: 60,
+    height: 55,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
