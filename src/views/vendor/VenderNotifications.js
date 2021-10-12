@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 import {
   View,
   StyleSheet,
@@ -11,7 +12,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../../common/Colors';
-import Constants, {SIZES, STYLES} from '../../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
@@ -215,6 +216,11 @@ export default class VenderNotifications extends Component {
             // for android
             paddingBottom: SIZES.ten * 10,
           }}
+          ListEmptyComponent={() => (
+            <Text style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+              No Notification(s)!
+            </Text>
+          )}
         />
         <Spinner
           visible={this.state.isLoading}

@@ -9,7 +9,7 @@ export default class RegularTextCB extends Component {
 
   render() {
     return (
-      <Text style={[styles.defaultStyle, this.props.style]}>
+      <Text {...this.props} style={[styles.defaultStyle, this.props.style]}>
         {this.props.children}
       </Text>
     );
