@@ -92,6 +92,7 @@ const Constants = {
   forgotPasswordURL: 'auth/forgot-password',
   updatePasswordURL: 'auth/update-password',
   getProfileURL: 'auth/get-profile',
+  getServicesOfVendorURL: 'vendors/get-service-of-vendor?',
   updateProfileURL: 'auth/update-profile',
   signOutURL: 'auth/sign-out',
   customerCategoriesURL: 'customer/categories',

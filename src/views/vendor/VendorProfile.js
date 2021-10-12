@@ -58,6 +58,7 @@ export default class VendorProfile extends React.Component {
       desc: '3 AC split units maintenance',
     },
   ];
+
   reviews = [
     {
       id: '1',
@@ -112,12 +113,14 @@ export default class VendorProfile extends React.Component {
   constructor(props) {
     super(props);
   }
+
   state = {
     isLoading: false,
     isDescriptionSelected: true,
     isReviewsSelected: false,
     review: '',
     accessToken: '',
+    userId: '',
     avatar: '',
     name: '',
     email: '',
@@ -129,10 +132,11 @@ export default class VendorProfile extends React.Component {
     rating: '',
     year: '',
     customer: '',
+    interests: [],
+    categories: [],
     services: [],
     review: [],
     abouteMe: '',
-    Interest: DummyData,
   };
 
   componentDidMount() {
@@ -161,48 +165,49 @@ export default class VendorProfile extends React.Component {
   };
 
   getUserAccessToken = async () => {
+    const user = await AsyncStorage.getItem('user');
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
+    this.setState({userId: JSON.parse(user).id, accessToken: token}, () => {
       this.getUserProfile();
     });
   };
 
-  renderServicePrice = ({item}) => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: SIZES.twenty,
-        }}>
-        <Text style={[FONTS.mediumFont16]}>{item.name}</Text>
-        <Text style={[FONTS.boldFont14]}>{item.price}</Text>
-      </View>
-    );
-  };
-
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      // console.log(
-      //   'Vender Profile =========',
-      //   data.data.records.userProfile.image,
-      // );
       this.toggleIsLoading();
+      let tempCats = [];
+      if (data.data.records && data.data.records.category)
+        data.data.records.category.map((item, index) => {
+          if (index === 0) {
+            tempCats.push({...item, isSelected: true});
+          } else {
+            tempCats.push({...item, isSelected: false});
+          }
+        });
+
       this.setState({
-        avatar: Constants.imageURL + data.data.records.userProfile.image,
+        avatar: Constants.imageURL + data.data.records.user_profiles.image,
         name: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag: data.data.records.country_flag,
         phone: data.data.records.phone,
-        location: data.data.records.userProfile.location,
+        location: data.data.records.user_profiles.location,
         rating: data.data.records.ratings,
         year: data.data.records.year,
-        services: data.data.records.services,
+        interests: data.data.records.interest,
         review: data.data.records.comments,
-        customer: data.data.records.customer,
-        abuteMe: data.data.records.userProfile.about_me,
+        customer: data.data.records.customers,
+        abuteMe: data.data.records.user_profiles.about_me,
+        categories: tempCats,
       });
+
+      for (let i = 0; i < tempCats.length; i++) {
+        if (tempCats[i].isSelected) {
+          this.getServicesOfCategory(tempCats[i].id, true);
+          break;
+        }
+      }
     };
 
     const onFailure = (error) => {
@@ -220,11 +225,50 @@ export default class VendorProfile extends React.Component {
       .catch(onFailure);
   };
 
-  renderServicesItem = ({item}) => {
-    //console.log('Services =========', item);
+  getServicesOfCategory = (id, isFirstTime) => {
+    const onSuccess = ({data}) => {
+      if (!isFirstTime) {
+        this.toggleIsLoading();
+      }
+      this.setState({services: data.data});
+    };
 
+    const onFailure = (error) => {
+      if (!isFirstTime) {
+        this.toggleIsLoading();
+      }
+      utils.showResponseError(error);
+    };
+
+    if (!isFirstTime) {
+      this.toggleIsLoading();
+    }
+    Axios.get(Constants.getServicesOfVendorURL, {
+      params: {
+        category_id: id,
+        vendor_id: this.state.userId,
+      },
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  renderServicesItem = ({item}) => {
     return (
-      <TouchableOpacity activeOpacity={0.6}>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        onPress={() => {
+          let temp = this.state.categories;
+          temp.map((tItem) => {
+            if (tItem.id !== item.id) tItem.isSelected = false;
+            else tItem.isSelected = true;
+          });
+          this.setState({categories: temp});
+          this.getServicesOfCategory(item.id, false);
+        }}>
         <LinearGradient
           style={[
             styles.card,
@@ -232,34 +276,42 @@ export default class VendorProfile extends React.Component {
               paddingVertical: SIZES.ten,
               paddingHorizontal: SIZES.fifteen,
               alignItems: 'center',
-              // justifyContent: 'space-between',
-              marginVertical: SIZES.fifteen,
+              marginVertical: SIZES.ten,
               marginLeft: SIZES.ten,
             },
           ]}
-          colors={[Colors.lightGold, Colors.orange]}>
-          {/* <Image
-          source={{uri: Constants.imageURL + item.categories.icon}}
-          style={{
-            height: SIZES.ten * 3,
-            width: SIZES.ten * 3,
-            marginRight: SIZES.five,
-          }}
-        /> */}
+          colors={
+            item.isSelected
+              ? [Colors.sand, Colors.sickGreen]
+              : [Colors.lightGold, Colors.orange]
+          }>
           <RegularTextCB
             style={{
               fontSize: 16,
               color: Colors.white,
             }}>
-            {item.categories.name}
+            {item.name}
           </RegularTextCB>
         </LinearGradient>
       </TouchableOpacity>
     );
   };
 
+  renderServicePrice = ({item}) => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: SIZES.twenty,
+        }}>
+        <Text style={[FONTS.mediumFont16]}>{item.name}</Text>
+        <Text style={[FONTS.boldFont14]}>$ {item.price}</Text>
+      </View>
+    );
+  };
+
   renderReviewsItem = ({item}) => {
-    // console.log('Reviews ====================', item);
     return (
       <View
         style={{
@@ -343,21 +395,19 @@ export default class VendorProfile extends React.Component {
       </View>
     );
   };
+
   onInterestPress = (id, type) => {
-    let newArray = this.state.Interest.map((val, i) => {
+    let newArray = this.state.interests.map((val, i) => {
       if (id === val.id) {
         return {...val, isSlected: type};
       } else {
         return val;
       }
     });
-    // console.log('Interset ====== Array ', newArray);
-    this.setState({Interest: newArray});
+    this.setState({interests: newArray});
   };
 
   rendorInterest = ({item}) => {
-    // //console.log('Dummy data === ==', item);
-    // console.log('=================', item.isSlected);
     return (
       <TouchableOpacity
         style={[
@@ -381,7 +431,9 @@ export default class VendorProfile extends React.Component {
           },
         ]}
         activeOpacity={0.6}
-        onPress={() => this.onInterestPress(item.id, !item.isSlected)}>
+        onPress={() => {
+          // this.onInterestPress(item.id, !item.isSlected)
+        }}>
         <Text
           style={[
             FONTS.mediumFont16,
@@ -424,9 +476,6 @@ export default class VendorProfile extends React.Component {
                 Platform.OS === 'android'
                   ? SIZES.ten
                   : getStatusBarHeight(true) + SIZES.five,
-              // padding: SIZES.fifteen,
-              // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-              // marginBottom: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
             <TouchableOpacity
               style={{position: 'absolute', left: SIZES.ten}}
@@ -444,7 +493,6 @@ export default class VendorProfile extends React.Component {
             <TouchableOpacity
               style={{position: 'absolute', right: SIZES.ten}}
               onPress={() => {
-                console.log('Country Flag ===== ==', this.state.countryFlag);
                 this.props.navigation.navigate(Constants.vendorEditProfile);
               }}>
               <Image
@@ -723,7 +771,6 @@ export default class VendorProfile extends React.Component {
             )}
             {this.state.isReviewsSelected && (
               <View>
-                {console.log('this reviews ======', this.state.review)}
                 <FlatList
                   style={{paddingBottom: SIZES.fifty}}
                   showsVerticalScrollIndicator={false}
@@ -743,7 +790,7 @@ export default class VendorProfile extends React.Component {
                     {
                       marginHorizontal: SIZES.twenty,
                       color: Colors.black,
-                      marginVertical: SIZES.twenty,
+                      marginTop: SIZES.twenty,
                     },
                   ]}>
                   Interest
@@ -751,7 +798,7 @@ export default class VendorProfile extends React.Component {
 
                 <FlatList
                   horizontal
-                  data={this.state.Interest}
+                  data={this.state.interests}
                   keyExtractor={(item, index) => String(index)}
                   renderItem={this.rendorInterest}
                   showsHorizontalScrollIndicator={false}
@@ -785,7 +832,7 @@ export default class VendorProfile extends React.Component {
                   style={{}}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={this.state.services}
+                  data={this.state.categories}
                   renderItem={this.renderServicesItem}
                   keyExtractor={(item) => item.id}
                   contentInset={{
@@ -805,7 +852,13 @@ export default class VendorProfile extends React.Component {
               <FlatList
                 style={{paddingBottom: SIZES.ten * 4}}
                 showsVerticalScrollIndicator={false}
-                data={services}
+                data={this.state.services}
+                ListEmptyComponent={() => (
+                  <Text
+                    style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+                    No Service(s)!
+                  </Text>
+                )}
                 renderItem={this.renderServicePrice}
                 keyExtractor={(item) => item.id}
                 contentInset={{
