@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 import {
   View,
   StyleSheet,
@@ -11,7 +12,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import NormalHeader from '../components/NormalHeader';
 import RegularTextCB from '../components/RegularTextCB';
@@ -190,6 +191,17 @@ export default class Notifications extends Component {
             // for android
             paddingBottom: 100,
           }}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                alignSelf: 'center',
+                ...StyleSheet.absoluteFill,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={[FONTS.boldFont18, {}]}>No Notification(s)!</Text>
+            </View>
+          )}
         />
         <Spinner
           visible={this.state.isLoading}
