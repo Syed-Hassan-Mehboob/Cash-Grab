@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   View,
   StyleSheet,
@@ -7,17 +7,17 @@ import {
   FlatList,
   Platform,
   Text,
-} from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Colors from '../common/Colors';
-import Constants, {FONTS, SIZES, STYLES, width} from '../common/Constants';
-import Images from '../common/Images';
-import RegularTextCB from '../components/RegularTextCB';
-import LightTextCB from '../components/LightTextCB';
-import utils from '../utils';
-import Axios from '../network/APIKit';
-import {Icon} from 'native-base';
+} from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Colors from "../common/Colors";
+import Constants, { FONTS, SIZES, STYLES, width } from "../common/Constants";
+import Images from "../common/Images";
+import RegularTextCB from "../components/RegularTextCB";
+import LightTextCB from "../components/LightTextCB";
+import utils from "../utils";
+import Axios from "../network/APIKit";
+import { Icon } from "native-base";
 
 export default class SingleCategory extends Component {
   constructor(props) {
@@ -37,20 +37,20 @@ export default class SingleCategory extends Component {
   };
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getCategoryData());
+    this.setState({ accessToken: token }, () => this.getCategoryData());
     this.getCategoryData();
   };
 
   getCategoryData = () => {
-    const onSuccess = ({data}) => {
-      console.log('==== catagory data ====', data);
+    const onSuccess = ({ data }) => {
+      console.log("==== catagory data ====", data);
       this.toggleIsLoading();
-      this.setState({vendors: data.data});
+      this.setState({ vendors: data.data });
       // utils.showToast(data.message)
     };
 
@@ -75,35 +75,45 @@ export default class SingleCategory extends Component {
       .catch(onFailure);
   };
 
-  renderSingleCategoriesItem = ({item}) => {
+  renderSingleCategoriesItem = ({ item }) => {
     // console.log('Single Category Item======',item.userProfile)
 
-    // console.log('SIngle Category item ====== ', item);
+    console.log("SIngle Category item ====== ", item);
     return (
       <TouchableOpacity
+        disabled={true}
         style={[
           styles.card,
           {
             marginHorizontal: SIZES.fifteen + 2,
             marginTop: SIZES.ten * 4,
-            alignItems: 'center',
+            alignItems: "center",
             paddingVertical: SIZES.five,
           },
         ]}
-        onPress={() =>
-          this.props.navigation.navigate(Constants.viewVendorProfile, {
-            item: item.id,
-          })
-        }
-        activeOpacity={0.6}>
-        <View
+        //   onPress={
+        //     () =>
+        //     this.props.navigation.navigate(Constants.viewVendorProfile, {
+        //       item: item.id,
+        //     })
+        //   }
+        //   activeOpacity={0.6}
+      >
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate(Constants.viewVendorProfile, {
+              item: item.id,
+            })
+          }
+          activeOpacity={0.6}
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Image
-            source={{uri: Constants.imageURL + item.image}}
+            source={{ uri: Constants.imageURL + item.image }}
             // source={item.image}
             style={{
               height: SIZES.ten * 5.5,
@@ -117,26 +127,29 @@ export default class SingleCategory extends Component {
             style={[
               FONTS.mediumFont14,
               {
-                textDecorationLine: 'underline',
+                textDecorationLine: "underline",
                 color: Colors.black1,
               },
-            ]}>
+            ]}
+          >
             View Profile
           </Text>
-        </View>
+        </TouchableOpacity>
 
         <View
           style={{
             paddingHorizontal: SIZES.ten,
             paddingVertical: SIZES.ten,
-          }}>
+          }}
+        >
           <RegularTextCB
             style={[
               FONTS.boldFont16,
               {
                 color: Colors.black,
               },
-            ]}>
+            ]}
+          >
             {/* {item.services[0]['name']} */}
             Car Macanice
           </RegularTextCB>
@@ -144,7 +157,8 @@ export default class SingleCategory extends Component {
             style={{
               fontSize: 16,
               color: Colors.coolGrey,
-            }}>
+            }}
+          >
             {/* {item.services[0]['name']} */}
             Lorem ipSum
           </RegularTextCB>
@@ -162,13 +176,16 @@ export default class SingleCategory extends Component {
             },
           ]}
           onPress={() =>
-            this.props.navigation.navigate(Constants.SelectServices)
+            this.props.navigation.navigate(Constants.SelectServices, {
+              id: item.id,
+            })
           }
-          activeOpacity={0.6}>
+          activeOpacity={0.6}
+        >
           <Icon
             type="AntDesign"
             name="right"
-            style={{color: Colors.white, fontSize: 20}}
+            style={{ color: Colors.white, fontSize: 20 }}
           />
         </TouchableOpacity>
       </TouchableOpacity>
@@ -182,7 +199,7 @@ export default class SingleCategory extends Component {
       numberOfElementsLastRow !== numColumns &&
       numberOfElementsLastRow !== 0
     ) {
-      data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
+      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
       numberOfElementsLastRow++;
     }
 
@@ -191,32 +208,35 @@ export default class SingleCategory extends Component {
 
   render() {
     return (
-      <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
+      <View style={[STYLES.container, { paddingHorizontal: SIZES.ten }]}>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
             // paddingHorizontal: SIZES.ten,
-          }}>
+          }}
+        >
           <TouchableOpacity
             style={{}}
             onPress={() => {
               this.props.navigation.goBack();
-            }}>
+            }}
+          >
             <Icon
               type="AntDesign"
               name="left"
-              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
+              style={{ color: Colors.black, fontSize: SIZES.ten * 3 }}
             />
           </TouchableOpacity>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
+              flexDirection: "row",
+              justifyContent: "center",
               flex: 0.42,
-              alignItems: 'center',
-            }}>
+              alignItems: "center",
+            }}
+          >
             <Image
               source={{
                 uri: Constants.imageURL + this.props.route.params.item.image,
@@ -234,26 +254,28 @@ export default class SingleCategory extends Component {
                   fontSize: 22,
                   marginStart: SIZES.five * 1,
                 },
-              ]}>
+              ]}
+            >
               {this.props.route.params.item.name}
             </RegularTextCB>
           </View>
           <TouchableOpacity
             onPress={() => {
               this.openNextScreen(Constants.filter);
-            }}>
+            }}
+          >
             <Image
               source={Images.iconHamburger}
               style={{
                 height: SIZES.twenty,
                 width: SIZES.twenty,
               }}
-              resizeMode={'contain'}
+              resizeMode={"contain"}
             />
           </TouchableOpacity>
         </View>
 
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <FlatList
             numColumns={2}
             // horizontal
@@ -263,7 +285,9 @@ export default class SingleCategory extends Component {
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={() => {
               return (
-                <View style={{flex: 1, alignItems: 'center', paddingTop: 100}}>
+                <View
+                  style={{ flex: 1, alignItems: "center", paddingTop: 100 }}
+                >
                   <Text style={FONTS.mediumFont18}>Not Found</Text>
                 </View>
               );
@@ -276,7 +300,7 @@ export default class SingleCategory extends Component {
 
         <Spinner
           visible={this.state.isLoading}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
       </View>
@@ -288,29 +312,29 @@ const styles = StyleSheet.create({
   iconBack: {
     height: SIZES.twenty,
     width: SIZES.twenty,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   iconFilter: {
     height: SIZES.ten * 3,
     width: SIZES.ten * 3,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   iconForward: {
     height: SIZES.ten * 10,
     width: SIZES.ten * 10,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   iconUser: {
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: (SIZES.ten * 6) / 2,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   iconPassword: {
     fontSize: SIZES.twenty,
     height: SIZES.twenty,
     width: SIZES.twenty,
-    alignSelf: 'center',
+    alignSelf: "center",
     color: Colors.orange,
   },
   container: {
@@ -321,7 +345,7 @@ const styles = StyleSheet.create({
   },
   childContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   itemContainer: {
     padding: SIZES.twenty,
@@ -341,25 +365,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
     height: SIZES.fifty - 5,
     borderColor: Colors.grey,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   underlineText: {
     color: Colors.black,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
     fontSize: 16,
   },
   noUnderlineText: {
     color: Colors.black,
-    textDecorationLine: 'none',
+    textDecorationLine: "none",
     fontSize: 16,
   },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: SIZES.twenty,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -368,15 +392,15 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: SIZES.ten * 3,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   spinnerTextStyle: {
-    color: '#FFF',
+    color: "#FFF",
     fontFamily: Constants.fontRegular,
   },
 });
