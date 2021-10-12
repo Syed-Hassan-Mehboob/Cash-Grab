@@ -125,6 +125,8 @@ const Constants = {
   getMyJob: 'customer/jobs/my-jobs',
   scheduleJob: 'order/get-schedule-bookings',
   quickOrder: 'order/get-quick-bookings',
+  quickJobsVendor: 'order/get-quick-bookings-vendor',
+  scheduleBookingsVendor: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   jobAcceptance: 'customer/jobs/detail?',
   rescheduleBooking: 'order/reschedule-bookings?',

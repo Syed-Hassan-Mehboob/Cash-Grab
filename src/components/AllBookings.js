@@ -10,7 +10,9 @@ import {useNavigation} from '@react-navigation/native';
 const AllBookings = (props) => {
   const navigation = useNavigation();
   const item = props.item;
+
   console.log('List Componant=======', item);
+
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -26,11 +28,7 @@ const AllBookings = (props) => {
         <View style={styles.circleCard}>
           <Image
             source={{
-              uri:
-                item.userProfile.image !== null &&
-                item.userProfile.image !== undefined
-                  ? Constants.imageURL + item.userProfile.image
-                  : '',
+              uri: Constants.imageURL + item.user_image,
             }}
             style={styles.iconUser}
             resizeMode="cover"
@@ -39,9 +37,7 @@ const AllBookings = (props) => {
 
         <View style={{marginStart: 10}}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.user.name !== null && item.user.name !== undefined
-              ? item.user.name
-              : ''}
+            {item.user_name}
           </RegularTextCB>
           <View
             style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
@@ -51,10 +47,10 @@ const AllBookings = (props) => {
                 height: 15,
                 width: 15,
                 resizeMode: 'contain',
-                tintColor:
-                  item.user.email_verified_at !== null
-                    ? Colors.turqoiseGreen
-                    : 'red',
+                // tintColor:
+                //   item.user.email_verified_at !== null
+                //     ? Colors.turqoiseGreen
+                //     : 'red',
               }}
             />
             <RegularTextCB
@@ -66,7 +62,7 @@ const AllBookings = (props) => {
                 fontSize: 12,
                 marginStart: 5,
               }}>
-              {item.user.email_verified_at !== null ? 'Verified' : 'Unverified'}
+              {/* {item.user.email_verified_at !== null ? 'Verified' : 'Unverified'} */}
             </RegularTextCB>
           </View>
         </View>
@@ -80,23 +76,33 @@ const AllBookings = (props) => {
         }}>
         <View>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.category.name !== null && item.category.name !== undefined
-              ? item.category.name
-              : ''}
+            {item.category_name}
           </RegularTextCB>
+
+          {/* <RegularTextCB
+            style={{
+              color: Colors.sickGreen,
+              fontSize: 14,
+              //   marginVertical: SIZES.ten,
+            }}>
+            {item.service}
+          </RegularTextCB> */}
         </View>
 
         <LightTextCB style={{color: Colors.black, fontSize: 14}}>
-          $
-          {item.grandTotal !== null && item.grandTotal !== undefined
-            ? item.grandTotal
-            : ''}
+          $ {item.grand_total}
         </LightTextCB>
       </View>
       <View style={{}}>
-        <RegularTextCB style={{color: Colors.coolGrey, fontSize: 15}}>
-          {item.description}
-        </RegularTextCB>
+        {item.description ? (
+          <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              fontSize: 15,
+            }}>
+            {item.description}
+          </RegularTextCB>
+        ) : null}
       </View>
       <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
         <Image
@@ -108,38 +114,44 @@ const AllBookings = (props) => {
             color: Colors.coolGrey,
             // marginVertical: SIZES.ten,
           }}>
-          {item.address}
+          {item.location}
         </RegularTextCB>
       </View>
-      <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-        <Image
-          source={Images.iconStopWatch}
-          style={{height: 17, width: 17, resizeMode: 'contain'}}
-        />
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 5,
+          alignItems: 'center',
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
         <View
           style={{
             flexDirection: 'row',
-            marginStart: 5,
-            alignItems: 'center',
-            flex: 1,
-            justifyContent: 'space-between',
+            flexShrink: 1,
+            marginRight: SIZES.fifteen,
           }}>
+          <Image
+            source={Images.iconStopWatch}
+            style={{height: 17, width: 17, resizeMode: 'contain'}}
+          />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
-            }}>
-            {item.time}
+            }}
+            numberOfLines={1}>
+            {item.from_time} - {item.to_time}
           </RegularTextCB>
-          <View>
-            <RegularTextCB
-              style={{
-                color: Colors.black,
-                textDecorationLine: 'underline',
-                fontSize: 16,
-              }}>
-              View Job
-            </RegularTextCB>
-          </View>
+        </View>
+        <View>
+          <RegularTextCB
+            style={{
+              color: Colors.black,
+              textDecorationLine: 'underline',
+              fontSize: 16,
+            }}>
+            View Job
+          </RegularTextCB>
         </View>
       </View>
     </TouchableOpacity>
@@ -150,26 +162,20 @@ export default AllBookings;
 
 const styles = StyleSheet.create({
   conatiner: {},
-  circleCard: {
-    height: SIZES.ten * 6,
-    width: SIZES.ten * 6,
-    borderRadius: SIZES.ten * 6,
-    overflow: 'hidden',
-    // shadowColor: '#c5c5c5',
-    // shadowOffset: {width: 5, height: 5},
-    // shadowOpacity: 0.15,
-    // shadowRadius: 5,
-    // elevation: 5,
-  },
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    // width: width - SIZES.fifteen,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
+  },
+  circleCard: {
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 6,
+    overflow: 'hidden',
   },
   iconUser: {
     height: '100%',
