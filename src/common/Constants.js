@@ -131,6 +131,8 @@ const Constants = {
   orderCancel: 'order/order-cancel?',
   // jobAcceptance: 'customer/jobs/detail',
   jobRequest: 'customer/job-request',
+  getScheduleBookings: 'order/get-schedule-bookings-vendor',
+  orderDetail: 'order/details?',
 };
 
 export const SIZES = {

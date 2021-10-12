@@ -43,6 +43,7 @@ export default class VendorHome extends Component {
       currentLat: '',
       currentLong: '',
       permissionModalVisibility: false,
+      scheduleBookings: [],
     };
   }
 
@@ -58,37 +59,12 @@ export default class VendorHome extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    console.log('access token============>>>', token);
+    // console.log('access token============>>>', token);
     this.setState({accessToken: token}, async () => {
       this.getUserProfile(token);
       this.getJobAroundYou();
-      this.getCategories();
+      this.getBookings();
     });
-  };
-
-  getCategories = () => {
-    const onSuccess = ({data}) => {
-      //console.log('All Category ================', data.data.records);
-      this.setState({isLoading: false, categories: data.data.records});
-    };
-
-    const onFailure = (error) => {
-      this.setState({isLoading: false});
-      utils.showResponseError(error);
-    };
-
-    this.setState({isLoading: true});
-
-    let params = {
-      limit: 2,
-    };
-
-    Axios.get(Constants.getVenderAllCategory, {
-      // params: params,
-      headers: {Authorization: this.state.accessToken},
-    })
-      .then(onSuccess)
-      .catch(onFailure);
   };
 
   getUserProfile = async (token) => {
@@ -145,6 +121,38 @@ export default class VendorHome extends Component {
     };
 
     Axios.get(Constants.getAllJobs, {
+      params: {
+        limit: 1,
+        offset: 0,
+      },
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getBookings = async () => {
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      // console.log(' Schedule Bookings  =====', data.data.records);
+      this.setState({
+        scheduleBookings: data.data.records,
+      });
+      // utils.showToast(data.message)
+      this.setState({
+        isLoading: false,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+      console.log('==================Error', error);
+    };
+
+    Axios.get(Constants.getScheduleBookings, {
       params: {
         limit: 1,
         offset: 0,
@@ -231,14 +239,22 @@ export default class VendorHome extends Component {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{
+                uri:
+                  item.user.userProfile.image !== null &&
+                  item.user.userProfile.image !== undefined
+                    ? Constants.imageURL + item.user.userProfile.image
+                    : '',
+              }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.user.name}
+              {item.user.name !== null && item.user.name !== undefined
+                ? item.user.name
+                : ''}
             </RegularTextCB>
             <View
               style={{
@@ -280,17 +296,18 @@ export default class VendorHome extends Component {
             justifyContent: 'space-between',
           }}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title}
+            {item.title !== null && item.title !== undefined ? item.title : ''}
           </RegularTextCB>
 
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            ${item.price}
+          <LightTextCB style={{color: Colors.black}}>
+            ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -304,7 +321,9 @@ export default class VendorHome extends Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.address}
+            {item.address !== null && item.address !== undefined
+              ? item.address
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -325,7 +344,7 @@ export default class VendorHome extends Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.time}
+              {item.time !== null && item.time !== undefined ? item.time : ''}
             </RegularTextCB>
             <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
               {'View Job >'}
@@ -457,7 +476,7 @@ export default class VendorHome extends Component {
     );
   };
   renderBookings = ({item}) => {
-    // //console.log('Job Around data ======',item)
+    console.log('Schedule Bookings item>>>>>> ======', item.userProfile.image);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -475,14 +494,22 @@ export default class VendorHome extends Component {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{
+                uri:
+                  item.userProfile.image !== null &&
+                  item.userProfile.image !== undefined
+                    ? Constants.imageURL + item.userProfile.image
+                    : '',
+              }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.user.name}
+              {item.user.name !== null && item.user.name !== undefined
+                ? item.user.name
+                : ''}
             </RegularTextCB>
             <View
               style={{
@@ -497,7 +524,7 @@ export default class VendorHome extends Component {
                   width: 15,
                   resizeMode: 'contain',
                   tintColor:
-                    item.email_verified_at !== null
+                    item.user.email_verified_at !== null
                       ? Colors.turqoiseGreen
                       : 'red',
                 }}
@@ -505,13 +532,15 @@ export default class VendorHome extends Component {
               <RegularTextCB
                 style={{
                   color:
-                    item.email_verified_at !== null
+                    item.user.email_verified_at !== null
                       ? Colors.turqoiseGreen
                       : 'red',
                   fontSize: 12,
                   marginStart: 5,
                 }}>
-                {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
+                {item.user.email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>
@@ -524,17 +553,23 @@ export default class VendorHome extends Component {
             justifyContent: 'space-between',
           }}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title}
+            {item.category.name !== null && item.category.name !== undefined
+              ? item.category.name
+              : ''}
           </RegularTextCB>
 
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            ${item.price}
+          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+            $
+            {item.grandTotal !== null && item.grandTotal !== undefined
+              ? item.grandTotal
+              : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -548,7 +583,9 @@ export default class VendorHome extends Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.address}
+            {item.address !== null && item.address !== undefined
+              ? item.address
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -569,7 +606,9 @@ export default class VendorHome extends Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.time}
+              {item.end_time !== null && item.end_time !== undefined
+                ? item.end_time
+                : ''}
             </RegularTextCB>
             <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
               {'View Job >'}
@@ -802,7 +841,7 @@ export default class VendorHome extends Component {
 
             <View style={{paddingHorizontal: SIZES.twenty}}>
               <FlatList
-                data={this.state.jobAround}
+                data={this.state.scheduleBookings}
                 // horizontal
                 keyExtractor={(item) => item.id}
                 renderItem={this.renderBookings}
