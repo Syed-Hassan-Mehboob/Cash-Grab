@@ -28,6 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditText from './../components/EditText';
 import CountryPicker from 'react-native-country-picker-modal';
 import {Icon, Radio, ListItem} from 'native-base';
+import utils from '../utils';
 
 const {height, width} = Dimensions.get('window');
 
@@ -89,6 +90,7 @@ export default class DateTimeSlots extends Component {
       address: '',
       lat: '',
       lng: '',
+      description: '',
       selected: '',
       selectedTimeSlot: '',
       sliderValue: 0,
@@ -99,12 +101,8 @@ export default class DateTimeSlots extends Component {
       minTo: '',
       isLoading: false,
       showModal: false,
-      hrfrom: '',
-      minfrom: '',
-      fromItemSelected: '',
-      hrto: '',
-      minTo: '',
-      toItemSelected: '',
+      fromItemSelected: 'am',
+      toItemSelected: 'am',
     };
   }
 
@@ -251,6 +249,144 @@ export default class DateTimeSlots extends Component {
 
   selectTimeSlot = (slot) => {
     this.setState({selectedTimeSlot: slot});
+  };
+
+  postScheduleJob = () => {
+    let phone = this.state.phone;
+    let countryCode = this.state.countryCode;
+    let address = this.state.address;
+    let location = this.state.location;
+    let description = this.state.description;
+    let lat = this.state.lat;
+    let lng = this.state.lng;
+    let hrFrom = this.state.hrFrom;
+    let minFrom = this.state.minFrom;
+    let hrTo = this.state.hrTo;
+    let minTo = this.state.minTo;
+    let selectedDate = this.state.selected;
+    let fromItemSelected = this.state.fromItemSelected;
+    let toItemSelected = this.state.toItemSelected;
+
+    if (selectedDate === '') {
+      utils.showToast('Please Select Date');
+      return;
+    }
+
+    if (hrFrom === '') {
+      utils.showToast('From Hour should not be empty');
+      return;
+    }
+
+    if (fromItemSelected === 'am') {
+      if (Number(hrFrom) < 1 || Number(hrFrom) > 12)
+        utils.showToast('From Hour should be in between 1 and 12');
+      return;
+    }
+
+    if (fromItemSelected === 'pm') {
+      if (Number(hrFrom) < 1 || Number(hrFrom) > 23)
+        utils.showToast('From Hour should be in between 1 and 23');
+      return;
+    }
+
+    if (minFrom === '') {
+      utils.showToast('From Minutes should not be empty');
+      return;
+    }
+
+    if (Number(minFrom) < 1 || Number(minFrom) > 59) {
+      utils.showToast('From Minute should be in between 1 and 59');
+      return;
+    }
+
+    if (hrTo === '') {
+      utils.showToast('To Hour should not be empty');
+      return;
+    }
+
+    if (toItemSelected === 'am') {
+      if (Number(hrTo) < 1 || Number(hrFrom) > 12) {
+        utils.showToast('To Hour should be in between 1 and 12');
+        return;
+      }
+    }
+    if (toItemSelected === 'pm') {
+      if (Number(hrTo) < 1 || Number(hrFrom) > 23) {
+        utils.showToast('To Hour should be in between 1 and 23');
+        return;
+      }
+    }
+
+    if (minTo === '') {
+      utils.showToast('To Minutes should not be empty');
+      return;
+    }
+    if (Number(minTo) < 1 || Number(minTo) > 59) {
+      utils.showToast('To Minute should be in between 1 and 59');
+      return;
+    }
+
+    if (countryCode === '') {
+      utils.showToast('Select Country Code');
+      return;
+    }
+    if (phone === '') {
+      utils.showToast(' should not be empty');
+      return;
+    }
+    if (phone === '') {
+      utils.showToast(' should not be empty');
+      return;
+    }
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+    if (location === '') {
+      utils.showToast('Location Should not be Empty');
+      return;
+    }
+    if (address === '') {
+      utils.showToast('Address Should not be Empty');
+      return;
+    }
+    if (description === '') {
+      utils.showToast('Description Should not be Empty');
+      return;
+    }
+
+    // const onSuccess = ({data}) => {
+    //   utils.showToast(data.message);
+    //   this.toggleIsLoading();
+
+    //   setTimeout(() => {
+    //     this.props.navigation.goBack();
+    //   }, 1000);
+    // };
+
+    // const onFailure = (error) => {
+    //   this.toggleIsLoading();
+    //   utils.showResponseError(error);
+    // };
+
+    // const params = {
+    //   old_password: currentPassword,
+    //   password: newPassword,
+    //   password_confirmation: confirmPassword,
+    // };
+
+    // const options = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: this.state.accessToken,
+    //   },
+    // };
+
+    // this.toggleIsLoading();
+
+    // Axios.post(Constants.updatePasswordURL, params, options)
+    //   .then(onSuccess)
+    //   .catch(onFailure);
   };
 
   renderTimeSlotItem = ({item}) => {
@@ -533,7 +669,15 @@ export default class DateTimeSlots extends Component {
                 }}>
                 <ListItem>
                   <Radio
-                    onPress={() => this.setState({fromItemSelected: 'am'})}
+                    onPress={() => {
+                      if (this.state.fromItemSelected !== 'am') {
+                        let temp = Number(this.state.hrFrom) - 12;
+                        this.setState({
+                          hrFrom: temp.toString(),
+                          fromItemSelected: 'am',
+                        });
+                      }
+                    }}
                     selected={this.state.fromItemSelected === 'am'}
                     color={Colors.sickGreen}
                     selectedColor={Colors.sickGreen}
@@ -542,11 +686,15 @@ export default class DateTimeSlots extends Component {
                 </ListItem>
                 <ListItem>
                   <Radio
-                    onPress={() =>
-                      this.setState({
-                        fromItemSelected: 'pm',
-                      })
-                    }
+                    onPress={() => {
+                      if (this.state.fromItemSelected !== 'pm') {
+                        let temp = Number(this.state.hrFrom) + 12;
+                        this.setState({
+                          hrFrom: temp.toString(),
+                          fromItemSelected: 'pm',
+                        });
+                      }
+                    }}
                     selected={this.state.fromItemSelected === 'pm'}
                     color={Colors.sickGreen}
                     selectedColor={Colors.sickGreen}
@@ -581,7 +729,7 @@ export default class DateTimeSlots extends Component {
                     value={this.state.hrTo}
                     keyboardType={'numeric'}
                     onChangeText={(text) =>
-                      this.state({
+                      this.setState({
                         hrTo: text,
                       })
                     }
@@ -604,11 +752,15 @@ export default class DateTimeSlots extends Component {
               <View style={{flexDirection: 'row'}}>
                 <ListItem>
                   <Radio
-                    onPress={() =>
-                      this.setState({
-                        toItemSelected: 'am',
-                      })
-                    }
+                    onPress={() => {
+                      if (this.state.toItemSelected !== 'am') {
+                        let temp = Number(this.state.hrTo) - 12;
+                        this.setState({
+                          hrTo: temp.toString(),
+                          toItemSelected: 'am',
+                        });
+                      }
+                    }}
                     selected={this.state.toItemSelected === 'am'}
                     color={Colors.sickGreen}
                     selectedColor={Colors.sickGreen}
@@ -617,11 +769,15 @@ export default class DateTimeSlots extends Component {
                 </ListItem>
                 <ListItem>
                   <Radio
-                    onPress={() =>
-                      this.setState({
-                        toItemSelected: 'pm',
-                      })
-                    }
+                    onPress={() => {
+                      if (this.state.toItemSelected !== 'pm') {
+                        let temp = Number(this.state.hrTo) + 12;
+                        this.setState({
+                          hrTo: temp.toString(),
+                          toItemSelected: 'pm',
+                        });
+                      }
+                    }}
                     selected={this.state.toItemSelected === 'pm'}
                     color={Colors.sickGreen}
                     selectedColor={Colors.sickGreen}
@@ -732,6 +888,12 @@ export default class DateTimeSlots extends Component {
               <MessageEditText
                 placeholder={'Write'}
                 height={SIZES.twentyFive * 4.5}
+                value={this.state.description}
+                onChangeText={(txt) => {
+                  this.setState({
+                    description: txt,
+                  });
+                }}
               />
             </View>
           </View>
@@ -781,9 +943,7 @@ export default class DateTimeSlots extends Component {
             <ButtonRadius10
               label="NEXT"
               bgColor={Colors.sickGreen}
-              onPress={() =>
-                this.props.navigation.navigate(Constants.bookingConfirmed)
-              }
+              onPress={this.postScheduleJob}
             />
           </View>
         </ScrollView>
