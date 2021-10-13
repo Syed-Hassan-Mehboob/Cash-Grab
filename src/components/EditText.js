@@ -2,7 +2,7 @@ import {Icon} from 'native-base';
 import React, {Component} from 'react';
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 
 export default class EditText extends Component {
   constructor(props) {
@@ -87,14 +87,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 60,
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     paddingHorizontal: 20,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
     alignItems: 'center',
   },
   textInput: {

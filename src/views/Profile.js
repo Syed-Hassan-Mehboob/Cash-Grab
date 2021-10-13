@@ -251,7 +251,7 @@ export default class Profile extends React.Component {
         ]}
         onPress={() =>
           this.props.navigation.navigate(Constants.SchechuleJobDetail, {
-            catName: item.category.name,
+            catName: item.category_name,
             joid: item.id,
           })
         }>

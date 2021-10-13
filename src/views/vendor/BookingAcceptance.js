@@ -29,7 +29,7 @@ export default function BookingAcceptance(props) {
     const getToken = async () => {
       getBookingDetail();
       const unsubscribe = props.navigation.addListener('focus', () => {
-        console.log('working ==== ......');
+        // console.log('working ==== ......');
         getBookingDetail();
       });
       return unsubscribe;
@@ -426,9 +426,14 @@ export default function BookingAcceptance(props) {
         </TouchableOpacity>
 
         {bookingDetail?.orderStatus === 'cancelled' && (
-          <Text style={{marginTop: SIZES.twenty, alignSelf: 'center'}}>
-            You Have cancel this order{' '}
-          </Text>
+          <LightTextCB
+            style={{
+              marginTop: SIZES.twenty,
+              alignSelf: 'center',
+              color: Colors.coolGrey,
+            }}>
+            * you Have canceled this order{' '}
+          </LightTextCB>
         )}
       </View>
       <Spinner

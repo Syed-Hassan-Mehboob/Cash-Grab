@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+  SegmentedControlIOS,
+} from 'react-native';
 import Colors from '../common/Colors';
 import Constants, {SIZES, STYLES, FONTS} from '../common/Constants';
 import BoldTextCB from '../components/BoldTextCB';
@@ -13,15 +20,21 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function SelectServices(props) {
   const [isLoading, setIsloading] = useState(true);
-  console.log('other user id', props.route.params.id);
-
   const [serviceData, setServiceData] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
+
+  console.log('this.props.route.params.item', props.route.params.item);
 
   useEffect(() => {
     getUserAccessToken();
-  }, []);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      console.log('working ==== ......');
+      getUserAccessToken();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
-  console.log('shaohabbb=====', serviceData);
+  // console.log('shaohabbb=====', serviceData);
 
   const getUserAccessToken = async () => {
     setIsloading(true);
@@ -36,7 +49,8 @@ export default function SelectServices(props) {
     const value = await AsyncStorage.getItem(Constants.accessToken);
     let config = {
       params: {
-        categoryId: props.route.params.id,
+        categoryId: props.route.params.item.id.toString(),
+        // categoryId: '16',
       },
       headers: {
         Authorization: value,
@@ -46,10 +60,7 @@ export default function SelectServices(props) {
     // console.log('tokennnnn', token);
 
     const onSuccess = ({data}) => {
-      console.log(
-        'All Servicessssssss ======================>',
-        data.data[0].services,
-      );
+      console.log('All Servicessssssss ======================>', data);
       // setAllServices(data.data[0].services);
       let temp = [];
       let temp1 = data.data[0].services;
@@ -60,24 +71,34 @@ export default function SelectServices(props) {
       setServiceData(temp);
       setIsloading(false);
     };
+
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
       console.log('=======Servicessssss========>', error);
     };
-    // const onSuccess = ({data}) => {
-    //   console.log('asdsdasdsadasd ======================>', data.data);
-    //   setJobAccept(data.data);
-    //   setIsloading(false);
-    // };
-    // const onFailure = (error) => {
-    //   utils.showResponseError(error);
-    //   setIsloading(false);
-    //   console.log('===============>', error);
-    // };
     Axios.get(Constants.customerViewCategoriesURL, config)
       .then(onSuccess)
       .catch(onFailure);
+  };
+
+  const handleServiceIdOnClick = () => {
+    setSelectedServices([]);
+    serviceData.map((val) => {
+      if (val.isSelected) {
+        selectedServices.push(val.id);
+        console.log('Services Id ==== ', val.id);
+      }
+    });
+
+    if (selectedServices.length === 0) {
+      utils.showToast('Specify atleast 1 interest');
+    } else {
+      props.navigation.navigate(Constants.dateTimeSlots, {
+        serviceIds: selectedServices,
+        item: props.route.params.item,
+      });
+    }
   };
 
   const onPress = (id, type) => {
@@ -114,7 +135,7 @@ export default function SelectServices(props) {
         onPress={() => onPress(item.id, !item.isSelected)}
         activeOpacity={0.6}>
         <RegularTextCB>{item.name}</RegularTextCB>
-        <RegularTextCB>{item.price}</RegularTextCB>
+        <RegularTextCB>$ {item.price}</RegularTextCB>
       </TouchableOpacity>
     );
   };
@@ -171,15 +192,25 @@ export default function SelectServices(props) {
           bgColor={Colors.sickGreen}
           label="Next"
           onPress={() => {
-            props.navigation.navigate(Constants.dateTimeSlots);
+            handleServiceIdOnClick();
           }}
         />
       </TouchableOpacity>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
+  },
+});
 
 const Data = [
   {
