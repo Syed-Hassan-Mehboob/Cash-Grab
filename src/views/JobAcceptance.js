@@ -426,11 +426,7 @@ export default function JobAcceptance(props) {
                       borderBottomWidth: 1.5,
                       marginTop: SIZES.fifteen,
                     }}></View>
-                  <View
-                    style={[
-                      styles.card,
-                      {marginTop: SIZES.twenty, padding: SIZES.ten},
-                    ]}>
+                  <View style={[{marginTop: SIZES.twenty, padding: SIZES.ten}]}>
                     <View
                       style={{
                         flexDirection: 'row',
