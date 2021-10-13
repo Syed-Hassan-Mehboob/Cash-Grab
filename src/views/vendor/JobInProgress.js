@@ -46,7 +46,6 @@ export default class JobInProgress extends React.Component {
       longitude: '',
       jobService: [],
       thankYouModal: false,
-      address: '',
     };
   }
 
@@ -57,6 +56,13 @@ export default class JobInProgress extends React.Component {
       this.getUserAccessToken();
     });
   }
+  // componentWillMount() {
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  //   this.getUserAccessToken();
+  //   this.props.navigation.addListener('focus', () => {
+  //     this.getUserAccessToken();
+  //   });
+  // }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
@@ -70,7 +76,7 @@ export default class JobInProgress extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      console.log(' Schedule Bookings Detail  =====', data.data);
+      // console.log(' Schedule Bookings Detail  =====', data.data);
       this.setState({
         userData: data.data,
       });
@@ -105,10 +111,12 @@ export default class JobInProgress extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      console.log('>>>>>>>> ', data);
+      // console.log('>>>>>>>> ', data);
+      this.getUserAccessToken();
       this.setState({
         isLoading: false,
       });
+
       utils.showToast('Work Has Been Started');
     };
 
@@ -132,9 +140,9 @@ export default class JobInProgress extends React.Component {
     Axios.post(Constants.orderStatus, params, options)
       .then(onSuccess)
       .catch(onFailure);
-    setTimeout(() => {
-      this.props.navigation.goBack();
-    }, 500);
+    // setTimeout(() => {
+    //   this.props.navigation.goBack();
+    // }, 500);
   };
 
   render() {
@@ -142,7 +150,7 @@ export default class JobInProgress extends React.Component {
 
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="Job In Progress" />
+        <NormalHeader name="Job Details" />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: SIZES.five}}>
@@ -153,10 +161,15 @@ export default class JobInProgress extends React.Component {
                   alignItems: 'center',
                 }}>
                 <View style={styles.circleCard}>
-                  {this.state.userImage !== '' &&
-                  this.state.userImage !== undefined ? (
+                  {this.state.userData?.user?.user_profiles.image !== '' &&
+                  this.state.userData?.user?.user_profiles.image !==
+                    undefined ? (
                     <Image
-                      source={{uri: Constants.imageURL + this.state.userImage}}
+                      source={{
+                        uri:
+                          Constants.imageURL +
+                          this.state.userData?.user?.user_profiles.image,
+                      }}
                       style={styles.iconUser}
                       resizeMode="cover"
                     />
@@ -210,13 +223,12 @@ export default class JobInProgress extends React.Component {
                 </RegularTextCB>
                 <LightTextCB
                   style={[
-                    FONTS.boldFont14,
                     {
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                     },
                   ]}>
-                  ${this.state.userData?.grandTotal}
+                  $ {this.state.userData?.grandTotal}
                 </LightTextCB>
               </View>
 
@@ -302,28 +314,24 @@ export default class JobInProgress extends React.Component {
                 marginVertical: SIZES.ten * 1.8,
                 marginHorizontal: SIZES.twenty,
               }}>
-              {/* {this.state.userData?.orderStatus === 'accepted' && (
+              {this.state.userData?.orderStatus ? (
                 <ButtonRadius10
-                  label="START NOW"
+                  label={
+                    this.state.userData?.orderStatus === 'accepted'
+                      ? 'START NOW'
+                      : 'WORK STARTED'
+                  }
+                  disabled={
+                    this.state.userData?.orderStatus !== 'accepted'
+                      ? true
+                      : false
+                  }
                   bgColor={Colors.sickGreen}
                   onPress={() => {
                     this.progressOrder();
                   }}
                 />
-              )} */}
-
-              <ButtonRadius10
-                label={
-                  this.state.userData?.orderStatus === 'accepted'
-                    ? 'START NOW'
-                    : 'WORK STARTED'
-                }
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  // //   this.props.navigation.navigate(Constants.);
-                  // this.setState({thankYouModal: true});
-                }}
-              />
+              ) : null}
             </View>
           </View>
         </ScrollView>

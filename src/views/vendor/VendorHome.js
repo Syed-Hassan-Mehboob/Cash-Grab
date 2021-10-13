@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   PermissionsAndroid,
+  Text,
 } from "react-native";
 import ButtonRadius10 from "../../components/ButtonRadius10";
 import EditText from "../../components/EditText";
@@ -70,7 +71,10 @@ export default class VendorHome extends Component {
 
   getUserProfile = async (token) => {
     const onSuccess = ({ data }) => {
-      // console.log('get profile success===========>>>>', token);
+      console.log(
+        "get profile success===========>>>>",
+        data.data.records.user_profiles.image
+      );
       this.setState({
         isLoading: false,
         avatar: data.data.records.user_profiles.image,
@@ -325,8 +329,14 @@ export default class VendorHome extends Component {
             >
               {item.time !== null && item.time !== undefined ? item.time : ""}
             </RegularTextCB>
-            <RegularTextCB style={[FONTS.boldFont18, { color: Colors.black }]}>
-              {"View Job >"}
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 18,
+                textDecorationLine: "underline",
+              }}
+            >
+              {"View Job"}
             </RegularTextCB>
           </View>
         </View>
@@ -455,8 +465,14 @@ export default class VendorHome extends Component {
             >
               {item.time}
             </RegularTextCB>
-            <RegularTextCB style={[FONTS.boldFont18, { color: Colors.black }]}>
-              {"View Job >"}
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 18,
+                textDecorationLine: "underline",
+              }}
+            >
+              {"View Job"}
             </RegularTextCB>
           </View>
         </View>
@@ -555,8 +571,8 @@ export default class VendorHome extends Component {
               : ""}
           </RegularTextCB>
 
-          <LightTextCB style={[FONTS.boldFont14, { color: Colors.black }]}>
-            $
+          <LightTextCB style={[{ color: Colors.black, fontSize: 14 }]}>
+            ${" "}
             {item.grand_total !== null && item.grand_total !== undefined
               ? item.grand_total
               : ""}
@@ -617,10 +633,17 @@ export default class VendorHome extends Component {
                 ? item.from_time
                 : ""}
             </RegularTextCB>
-            <RegularTextCB style={[FONTS.boldFont18, { color: Colors.black }]}>
-              {"View Job >"}
+            <RegularTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 18,
+                textDecorationLine: "underline",
+              }}
+            >
+              {"View Job"}
             </RegularTextCB>
           </View>
+          {/* <Text style={{textDecorationLine='underline'}}></Text> */}
         </View>
       </TouchableOpacity>
     );

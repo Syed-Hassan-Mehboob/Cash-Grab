@@ -291,8 +291,8 @@ export default class FileredScreen extends Component {
                     alignItems: 'center',
                     height: height / 1.5,
                   }}>
-                  <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
-                    Record not found
+                  <Text style={[FONTS.boldFont18, {alignSelf: 'center'}]}>
+                    No Record(s)!
                   </Text>
                 </View>
               ) : null
