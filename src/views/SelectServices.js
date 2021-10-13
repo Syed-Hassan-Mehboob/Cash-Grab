@@ -165,16 +165,9 @@ export default function SelectServices(props) {
         }}
         ListEmptyComponent={() => {
           return (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
-                Record not found
-              </Text>
-            </View>
+            <Text style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+              No Service(s)!
+            </Text>
           );
         }}
       />

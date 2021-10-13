@@ -27,6 +27,7 @@ import Axios from '../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditText from './../components/EditText';
 import CountryPicker from 'react-native-country-picker-modal';
+import {Icon, Radio, ListItem} from 'native-base';
 
 const {height, width} = Dimensions.get('window');
 
@@ -98,6 +99,12 @@ export default class DateTimeSlots extends Component {
       minTo: '',
       isLoading: false,
       showModal: false,
+      hrfrom: '',
+      minfrom: '',
+      fromItemSelected: '',
+      hrto: '',
+      minTo: '',
+      toItemSelected: '',
     };
   }
 
@@ -470,24 +477,41 @@ export default class DateTimeSlots extends Component {
             <View
               style={[
                 styles.card,
-                {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+                {
+                  borderWidth: 2,
+                  borderColor: Colors.sickGreen,
+                  width: '45%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
               ]}>
-              <View style={{alignItems: 'center'}}>
-                <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}>
+                <RegularTextCB
+                  style={{
+                    fontSize: 12,
+                    color: Colors.coolGrey,
+                    marginTop: SIZES.five,
+                  }}>
                   From
                 </RegularTextCB>
                 <View style={{flexDirection: 'row'}}>
                   <TextInput
                     placeholderTextColor={Colors.black}
                     placeholder={'Hr'}
-                    style={styles.textInput}
+                    style={[styles.textInput, {alignItems: 'center'}]}
                     maxLength={2}
                     value={this.state.hrFrom}
                     keyboardType={'numeric'}
                     onChangeText={(text) =>
-                      this.setState({hrFrom: text.replace(/[^0-9]/g, '')})
+                      this.setState({
+                        hrFrom: text,
+                      })
                     }
                   />
+
                   <TextInput
                     placeholderTextColor={Colors.black}
                     placeholder={'Min'}
@@ -496,16 +520,52 @@ export default class DateTimeSlots extends Component {
                     keyboardType={'numeric'}
                     value={this.state.minFrom}
                     onChangeText={(text) =>
-                      this.setState({minFrom: text.replace(/[^0-9]/g, '')})
+                      this.setState({
+                        minFrom: text,
+                      })
                     }
                   />
                 </View>
               </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <ListItem>
+                  <Radio
+                    onPress={() => this.setState({fromItemSelected: 'am'})}
+                    selected={this.state.fromItemSelected === 'am'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>AM</Text>
+                </ListItem>
+                <ListItem>
+                  <Radio
+                    onPress={() =>
+                      this.setState({
+                        fromItemSelected: 'pm',
+                      })
+                    }
+                    selected={this.state.fromItemSelected === 'pm'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>PM</Text>
+                </ListItem>
+              </View>
             </View>
+
             <View
               style={[
                 styles.card,
-                {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
+                {
+                  borderWidth: 2,
+                  borderColor: Colors.sickGreen,
+                  width: '45%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
               ]}>
               <View style={{alignItems: 'center'}}>
                 <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
@@ -521,7 +581,9 @@ export default class DateTimeSlots extends Component {
                     value={this.state.hrTo}
                     keyboardType={'numeric'}
                     onChangeText={(text) =>
-                      this.setState({hrTo: text.replace(/[^0-9]/g, '')})
+                      this.state({
+                        hrTo: text,
+                      })
                     }
                   />
                   <TextInput
@@ -529,13 +591,43 @@ export default class DateTimeSlots extends Component {
                     placeholder={'Min'}
                     style={styles.textInput}
                     maxLength={2}
-                    value={this.state.hrMin}
+                    value={this.state.minTo}
                     keyboardType={'numeric'}
                     onChangeText={(text) =>
-                      this.setState({hrMin: text.replace(/[^0-9]/g, '')})
+                      this.setState({
+                        minTo: text,
+                      })
                     }
                   />
                 </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <ListItem>
+                  <Radio
+                    onPress={() =>
+                      this.setState({
+                        toItemSelected: 'am',
+                      })
+                    }
+                    selected={this.state.toItemSelected === 'am'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>AM</Text>
+                </ListItem>
+                <ListItem>
+                  <Radio
+                    onPress={() =>
+                      this.setState({
+                        toItemSelected: 'pm',
+                      })
+                    }
+                    selected={this.state.toItemSelected === 'pm'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>PM</Text>
+                </ListItem>
               </View>
             </View>
           </View>

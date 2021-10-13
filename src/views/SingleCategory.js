@@ -289,9 +289,10 @@ export default class SingleCategory extends Component {
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={() => {
               return (
-                <View style={{flex: 1, alignItems: 'center', paddingTop: 100}}>
-                  <Text style={FONTS.mediumFont18}>Not Found</Text>
-                </View>
+                <Text
+                  style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+                  No Record(s)!
+                </Text>
               );
             }}
             contentContainerStyle={{
