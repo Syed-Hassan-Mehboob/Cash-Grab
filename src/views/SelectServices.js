@@ -23,7 +23,7 @@ export default function SelectServices(props) {
 
   const [serviceData, setServiceData] = useState([]);
 
-  useEffect(async () => {
+  useEffect( () => {
     getUserAccessToken();
   }, []);
   console.log("shaohabbb=====", serviceData);

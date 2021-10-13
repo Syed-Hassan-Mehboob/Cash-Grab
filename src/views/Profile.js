@@ -668,7 +668,7 @@ export default class Profile extends React.Component {
               Phone No.
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {this.state.countryCode.concat('', this.state.phone)}
+              {this.state.countryCode + '' + this.state.phone}
             </RegularTextCB>
           </View>
           <View

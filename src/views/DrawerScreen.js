@@ -60,13 +60,17 @@ export default class DrawerScreen extends Component {
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
+      console.log(
+        'ssssssssssssssssssssdsdsssdsdsdsdsdssdsdsdsdsdsd ======== >>>>> ',
+        Constants.imageURL + data.data.records.user_profiles.image,
+      );
       this.setState({
-        avatar: data.data.records.userProfile.image,
+        avatar: Constants.imageURL + data.data.records.user_profiles.image,
         name: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         phone: data.data.records.phone,
-        location: data.data.records.userProfile.location,
+        location: data.data.records.user_profiles.location,
       });
     };
 
@@ -139,7 +143,7 @@ export default class DrawerScreen extends Component {
                   ? Constants.vendorEditProfile
                   : Constants.editProfile,
                 {
-                  avatar: Constants.imageURL + this.state.avatar,
+                  avatar: this.state.avatar,
                   name: this.state.name,
                   email: this.state.email,
                   countryCode: this.state.countryCode,
@@ -160,7 +164,7 @@ export default class DrawerScreen extends Component {
             }}>
             <View style={styles.circleCard}>
               <Image
-                source={{uri: Constants.imageURL + this.state.avatar}}
+                source={{uri: this.state.avatar}}
                 style={styles.iconUser}
                 resizeMode="cover"
               />
@@ -424,6 +428,8 @@ const styles = StyleSheet.create({
     width: SIZES.ten * 6,
     borderRadius: (SIZES.ten * 6) / 2,
     resizeMode: 'contain',
+    borderColor: Colors.sickGreen,
+    borderWidth: 1,
   },
   circleCard: {
     height: SIZES.ten * 6,
