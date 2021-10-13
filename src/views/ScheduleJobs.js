@@ -105,9 +105,9 @@ export default function ScheduleJobs(props) {
                   width: 15,
                   resizeMode: 'contain',
                   tintColor: Colors.turqoiseGreen,
-                  //   item.email_verified_at !== null
-                  //     ? Colors.turqoiseGreen
-                  //     : 'red',
+                  // item.email_verified_at !== null
+                  //   ? Colors.turqoiseGreen
+                  //   : 'red',
                 }}
               />
               <RegularTextCB

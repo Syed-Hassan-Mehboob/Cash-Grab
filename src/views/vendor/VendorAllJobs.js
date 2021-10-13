@@ -9,7 +9,7 @@ import {
   LogBox,
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
+import Constants, {FONTS, SIZES, STYLES, width} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import LightTextCB from '../../components/LightTextCB';
@@ -117,14 +117,22 @@ export default class VendorAllJobs extends Component {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{
+                uri:
+                  item.user.userProfile.image !== null &&
+                  item.user.userProfile.image !== undefined
+                    ? Constants.imageURL + item.user.userProfile.image
+                    : '',
+              }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.user.name}
+              {item.user.name !== null && item.user.name !== undefined
+                ? item.user.name
+                : ''}
             </RegularTextCB>
             <View
               style={{
@@ -166,17 +174,18 @@ export default class VendorAllJobs extends Component {
             justifyContent: 'space-between',
           }}>
           <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title}
+            {item.title !== null && item.title !== undefined ? item.title : ''}
           </RegularTextCB>
 
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            ${item.price}
+          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+            ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}{' '}
           </RegularTextCB>
         </View>
         <View
@@ -190,7 +199,9 @@ export default class VendorAllJobs extends Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.address}
+            {item.address !== null && item.address !== undefined
+              ? item.address
+              : ''}
           </RegularTextCB>
         </View>
         <View
@@ -211,7 +222,7 @@ export default class VendorAllJobs extends Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.time}
+              {item.time !== null && item.time !== undefined ? item.time : ''}
             </RegularTextCB>
             <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
               {'View Job >'}
@@ -230,7 +241,7 @@ export default class VendorAllJobs extends Component {
     return (
       <View style={STYLES.container}>
         <NormalHeader name="All Jobs" />
-        <View style={{paddingHorizontal: SIZES.twenty}}>
+        <View style={{}}>
           <FlatList
             style={{marginTop: SIZES.ten}}
             data={this.state.allJobsAround}
@@ -330,6 +341,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
+    width: width - 30,
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
