@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList,
-} from "react-native";
-import Colors from "../common/Colors";
-import Constants, { SIZES, STYLES } from "../common/Constants";
-import BoldTextCB from "../components/BoldTextCB";
-import ButtonRadius10 from "../components/ButtonRadius10";
-import NormalHeader from "../components/NormalHeader";
-import RegularTextCB from "../components/RegularTextCB";
-import utils from "../utils";
-import Axios from "../network/APIKit";
-import Spinner from "react-native-loading-spinner-overlay";
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
+import Colors from '../common/Colors';
+import Constants, {SIZES, STYLES} from '../common/Constants';
+import BoldTextCB from '../components/BoldTextCB';
+import ButtonRadius10 from '../components/ButtonRadius10';
+import NormalHeader from '../components/NormalHeader';
+import RegularTextCB from '../components/RegularTextCB';
+import utils from '../utils';
+import Axios from '../network/APIKit';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function SelectServices(props) {
   const [isLoading, setIsloading] = useState(true);
-  console.log("other user id", props.route.params.id);
+  console.log('other user id', props.route.params.id);
 
   const [serviceData, setServiceData] = useState([]);
 
   useEffect(async () => {
     getUserAccessToken();
   }, []);
-  console.log("shaohabbb=====", serviceData);
+
+  console.log('shaohabbb=====', serviceData);
 
   const getUserAccessToken = async () => {
     setIsloading(true);
-    const value = await AsyncStorage.getItem("user");
+    const value = await AsyncStorage.getItem('user');
     const accessToken = JSON.parse(value);
-    if (accessToken !== undefined) {
-      vendorAllServices(accessToken.token);
-      // postJobRequest(accessToken.token);
-    }
+
+    vendorAllServices();
+    // postJobRequest(accessToken.token);
   };
 
   const vendorAllServices = async () => {
@@ -51,17 +45,17 @@ export default function SelectServices(props) {
 
     // console.log('tokennnnn', token);
 
-    const onSuccess = ({ data }) => {
+    const onSuccess = ({data}) => {
       console.log(
-        "All Servicessssssss ======================>",
-        data.data[0].services
+        'All Servicessssssss ======================>',
+        data.data[0].services,
       );
       // setAllServices(data.data[0].services);
       let temp = [];
       let temp1 = data.data[0].services;
       temp1.map((element) => {
         // element["isSelected"] = false;
-        temp.push({ ...element, isSelected: false });
+        temp.push({...element, isSelected: false});
       });
       setServiceData(temp);
       setIsloading(false);
@@ -69,7 +63,7 @@ export default function SelectServices(props) {
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
-      console.log("=======Servicessssss========>", error);
+      console.log('=======Servicessssss========>', error);
     };
     // const onSuccess = ({data}) => {
     //   console.log('asdsdasdsadasd ======================>', data.data);
@@ -89,7 +83,7 @@ export default function SelectServices(props) {
   const onPress = (id, type) => {
     let newArray = serviceData.map((val, i) => {
       if (id === val.id) {
-        return { ...val, isSelected: type };
+        return {...val, isSelected: type};
       } else {
         return val;
       }
@@ -97,20 +91,20 @@ export default function SelectServices(props) {
     setServiceData(newArray);
   };
 
-  const renderServices = ({ item }) => {
+  const renderServices = ({item}) => {
     return (
       <TouchableOpacity
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           backgroundColor: Colors.white,
-          alignItems: "center",
-          justifyContent: "space-between",
+          alignItems: 'center',
+          justifyContent: 'space-between',
           paddingVertical: SIZES.fifteen,
           borderRadius: SIZES.ten,
           marginTop: SIZES.ten,
           paddingHorizontal: SIZES.twenty,
-          shadowColor: "#c5c5c5",
-          shadowOffset: { width: SIZES.five, height: SIZES.five },
+          shadowColor: '#c5c5c5',
+          shadowOffset: {width: SIZES.five, height: SIZES.five},
           shadowOpacity: 1.0,
           shadowRadius: SIZES.ten,
           elevation: SIZES.ten,
@@ -118,8 +112,7 @@ export default function SelectServices(props) {
           borderColor: item.isSelected ? Colors.sickGreen : Colors.white,
         }}
         onPress={() => onPress(item.id, !item.isSelected)}
-        activeOpacity={0.6}
-      >
+        activeOpacity={0.6}>
         <RegularTextCB>{item.name}</RegularTextCB>
         <RegularTextCB>{item.price}</RegularTextCB>
       </TouchableOpacity>
@@ -134,10 +127,9 @@ export default function SelectServices(props) {
           flex: 1,
           backgroundColor: Colors.white,
         },
-      ]}
-    >
+      ]}>
       <NormalHeader name="Select Services" />
-      <BoldTextCB style={{ marginLeft: SIZES.twenty, fontSize: 16 }}>
+      <BoldTextCB style={{marginLeft: SIZES.twenty, fontSize: 16}}>
         Cleaning
       </BoldTextCB>
 
@@ -152,7 +144,7 @@ export default function SelectServices(props) {
         }}
         ListEmptyComponent={() => {
           return (
-            <View style={{ alignItems: "center" }}>
+            <View style={{alignItems: 'center'}}>
               <Text>Data not Found</Text>
             </View>
           );
@@ -162,13 +154,12 @@ export default function SelectServices(props) {
       <TouchableOpacity
         style={{
           flex: 1,
-          position: "absolute",
+          position: 'absolute',
           bottom: SIZES.twenty,
-          width: "100%",
+          width: '100%',
           paddingHorizontal: SIZES.ten,
         }}
-        activeOpacity={0.6}
-      >
+        activeOpacity={0.6}>
         <ButtonRadius10
           bgColor={Colors.sickGreen}
           label="Next"
@@ -186,20 +177,20 @@ const styles = StyleSheet.create({});
 const Data = [
   {
     id: 1,
-    name: "Home Cleaning",
-    price: "$240.00",
+    name: 'Home Cleaning',
+    price: '$240.00',
     isSelected: false,
   },
   {
     id: 2,
-    name: "Garage Cleaning",
-    price: "$240.00",
+    name: 'Garage Cleaning',
+    price: '$240.00',
     isSelected: false,
   },
   {
     id: 3,
-    name: "Garden Cleaning",
-    price: "$240.00",
+    name: 'Garden Cleaning',
+    price: '$240.00',
     isSelected: false,
   },
 ];
