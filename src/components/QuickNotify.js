@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   FlatList,
   Image,
@@ -9,23 +9,23 @@ import {
   View,
   Platform,
   Modal,
-} from 'react-native';
+} from "react-native";
 
-import Spinner from 'react-native-loading-spinner-overlay';
-import ButtonRadius10 from '../components/ButtonRadius10';
-import EditText from '../components/EditText';
-import Constants, {SIZES} from '../common/Constants';
-import Axios from '../network/APIKit';
-import utils from '../utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import TimePicker from '../components/TimePicker';
-import Moment from 'moment';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {Component} from 'react';
-import RegularTextCB from './RegularTextCB';
-import Colors from '../common/Colors';
-import Images from '../common/Images';
-import {MultiDropdownPicker} from '../components/quickNotifyServeses';
+import Spinner from "react-native-loading-spinner-overlay";
+import ButtonRadius10 from "../components/ButtonRadius10";
+import EditText from "../components/EditText";
+import Constants, { SIZES } from "../common/Constants";
+import Axios from "../network/APIKit";
+import utils from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import TimePicker from "../components/TimePicker";
+import Moment from "moment";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { Component } from "react";
+import RegularTextCB from "./RegularTextCB";
+import Colors from "../common/Colors";
+import Images from "../common/Images";
+import { MultiDropdownPicker } from "../components/quickNotifyServeses";
 
 export default class QuickNotify extends Component {
   constructor(props) {
@@ -34,41 +34,45 @@ export default class QuickNotify extends Component {
       isLoading: false,
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
-      accessToken: '',
-      services: '',
-      rateRequested: '',
-      location: '',
-      address: '',
-      exactTime: '',
+      accessToken: "",
+      services: "",
+      rateRequested: "",
+      location: "",
+      address: "",
+      exactTime: "",
       selections: [],
-      startTime: '08:55',
+      startTime: "08:55",
       isDatePickerVisible: false,
       showModal: false,
-      lat: '',
-      long: '',
-      servicesid: '',
+      lat: "",
+      long: "",
+      servicesid: "",
+      getAllCategories: [],
     };
   }
 
   componentDidMount() {
     this.getUserAccessToken();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    this.props.navigation.addListener("focus", () => this.getUserAccessToken());
   }
+
   getUserAccessToken = async () => {
+    console.log("All Category ==========> ");
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
+    this.setState({ accessToken: token }, () => {
       this.getServies();
+      this.getAllCategories();
     });
   };
 
   GooglePlacesInput = (props) => {
     return (
       <GooglePlacesAutocomplete
-        placeholder={'Search'}
+        placeholder={"Search"}
         //   renderLeftButton={() => }
         minLength={2}
-        keyboardKeyType={'search'}
+        keyboardKeyType={"search"}
         fetchDetails={true}
         onPress={(data, details = null) => {
           this.setState(
@@ -79,25 +83,25 @@ export default class QuickNotify extends Component {
             },
             () => {
               setTimeout(() => {
-                this.setState({showModal: false});
+                this.setState({ showModal: false });
               }, 400);
-            },
+            }
           );
         }}
         query={{
-          key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
-          language: 'en',
-          types: '',
+          key: "AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM",
+          language: "en",
+          types: "",
         }}
         enablePoweredByContainer={false}
         styles={{
           textInputContainer: {
-            backgroundColor: '#fff',
+            backgroundColor: "#fff",
             marginTop: 0,
             marginBottom: 0,
             marginLeft: 0,
             marginRight: 0,
-            shadowColor: '#000',
+            shadowColor: "#000",
             shadowOffset: {
               width: 0,
               height: SIZES.five,
@@ -117,13 +121,13 @@ export default class QuickNotify extends Component {
           listView: {
             marginTop: SIZES.ten,
             borderRadius: 8,
-            overflow: 'hidden',
-            backgroundColor: '#fff',
+            overflow: "hidden",
+            backgroundColor: "#fff",
           },
-          row: {borderRadius: 8},
+          row: { borderRadius: 8 },
         }}
-        GooglePlacesSearchQuery={{rankby: 'distance'}}
-        GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
+        GooglePlacesSearchQuery={{ rankby: "distance" }}
+        GooglePlacesDetailsQuery={{ fields: ["formatted_address", "geometry"] }}
         renderDescription={(row) => row.description}
         currentLocation={true}
         currentLocationLabel="Current location"
@@ -136,30 +140,53 @@ export default class QuickNotify extends Component {
   };
 
   getServies = () => {
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      this.setState({selections: data.data.records});
-      this.setState({isLoading: false});
+    this.setState({ isLoading: true });
+    const onSuccess = ({ data }) => {
+      this.setState({ selections: data.data.records });
+      this.setState({ isLoading: false });
     };
     const onFailure = (error) => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       utils.showResponseError(error);
     };
     Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
   };
 
+  getAllCategories = () => {
+    const onSuccess = ({ data }) => {
+      console.log("All Category ==========> ", data.data.records);
+      this.setState({ isLoading: false, getAllCategories: data.data.records });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      console.log("=================", error);
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    Axios.get(Constants.getCategories, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   handleConfirm = (date) => {
-    const newTime = Moment(date).format('h:mm:ss');
-    this.setState({startTime: newTime});
+    const newTime = Moment(date).format("h:mm:ss");
+    this.setState({ startTime: newTime });
     this.hideDatePicker();
   };
 
   showDatePicker = () => {
-    this.setState({isDatePickerVisible: true});
+    this.setState({ isDatePickerVisible: true });
   };
 
   hideDatePicker = () => {
-    this.setState({isDatePickerVisible: false});
+    this.setState({ isDatePickerVisible: false });
   };
   postQuickOrder = () => {
     const postData = {
@@ -172,19 +199,19 @@ export default class QuickNotify extends Component {
       location: this.state.location,
     };
 
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
+    this.setState({ isLoading: true });
+    const onSuccess = ({ data }) => {
       utils.showToast(data.message);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       this.props.navigation.navigate(Constants.home);
     };
     const onFailure = (error) => {
       console.log(
-        'error =====================================================================>',
-        error,
+        "error =====================================================================>",
+        error
       );
       utils.showResponseError(error.massage);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     };
     const options = {
       headers: {
@@ -199,13 +226,14 @@ export default class QuickNotify extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: '#fff', paddingHorizontal: 20}}>
+      <View style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 20 }}>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             paddingVertical: SIZES.twenty,
-          }}>
+          }}
+        >
           <TouchableOpacity
             style={{
               height: SIZES.twenty,
@@ -213,10 +241,11 @@ export default class QuickNotify extends Component {
             }}
             onPress={() => {
               this.props.navigation.goBack();
-            }}>
+            }}
+          >
             <Image
               source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black1}]}
+              style={[styles.iconBack, { tintColor: Colors.black1 }]}
             />
           </TouchableOpacity>
           <RegularTextCB
@@ -224,28 +253,30 @@ export default class QuickNotify extends Component {
               fontSize: 18,
               color: Colors.lightYellowGreen,
               marginLeft: SIZES.ten,
-            }}>
+            }}
+          >
             Quick Services
           </RegularTextCB>
         </View>
 
         <View
           style={{
-            backgroundColor: 'pink',
+            backgroundColor: "pink",
             height: SIZES.ten * 6,
             borderRadius: SIZES.twenty,
-          }}>
+          }}
+        >
           <MultiDropdownPicker
             viewProperty="name"
             value={this.state.services}
             data={this.state.selections}
             onChangeValue={(val) => {
-              this.setState({servicesid: val}, () => {
+              this.setState({ servicesid: val }, () => {
                 console.log(
-                  'multidropdown picker ',
+                  "multidropdown picker ",
                   this.state.servicesid,
-                  'value',
-                  val,
+                  "value",
+                  val
                 );
               });
             }}
@@ -253,22 +284,23 @@ export default class QuickNotify extends Component {
         </View>
 
         <RegularTextCB
-          style={{fontSize: 18, color: Colors.black, marginTop: SIZES.twenty}}>
+          style={{ fontSize: 18, color: Colors.black, marginTop: SIZES.twenty }}
+        >
           Rate Requested
         </RegularTextCB>
         <EditText
-          ref={'rate'}
-          placeholder={'Enter Rate'}
+          ref={"rate"}
+          placeholder={"Enter Rate"}
           value={this.state.rateRequested}
           onChangeText={(text) => {
             this.setState({
               rateRequested: text,
             });
           }}
-          style={{height: SIZES.ten * 6, marginTop: SIZES.ten}}
+          style={{ height: SIZES.ten * 6, marginTop: SIZES.ten }}
         />
-        <View style={[{marginTop: SIZES.twenty}]}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={[{ marginTop: SIZES.twenty }]}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Location
           </RegularTextCB>
           <View
@@ -277,24 +309,26 @@ export default class QuickNotify extends Component {
                 height: SIZES.ten * 6,
                 backgroundColor: Colors.white,
                 borderRadius: SIZES.ten,
-                shadowColor: '#c5c5c5',
-                shadowOffset: {width: SIZES.five, height: SIZES.five},
+                shadowColor: "#c5c5c5",
+                shadowOffset: { width: SIZES.five, height: SIZES.five },
                 shadowOpacity: 1.0,
                 shadowRadius: SIZES.ten,
                 elevation: SIZES.ten,
-                justifyContent: 'center',
+                justifyContent: "center",
                 paddingLeft: SIZES.twenty,
                 marginTop: SIZES.ten,
               },
-            ]}>
+            ]}
+          >
             <TouchableOpacity
               onPress={() => {
                 this.setState({
                   showModal: true,
                 });
-              }}>
+              }}
+            >
               <RegularTextCB>
-                {this.state.location ? this.state.location : 'Search Location'}
+                {this.state.location ? this.state.location : "Search Location"}
               </RegularTextCB>
             </TouchableOpacity>
           </View>
@@ -305,23 +339,28 @@ export default class QuickNotify extends Component {
           transparent={true}
           visible={this.state.showModal}
           onRequestClose={() => {
-            this.setState({showModal: false});
-          }}>
+            this.setState({ showModal: false });
+          }}
+        >
           <View
             style={{
               flex: 1,
               padding: SIZES.twenty,
-              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
-            }}>
-            <View style={{flex: 1, padding: SIZES.five, flexDirection: 'row'}}>
+              backgroundColor: "rgba(52, 52, 52, 0.SIZES.five)",
+            }}
+          >
+            <View
+              style={{ flex: 1, padding: SIZES.five, flexDirection: "row" }}
+            >
               {this.GooglePlacesInput()}
               <TouchableOpacity
-                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                style={{ marginTop: SIZES.fifteen, marginLeft: SIZES.five }}
                 onPress={() => {
-                  this.setState({showModal: false});
-                }}>
+                  this.setState({ showModal: false });
+                }}
+              >
                 <Image
-                  style={{height: SIZES.fifteen, width: SIZES.fifteen}}
+                  style={{ height: SIZES.fifteen, width: SIZES.fifteen }}
                   resizeMode="contain"
                   source={Images.iconClose}
                 />
@@ -330,26 +369,27 @@ export default class QuickNotify extends Component {
           </View>
         </Modal>
 
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={{ marginTop: SIZES.twenty }}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Address
           </RegularTextCB>
           <EditText
-            ref={'rate'}
-            placeholder={'Enter Address'}
+            ref={"rate"}
+            placeholder={"Enter Address"}
             value={this.state.address}
             onChangeText={(text) => {
               this.setState({
                 address: text,
               });
             }}
-            style={{height: SIZES.ten * 6, marginTop: SIZES.ten}}
+            style={{ height: SIZES.ten * 6, marginTop: SIZES.ten }}
           />
         </View>
 
-        <View style={[{marginTop: SIZES.twenty}]}>
+        <View style={[{ marginTop: SIZES.twenty }]}>
           <RegularTextCB
-            style={{fontSize: 18, color: '#000', marginBottom: SIZES.ten}}>
+            style={{ fontSize: 18, color: "#000", marginBottom: SIZES.ten }}
+          >
             Exact Time
           </RegularTextCB>
 
@@ -369,7 +409,8 @@ export default class QuickNotify extends Component {
             marginTop: SIZES.ten * 5,
             paddingBottom: SIZES.ten,
             marginHorizontal: SIZES.ten,
-          }}>
+          }}
+        >
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
@@ -380,7 +421,7 @@ export default class QuickNotify extends Component {
         </View>
         <Spinner
           visible={this.state.isLoading}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
       </View>
@@ -390,7 +431,7 @@ export default class QuickNotify extends Component {
 
 const styles = StyleSheet.create({
   textInput: {
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingVertical: SIZES.five,
   },
   bottomSheetBody: {
@@ -400,13 +441,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: SIZES.twenty,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: SIZES.twenty,
     // borderWidth:1,
     // borderColor:Colors.lightYellowGreen,
     flex: 1,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -416,23 +457,23 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 7,
   },
   spinnerTextStyle: {
-    color: '#FFF',
+    color: "#FFF",
     fontFamily: Constants.fontRegular,
   },
   iconBack: {
     height: SIZES.twenty,
     width: SIZES.twenty,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });
 
 const data = [
   {
     id: 1,
-    name: 'test1',
+    name: "test1",
   },
   {
     id: 2,
-    name: 'test2',
+    name: "test2",
   },
 ];
