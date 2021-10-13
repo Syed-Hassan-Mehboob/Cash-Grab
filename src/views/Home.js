@@ -209,11 +209,11 @@ export default class Home extends Component {
   //   const onSuccess = ({data}) => {
   //     this.setState({
   //       isLoading: false,
-  //       avatar: data.data.records.userProfile.image,
+  //       avatar: data.data.records.user_profiles.image,
   //       name: data.data.records.name,
   //     });
-  //     let latitude = data.data.records.userProfile.latitude;
-  //     let longitude = data.data.records.userProfile.longitude;
+  //     let latitude = data.data.records.user_profiles.latitude;
+  //     let longitude = data.data.records.user_profiles.longitude;
   //     // this.getVendorAroundYou(latitude, longitude);
   //   };
 

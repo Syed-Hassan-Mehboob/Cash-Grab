@@ -27,8 +27,8 @@ export default class Login extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      email: '',
-      password: '',
+      email: 'user99@cashgrab.com',
+      password: '12345678',
       isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,

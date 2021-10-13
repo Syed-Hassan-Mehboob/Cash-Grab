@@ -10,12 +10,13 @@ import {
   FlatList,
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import Constants, {SIZES, STYLES, width} from '../common/Constants';
+import Constants, {SIZES, STYLES, width, FONTS} from '../common/Constants';
 import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
 import {Icon} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 import NormalHeader from '../components/NormalHeader';
 import utils from '../utils';
 import Axios from '../network/APIKit';
@@ -26,6 +27,8 @@ export default function JobAcceptance(props) {
   const [jobAccept, setJobAccept] = useState();
   const [jobAcceptList, setJobAcceptList] = useState([]);
   const [jobRequest, setJobRequest] = useState([]);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     getUserAccessToken();
@@ -88,9 +91,11 @@ export default function JobAcceptance(props) {
 
       if (statuses === 'accepted') {
         setJobAcceptList([]);
+      } else if (statuses === 'cancelled') {
       }
       utils.showToast(data.message);
     };
+
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
@@ -114,134 +119,144 @@ export default function JobAcceptance(props) {
       .catch(onFailure);
   };
 
-  const renderJobRequest = ({item}) => {
+  const renderJobRequest = ({item, index}) => {
     //console.log("==================>>>>>>> ", item);
 
     return (
-      <View
-        style={[styles.card, {marginTop: SIZES.twenty, padding: SIZES.ten}]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-            justifyContent: 'space-between',
-          }}>
+      <View>
+        {jobAccept.status !== 'accepted' ? (
           <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View>
-              <Image
-                source={Images.emp2}
+            style={[
+              styles.card,
+              {marginTop: SIZES.twenty, padding: SIZES.ten},
+            ]}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: SIZES.fifteen,
+                justifyContent: 'space-between',
+              }}>
+              <View
                 style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: 60 / 2,
-                  resizeMode: 'contain',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <View>
+                  <Image
+                    source={Images.emp2}
+                    style={{
+                      height: 50,
+                      width: 50,
+                      borderRadius: 60 / 2,
+                      resizeMode: 'contain',
+                    }}
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={{marginStart: 10}}>
+                  <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
+                    {item.vendor !== null ? item.vendor.name : ''}
+                  </BoldTextCB>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: 5,
+                      alignItems: 'center',
+                    }}>
+                    <RegularTextCB
+                      style={{
+                        color: Colors.coolGrey,
+                        fontSize: 13.5,
+                      }}>
+                      {/* {item.vendor !== null ? item.vendor.type : ""} */}
+                    </RegularTextCB>
+                  </View>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.sickGreen,
+                  marginRight: SIZES.ten,
+                  padding: SIZES.fifteen,
+                  borderRadius: SIZES.ten,
+                  width: SIZES.fifty * 1.7,
+                  alignItems: 'center',
                 }}
-                resizeMode="cover"
-              />
+                activeOpacity={0.6}
+                onPress={() => {
+                  // props.navigation.navigate(Constants.confirmPayment);
+                  updateJobs('accepted');
+                  setTimeout(() => {
+                    navigation.goBack();
+                  }, 500);
+                }}>
+                <BoldTextCB>Accept</BoldTextCB>
+              </TouchableOpacity>
             </View>
-            <View style={{marginStart: 10}}>
-              <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                {item.vendor !== null ? item.vendor.name : ''}
-              </BoldTextCB>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
               <View
                 style={{
                   flexDirection: 'row',
                   marginTop: 5,
                   alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  paddingHorizontal: SIZES.ten,
                 }}>
+                <StarRating
+                  disabled={true}
+                  maxStars={5}
+                  fullStar={Images.starFull}
+                  emptyStar={Images.starHalf}
+                  starSize={SIZES.fifteen}
+                  rating={4}
+                  starStyle={{
+                    width: SIZES.twenty,
+                    height: SIZES.twenty,
+                    marginRight: SIZES.five,
+                  }}
+                  containerStyle={{width: SIZES.fifty * 1.5}}
+                />
+
                 <RegularTextCB
                   style={{
-                    color: Colors.coolGrey,
+                    color: Colors.sunflowerYellow,
                     fontSize: 13.5,
+                    marginStart: SIZES.twenty * 1.8,
+                    marginTop: SIZES.five / 2,
                   }}>
-                  {/* {item.vendor !== null ? item.vendor.type : ""} */}
+                  4.4 Ratings
                 </RegularTextCB>
               </View>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: Colors.coolGrey,
+                  marginRight: SIZES.ten,
+                  padding: SIZES.fifteen,
+                  borderRadius: SIZES.ten,
+                  width: SIZES.fifty * 1.7,
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  // props.navigation.replace(Constants.PostedJob);
+                  updateJobs('cancelled');
+                }}
+                activeOpacity={0.6}>
+                <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.sickGreen,
-              marginRight: SIZES.ten,
-              padding: SIZES.fifteen,
-              borderRadius: SIZES.ten,
-              width: SIZES.fifty * 1.7,
-              alignItems: 'center',
-            }}
-            activeOpacity={0.6}
-            onPress={() => {
-              // props.navigation.navigate(Constants.confirmPayment);
-              updateJobs('accepted');
-            }}>
-            <BoldTextCB>Accept</BoldTextCB>
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 5,
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              paddingHorizontal: SIZES.ten,
-            }}>
-            <StarRating
-              disabled={true}
-              maxStars={5}
-              fullStar={Images.starFull}
-              emptyStar={Images.starHalf}
-              starSize={SIZES.fifteen}
-              rating={4}
-              starStyle={{
-                width: SIZES.twenty,
-                height: SIZES.twenty,
-                marginRight: SIZES.five,
-              }}
-              containerStyle={{width: SIZES.fifty * 1.5}}
-            />
-
-            <RegularTextCB
-              style={{
-                color: Colors.sunflowerYellow,
-                fontSize: 13.5,
-                marginStart: SIZES.twenty * 1.8,
-                marginTop: SIZES.five / 2,
-              }}>
-              4.4 Ratings
-            </RegularTextCB>
-          </View>
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.coolGrey,
-              marginRight: SIZES.ten,
-              padding: SIZES.fifteen,
-              borderRadius: SIZES.ten,
-              width: SIZES.fifty * 1.7,
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              // props.navigation.replace(Constants.PostedJob);
-              updateJobs('cancelled');
-            }}
-            activeOpacity={0.6}>
-            <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
-          </TouchableOpacity>
-        </View>
+        ) : null}
       </View>
     );
   };
-
+  // end here
   return (
     <>
       {isLoading ? (
@@ -403,97 +418,102 @@ export default function JobAcceptance(props) {
               </View>
 
               {/* paste hereeeeeeeeeeeeeeeee {selectedView === 'general'? (view) : null*/}
-              {jobAccept.vendor_accepted !== null ? (
-                <View
-                  style={[
-                    styles.card,
-                    {marginTop: SIZES.twenty, padding: SIZES.ten},
-                  ]}>
+              {jobAccept.status === 'accepted' ? (
+                <View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginVertical: SIZES.fifteen,
-                      justifyContent: 'space-between',
-                    }}>
+                      borderBottomColor: Colors.coolGrey,
+                      borderBottomWidth: 1.5,
+                      marginTop: SIZES.fifteen,
+                    }}></View>
+                  <View style={[{marginTop: SIZES.twenty, padding: SIZES.ten}]}>
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
+                        marginVertical: SIZES.fifteen,
+                        justifyContent: 'space-between',
                       }}>
-                      <View>
-                        <Image
-                          source={Images.emp2}
-                          style={{
-                            height: 50,
-                            width: 50,
-                            borderRadius: 60 / 2,
-                            resizeMode: 'contain',
-                          }}
-                          resizeMode="cover"
-                        />
-                      </View>
-                      <View style={{marginStart: 10}}>
-                        <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                          {/* {item.vendor !== null ? item.vendor.name : ""} */}
-                          {jobAccept.vendor_accepted.name}
-                        </BoldTextCB>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 5,
-                            alignItems: 'center',
-                          }}>
-                          <RegularTextCB
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <View>
+                          <Image
+                            source={Images.emp2}
                             style={{
-                              color: Colors.coolGrey,
-                              fontSize: 13.5,
+                              height: 50,
+                              width: 50,
+                              borderRadius: 60 / 2,
+                              resizeMode: 'contain',
+                            }}
+                            resizeMode="cover"
+                          />
+                        </View>
+                        <View style={{marginStart: 10}}>
+                          <BoldTextCB
+                            style={{color: Colors.black, fontSize: 16}}>
+                            {/* {item.vendor !== null ? item.vendor.name : ""} */}
+                            {jobAccept.vendor_accepted.name}
+                          </BoldTextCB>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 5,
+                              alignItems: 'center',
                             }}>
-                            {/* {item.vendor !== null ? item.vendor.type : ""} */}
-                          </RegularTextCB>
+                            <RegularTextCB
+                              style={{
+                                color: Colors.coolGrey,
+                                fontSize: 13.5,
+                              }}>
+                              {/* {item.vendor !== null ? item.vendor.type : ""} */}
+                            </RegularTextCB>
+                          </View>
                         </View>
                       </View>
                     </View>
-                  </View>
 
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}>
                     <View
                       style={{
                         flexDirection: 'row',
-                        marginTop: 5,
                         alignItems: 'center',
-                        justifyContent: 'flex-start',
-                        paddingHorizontal: SIZES.ten,
+                        justifyContent: 'space-between',
                       }}>
-                      <StarRating
-                        disabled={true}
-                        maxStars={5}
-                        fullStar={Images.starFull}
-                        emptyStar={Images.starHalf}
-                        starSize={SIZES.fifteen}
-                        rating={4}
-                        starStyle={{
-                          width: SIZES.twenty,
-                          height: SIZES.twenty,
-                          marginRight: SIZES.five,
-                        }}
-                        containerStyle={{width: SIZES.fifty * 1.5}}
-                      />
-
-                      <RegularTextCB
+                      <View
                         style={{
-                          color: Colors.sunflowerYellow,
-                          fontSize: 13.5,
-                          marginStart: SIZES.twenty * 1.8,
-                          marginTop: SIZES.five / 2,
+                          flexDirection: 'row',
+                          marginTop: 5,
+                          alignItems: 'center',
+                          justifyContent: 'flex-start',
+                          paddingHorizontal: SIZES.ten,
                         }}>
-                        4.4 Ratings
-                      </RegularTextCB>
+                        <StarRating
+                          disabled={true}
+                          maxStars={5}
+                          fullStar={Images.starFull}
+                          emptyStar={Images.starHalf}
+                          starSize={SIZES.fifteen}
+                          rating={4}
+                          starStyle={{
+                            width: SIZES.twenty,
+                            height: SIZES.twenty,
+                            marginRight: SIZES.five,
+                          }}
+                          containerStyle={{width: SIZES.fifty * 1.5}}
+                        />
+
+                        <RegularTextCB
+                          style={{
+                            color: Colors.sunflowerYellow,
+                            fontSize: 13.5,
+                            marginStart: SIZES.twenty * 1.8,
+                            marginTop: SIZES.five / 2,
+                          }}>
+                          4.4 Ratings
+                        </RegularTextCB>
+                      </View>
                     </View>
                   </View>
                 </View>

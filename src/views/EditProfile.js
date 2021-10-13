@@ -86,14 +86,14 @@ export default class EditProfile extends Component {
       this.toggleIsLoading();
       console.log('User Profile Data ===== === =', data);
       this.setState({
-        avatar: Constants.imageURL + data.data.records.userProfile.image,
+        avatar: Constants.imageURL + data.data.records.user_profiles.image,
         fullName: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag: data.data.records.country_flag.toUpperCase(),
         phoneNumber: data.data.records.phone,
-        location: data.data.records.userProfile.location,
-        abouteMe: data.data.records.userProfile.about_me,
+        location: data.data.records.user_profiles.location,
+        abouteMe: data.data.records.user_profiles.about_me,
       });
     };
 
@@ -242,25 +242,25 @@ export default class EditProfile extends Component {
   };
 
   choosePhotoFromGallery = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openPicker({
       width: SIZES.ten * 40,
       height: SIZES.ten * 40,
       cropping: true,
       cropperCircleOverlay: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
 
   takePhotoFromCamera = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openCamera({
       width: SIZES.ten * 40,
       height: SIZES.ten * 40,
       cropping: true,
       cropperCircleOverlay: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
@@ -599,8 +599,8 @@ export default class EditProfile extends Component {
               style={[
                 styles.textInput,
                 {
-                  height: 53,
-                  paddingHorizontal: SIZES.fifteen,
+                  height: 60,
+                  paddingHorizontal: SIZES.twenty,
                   backgroundColor: Colors.white,
                   marginVertical: SIZES.ten,
                   borderRadius: SIZES.ten,
@@ -619,7 +619,9 @@ export default class EditProfile extends Component {
                   });
                 }}>
                 <RegularTextCB>
-                  {this.state.location ? this.state.location : 'Get Location'}
+                  {this.state.location
+                    ? this.state.location
+                    : 'Search Location'}
                 </RegularTextCB>
               </TouchableOpacity>
             </View>

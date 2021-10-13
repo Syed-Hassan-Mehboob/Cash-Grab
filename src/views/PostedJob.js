@@ -64,7 +64,7 @@ export default function PostedJob(props) {
   };
 
   const renderPostedJob = ({item}) => {
-    // console.log('Job Around data ======', item.user.userProfile.image);
+    // console.log('Job Around data ======', item.user.user_profiles.image);
     return (
       <TouchableOpacity
         activeOpacity={0.5}

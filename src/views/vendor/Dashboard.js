@@ -41,7 +41,9 @@ export default class Dashboard extends Component {
       time: '',
       image: '',
       verfiyAt: '',
-      selectedMonth: {},
+      selectedMonth: undefined,
+      chartData: [],
+      totalEarning: '',
     };
   }
 
@@ -54,13 +56,85 @@ export default class Dashboard extends Component {
   }
 
   getUserAccessToken = async () => {
+    this.setState({isLoading: true});
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
     this.getCompleteJob();
+    this.getDashboardData();
+    this.setState({isLoading: false});
+  };
+
+  getDashboardData = () => {
+    const onSuccess = ({data}) => {
+      console.log('Complete job vvv======= ', data.data.withdraw);
+
+      let tempMonthlyData = [];
+      data.data.months.map((mItem, index) => {
+        tempMonthlyData.push({
+          displayvalue: Number(mItem.earning),
+          value:
+            Number(mItem.earning) === 0
+              ? (Number(mItem.earning) + 10) / 100
+              : Number(mItem.earning) / 100,
+          label: mItem.name.substring(0, 3),
+          labelTextStyle: [
+            FONTS.mediumFont14,
+            {
+              color: Colors.coolGrey,
+            },
+          ],
+          frontColor: Colors.sickGreen,
+          onPress: (value) => {
+            this.setState({selectedMonth: this.state.chartData[index]});
+            console.log(
+              'this.data[0][value]========================>',
+              this.state.chartData[index]['displayvalue'],
+            );
+          },
+        });
+      });
+
+      this.setState(
+        {
+          totalEarning: data?.data.total_earning,
+          chartData: tempMonthlyData,
+          // name:data?.data.progress.user.name,
+          // title:data?.data.progress.title,
+          // price:data?.data.progress.price,
+          // description:data?.data.progress.description,
+          // time:data?.data.progress.time,
+          // image:data?.data.progress.user.user_profiles.image,
+          // location:data?.data.progress.location,
+          // verfiyAt:data?.data.progress.user.email_verified_at
+        },
+        () => {
+          console.log(
+            'chart data =======   >>>>>>>  ',
+            JSON.stringify(this.state.chartData),
+          );
+        },
+      );
+
+      // this.setState({isLoading: false});
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
+
+    this.setState({isLoading: true});
+    Axios.get(Constants.VendorDashboardEarning, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   getCompleteJob = () => {
-    this.setState({isLoading: true});
+    // this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
       console.log('Complete job vvv======= ', data.data.withdraw);
@@ -74,12 +148,12 @@ export default class Dashboard extends Component {
         // price:data?.data.progress.price,
         // description:data?.data.progress.description,
         // time:data?.data.progress.time,
-        // image:data?.data.progress.user.userProfile.image,
+        // image:data?.data.progress.user.user_profiles.image,
         // location:data?.data.progress.location,
         // verfiyAt:data?.data.progress.user.email_verified_at
       });
 
-      this.setState({isLoading: false});
+      // this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
@@ -118,7 +192,7 @@ export default class Dashboard extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{uri: Constants.imageURL + item.user.user_profiles.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -266,7 +340,7 @@ export default class Dashboard extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{uri: Constants.imageURL + item.user.user_profiles.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
@@ -399,16 +473,6 @@ export default class Dashboard extends Component {
             </RegularTextCB> */}
           </View>
         </View>
-      </View>
-    );
-  };
-
-  barLabel = (labelText) => {
-    return (
-      <View>
-        <Text style={[FONTS.mediumFont12, {color: Colors.barBg}]}>
-          {labelText}
-        </Text>
       </View>
     );
   };
@@ -554,7 +618,8 @@ export default class Dashboard extends Component {
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
+          {/* Quick job notification tab */}
+          {/* <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB
               style={{
                 fontSize: SIZES.twenty,
@@ -594,7 +659,8 @@ export default class Dashboard extends Component {
                 />
               </View>
             </View>
-          </View>
+          </View> */}
+          {/* Quick job notification tab */}
           <View style={{}}>
             <View
               style={{
@@ -613,7 +679,7 @@ export default class Dashboard extends Component {
                   marginStart: SIZES.five,
                   color: Colors.black1,
                 }}>
-                ${this.state.withDraw.total}
+                ${this.state.totalEarning}
               </BoldTextCB>
             </View>
             <View
@@ -624,11 +690,14 @@ export default class Dashboard extends Component {
                 paddingHorizontal: SIZES.fifteen,
               }}>
               <RegularTextCB style={{fontSize: SIZES.twenty}}>
-                {`Monthly Earnings (${
+                {this.state.selectedMonth !== undefined
+                  ? `Monthly Earnings (${this.state.selectedMonth.label})`
+                  : null}
+                {/* {`Monthly Earnings (${
                   this.state.selectedMonth.label === undefined
                     ? ''
                     : this.state.selectedMonth.label
-                })`}
+                })`} */}
               </RegularTextCB>
               <BoldTextCB
                 style={{
@@ -636,12 +705,14 @@ export default class Dashboard extends Component {
                   marginStart: SIZES.five,
                   color: Colors.black1,
                 }}>
-                ${this.state.selectedMonth.value}
+                {this.state.selectedMonth !== undefined
+                  ? ` $${this.state.selectedMonth.displayvalue}`
+                  : null}
               </BoldTextCB>
             </View>
 
             <BarChart
-              data={this.data}
+              data={this.state.chartData}
               barWidth={
                 Platform.OS === 'ios'
                   ? SIZES.fifteen * 3.5
