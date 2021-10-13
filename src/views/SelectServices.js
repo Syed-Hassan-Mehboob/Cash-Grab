@@ -23,7 +23,7 @@ export default function SelectServices(props) {
 
   const [serviceData, setServiceData] = useState([]);
 
-  useEffect(async () => {
+  useEffect( () => {
     getUserAccessToken();
   }, []);
   console.log("shaohabbb=====", serviceData);
@@ -138,7 +138,7 @@ export default function SelectServices(props) {
     >
       <NormalHeader name="Select Services" />
       <BoldTextCB style={{ marginLeft: SIZES.twenty, fontSize: 16 }}>
-        Cleaning
+        {/* Cleaning */}
       </BoldTextCB>
 
       <FlatList
