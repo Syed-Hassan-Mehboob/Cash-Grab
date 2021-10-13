@@ -191,13 +191,13 @@ export default class VendorEditProfile extends Component {
       this.toggleIsLoading();
       console.log('User Profile Data ===== === =', data);
       this.setState({
-        avatar: Constants.imageURL + data.data.records.userProfile.image,
+        avatar: Constants.imageURL + data.data.records.user_profiles.image,
         fullName: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag: data.data.records.country_flag.toUpperCase(),
         phoneNumber: data.data.records.phone,
-        location: data.data.records.userProfile.location,
+        location: data.data.records.user_profiles.location,
       });
     };
 

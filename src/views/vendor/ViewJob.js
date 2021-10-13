@@ -79,18 +79,18 @@ export default class ViewJob extends React.Component {
 
       this.setState({isLoading: false});
       this.setState({
-        userImage: data.data.records.user.userProfile.image,
+        userImage: data.data.records.user.user_profiles.image,
         title: data.data.records.title,
         location: data.data.records.location,
         time: data.data.records.time,
         images: data.data.records.images,
         username: data.data.records.user.name,
-        lat: data.data.records.user.userProfile.latitude,
-        lng: data.data.records.user.userProfile.longitude,
+        lat: data.data.records.user.user_profiles.latitude,
+        lng: data.data.records.user.user_profiles.longitude,
         price: data.data.records.price,
         description: data.data.records.description,
-        latitude: data.data.records.user.userProfile.latitude,
-        longitude: data.data.records.user.userProfile.longitude,
+        latitude: data.data.records.user.user_profiles.latitude,
+        longitude: data.data.records.user.user_profiles.longitude,
         // jobService: data.data.records.job_service,
       });
 

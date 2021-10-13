@@ -73,7 +73,7 @@ export default class VendorHome extends Component {
       // console.log('get profile success===========>>>>', token);
       this.setState({
         isLoading: false,
-        avatar: data.data.records.userProfile.image,
+        avatar: data.data.records.user_profiles.image,
         name: data.data.records.name,
       });
       // this.getJobAroundYou(latitude, longitude, token);

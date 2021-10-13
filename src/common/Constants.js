@@ -118,6 +118,7 @@ const Constants = {
   getJobAround: 'vendors/get-around-job?',
   viewJob: 'customer/jobs/detail?',
   getCompleteJob: 'vendors/get-completed-job',
+  VendorDashboardEarning: 'order/earning',
   search: 'customer/filter-services?',
   venderFilterd: 'vendors/filter?',
   UserHome: 'UserHome',
