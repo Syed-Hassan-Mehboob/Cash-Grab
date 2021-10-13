@@ -11,7 +11,7 @@ import {
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import ButtonRadius10 from '../components/ButtonRadius10';
@@ -96,23 +96,23 @@ export default class Support extends React.Component {
   };
 
   choosePhotoFromGallery = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openPicker({
-      width: SIZES.ten*50,
-      height: SIZES.ten*50,
+      width: SIZES.ten * 50,
+      height: SIZES.ten * 50,
       cropping: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
 
   takePhotoFromCamera = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openCamera({
-      width: SIZES.ten*50,
-      height: SIZES.ten*50,
+      width: SIZES.ten * 50,
+      height: SIZES.ten * 50,
       cropping: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
@@ -120,7 +120,11 @@ export default class Support extends React.Component {
   renderChatItem = ({item}) => {
     return (
       <View
-        style={{flexDirection: 'row', marginVertical: SIZES.five, marginHorizontal: SIZES.fifteen}}>
+        style={{
+          flexDirection: 'row',
+          marginVertical: SIZES.five,
+          marginHorizontal: SIZES.fifteen,
+        }}>
         <View style={styles.circleCard}>
           <Image
             source={item.user.image}
@@ -184,7 +188,11 @@ export default class Support extends React.Component {
           <TouchableOpacity onPress={() => this.toggleIsModalVisible()}>
             <Image
               source={Images.iconCamera}
-              style={{height: SIZES.twentyFive, width: SIZES.twentyFive, resizeMode: 'contain'}}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
             />
           </TouchableOpacity>
           <TextInput
@@ -194,7 +202,10 @@ export default class Support extends React.Component {
             onChangeText={(text) => this.setState({message: text})}
           />
           <TouchableOpacity onPress={() => {}}>
-            <Image source={Images.iconSend} style={{height: SIZES.ten*4, width: SIZES.ten*4}} />
+            <Image
+              source={Images.iconSend}
+              style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
+            />
           </TouchableOpacity>
         </View>
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
@@ -221,8 +232,8 @@ const styles = StyleSheet.create({
     padding: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*4,
-    width: SIZES.ten*4,
+    height: SIZES.ten * 4,
+    width: SIZES.ten * 4,
     borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
@@ -231,8 +242,8 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   iconUser: {
-    height: SIZES.ten*4,
-    width: SIZES.ten*4,
+    height: SIZES.ten * 4,
+    width: SIZES.ten * 4,
     borderRadius: SIZES.twenty,
     resizeMode: 'contain',
   },

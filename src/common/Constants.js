@@ -7,6 +7,8 @@ const Constants = {
   fontLight: 'Jost-Light',
   fontRegular: 'Jost-Regular',
   fontBold: 'Jost-Bold',
+  /* * Font Families * */
+
   /* * Screens * */
   splash: 'Splash',
   loginOrJoin: 'LoinOrJoin',
@@ -51,6 +53,11 @@ const Constants = {
   QuickJobDetail: 'QuickJobDetail',
   PostedJob: 'PostedJob',
   JobAcceptance: 'JobAcceptance',
+  UserHome: 'UserHome',
+  AddServices: 'AddServices',
+  AddTeamMember: 'AddTeamMember',
+  /* * Screens * */
+
   /* * tabs * */
   tabNavigator: 'TabNavigator',
   home: 'Home',
@@ -72,14 +79,20 @@ const Constants = {
   ThankYou: 'ThankYou',
   more: 'More',
   settings: 'Settings',
+  /* * tabs * */
+
   /* * drawer * */
   drawerNavigator: 'DrawerNavigator',
   support: 'Support',
   termsAndConditionsScreen: 'TermsAndConditions',
   logOut: 'Log Out',
+  /* * drawer * */
+
   /* * cache keys * */
   accessToken: 'accessToken',
   user: 'user',
+  /* * cache keys * */
+
   /* * api urls * */
   baseURL: 'https://cash-grab.reignsol.net/api/v1/',
   imageURL: 'https://cash-grab.reignsol.net',
@@ -94,6 +107,7 @@ const Constants = {
   getProfileURL: 'auth/get-profile',
   getServicesOfVendorURL: 'vendors/get-service-of-vendor?',
   updateProfileURL: 'auth/update-profile',
+  addTeamMemberURL: 'vendors/team/create',
   signOutURL: 'auth/sign-out',
   customerCategoriesURL: 'customer/categories',
   customerViewCategoriesURL: 'customer/getVendorsByCategory?',
@@ -121,9 +135,6 @@ const Constants = {
   VendorDashboardEarning: 'order/earning',
   search: 'customer/filter-services?',
   venderFilterd: 'vendors/filter?',
-  UserHome: 'UserHome',
-  AddServices: 'AddServices',
-  AddTeamMember: 'AddTeamMember',
   getMyJob: 'customer/jobs/my-jobs',
   scheduleJob: 'order/get-schedule-bookings',
   quickOrder: 'order/get-quick-bookings',
@@ -138,6 +149,7 @@ const Constants = {
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
+  /* * api urls * */
 };
 
 export const SIZES = {

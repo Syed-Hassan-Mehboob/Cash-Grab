@@ -523,6 +523,7 @@ export default class Profile extends React.Component {
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
               marginBottom: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              // backgroundColor: 'red',
             }}>
             <TouchableOpacity
               style={{
