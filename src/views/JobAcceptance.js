@@ -37,7 +37,7 @@ export default function JobAcceptance(props) {
     const accessToken = JSON.parse(value);
     if (accessToken !== undefined) {
       getJobAcceptance(accessToken.token);
-      // postJobRequest(accessToken.token);
+      // updateJobs(accessToken.token);
     }
   };
 
@@ -52,10 +52,10 @@ export default function JobAcceptance(props) {
       },
     };
 
-    // console.log('tokennnnn', token);
+    // //console.log('tokennnnn', token);
 
     const onSuccess = ({ data }) => {
-      console.log("Job Acceptanceeeeeeeee ======================>", data.data);
+      // //console.log("Job Acceptanceeeeeeeee ======================>", data.data);
       setJobAccept(data.data.records);
       setJobAcceptList(data.data.records.requests);
       setIsloading(false);
@@ -63,60 +63,45 @@ export default function JobAcceptance(props) {
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
-      console.log("===============>", error);
+      // //console.log("===============>", error);
     };
     // const onSuccess = ({data}) => {
-    //   console.log('asdsdasdsadasd ======================>', data.data);
+    //   //console.log('asdsdasdsadasd ======================>', data.data);
     //   setJobAccept(data.data);
     //   setIsloading(false);
     // };
     // const onFailure = (error) => {
     //   utils.showResponseError(error);
     //   setIsloading(false);
-    //   console.log('===============>', error);
+    //   //console.log('===============>', error);
     // };
     Axios.get(Constants.jobAcceptance, config).then(onSuccess).catch(onFailure);
   };
 
-  const postJobRequest = async () => {
+  const updateJobs = async (statuses) => {
     const value2 = await AsyncStorage.getItem(Constants.accessToken);
-    let config2 = {
-      params: {
-        request_id: "1",
-        status: "accepted",
-      },
-      headers: {
-        Authorization: value2,
-      },
-    };
-
-    // console.log('tokennnnn', token);
 
     const onSuccess = ({ data }) => {
       console.log("Job Requesttttt ======================>", data.data);
-      setJobRequest(data);
+      // setJobRequest(data);
       setIsloading(false);
+
+      if (statuses === "accepted") {
+        setJobAcceptList([]);
+      }
+      utils.showToast(data.message);
     };
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
       console.log("==============222222222222222=>", error);
     };
-    // const onSuccess = ({data}) => {
-    //   console.log('asdsdasdsadasd ======================>', data.data);
-    //   setJobAccept(data.data);
-    //   setIsloading(false);
-    // };
-    // const onFailure = (error) => {
-    //   utils.showResponseError(error);
-    //   setIsloading(false);
-    //   console.log('===============>', error);
-    // };
+
     Axios.post(
       Constants.jobRequest,
       {
         request_id: "1",
-        status: "accepted",
+        status: statuses,
       },
       {
         headers: {
@@ -130,7 +115,8 @@ export default function JobAcceptance(props) {
   };
 
   const renderJobRequest = ({ item }) => {
-    console.log("==================>>>>>>> ", item);
+    //console.log("==================>>>>>>> ", item);
+
     return (
       <View
         style={[styles.card, { marginTop: SIZES.twenty, padding: SIZES.ten }]}
@@ -178,7 +164,7 @@ export default function JobAcceptance(props) {
                     fontSize: 13.5,
                   }}
                 >
-                  {item.vendor !== null ? item.vendor.type : ""}
+                  {/* {item.vendor !== null ? item.vendor.type : ""} */}
                 </RegularTextCB>
               </View>
             </View>
@@ -195,7 +181,7 @@ export default function JobAcceptance(props) {
             activeOpacity={0.6}
             onPress={() => {
               // props.navigation.navigate(Constants.confirmPayment);
-              postJobRequest();
+              updateJobs("accepted");
             }}
           >
             <BoldTextCB>Accept</BoldTextCB>
@@ -254,7 +240,8 @@ export default function JobAcceptance(props) {
               alignItems: "center",
             }}
             onPress={() => {
-              props.navigation.replace(Constants.PostedJob);
+              // props.navigation.replace(Constants.PostedJob);
+              updateJobs("cancelled");
             }}
             activeOpacity={0.6}
           >
@@ -435,10 +422,118 @@ export default function JobAcceptance(props) {
                   </RegularTextCB>
                 </View>
               </View>
+
+              {/* paste hereeeeeeeeeeeeeeeee {selectedView === 'general'? (view) : null*/}
+              {jobAccept.vendor_accepted !== null ? (
+                <View
+                  style={[
+                    styles.card,
+                    { marginTop: SIZES.twenty, padding: SIZES.ten },
+                  ]}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginVertical: SIZES.fifteen,
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <View>
+                        <Image
+                          source={Images.emp2}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            borderRadius: 60 / 2,
+                            resizeMode: "contain",
+                          }}
+                          resizeMode="cover"
+                        />
+                      </View>
+                      <View style={{ marginStart: 10 }}>
+                        <BoldTextCB
+                          style={{ color: Colors.black, fontSize: 16 }}
+                        >
+                          {/* {item.vendor !== null ? item.vendor.name : ""} */}
+                          {jobAccept.vendor_accepted.name}
+                        </BoldTextCB>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            marginTop: 5,
+                            alignItems: "center",
+                          }}
+                        >
+                          <RegularTextCB
+                            style={{
+                              color: Colors.coolGrey,
+                              fontSize: 13.5,
+                            }}
+                          >
+                            {/* {item.vendor !== null ? item.vendor.type : ""} */}
+                          </RegularTextCB>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        marginTop: 5,
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingHorizontal: SIZES.ten,
+                      }}
+                    >
+                      <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        fullStar={Images.starFull}
+                        emptyStar={Images.starHalf}
+                        starSize={SIZES.fifteen}
+                        rating={4}
+                        starStyle={{
+                          width: SIZES.twenty,
+                          height: SIZES.twenty,
+                          marginRight: SIZES.five,
+                        }}
+                        containerStyle={{ width: SIZES.fifty * 1.5 }}
+                      />
+
+                      <RegularTextCB
+                        style={{
+                          color: Colors.sunflowerYellow,
+                          fontSize: 13.5,
+                          marginStart: SIZES.twenty * 1.8,
+                          marginTop: SIZES.five / 2,
+                        }}
+                      >
+                        4.4 Ratings
+                      </RegularTextCB>
+                    </View>
+                  </View>
+                </View>
+              ) : null}
             </TouchableOpacity>
           </View>
           <FlatList
             data={jobAcceptList}
+            extraData={jobAcceptList}
             renderItem={renderJobRequest}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}

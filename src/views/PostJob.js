@@ -21,12 +21,11 @@ import utils from '../utils';
 import Axios from '../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MultiDropdownPicker} from '../components/MultiDropDownPicker';
-import {LocationPicker} from '../components/LocationPicker';
+
 import {Calendar} from 'react-native-calendars';
 import GetLocation from 'react-native-get-location';
 const {height, width} = Dimensions.get('window');
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import RNFetchBlob from 'react-native-fetch-blob';
 import axios from 'axios';
 import ImgToBase64 from 'react-native-image-base64';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -487,12 +486,7 @@ export default class postJob extends Component {
                 </TouchableOpacity>
               </View>
 
-              {/* <LocationPicker
-                viewProperty="name"
-                onChangeValue={(val) => {
-                  this.setState({ services: val })
-                }}
-              /> */}
+
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>

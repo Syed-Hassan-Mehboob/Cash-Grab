@@ -115,7 +115,7 @@ export default class VendorProfile extends React.Component {
   }
 
   state = {
-    isLoading: false,
+    isLoading: true,
     isDescriptionSelected: true,
     isReviewsSelected: false,
     review: '',
@@ -161,7 +161,7 @@ export default class VendorProfile extends React.Component {
   };
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({isLoading: false});
   };
 
   getUserAccessToken = async () => {
@@ -306,7 +306,7 @@ export default class VendorProfile extends React.Component {
           marginTop: SIZES.twenty,
         }}>
         <Text style={[FONTS.mediumFont16]}>{item.name}</Text>
-        <Text style={[FONTS.boldFont14]}>$ {item.price}</Text>
+        <Text style={[FONTS.boldFont14]}>{item.price}</Text>
       </View>
     );
   };
