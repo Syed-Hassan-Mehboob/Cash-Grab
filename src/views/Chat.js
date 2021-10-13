@@ -12,7 +12,7 @@ import {
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
 import Colors from '../common/Colors';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import LightTextCB from '../components/LightTextCB';
@@ -99,23 +99,23 @@ export default class Chat extends React.Component {
   };
 
   choosePhotoFromGallery = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openPicker({
       width: 500,
       height: 500,
       cropping: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
 
   takePhotoFromCamera = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openCamera({
       width: 500,
       height: 500,
       cropping: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
@@ -123,7 +123,11 @@ export default class Chat extends React.Component {
   renderSupportItem = ({item}) => {
     return (
       <View
-        style={{flexDirection: 'row', marginVertical: SIZES.five, marginHorizontal: SIZES.fifteenWidth}}>
+        style={{
+          flexDirection: 'row',
+          marginVertical: SIZES.five,
+          marginHorizontal: SIZES.fifteenWidth,
+        }}>
         <View style={styles.circleCard}>
           <Image
             source={item.user.image}
@@ -252,7 +256,10 @@ export default class Chat extends React.Component {
             onChangeText={(text) => this.setState({message: text})}
           />
           <TouchableOpacity onPress={() => {}}>
-            <Image source={Images.iconSend} style={{height: SIZES.ten*4, width: SIZES.ten*4}} />
+            <Image
+              source={Images.iconSend}
+              style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
+            />
           </TouchableOpacity>
         </View>
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
@@ -279,8 +286,8 @@ const styles = StyleSheet.create({
     padding: SIZES.ten,
   },
   circleCard: {
-    height: SIZES.ten*4,
-    width: SIZES.ten*4,
+    height: SIZES.ten * 4,
+    width: SIZES.ten * 4,
     borderRadius: SIZES.twenty,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
@@ -289,8 +296,8 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   iconUser: {
-    height: SIZES.ten*4,
-    width: SIZES.ten*4,
+    height: SIZES.ten * 4,
+    width: SIZES.ten * 4,
     borderRadius: SIZES.twenty,
     resizeMode: 'contain',
   },

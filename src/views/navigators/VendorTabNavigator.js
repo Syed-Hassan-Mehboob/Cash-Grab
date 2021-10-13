@@ -184,6 +184,10 @@ const ProfileNavigator = () => {
         name={Constants.vendorEditProfile}
         component={VendorEditProfile}
       />
+      <ProfileStack.Screen
+        name={Constants.AddTeamMember}
+        component={AddTeamMember}
+      />
     </ProfileStack.Navigator>
   );
 };

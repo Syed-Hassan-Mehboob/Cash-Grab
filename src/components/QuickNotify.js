@@ -294,7 +294,7 @@ export default class QuickNotify extends Component {
                 });
               }}>
               <RegularTextCB>
-                {this.state.location ? this.state.location : 'Get Location'}
+                {this.state.location ? this.state.location : 'Search Location'}
               </RegularTextCB>
             </TouchableOpacity>
           </View>

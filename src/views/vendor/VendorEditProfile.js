@@ -53,12 +53,20 @@ export default class VendorEditProfile extends Component {
       lat: '',
       lng: '',
       secureText: false,
+      companyName: '',
+      companyEmail: '',
       companyLocation: '',
+      companyLat: '',
+      companyLng: '',
+      team: [],
     };
   }
 
   componentDidMount() {
     this.getUserAccessToken();
+    this.props.navigation.addListener('focus', () => {
+      this.getUserAccessToken();
+    });
   }
 
   getUserAccessToken = async () => {
@@ -106,8 +114,8 @@ export default class VendorEditProfile extends Component {
               : this.setState(
                   {
                     companyLocation: details.formatted_address,
-                    lat: details.geometry.location.lat,
-                    lng: details.geometry.location.lng,
+                    companyLat: details.geometry.location.lat,
+                    companyLng: details.geometry.location.lng,
                   },
                   () => {
                     setTimeout(() => {
@@ -191,13 +199,17 @@ export default class VendorEditProfile extends Component {
       this.toggleIsLoading();
       console.log('User Profile Data ===== === =', data);
       this.setState({
-        avatar: Constants.imageURL + data.data.records.userProfile.image,
+        avatar: Constants.imageURL + data.data.records.user_profiles.image,
         fullName: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag: data.data.records.country_flag.toUpperCase(),
         phoneNumber: data.data.records.phone,
-        location: data.data.records.userProfile.location,
+        location: data.data.records.user_profiles.location,
+        companyName: data.data.records.user_profiles.company_name,
+        companyEmail: data.data.records.user_profiles.company_email,
+        companyLocation: data.data.records.user_profiles.company_location,
+        team: data.data.records.team,
       });
     };
 
@@ -226,6 +238,11 @@ export default class VendorEditProfile extends Component {
     let countryFlag = this.state.countryFlag;
     let lat = this.state.lat;
     let lng = this.state.lng;
+    let companyName = this.state.companyName;
+    let companyEmail = this.state.companyEmail;
+    let companyLocation = this.state.companyLocation;
+    let companyLat = this.state.companyLat;
+    let companyLng = this.state.companyLng;
 
     if (utils.isEmpty(name)) {
       utils.showToast('Invalid Name');
@@ -293,6 +310,11 @@ export default class VendorEditProfile extends Component {
     });
     formData.append('lat', lat);
     formData.append('lng', lng);
+    formData.append('company_name', companyName);
+    formData.append('company_email', companyEmail);
+    formData.append('company_location', companyLocation);
+    formData.append('company_lat', companyLat);
+    formData.append('company_lng', companyLng);
     const options = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -348,23 +370,23 @@ export default class VendorEditProfile extends Component {
   };
 
   choosePhotoFromGallery = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openPicker({
       width: SIZES.five * 100,
       height: SIZES.five * 100,
       cropping: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       this.setState({avatar: image.path});
     });
   };
 
   takePhotoFromCamera = () => {
-    this.toggleIsModalVisible();
     ImagePicker.openCamera({
       width: SIZES.five * 100,
       height: SIZES.five * 100,
       cropping: true,
     }).then((image) => {
+      this.toggleIsModalVisible();
       // console.log('=====Image',image.path)
       this.setState({avatar: image.path});
       // console.log('Avator===',this.state.avatar)
@@ -379,49 +401,58 @@ export default class VendorEditProfile extends Component {
     });
   };
 
-  renderTeamMember = ({item}) => {
-    return (
-      <View
+  renderTeamMember = ({item, index}) => {
+    return index === 0 ? (
+      <TouchableOpacity
         style={{
-          marginLeft: SIZES.ten,
+          height: SIZES.fifty,
+          width: SIZES.fifty,
+          borderRadius: SIZES.fifty,
+          margin: SIZES.five,
+          backgroundColor: Colors.sickGreen,
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
-        <Image
-          source={{uri: item.image}}
+        }}
+        onPress={() => {
+          this.props.navigation.navigate(Constants.AddTeamMember);
+        }}
+        activeOpacity={0.6}>
+        <Icon
+          type="AntDesign"
+          name="plus"
           style={{
-            height: SIZES.twenty * 3,
-            width: SIZES.twenty * 3,
-            borderRadius: SIZES.twenty * 3,
+            color: Colors.black,
+            fontSize: SIZES.fifteen * 2.3,
           }}
         />
-
-        {item.index == 1 && (
-          <TouchableOpacity
-            style={{
-              height: SIZES.fifty,
-              width: SIZES.fifty,
-              borderRadius: SIZES.fifty,
-              backgroundColor: Colors.sickGreen,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => {
-              // props.navigation.goBack();
-            }}
-            activeOpacity={0.6}>
-            <Icon
-              type="AntDesign"
-              name="plus"
-              style={{
-                color: Colors.black,
-                fontSize: SIZES.fifteen * 2.3,
-              }}
-            />
-          </TouchableOpacity>
-        )}
-
-        <RegularTextCB style={{fontSize: 12}}>{item.name}</RegularTextCB>
+      </TouchableOpacity>
+    ) : (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: SIZES.five,
+          height: SIZES.fifty * 1.3,
+          width: SIZES.fifty * 1.3,
+        }}>
+        <Image
+          source={{
+            uri: Constants.imageURL + '/' + item.image,
+          }}
+          style={{
+            height: SIZES.fifty,
+            width: SIZES.fifty,
+            borderRadius: SIZES.fifty,
+          }}
+        />
+        <Text
+          numberOfLines={1}
+          style={[
+            FONTS.mediumFont12,
+            {color: Colors.black, width: '100%', textAlign: 'center'},
+          ]}>
+          {item.name}
+        </Text>
       </View>
     );
   };
@@ -510,7 +541,7 @@ export default class VendorEditProfile extends Component {
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: SIZES.ten,
-            paddingBottom: SIZES.twenty * 2,
+            paddingBottom: 150,
           }}
           style={[styles.container, {paddingVertical: SIZES.twenty}]}
           showsVerticalScrollIndicator={false}
@@ -632,8 +663,8 @@ export default class VendorEditProfile extends Component {
               style={[
                 styles.textInput,
                 {
-                  height: 53,
-                  paddingHorizontal: SIZES.fifteen,
+                  height: 60,
+                  paddingHorizontal: SIZES.twenty,
                   backgroundColor: Colors.white,
                   marginVertical: SIZES.ten,
                   borderRadius: SIZES.ten,
@@ -652,7 +683,9 @@ export default class VendorEditProfile extends Component {
                   });
                 }}>
                 <RegularTextCB>
-                  {this.state.location ? this.state.location : 'Get Location'}
+                  {this.state.companyLocation
+                    ? this.state.companyLocation
+                    : 'Search Location'}
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
@@ -742,7 +775,10 @@ export default class VendorEditProfile extends Component {
             </View>
           </Modal>
 
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {
+            // Old Password
+            /* <View
+            style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -762,9 +798,12 @@ export default class VendorEditProfile extends Component {
               }}
               style={[styles.textInput]}
             />
-          </View>
+          </View> */
+          }
 
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {
+            // New Password
+            /* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -784,7 +823,8 @@ export default class VendorEditProfile extends Component {
               }}
               style={[styles.textInput, {marginBottom: SIZES.TWENTY}]}
             />
-          </View>
+          </View> */
+          }
 
           <Text
             style={[
@@ -806,10 +846,10 @@ export default class VendorEditProfile extends Component {
             </RegularTextCB>
             <EditText
               placeholder={'Company Name'}
-              // value={this.state.newPassword}
-              // onChangeText={(text) => {
-              //   this.setState({newPassword: text});
-              // }}
+              value={this.state.companyName}
+              onChangeText={(text) => {
+                this.setState({companyName: text});
+              }}
               style={[styles.textInput, {}]}
             />
           </View>
@@ -822,14 +862,14 @@ export default class VendorEditProfile extends Component {
                 flex: 0.37,
                 marginStart: SIZES.fifteen,
               }}>
-              Email address
+              Email
             </RegularTextCB>
             <EditText
-              placeholder={'Email address'}
-              // value={this.state.newPassword}
-              // onChangeText={(text) => {
-              //   this.setState({newPassword: text});
-              // }}
+              placeholder={'Email'}
+              value={this.state.companyEmail}
+              onChangeText={(text) => {
+                this.setState({companyEmail: text});
+              }}
               style={[styles.textInput, {}]}
             />
           </View>
@@ -853,8 +893,8 @@ export default class VendorEditProfile extends Component {
               style={[
                 styles.textInput,
                 {
-                  height: 53,
-                  paddingHorizontal: SIZES.fifteen,
+                  height: 60,
+                  paddingHorizontal: SIZES.twenty,
                   backgroundColor: Colors.white,
                   marginVertical: SIZES.ten,
                   borderRadius: SIZES.ten,
@@ -875,7 +915,7 @@ export default class VendorEditProfile extends Component {
                 <RegularTextCB>
                   {this.state.companyLocation
                     ? this.state.companyLocation
-                    : 'Get Location'}
+                    : 'Search Location'}
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
@@ -925,60 +965,15 @@ export default class VendorEditProfile extends Component {
             <View
               style={{
                 flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
                 marginTop: SIZES.ten,
               }}>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Image
-                  source={{
-                    uri: 'https://media.gettyimages.com/photos/smiling-man-outdoors-in-the-city-picture-id1179420343?s=612x612',
-                  }}
-                  style={{
-                    height: SIZES.twenty * 3,
-                    width: SIZES.twenty * 3,
-                    borderRadius: SIZES.twenty * 3,
-                  }}
-                />
-                <Text>Jojn wick</Text>
-              </View>
-
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Image
-                  source={{
-                    uri: 'https://media.gettyimages.com/photos/smiling-man-outdoors-in-the-city-picture-id1179420343?s=612x612',
-                  }}
-                  style={{
-                    height: SIZES.twenty * 3,
-                    width: SIZES.twenty * 3,
-                    borderRadius: SIZES.twenty * 3,
-                  }}
-                />
-                <Text>Devid Jack</Text>
-              </View>
-              <TouchableOpacity
-                style={{
-                  height: SIZES.fifty,
-                  width: SIZES.fifty,
-                  borderRadius: SIZES.fifty,
-                  backgroundColor: Colors.sickGreen,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                onPress={() => {
-                  this.props.navigation.navigate(Constants.AddTeamMember);
-                }}
-                activeOpacity={0.6}>
-                <Icon
-                  type="AntDesign"
-                  name="plus"
-                  style={{
-                    color: Colors.black,
-                    fontSize: SIZES.fifteen * 2.3,
-                  }}
-                />
-              </TouchableOpacity>
+              <FlatList
+                horizontal
+                data={this.state.team}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(index) => String(index)}
+                renderItem={(item, index) => this.renderTeamMember(item, index)}
+              />
             </View>
           </View>
         </ScrollView>

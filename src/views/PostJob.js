@@ -463,7 +463,8 @@ export default class postJob extends Component {
               <View
                 style={[
                   {
-                    height: SIZES.ten * 6,
+                    eight: 60,
+                    paddingHorizontal: SIZES.twenty,
                     backgroundColor: Colors.white,
                     borderRadius: SIZES.ten,
                     shadowColor: '#c5c5c5',
@@ -472,7 +473,6 @@ export default class postJob extends Component {
                     shadowRadius: SIZES.ten,
                     elevation: SIZES.ten,
                     justifyContent: 'center',
-                    paddingLeft: SIZES.twenty,
                   },
                 ]}>
                 <TouchableOpacity
@@ -482,7 +482,9 @@ export default class postJob extends Component {
                     });
                   }}>
                   <RegularTextCB>
-                    {this.state.location ? this.state.location : 'Get Location'}
+                    {this.state.location
+                      ? this.state.location
+                      : 'Search Location'}
                   </RegularTextCB>
                 </TouchableOpacity>
               </View>

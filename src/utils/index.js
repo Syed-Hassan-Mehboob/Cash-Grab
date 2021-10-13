@@ -20,7 +20,6 @@ class utils {
   }
 
   isEmpty(obj) {
-    console.log('isempty started', obj);
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) return false;
     }
@@ -28,7 +27,6 @@ class utils {
   }
 
   validateEmail(str) {
-    console.log('this.validateEmail ', str);
     var pattern =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return pattern.test(str);
@@ -103,27 +101,43 @@ class utils {
   }
 
   showResponseError(error) {
-    console.log(error);
-    console.log(error.response);
-    let errorCode = JSON.stringify(error.response.status);
-    console.log(errorCode);
-    if (errorCode === '400') {
-      let errorData = error.response.data;
-      // this.showToast(errorData.message);
-      if (errorData.data && errorData.data.length > 0) {
-        this.showToast(JSON.stringify(errorData.data));
+    console.log(error.message);
+    let errorCode = '';
+    if (error.response) {
+      console.log(error.response);
+      errorCode = JSON.stringify(error.response.status);
 
-        return;
+      switch (errorCode) {
+        case '400':
+          {
+            let errorData = error.response.data;
+            if (errorData.data && errorData.data.length > 0) {
+              this.showToast(JSON.stringify(errorData.data));
+              return;
+            }
+            this.showToast(JSON.stringify(errorData.message));
+          }
+          break;
+        case '405':
+          {
+            this.showToast('Wrong Api Method');
+          }
+          break;
+        default:
+          {
+            let errorResData = JSON.parse(
+              error.response.request._response,
+            ).data;
+            for (const [, value] of Object.entries(errorResData)) {
+              this.showToast(value[0]);
+              break;
+            }
+          }
+          break;
       }
-      this.showToast(JSON.stringify(errorData.message));
-    } else if (errorCode === '405') {
-      this.showToast('Wrong Api Method');
-    } else {
-      let errorResData = JSON.parse(error.response.request._response).data;
-      for (const [, value] of Object.entries(errorResData)) {
-        this.showToast(value[0]);
-        break;
-      }
+    }
+    if (error.message === 'Network Error') {
+      this.showToast('Please check your network');
     }
   }
 }
