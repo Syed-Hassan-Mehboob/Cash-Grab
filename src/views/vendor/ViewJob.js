@@ -204,7 +204,7 @@ export default class ViewJob extends React.Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.state.title}
+                  {this.state.title === null ? '' : this.state.title}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
