@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   FlatList,
   Image,
@@ -10,22 +10,22 @@ import {
   View,
   PermissionsAndroid,
   Text,
-} from 'react-native';
-import ButtonRadius10 from '../../components/ButtonRadius10';
-import EditText from '../../components/EditText';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
-import Images from '../../common/Images';
-import RegularTextCB from '../../components/RegularTextCB';
-import Colors from '../../common/Colors';
-import LightTextCB from '../../components/LightTextCB';
-import utils from '../../utils';
-import Axios from '../../network/APIKit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Spinner from 'react-native-loading-spinner-overlay';
-import ListComponent from '../../components/ListComponent';
-import Geolocation from '@react-native-community/geolocation';
-import BoldTextCB from '../../components/BoldTextCB';
-import Modal from 'react-native-modal';
+} from "react-native";
+import ButtonRadius10 from "../../components/ButtonRadius10";
+import EditText from "../../components/EditText";
+import Constants, { FONTS, SIZES, STYLES } from "../../common/Constants";
+import Images from "../../common/Images";
+import RegularTextCB from "../../components/RegularTextCB";
+import Colors from "../../common/Colors";
+import LightTextCB from "../../components/LightTextCB";
+import utils from "../../utils";
+import Axios from "../../network/APIKit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Spinner from "react-native-loading-spinner-overlay";
+import ListComponent from "../../components/ListComponent";
+import Geolocation from "@react-native-community/geolocation";
+import BoldTextCB from "../../components/BoldTextCB";
+import Modal from "react-native-modal";
 
 export default class VendorHome extends Component {
   openDrawer = () => {
@@ -37,23 +37,23 @@ export default class VendorHome extends Component {
     this.state = {
       isLoading: false,
       categories: [],
-      accessToken: '',
+      accessToken: "",
       jobAround: [],
-      avatar: '',
-      name: '',
-      currentLat: '',
-      currentLong: '',
+      avatar: "",
+      name: "",
+      currentLat: "",
+      currentLong: "",
       permissionModalVisibility: false,
       scheduleBookings: [],
-      ordrStatus: '',
+      ordrStatus: "",
     };
   }
 
   componentDidMount() {
-    console.log('Vendor Home ===== ');
+    console.log("Vendor Home ===== ");
     this.getUserAccessToken();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.props.navigation.addListener('focus', () => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    this.props.navigation.addListener("focus", () => {
       // this.checkLocationPermission();
       this.getUserAccessToken();
     });
@@ -62,7 +62,7 @@ export default class VendorHome extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     // console.log('access token============>>>', token);
-    this.setState({accessToken: token}, async () => {
+    this.setState({ accessToken: token }, async () => {
       this.getUserProfile(token);
       this.getJobAroundYou();
       this.getBookings();
@@ -70,10 +70,10 @@ export default class VendorHome extends Component {
   };
 
   getUserProfile = async (token) => {
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       console.log(
-        'get profile success===========>>>>',
-        data.data.records.user_profiles.image,
+        "get profile success===========>>>>",
+        data.data.records.user_profiles.image
       );
       this.setState({
         isLoading: false,
@@ -86,13 +86,13 @@ export default class VendorHome extends Component {
     // //console.log('lat',this.state.lat)
 
     const onFailure = (error) => {
-      console.log('get profile success===========>>>>', error);
+      console.log("get profile success===========>>>>", error);
 
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       utils.showResponseError(error);
     };
 
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: token,
@@ -109,8 +109,8 @@ export default class VendorHome extends Component {
     //   lng: this.state.currentLong,
     // };
 
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
+    this.setState({ isLoading: true });
+    const onSuccess = ({ data }) => {
       //console.log(' Job for You =====', data);
       // utils.showToast(data.message)
       this.setState({
@@ -120,7 +120,7 @@ export default class VendorHome extends Component {
     };
 
     const onFailure = (error) => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       utils.showResponseError(error);
       //console.log('==================Error', error);
     };
@@ -139,8 +139,8 @@ export default class VendorHome extends Component {
   };
 
   getBookings = async () => {
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
+    this.setState({ isLoading: true });
+    const onSuccess = ({ data }) => {
       // console.log(' Schedule Bookings  =====', data.data.records);
       this.setState({
         scheduleBookings: data.data.records,
@@ -152,9 +152,9 @@ export default class VendorHome extends Component {
     };
 
     const onFailure = (error) => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       utils.showResponseError(error);
-      console.log('==================Error', error);
+      console.log("==================Error", error);
     };
 
     Axios.get(Constants.getScheduleBookings, {
@@ -171,26 +171,26 @@ export default class VendorHome extends Component {
   };
 
   toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   checkLocationPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         this.props.navigation.navigate(Constants.venderFilter);
       } else {
         // ////console.log('location permission denied');
-        this.setState({permissionModalVisibility: true});
+        this.setState({ permissionModalVisibility: true });
       }
     } catch (err) {
       ////console.log('getLocation catch: ==================> ', err);
     }
   };
 
-  renderJobsForYouItem = ({item}) => {
+  renderJobsForYouItem = ({ item }) => {
     // //console.log('Job Around data ======',item)
     return (
       <TouchableOpacity
@@ -203,12 +203,15 @@ export default class VendorHome extends Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() =>
-          this.props.navigation.navigate(Constants.viewJob, {
-            item: item.id,
-          })
-        }>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        onPress={
+          () =>
+            this.props.navigation.navigate(Constants.viewJob, {
+              item: item.id,
+            })
+          // console.log("item lele tu===========> ", item)
+        }
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={styles.circleCard}>
             <Image
               source={{
@@ -216,34 +219,35 @@ export default class VendorHome extends Component {
                   item.user.userProfile.image !== null &&
                   item.user.userProfile.image !== undefined
                     ? Constants.imageURL + item.user.userProfile.image
-                    : '',
+                    : "",
               }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{marginStart: 10}}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+          <View style={{ marginStart: 10 }}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {item.user.name !== null && item.user.name !== undefined
                 ? item.user.name
-                : ''}
+                : ""}
             </RegularTextCB>
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: "row",
                 marginTop: 5,
-                alignItems: 'center',
-              }}>
+                alignItems: "center",
+              }}
+            >
               <Image
                 source={Images.iconVerified}
                 style={{
                   height: 15,
                   width: 15,
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   tintColor:
                     item.email_verified_at !== null
                       ? Colors.turqoiseGreen
-                      : 'red',
+                      : "red",
                 }}
               />
               <RegularTextCB
@@ -251,87 +255,95 @@ export default class VendorHome extends Component {
                   color:
                     item.email_verified_at !== null
                       ? Colors.turqoiseGreen
-                      : 'red',
+                      : "red",
                   fontSize: 12,
                   marginStart: 5,
-                }}>
-                {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
+                }}
+              >
+                {item.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title !== null && item.title !== undefined ? item.title : ''}
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
+            {item.title !== null && item.title !== undefined ? item.title : ""}
           </RegularTextCB>
 
-          <LightTextCB style={{color: Colors.black}}>
-            ${item.price !== null && item.price !== undefined ? item.price : ''}
+          <LightTextCB style={{ color: Colors.black }}>
+            ${item.price !== null && item.price !== undefined ? item.price : ""}
           </LightTextCB>
         </View>
         <View style={{}}>
-          <RegularTextCB style={{color: Colors.coolGrey}}>
+          <RegularTextCB style={{ color: Colors.coolGrey }}>
             {item.description !== null && item.description !== undefined
               ? item.description
-              : ''}
+              : ""}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
+        >
           <Image
             source={Images.iconLocationPin}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: "contain" }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
               marginStart: 5,
-            }}>
+            }}
+          >
             {item.address !== null && item.address !== undefined
               ? item.address
-              : ''}
+              : ""}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
+        >
           <Image
             source={Images.iconStopWatch}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: "contain" }}
           />
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               marginStart: 5,
-              alignItems: 'center',
+              alignItems: "center",
               flex: 1,
-              justifyContent: 'space-between',
-            }}>
+              justifyContent: "space-between",
+            }}
+          >
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
-              }}>
-              {item.time !== null && item.time !== undefined ? item.time : ''}
+              }}
+            >
+              {item.time !== null && item.time !== undefined ? item.time : ""}
             </RegularTextCB>
             <RegularTextCB
               style={{
                 color: Colors.black,
                 fontSize: 18,
-                textDecorationLine: 'underline',
-              }}>
-              {'View Job'}
+                textDecorationLine: "underline",
+              }}
+            >
+              {"View Job"}
             </RegularTextCB>
           </View>
         </View>
       </TouchableOpacity>
     );
   };
-  renderQuickJob = ({item}) => {
+  renderQuickJob = ({ item }) => {
     // //console.log('Job Around data ======',item)
     return (
       <TouchableOpacity
@@ -344,35 +356,37 @@ export default class VendorHome extends Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() => this.props.navigation.navigate(Constants.JobInProgress)}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        onPress={() => this.props.navigation.navigate(Constants.JobInProgress)}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{ uri: Constants.imageURL + item.user.userProfile.image }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{marginStart: 10}}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+          <View style={{ marginStart: 10 }}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {item.user.name}
             </RegularTextCB>
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: "row",
                 marginTop: 5,
-                alignItems: 'center',
-              }}>
+                alignItems: "center",
+              }}
+            >
               <Image
                 source={Images.iconVerified}
                 style={{
                   height: 15,
                   width: 15,
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   tintColor:
                     item.email_verified_at !== null
                       ? Colors.turqoiseGreen
-                      : 'red',
+                      : "red",
                 }}
               />
               <RegularTextCB
@@ -380,84 +394,92 @@ export default class VendorHome extends Component {
                   color:
                     item.email_verified_at !== null
                       ? Colors.turqoiseGreen
-                      : 'red',
+                      : "red",
                   fontSize: 12,
                   marginStart: 5,
-                }}>
-                {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
+                }}
+              >
+                {item.email_verified_at !== null ? "Verified" : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
             {item.title}
           </RegularTextCB>
 
-          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+          <LightTextCB style={{ color: Colors.black, fontSize: 12 }}>
             ${item.price}
           </LightTextCB>
         </View>
         <View style={{}}>
-          <RegularTextCB style={{color: Colors.coolGrey}}>
+          <RegularTextCB style={{ color: Colors.coolGrey }}>
             Looking for a car mechanic that can look into the battery setup. The
             car is in a still position & would require some man power
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
+        >
           <Image
             source={Images.iconLocationPin}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: "contain" }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
               marginStart: 5,
-            }}>
+            }}
+          >
             {item.address}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
+        >
           <Image
             source={Images.iconStopWatch}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: "contain" }}
           />
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               marginStart: 5,
-              alignItems: 'center',
+              alignItems: "center",
               flex: 1,
-              justifyContent: 'space-between',
-            }}>
+              justifyContent: "space-between",
+            }}
+          >
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
-              }}>
+              }}
+            >
               {item.time}
             </RegularTextCB>
             <RegularTextCB
               style={{
                 color: Colors.black,
                 fontSize: 18,
-                textDecorationLine: 'underline',
-              }}>
-              {'View Job'}
+                textDecorationLine: "underline",
+              }}
+            >
+              {"View Job"}
             </RegularTextCB>
           </View>
         </View>
       </TouchableOpacity>
     );
   };
-  renderBookings = ({item}) => {
+  renderBookings = ({ item }) => {
     // console.log('...................', item.order_status);
     return (
       <TouchableOpacity
@@ -471,49 +493,51 @@ export default class VendorHome extends Component {
           },
         ]}
         onPress={() => {
-          item.order_status === 'pending' || item.order_status === 'cancelled'
+          item.order_status === "pending" || item.order_status === "cancelled"
             ? this.props.navigation.navigate(Constants.BookingAcceptance, {
                 orderId: item.id,
               })
             : this.props.navigation.navigate(Constants.JobInProgress, {
                 orderId: item.id,
               });
-        }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={styles.circleCard}>
             <Image
               source={{
                 uri:
                   item.user_image !== null && item.user_image !== undefined
                     ? Constants.imageURL + item.user_image
-                    : '',
+                    : "",
               }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
-          <View style={{marginStart: 10}}>
-            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+          <View style={{ marginStart: 10 }}>
+            <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
               {item.user_name !== null && item.user_name !== undefined
                 ? item.user_name
-                : ''}
+                : ""}
             </RegularTextCB>
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: "row",
                 marginTop: 5,
-                alignItems: 'center',
-              }}>
+                alignItems: "center",
+              }}
+            >
               <Image
                 source={Images.iconVerified}
                 style={{
                   height: 15,
                   width: 15,
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   tintColor:
                     item.user_email_verified_at !== null
                       ? Colors.turqoiseGreen
-                      : 'red',
+                      : "red",
                 }}
               />
               <RegularTextCB
@@ -521,35 +545,37 @@ export default class VendorHome extends Component {
                   color:
                     item.user_email_verified_at !== null
                       ? Colors.turqoiseGreen
-                      : 'red',
+                      : "red",
                   fontSize: 12,
                   marginStart: 5,
-                }}>
+                }}
+              >
                 {item.user_email_verified_at !== null
-                  ? 'Verified'
-                  : 'Unverified'}
+                  ? "Verified"
+                  : "Unverified"}
               </RegularTextCB>
             </View>
           </View>
         </View>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
             {item.category_name !== null && item.category_name !== undefined
               ? item.category_name
-              : ''}
+              : ""}
           </RegularTextCB>
 
-          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
-            ${' '}
+          <LightTextCB style={[{ color: Colors.black, fontSize: 14 }]}>
+            ${" "}
             {item.grand_total !== null && item.grand_total !== undefined
               ? item.grand_total
-              : ''}
+              : ""}
           </LightTextCB>
         </View>
         <View style={{}}>
@@ -558,56 +584,63 @@ export default class VendorHome extends Component {
               style={{
                 color: Colors.coolGrey,
                 fontSize: 15,
-              }}>
+              }}
+            >
               {item.description}
             </RegularTextCB>
           ) : null}
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
+        >
           <Image
             source={Images.iconLocationPin}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: "contain" }}
           />
           <RegularTextCB
             style={{
               color: Colors.coolGrey,
               marginStart: 5,
-            }}>
+            }}
+          >
             {item.location !== null && item.location !== undefined
               ? item.location
-              : ''}
+              : ""}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
+        >
           <Image
             source={Images.iconStopWatch}
-            style={{height: 17, width: 17, resizeMode: 'contain'}}
+            style={{ height: 17, width: 17, resizeMode: "contain" }}
           />
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               marginStart: 5,
-              alignItems: 'center',
+              alignItems: "center",
               flex: 1,
-              justifyContent: 'space-between',
-            }}>
+              justifyContent: "space-between",
+            }}
+          >
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
-              }}>
+              }}
+            >
               {item.from_time !== null && item.from_time !== undefined
                 ? item.from_time
-                : ''}
+                : ""}
             </RegularTextCB>
             <RegularTextCB
               style={{
                 color: Colors.black,
                 fontSize: 18,
-                textDecorationLine: 'underline',
-              }}>
-              {'View Job'}
+                textDecorationLine: "underline",
+              }}
+            >
+              {"View Job"}
             </RegularTextCB>
           </View>
           {/* <Text style={{textDecorationLine='underline'}}></Text> */}
@@ -621,33 +654,37 @@ export default class VendorHome extends Component {
       <>
         <ScrollView
           style={STYLES.container}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+        >
           <View>
             <View
               style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignItems: 'center',
+                flexDirection: "row",
+                width: "100%",
+                alignItems: "center",
                 paddingHorizontal: SIZES.twenty,
-              }}>
+              }}
+            >
               <TouchableOpacity
                 activeOpacity={0.5}
-                style={{flexDirection: 'row', alignItems: 'center'}}
+                style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() =>
                   this.props.navigation.navigate(Constants.vendorProfile)
-                }>
+                }
+              >
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri: Constants.imageURL + this.state.avatar}}
+                    source={{ uri: Constants.imageURL + this.state.avatar }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <RegularTextCB style={{fontSize: 16, marginStart: SIZES.ten}}>
+                <RegularTextCB style={{ fontSize: 16, marginStart: SIZES.ten }}>
                   Welcome,
                 </RegularTextCB>
                 <RegularTextCB
-                  style={[FONTS.boldFont18, {color: Colors.black}]}>
+                  style={[FONTS.boldFont18, { color: Colors.black }]}
+                >
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
@@ -672,17 +709,18 @@ export default class VendorHome extends Component {
               style={{
                 marginVertical: SIZES.ten,
                 paddingHorizontal: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              onPress={() => this.props.navigation.navigate(Constants.search)}>
-              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+              onPress={() => this.props.navigation.navigate(Constants.search)}
+            >
+              <RegularTextCB style={{ fontSize: 16, color: Colors.coolGrey }}>
                 Search Service...
               </RegularTextCB>
               <Image
                 source={Images.iconSearch}
-                style={{height: SIZES.fifty, width: SIZES.fifty}}
+                style={{ height: SIZES.fifty, width: SIZES.fifty }}
               />
             </TouchableOpacity>
             {/* <View
@@ -734,11 +772,14 @@ export default class VendorHome extends Component {
               style={{
                 paddingHorizontal: SIZES.twenty,
                 paddingVertical: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <RegularTextCB
+                style={[FONTS.boldFont18, { color: Colors.black }]}
+              >
                 Jobs For You
               </RegularTextCB>
 
@@ -747,18 +788,20 @@ export default class VendorHome extends Component {
                   this.props.navigation.navigate(Constants.vendorAllJobs, {
                     accessToken: this.state.accessToken,
                   });
-                }}>
+                }}
+              >
                 <RegularTextCB
                   style={{
                     color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
+                    textDecorationLine: "underline",
+                  }}
+                >
                   See All
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
 
-            <View style={{paddingHorizontal: SIZES.twenty}}>
+            <View style={{ paddingHorizontal: SIZES.twenty }}>
               <FlatList
                 data={this.state.jobAround}
                 // horizontal
@@ -775,29 +818,34 @@ export default class VendorHome extends Component {
               style={{
                 paddingHorizontal: SIZES.twenty,
                 paddingVertical: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <RegularTextCB
+                style={[FONTS.boldFont18, { color: Colors.black }]}
+              >
                 Quick Job
               </RegularTextCB>
 
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate(Constants.VendorQuickJob);
-                }}>
+                }}
+              >
                 <RegularTextCB
                   style={{
                     color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
+                    textDecorationLine: "underline",
+                  }}
+                >
                   See All
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
 
-            <View style={{paddingHorizontal: SIZES.twenty}}>
+            <View style={{ paddingHorizontal: SIZES.twenty }}>
               <FlatList
                 data={this.state.jobAround}
                 // horizontal
@@ -814,29 +862,34 @@ export default class VendorHome extends Component {
               style={{
                 paddingHorizontal: SIZES.twenty,
                 paddingVertical: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <RegularTextCB
+                style={[FONTS.boldFont18, { color: Colors.black }]}
+              >
                 Bookings
               </RegularTextCB>
 
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate(Constants.VenderBookings, {});
-                }}>
+                }}
+              >
                 <RegularTextCB
                   style={{
                     color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
+                    textDecorationLine: "underline",
+                  }}
+                >
                   See All
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
 
-            <View style={{paddingHorizontal: SIZES.twenty}}>
+            <View style={{ paddingHorizontal: SIZES.twenty }}>
               <FlatList
                 data={this.state.scheduleBookings}
                 // horizontal
@@ -853,7 +906,7 @@ export default class VendorHome extends Component {
         </ScrollView>
         <Spinner
           visible={this.state.isLoading}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
 
@@ -864,13 +917,15 @@ export default class VendorHome extends Component {
           animationInTiming={600}
           animationOutTiming={600}
           backdropTransitionInTiming={600}
-          backdropTransitionOutTiming={600}>
+          backdropTransitionOutTiming={600}
+        >
           <View
             style={{
               backgroundColor: Colors.navy,
               padding: SIZES.fifteen,
-            }}>
-            <BoldTextCB style={[{color: Colors.white, fontSize: 22}]}>
+            }}
+          >
+            <BoldTextCB style={[{ color: Colors.white, fontSize: 22 }]}>
               CashGrab
             </BoldTextCB>
             <RegularTextCB
@@ -878,27 +933,30 @@ export default class VendorHome extends Component {
                 marginVertical: SIZES.ten,
                 fontSize: 16,
                 color: Colors.white,
-              }}>
+              }}
+            >
               Please enable your location to see nearby vendors...
             </RegularTextCB>
             <View
               style={{
                 marginTop: SIZES.ten,
-                alignSelf: 'flex-end',
-              }}>
+                alignSelf: "flex-end",
+              }}
+            >
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({permissionModalVisibility: false});
+                  this.setState({ permissionModalVisibility: false });
                 }}
                 style={{
                   padding: SIZES.ten,
                   width: SIZES.fifty,
-                  alignItems: 'center',
+                  alignItems: "center",
                   borderRadius: SIZES.fifteen,
                   marginTop: SIZES.ten,
                   backgroundColor: Colors.white,
-                }}>
-                <RegularTextCB style={{color: Colors.navy}}>Ok</RegularTextCB>
+                }}
+              >
+                <RegularTextCB style={{ color: Colors.navy }}>Ok</RegularTextCB>
               </TouchableOpacity>
             </View>
           </View>
@@ -926,7 +984,7 @@ const styles = StyleSheet.create({
     height: SIZES.fifty + SIZES.ten,
     width: SIZES.fifty + SIZES.ten,
     borderRadius: SIZES.fifty + SIZES.ten / 2,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   circle: {
     height: SIZES.ten * 8,
@@ -944,11 +1002,11 @@ const styles = StyleSheet.create({
     // elevation: SIZES.five,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: SIZES.twenty,
     flex: 1,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -960,7 +1018,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: SIZES.twenty,
   },
   spinnerTextStyle: {
-    color: '#FFF',
+    color: "#FFF",
     fontFamily: Constants.fontRegular,
   },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   FlatList,
   Image,
@@ -11,24 +11,24 @@ import {
   Modal,
   TextInput,
   StatusBar,
-} from 'react-native';
+} from "react-native";
 
-import Spinner from 'react-native-loading-spinner-overlay';
-import ButtonRadius10 from '../components/ButtonRadius10';
-import EditText from '../components/EditText';
-import Constants, {SIZES, FONTS, STYLES, height} from '../common/Constants';
-import Axios from '../network/APIKit';
-import utils from '../utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import TimePicker from '../components/TimePicker';
-import Moment from 'moment';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {Component} from 'react';
-import RegularTextCB from '../components/RegularTextCB';
-import Colors from '../common/Colors';
-import Images from '../common/Images';
-import {MultiDropdownPicker} from '../components/quickNotifyServeses';
-import MesageEditText from '../components/MessageEditText';
+import Spinner from "react-native-loading-spinner-overlay";
+import ButtonRadius10 from "../components/ButtonRadius10";
+import EditText from "../components/EditText";
+import Constants, { SIZES, FONTS, STYLES, height } from "../common/Constants";
+import Axios from "../network/APIKit";
+import utils from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import TimePicker from "../components/TimePicker";
+import Moment from "moment";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { Component } from "react";
+import RegularTextCB from "../components/RegularTextCB";
+import Colors from "../common/Colors";
+import Images from "../common/Images";
+import { MultiDropdownPicker } from "../components/quickNotifyServeses";
+import MesageEditText from "../components/MessageEditText";
 export default class UserHome extends Component {
   constructor(props) {
     super(props);
@@ -36,41 +36,46 @@ export default class UserHome extends Component {
       isLoading: false,
       isQuickServiceModalVisible: false,
       isSelectionModalVisible: false,
-      accessToken: '',
-      services: '',
-      rateRequested: '',
-      location: '',
-      address: '',
-      exactTime: '',
+      accessToken: "",
+      services: "",
+      rateRequested: "",
+      description: "",
+      location: "",
+      address: "",
+      exactTime: "",
       selections: [],
-      startTime: '08:55',
+      startTime: "08:55",
       isDatePickerVisible: false,
       showModal: false,
-      lat: '',
-      long: '',
-      servicesid: '',
+      lat: "",
+      long: "",
+      servicesid: "",
+      getAllCategories: [],
+      selectedCategory: "",
+      price: "",
     };
   }
 
   componentDidMount() {
     this.getUserAccessToken();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    this.props.navigation.addListener('focus', () => this.getUserAccessToken());
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    this.props.navigation.addListener("focus", () => this.getUserAccessToken());
   }
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
+    this.setState({ accessToken: token }, () => {
       // this.getServies();
+      this.getAllCategories();
     });
   };
 
   GooglePlacesInput = (props) => {
     return (
       <GooglePlacesAutocomplete
-        placeholder={'Search Location'}
+        placeholder={"Search Location"}
         //   renderLeftButton={() => }
         minLength={2}
-        keyboardKeyType={'search'}
+        keyboardKeyType={"search"}
         fetchDetails={true}
         onPress={(data, details = null) => {
           this.setState(
@@ -81,25 +86,25 @@ export default class UserHome extends Component {
             },
             () => {
               setTimeout(() => {
-                this.setState({showModal: false});
+                this.setState({ showModal: false });
               }, 400);
-            },
+            }
           );
         }}
         query={{
-          key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
-          language: 'en',
-          types: '',
+          key: "AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM",
+          language: "en",
+          types: "",
         }}
         enablePoweredByContainer={false}
         styles={{
           textInputContainer: {
-            backgroundColor: '#fff',
-            marginTop: Platform.OS === 'ios' ? 20 : 0,
+            backgroundColor: "#fff",
+            marginTop: Platform.OS === "ios" ? 20 : 0,
             marginBottom: 0,
             marginLeft: 0,
             marginRight: 0,
-            shadowColor: '#000',
+            shadowColor: "#000",
             shadowOffset: {
               width: 0,
               height: SIZES.five,
@@ -119,13 +124,13 @@ export default class UserHome extends Component {
           listView: {
             marginTop: SIZES.ten,
             borderRadius: 8,
-            overflow: 'hidden',
-            backgroundColor: '#fff',
+            overflow: "hidden",
+            backgroundColor: "#fff",
           },
-          row: {borderRadius: 8},
+          row: { borderRadius: 8 },
         }}
-        GooglePlacesSearchQuery={{rankby: 'distance'}}
-        GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
+        GooglePlacesSearchQuery={{ rankby: "distance" }}
+        GooglePlacesDetailsQuery={{ fields: ["formatted_address", "geometry"] }}
         renderDescription={(row) => row.description}
         currentLocation={true}
         currentLocationLabel="Current location"
@@ -151,42 +156,89 @@ export default class UserHome extends Component {
   // };
 
   handleConfirm = (date) => {
-    const newTime = Moment(date).format('h:mm:ss');
-    this.setState({startTime: newTime});
+    const newTime = Moment(date).format("h:mm:ss");
+    this.setState({ startTime: newTime });
     this.hideDatePicker();
   };
 
   showDatePicker = () => {
-    this.setState({isDatePickerVisible: true});
+    this.setState({ isDatePickerVisible: true });
   };
 
   hideDatePicker = () => {
-    this.setState({isDatePickerVisible: false});
+    this.setState({ isDatePickerVisible: false });
   };
+
   postQuickOrder = () => {
     const postData = {
       address: this.state.address,
-      service_id: this.state.servicesid,
-      time: this.state.startTime,
+      category_id: this.state.servicesid,
+      from_time: this.state.startTime,
       lat: this.state.lat,
       lng: this.state.long,
       price: this.state.rateRequested,
       location: this.state.location,
+      description: this.state.description,
     };
 
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
+    console.log("myData=======>>>>> ", postData);
+
+    const formData = new FormData();
+
+    for (const [key, value] in postData) {
+      formData.append(key, value);
+    }
+
+    //     address:New York
+    // category_id:2
+    // //from_time:08:27:09
+    // lat:24.90628280557342
+    // lng:67.07237028142383
+    // price:200
+    // location:
+    // description:
+
+    this.setState({ isLoading: true });
+
+    if (utils.isEmpty(postData.address)) {
+      utils.showToast("Address field can't be empty");
+      this.setState({ isLoading: false });
+      return;
+    }
+    // else if (utils.isEmpty(postData.category_id)) {
+    //   utils.showToast("category field can't be empty");
+    //   return;
+    // }
+    else if (utils.isEmpty(postData.from_time)) {
+      utils.showToast("time field can't be empty");
+      this.setState({ isLoading: false });
+      return;
+    } else if (utils.isEmpty(postData.price)) {
+      utils.showToast("Rate field can't be empty");
+      this.setState({ isLoading: false });
+      return;
+    } else if (utils.isEmpty(postData.location)) {
+      utils.showToast("Location field can't be empty");
+      this.setState({ isLoading: false });
+      return;
+    }
+    //  else if (utils.isEmpty(postData.description)) {
+    //   utils.showToast("Description field can't be empty");
+    //   return;
+    // }
+
+    const onSuccess = ({ data }) => {
+      this.setState({ isLoading: false });
       utils.showToast(data.message);
-      this.setState({isLoading: false});
       this.props.navigation.navigate(Constants.home);
     };
     const onFailure = (error) => {
       console.log(
-        'error =====================================================================>',
-        error,
+        "error =====================================================================>",
+        error
       );
-      utils.showResponseError(error.massage);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
+      utils.showResponseError(error);
     };
     const options = {
       headers: {
@@ -194,7 +246,30 @@ export default class UserHome extends Component {
         //    'Content-Type':'application/x-www-form-urlencoded'
       },
     };
-    Axios.post(Constants.quickOrder, postData, options)
+    Axios.post(Constants.quickOrder2, formData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getAllCategories = () => {
+    const onSuccess = ({ data }) => {
+      console.log("All Categoryyyyy ==========> ", data.data.records);
+      this.setState({ isLoading: false, getAllCategories: data.data.records });
+    };
+
+    const onFailure = (error) => {
+      this.setState({ isLoading: false });
+      console.log("=================", error);
+      utils.showResponseError(error);
+    };
+
+    this.setState({ isLoading: true });
+
+    Axios.get(Constants.getCategories, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -203,25 +278,28 @@ export default class UserHome extends Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'always'}
+        keyboardShouldPersistTaps={"always"}
         style={STYLES.container}
         contentContainerStyle={[
-          {paddingHorizontal: SIZES.ten * 2, paddingBottom: 120},
-        ]}>
+          { paddingHorizontal: SIZES.ten * 2, paddingBottom: 120 },
+        ]}
+      >
         <StatusBar backgroundColor={Colors.white} barStyle="dark-content" />
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             paddingVertical: SIZES.twenty,
-          }}>
+          }}
+        >
           <RegularTextCB
             style={[
               FONTS.boldFont22,
               {
                 color: Colors.black,
               },
-            ]}>
+            ]}
+          >
             Quick Services
           </RegularTextCB>
         </View>
@@ -233,7 +311,8 @@ export default class UserHome extends Component {
               color: Colors.black,
               marginVertical: SIZES.ten,
             },
-          ]}>
+          ]}
+        >
           Select Services
         </RegularTextCB>
 
@@ -244,26 +323,27 @@ export default class UserHome extends Component {
             height: 60,
             backgroundColor: Colors.white,
             borderRadius: height * 0.01,
-            shadowColor: '#c5c5c5',
-            shadowOffset: {width: SIZES.five, height: SIZES.five},
+            shadowColor: "#c5c5c5",
+            shadowOffset: { width: SIZES.five, height: SIZES.five },
             shadowOpacity: 1.0,
             shadowRadius: 10,
             // elevation: SIZES.ten,
-            justifyContent: 'center',
+            justifyContent: "center",
             // paddingLeft: SIZES.twenty,
             marginTop: SIZES.ten,
-          }}>
+          }}
+        >
           <MultiDropdownPicker
             viewProperty="name"
             value={this.state.services}
-            data={this.state.selections}
+            data={this.state.getAllCategories}
             onChangeValue={(val) => {
-              this.setState({servicesid: val}, () => {
+              this.setState({ servicesid: val }, () => {
                 console.log(
-                  'multidropdown picker ',
+                  "multidropdown picker ",
                   this.state.servicesid,
-                  'value',
-                  val,
+                  "value",
+                  val
                 );
               });
             }}
@@ -271,22 +351,23 @@ export default class UserHome extends Component {
         </View>
 
         <RegularTextCB
-          style={{fontSize: 18, color: Colors.black, marginTop: SIZES.twenty}}>
+          style={{ fontSize: 18, color: Colors.black, marginTop: SIZES.twenty }}
+        >
           Rate Requested
         </RegularTextCB>
         <EditText
-          ref={'rate'}
-          placeholder={'Enter Rate'}
+          ref={"rate"}
+          placeholder={"Enter Rate"}
           value={this.state.rateRequested}
           onChangeText={(text) => {
             this.setState({
               rateRequested: text,
             });
           }}
-          style={{marginTop: SIZES.ten}}
+          style={{ marginTop: SIZES.ten }}
         />
-        <View style={[{marginTop: SIZES.twenty}]}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={[{ marginTop: SIZES.twenty }]}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Location
           </RegularTextCB>
           <View
@@ -295,24 +376,26 @@ export default class UserHome extends Component {
                 height: 60,
                 backgroundColor: Colors.white,
                 borderRadius: height * 0.01,
-                shadowColor: '#c5c5c5',
-                shadowOffset: {width: SIZES.five, height: SIZES.five},
+                shadowColor: "#c5c5c5",
+                shadowOffset: { width: SIZES.five, height: SIZES.five },
                 shadowOpacity: 1.0,
                 shadowRadius: SIZES.ten,
                 elevation: SIZES.ten,
-                justifyContent: 'center',
+                justifyContent: "center",
                 paddingLeft: SIZES.twenty,
                 marginTop: SIZES.ten,
               },
-            ]}>
+            ]}
+          >
             <TouchableOpacity
               onPress={() => {
                 this.setState({
                   showModal: true,
                 });
-              }}>
-              <RegularTextCB style={{fontSize: 16}}>
-                {this.state.location ? this.state.location : 'Enter Location'}
+              }}
+            >
+              <RegularTextCB style={{ fontSize: 16 }}>
+                {this.state.location ? this.state.location : "Enter Location"}
               </RegularTextCB>
             </TouchableOpacity>
           </View>
@@ -323,27 +406,31 @@ export default class UserHome extends Component {
           transparent={true}
           visible={this.state.showModal}
           onRequestClose={() => {
-            this.setState({showModal: false});
-          }}>
+            this.setState({ showModal: false });
+          }}
+        >
           <View
             style={{
               flex: 1,
               padding: SIZES.twenty,
-              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
-            }}>
+              backgroundColor: "rgba(52, 52, 52, 0.SIZES.five)",
+            }}
+          >
             <View
               style={{
                 // flex: 1,
                 padding: SIZES.five,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
               {this.GooglePlacesInput()}
               <TouchableOpacity
-                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                style={{ marginTop: SIZES.fifteen, marginLeft: SIZES.five }}
                 onPress={() => {
-                  this.setState({showModal: false});
-                }}>
+                  this.setState({ showModal: false });
+                }}
+              >
                 <Image
                   style={{
                     height: SIZES.fifteen,
@@ -358,13 +445,13 @@ export default class UserHome extends Component {
           </View>
         </Modal>
 
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={{ marginTop: SIZES.twenty }}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Address
           </RegularTextCB>
           <EditText
-            ref={'rate'}
-            placeholder={'Enter Address'}
+            ref={"rate"}
+            placeholder={"Enter Address"}
             value={this.state.address}
             onChangeText={(text) => {
               this.setState({
@@ -377,9 +464,10 @@ export default class UserHome extends Component {
           />
         </View>
 
-        <View style={[{marginTop: SIZES.twenty}]}>
+        <View style={[{ marginTop: SIZES.twenty }]}>
           <RegularTextCB
-            style={{fontSize: 18, color: '#000', marginBottom: SIZES.ten}}>
+            style={{ fontSize: 18, color: "#000", marginBottom: SIZES.ten }}
+          >
             Exact Time
           </RegularTextCB>
 
@@ -395,8 +483,8 @@ export default class UserHome extends Component {
           />
         </View>
 
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={{ marginTop: SIZES.twenty }}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Job Description
           </RegularTextCB>
 
@@ -423,8 +511,9 @@ export default class UserHome extends Component {
           </View> */}
 
           <MesageEditText
-            placeholder={'Enter Job Description '}
+            placeholder={"Enter Job Description "}
             height={SIZES.twentyFive * 4.5}
+            value={this.state.description}
           />
         </View>
 
@@ -433,12 +522,14 @@ export default class UserHome extends Component {
             marginTop: SIZES.ten * 5,
             paddingBottom: SIZES.ten,
             marginHorizontal: SIZES.ten,
-          }}>
+          }}
+        >
           <ButtonRadius10
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
             onPress={() => {
-              this.props.navigation.navigate(Constants.confirmPayment);
+              // this.props.navigation.navigate(Constants.confirmPayment);
+              this.postQuickOrder();
             }}
           />
         </View>
@@ -446,16 +537,17 @@ export default class UserHome extends Component {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => this.props.navigation.navigate(Constants.home)}
-          style={{alignSelf: 'flex-end'}}>
+          style={{ alignSelf: "flex-end" }}
+        >
           <Image
             source={Images.iconSearch}
-            style={{height: SIZES.fifty * 1.5, width: SIZES.fifty * 1.5}}
+            style={{ height: SIZES.fifty * 1.5, width: SIZES.fifty * 1.5 }}
           />
         </TouchableOpacity>
 
         <Spinner
           visible={this.state.isLoading}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
       </ScrollView>
@@ -465,7 +557,7 @@ export default class UserHome extends Component {
 
 const styles = StyleSheet.create({
   textInput: {
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingVertical: SIZES.five,
   },
   bottomSheetBody: {
@@ -475,13 +567,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: SIZES.twenty,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: SIZES.twenty,
     // borderWidth:1,
     // borderColor:Colors.lightYellowGreen,
     flex: 1,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -491,37 +583,37 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 7,
   },
   spinnerTextStyle: {
-    color: '#FFF',
+    color: "#FFF",
     fontFamily: Constants.fontRegular,
   },
   iconBack: {
     height: SIZES.twenty,
     width: SIZES.twenty,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 60,
     backgroundColor: Colors.white,
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 5,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 
 const data = [
   {
     id: 1,
-    name: 'test1',
+    name: "test1",
   },
   {
     id: 2,
-    name: 'test2',
+    name: "test2",
   },
 ];
