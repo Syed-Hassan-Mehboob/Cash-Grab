@@ -30,6 +30,7 @@ const Constants = {
   venderFilter: 'vendors/getfilters',
   venderFilterd: 'venderFilterd',
   changePassword: 'ChangePassword',
+  ResetPassword: 'ResetPassword',
   editProfile: 'EditProfile',
   vendorEditProfile: 'VendorEditProfile',
   AddProfileServices: 'AddProfileServices',
@@ -104,6 +105,7 @@ const Constants = {
   verifyOtpURL: 'auth/verify-otp',
   resendOtpURL: 'auth/resend-otp',
   forgotPasswordURL: 'auth/forgot-password',
+  resetPasswordURL: 'auth/reset-password',
   updatePasswordURL: 'auth/update-password',
   getProfileURL: 'auth/get-profile',
   getServicesOfVendorURL: 'vendors/get-service-of-vendor?',
@@ -150,14 +152,11 @@ const Constants = {
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
-<<<<<<< HEAD
-=======
   orderProcess: 'order/proceed',
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
->>>>>>> 60193abf6746d6c91b4a2d6c8fdf45a517ece5a5
   /* * api urls * */
 };
 
