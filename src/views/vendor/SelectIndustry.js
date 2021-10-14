@@ -39,114 +39,15 @@ export default class SelectIndustry extends Component {
     ],
   });
 
-  // UNSAFE_componentWillMount() {
-  //   var temp = [];
-
-  //   const onSuccess = ({data}) => {
-  //     // this.setState({Data: data.data.records}, () => {
-
-  //     this.setState(
-  //       {
-  //         Data: data.data.records.map((el) => {
-  //           return {...el, isSelected: false};
-  //         }),
-  //       },
-  //       () => {
-  //         // console.log(temp);
-  //       },
-  //     );
-  //     var result = [];
-  //     this.state.Data.map(async (key) => {
-  //       // AsyncStorage.getItem(`${key.name}`).then((item) => {
-  //       //   var o = Object.assign({}, key);
-  //       //   // console.log('o=============>>>>>>', o);
-  //       //   if (
-  //       //     item !== null &&
-  //       //     JSON.parse(item).cat_id !== undefined &&
-  //       //     key.id == JSON.parse(item).cat_id
-  //       //   ) {
-  //       //     console.log(
-  //       //       'IF===========>>>>>> ',
-  //       //       Object.keys({...key, isSelected: true}),
-  //       //     );
-  //       //     return {...key, isSelected: true};
-  //       //     // console.log('item in storage ========>>>', item);
-  //       //     // o.isSelected = true;
-  //       //     // return o;
-  //       //   } else {
-  //       //     // o.isSelected = false;
-  //       //     // return o;
-  //       //     console.log(
-  //       //       'ELSE===========>>>>>>',
-  //       //       typeof {...key, isSelected: false},
-  //       //     );
-  //       //     return {...key, isSelected: false};
-  //       //   }
-  //       // });
-
-  //       const servicesItems = await AsyncStorage.getItem(`${key.name}`);
-  //       // console.log(servicesItems);
-  //       if (servicesItems !== null) {
-  //         if (JSON.parse(servicesItems).cat_id == key.id) {
-  //           // console.log('true');
-  //           // this.state.newData.push({...key, isSelected: true});
-  //           // result.push({...key, isSelected: true});
-  //           // return {...key, isSelected: true};
-  //           key.isSelected = true;
-  //         } else {
-  //           key.isSelected = false;
-  //           // this.state.newData.push({...key, isSelected: false});
-  //           // result.push({...key, isSelected: false});
-  //           // return {...key, isSelected: false};
-  //         }
-  //       }
-  //     });
-
-  //     console.log('result==========>>>>', result);
-  //     // });
-
-  //     this.setState({isLoading: false});
-  //   };
-  //   const onFaliure = (error) => {
-  //     console.log('get industry error=============>>>', error);
-  //   };
-  //   Axios.get(Constants.getCategories).then(onSuccess).catch(onFaliure);
-  // }
-
   componentDidMount() {
     var temp = [];
 
     const onSuccess = async ({data}) => {
       const harami = await AsyncStorage.getItem('SelectedServices');
-      // console.log('ffffffff======>>>>', JSON.parse(harami));
       var parsedHarami = JSON.parse(harami);
-      // console.log('parsedHarami============>>>', JSON.stringify(parsedHarami));
-
-      // data.data.records.map((rec) => {
-      //   // console.log('parentID==========>>>', rec.id);
-      //   parsedHarami.map((ph) => {
-      //     // console.log('child==========>>>', ph.cat_id);
-
-      //     if (rec.id === ph.cat_id) {
-      //       // return;
-      //       temp.push({...rec, isSelected: true});
-
-      //       console.log('parent', true, rec.id, ' ', ph.cat_id);
-      //       return;
-      //     } else {
-      //       console.log('child', false, rec.id, ' ', ph.cat_id);
-
-      //       temp.push({...rec, isSelected: false});
-      //     }
-      //   });
-      // });
-
       this.setState({Data: data.data.records}, () => {
-        this.setState({isLoading: false}, () => {
-          // console.log('after loading========>>>>>>', temp);
-        });
+        this.setState({isLoading: false}, () => {});
       });
-      // });
     };
     const onFaliure = (error) => {
       console.log('get industry error=============>>>', error);
@@ -191,7 +92,7 @@ export default class SelectIndustry extends Component {
           justifyContent: 'center',
           margin: SIZES.ten / 1.1,
           marginTop: SIZES.twenty,
-          paddingHorizontal: SIZES.fifteen,
+          paddingHorizontal: Platform.OS ? SIZES.five : SIZES.fifteen,
         }}>
         <TouchableOpacity
           style={[
@@ -217,7 +118,6 @@ export default class SelectIndustry extends Component {
             source={{
               uri: Constants.imageURL + item.image,
             }}
-            // source={item.image}
             style={{height: SIZES.ten * 4.5, width: SIZES.ten * 4.5}}
             resizeMode="cover"
           />
@@ -236,22 +136,26 @@ export default class SelectIndustry extends Component {
   };
 
   signUp = async () => {
-    const asyncData = await AsyncStorage.getItem('SelectedServices');
+    const asyncServicesData = await AsyncStorage.getItem('SelectedServices');
+    const asyncSignPayloadData = await AsyncStorage.getItem('SignUpPayload');
+    const asyncSignUpInterestData = await AsyncStorage.getItem(
+      'SignUpInterestID',
+    );
 
     const body = {
-      name: this.props.route.params.venderData.name,
-      email: this.props.route.params.venderData.email,
-      country_flag: this.props.route.params.venderData.country_flag,
-      country_code: this.props.route.params.venderData.country_code,
-      phone: this.props.route.params.venderData.phone,
-      type: this.props.route.params.venderData.type,
-      password: this.props.route.params.venderData.password,
+      name: JSON.parse(asyncSignPayloadData).name,
+      email: JSON.parse(asyncSignPayloadData).email,
+      country_flag: JSON.parse(asyncSignPayloadData).country_flag,
+      country_code: JSON.parse(asyncSignPayloadData).country_code,
+      phone: JSON.parse(asyncSignPayloadData).phone,
+      type: JSON.parse(asyncSignPayloadData).type,
+      password: JSON.parse(asyncSignPayloadData).password,
       password_confirmation:
-        this.props.route.params.venderData.password_confirmation,
+        JSON.parse(asyncSignPayloadData).password_confirmation,
       verified_by: 'email',
-      experience: this.props.route.params.venderData.experience,
-      interest_id: this.props.route.params.interestId,
-      categories: JSON.parse(asyncData),
+      experience: JSON.parse(asyncSignPayloadData).experience,
+      interest_id: JSON.parse(asyncSignUpInterestData),
+      categories: JSON.parse(asyncServicesData),
     };
     if (asyncData !== null) {
       console.log('datas===========>>>>>>>', JSON.stringify(body));

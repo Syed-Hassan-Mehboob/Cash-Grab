@@ -12,7 +12,7 @@ import Colors from '../../common/Colors';
 import RegularTextCB from '../../components/RegularTextCB';
 import Images from '../../common/Images';
 import ButtonRadius10 from '../../components/ButtonRadius10';
-import { SIZES } from '../../common/Constants';
+import {SIZES} from '../../common/Constants';
 
 const {height, width} = Dimensions.get('window');
 
@@ -47,21 +47,29 @@ export default class WithDraw extends Component {
         <View
           style={[
             styles.card,
-            {padding: SIZES.fifteen, marginHorizontal: SIZES.fifteen, marginTop: SIZES.ten},
+            {
+              padding: SIZES.fifteen,
+              marginHorizontal: SIZES.fifteen,
+              marginTop: SIZES.ten,
+            },
           ]}>
           <View style={{flexDirection: 'row'}}>
             <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
               Advance Cash
             </RegularTextCB>
             <RegularTextCB
-              style={{fontSize: 16, color: Colors.black, marginStart: SIZES.five}}>
+              style={{
+                fontSize: 16,
+                color: Colors.black,
+                marginStart: SIZES.five,
+              }}>
               ${this.state.sliderValue}
             </RegularTextCB>
           </View>
           <Slider
             style={{
               width: '100%',
-              height: SIZES.fif,
+              height: SIZES.fifteen,
             }}
             minimumValue={this.state.min}
             maximumValue={this.state.max}
@@ -78,6 +86,7 @@ export default class WithDraw extends Component {
               flexDirection: 'row',
               width: '100%',
               paddingHorizontal: SIZES.ten,
+              paddingVertical: SIZES.ten,
               justifyContent: 'space-between',
             }}>
             <RegularTextCB>{this.state.min}</RegularTextCB>
@@ -170,16 +179,21 @@ export default class WithDraw extends Component {
             source={Images.visa}
             style={{
               height: SIZES.fif,
-              width: SIZES.ten*8,
+              width: SIZES.ten * 8,
               resizeMode: 'contain',
             }}
           />
-          <RegularTextCB style={{color: Colors.coolGrey, marginStart: SIZES.twenty}}>
+          <RegularTextCB
+            style={{color: Colors.coolGrey, marginStart: SIZES.twenty}}>
             **** **** **** 7989
           </RegularTextCB>
         </View>
         <RegularTextCB
-          style={{color: Colors.coolGrey, marginTop: SIZES.twenty, marginHorizontal: SIZES.fifteen}}>
+          style={{
+            color: Colors.coolGrey,
+            marginTop: SIZES.twenty,
+            marginHorizontal: SIZES.fifteen,
+          }}>
           Advance cash typically take 30 mints but it may take up to 2 hours
           depending on your bank.
         </RegularTextCB>
@@ -215,7 +229,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   card: {
-    height: SIZES.ten*12,
+    height: SIZES.ten * 12,
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     padding: SIZES.twenty,
@@ -227,8 +241,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   thumb: {
-    width: SIZES.ten*4,
-    height: SIZES.ten*4,
+    width: SIZES.ten * 4,
+    height: SIZES.ten * 4,
     backgroundColor: 'transparent',
   },
 });

@@ -47,8 +47,18 @@ export default class EditText extends Component {
           placeholderTextColor={Colors.grey}
           autoCapitalize="none"
           blurOnSubmit={true}
-          onFocus={() => this.setState({borderColor: Colors.sickGreen})}
-          onBlur={() => this.setState({borderColor: 'transparent'})}
+          onFocus={() => {
+            if (this.props.onFocuss !== undefined) {
+              this.props.onFocuss();
+            }
+            this.setState({borderColor: Colors.sickGreen});
+          }}
+          onBlur={() => {
+            if (this.props.onBlurs !== undefined) {
+              this.props.onBlurs();
+            }
+            this.setState({borderColor: 'transparent'});
+          }}
           selectionColor={Colors.sickGreen}
           placeholder={placeholder}
           keyboardType={keyboardType}
