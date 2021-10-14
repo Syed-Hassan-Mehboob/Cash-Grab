@@ -1,48 +1,56 @@
-import React, { useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   FlatList,
-} from "react-native";
-import Colors from "../common/Colors";
-import Constants, { SIZES, STYLES, FONTS } from "../common/Constants";
-import BoldTextCB from "../components/BoldTextCB";
-import ButtonRadius10 from "../components/ButtonRadius10";
-import NormalHeader from "../components/NormalHeader";
-import RegularTextCB from "../components/RegularTextCB";
-import utils from "../utils";
-import Axios from "../network/APIKit";
-import Spinner from "react-native-loading-spinner-overlay";
+  SegmentedControlIOS,
+} from 'react-native';
+import Colors from '../common/Colors';
+import Constants, {SIZES, STYLES, FONTS} from '../common/Constants';
+import BoldTextCB from '../components/BoldTextCB';
+import ButtonRadius10 from '../components/ButtonRadius10';
+import NormalHeader from '../components/NormalHeader';
+import RegularTextCB from '../components/RegularTextCB';
+import utils from '../utils';
+import Axios from '../network/APIKit';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function SelectServices(props) {
   const [isLoading, setIsloading] = useState(true);
-  console.log("other user id", props.route.params.id);
-
   const [serviceData, setServiceData] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
 
-  useEffect( () => {
+  console.log('this.props.route.params.item', props.route.params.item);
+
+  useEffect(() => {
     getUserAccessToken();
-  }, []);
-  console.log("shaohabbb=====", serviceData);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      console.log('working ==== ......');
+      getUserAccessToken();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
+  // console.log('shaohabbb=====', serviceData);
 
   const getUserAccessToken = async () => {
     setIsloading(true);
-    const value = await AsyncStorage.getItem("user");
+    const value = await AsyncStorage.getItem('user');
     const accessToken = JSON.parse(value);
-    if (accessToken !== undefined) {
-      vendorAllServices(accessToken.token);
-      // postJobRequest(accessToken.token);
-    }
+
+    vendorAllServices();
+    // postJobRequest(accessToken.token);
   };
 
   const vendorAllServices = async () => {
     const value = await AsyncStorage.getItem(Constants.accessToken);
     let config = {
       params: {
-        categoryId: props.route.params.id,
+        categoryId: props.route.params.item.id.toString(),
+        // categoryId: '16',
       },
       headers: {
         Authorization: value,
@@ -51,45 +59,53 @@ export default function SelectServices(props) {
 
     // console.log('tokennnnn', token);
 
-    const onSuccess = ({ data }) => {
-      console.log(
-        "All Servicessssssss ======================>",
-        data.data[0].services
-      );
+    const onSuccess = ({data}) => {
+      console.log('All Servicessssssss ======================>', data);
       // setAllServices(data.data[0].services);
       let temp = [];
       let temp1 = data.data[0].services;
       temp1.map((element) => {
         // element["isSelected"] = false;
-        temp.push({ ...element, isSelected: false });
+        temp.push({...element, isSelected: false});
       });
       setServiceData(temp);
       setIsloading(false);
     };
+
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
-      console.log("=======Servicessssss========>", error);
+      console.log('=======Servicessssss========>', error);
     };
-    // const onSuccess = ({data}) => {
-    //   console.log('asdsdasdsadasd ======================>', data.data);
-    //   setJobAccept(data.data);
-    //   setIsloading(false);
-    // };
-    // const onFailure = (error) => {
-    //   utils.showResponseError(error);
-    //   setIsloading(false);
-    //   console.log('===============>', error);
-    // };
     Axios.get(Constants.customerViewCategoriesURL, config)
       .then(onSuccess)
       .catch(onFailure);
   };
 
+  const handleServiceIdOnClick = () => {
+    setSelectedServices([]);
+    serviceData.map((val) => {
+      if (val.isSelected) {
+        selectedServices.push(val.id);
+        console.log('Services Id ==== ', val.id);
+      }
+    });
+
+    if (selectedServices.length === 0) {
+      utils.showToast('Specify atleast 1 interest');
+    } else {
+      props.navigation.navigate(Constants.dateTimeSlots, {
+        serviceIds: selectedServices,
+        item: props.route.params.item,
+        vendorId: props.route.params.vendorid,
+      });
+    }
+  };
+
   const onPress = (id, type) => {
     let newArray = serviceData.map((val, i) => {
       if (id === val.id) {
-        return { ...val, isSelected: type };
+        return {...val, isSelected: type};
       } else {
         return val;
       }
@@ -97,20 +113,20 @@ export default function SelectServices(props) {
     setServiceData(newArray);
   };
 
-  const renderServices = ({ item }) => {
+  const renderServices = ({item}) => {
     return (
       <TouchableOpacity
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           backgroundColor: Colors.white,
-          alignItems: "center",
-          justifyContent: "space-between",
+          alignItems: 'center',
+          justifyContent: 'space-between',
           paddingVertical: SIZES.fifteen,
           borderRadius: SIZES.ten,
           marginTop: SIZES.ten,
           paddingHorizontal: SIZES.twenty,
-          shadowColor: "#c5c5c5",
-          shadowOffset: { width: SIZES.five, height: SIZES.five },
+          shadowColor: '#c5c5c5',
+          shadowOffset: {width: SIZES.five, height: SIZES.five},
           shadowOpacity: 1.0,
           shadowRadius: SIZES.ten,
           elevation: SIZES.ten,
@@ -118,10 +134,9 @@ export default function SelectServices(props) {
           borderColor: item.isSelected ? Colors.sickGreen : Colors.white,
         }}
         onPress={() => onPress(item.id, !item.isSelected)}
-        activeOpacity={0.6}
-      >
+        activeOpacity={0.6}>
         <RegularTextCB>{item.name}</RegularTextCB>
-        <RegularTextCB>{item.price}</RegularTextCB>
+        <RegularTextCB>$ {item.price}</RegularTextCB>
       </TouchableOpacity>
     );
   };
@@ -134,10 +149,9 @@ export default function SelectServices(props) {
           flex: 1,
           backgroundColor: Colors.white,
         },
-      ]}
-    >
+      ]}>
       <NormalHeader name="Select Services" />
-      <BoldTextCB style={{ marginLeft: SIZES.twenty, fontSize: 16 }}>
+      <BoldTextCB style={{marginLeft: SIZES.twenty, fontSize: 16}}>
         {/* Cleaning */}
       </BoldTextCB>
 
@@ -152,17 +166,9 @@ export default function SelectServices(props) {
         }}
         ListEmptyComponent={() => {
           return (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={[FONTS.mediumFont18, { color: Colors.black }]}>
-                Record not found
-              </Text>
-            </View>
+            <Text style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+              No Service(s)!
+            </Text>
           );
         }}
       />
@@ -170,44 +176,53 @@ export default function SelectServices(props) {
       <TouchableOpacity
         style={{
           flex: 1,
-          position: "absolute",
+          position: 'absolute',
           bottom: SIZES.twenty,
-          width: "100%",
+          width: '100%',
           paddingHorizontal: SIZES.ten,
         }}
-        activeOpacity={0.6}
-      >
+        activeOpacity={0.6}>
         <ButtonRadius10
           bgColor={Colors.sickGreen}
           label="Next"
           onPress={() => {
-            props.navigation.navigate(Constants.dateTimeSlots);
+            handleServiceIdOnClick();
           }}
         />
       </TouchableOpacity>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
+  },
+});
 
 const Data = [
   {
     id: 1,
-    name: "Home Cleaning",
-    price: "$240.00",
+    name: 'Home Cleaning',
+    price: '$240.00',
     isSelected: false,
   },
   {
     id: 2,
-    name: "Garage Cleaning",
-    price: "$240.00",
+    name: 'Garage Cleaning',
+    price: '$240.00',
     isSelected: false,
   },
   {
     id: 3,
-    name: "Garden Cleaning",
-    price: "$240.00",
+    name: 'Garden Cleaning',
+    price: '$240.00',
     isSelected: false,
   },
 ];

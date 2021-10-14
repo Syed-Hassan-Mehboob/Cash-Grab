@@ -86,8 +86,8 @@ export default class VenderFileredScreen extends Component {
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      let latitude = data.data.records.userProfile.latitude;
-      let longitude = data.data.records.userProfile.longitude;
+      let latitude = data.data.records.user_profiles.latitude;
+      let longitude = data.data.records.user_profiles.longitude;
       let type = data.data.records.type;
 
       // //console.log('Type ===== ', type);

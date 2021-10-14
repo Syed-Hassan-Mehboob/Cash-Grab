@@ -208,8 +208,8 @@ export default class Profile extends React.Component {
             justifyContent: 'space-between',
           }}>
           <LightTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
-            {item.category.name !== null && item.category.name !== undefined
-              ? item.category.name
+            {item.category_name !== null && item.category_name !== undefined
+              ? item.category_name
               : ''}
           </LightTextCB>
 
@@ -251,7 +251,7 @@ export default class Profile extends React.Component {
         ]}
         onPress={() =>
           this.props.navigation.navigate(Constants.SchechuleJobDetail, {
-            catName: item.category.name,
+            catName: item.category_name,
             joid: item.id,
           })
         }>
@@ -523,7 +523,7 @@ export default class Profile extends React.Component {
               padding: 15,
               marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
               marginBottom: Platform.OS === 'android' ? 0 : SIZES.twenty,
-              // backgroundColor: 'red',
+              //
             }}>
             <TouchableOpacity
               style={{
@@ -719,17 +719,9 @@ export default class Profile extends React.Component {
           }}
           ListEmptyComponent={
             !this.state.isLoading ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: height / 1.5,
-                }}>
-                <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
-                  Record not found
-                </Text>
-              </View>
+              <Text style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+                No Record(s)!
+              </Text>
             ) : null
           }
         />
@@ -768,17 +760,9 @@ export default class Profile extends React.Component {
           }}
           ListEmptyComponent={
             !this.state.isLoading ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: height / 1.5,
-                }}>
-                <Text style={[FONTS.mediumFont18, {color: Colors.black}]}>
-                  Record not found
-                </Text>
-              </View>
+              <Text style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+                No Record(s)!
+              </Text>
             ) : null
           }
         />

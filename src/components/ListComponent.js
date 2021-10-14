@@ -30,7 +30,7 @@ const ListComponent = (props) => {
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={styles.circleCard}>
           <Image
-            source={{uri: Constants.imageURL + item.user.userProfile.image}}
+            source={{uri: Constants.imageURL + item.user.user_profiles.image}}
             style={styles.iconUser}
             resizeMode="cover"
           />

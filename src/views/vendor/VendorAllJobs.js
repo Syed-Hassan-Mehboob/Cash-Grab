@@ -46,8 +46,8 @@ export default class VendorAllJobs extends Component {
   // getUserProfile = async () => {
   //   const onSuccess = ({data}) => {
   //     // console.log('Data============',data.data.records)
-  //     const latitude = data.data.records.userProfile.latitude;
-  //     const longitude = data.data.records.userProfile.longitude;
+  //     const latitude = data.data.records.user_profiles.latitude;
+  //     const longitude = data.data.records.user_profiles.longitude;
   //   };
   //   // console.log('lat',this.state.lat)
   //   const onFailure = (error) => {
@@ -119,9 +119,9 @@ export default class VendorAllJobs extends Component {
             <Image
               source={{
                 uri:
-                  item.user.userProfile.image !== null &&
-                  item.user.userProfile.image !== undefined
-                    ? Constants.imageURL + item.user.userProfile.image
+                  item.user.user_profiles.image !== null &&
+                  item.user.user_profiles.image !== undefined
+                    ? Constants.imageURL + item.user.user_profiles.image
                     : '',
               }}
               style={styles.iconUser}

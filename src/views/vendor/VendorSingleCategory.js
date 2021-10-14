@@ -25,8 +25,7 @@ export default class VendorSingleCategory extends Component {
       id: '1',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -37,8 +36,7 @@ export default class VendorSingleCategory extends Component {
       id: '2',
       image: Images.emp2,
       title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -49,8 +47,7 @@ export default class VendorSingleCategory extends Component {
       id: '3',
       image: Images.emp3,
       title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -61,8 +58,7 @@ export default class VendorSingleCategory extends Component {
       id: '4',
       image: Images.emp4,
       title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -73,8 +69,7 @@ export default class VendorSingleCategory extends Component {
       id: '5',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -85,8 +80,7 @@ export default class VendorSingleCategory extends Component {
       id: '6',
       image: Images.emp3,
       title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -97,8 +91,7 @@ export default class VendorSingleCategory extends Component {
       id: '7',
       image: Images.emp4,
       title: 'Jay Almond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -109,8 +102,7 @@ export default class VendorSingleCategory extends Component {
       id: '8',
       image: Images.emp1,
       title: 'Ray Hammond',
-      desc:
-        'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
+      desc: 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
       pricing: '$24/Hr',
       requirement: 'Car Mechanic Needed',
       type: 'Automobile',
@@ -190,7 +182,7 @@ export default class VendorSingleCategory extends Component {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{uri: Constants.imageURL + item.user.user_profiles.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />

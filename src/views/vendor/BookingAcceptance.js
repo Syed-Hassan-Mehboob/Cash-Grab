@@ -19,15 +19,17 @@ import NormalHeader from '../../components/NormalHeader';
 import Axios from '../../network/APIKit';
 import Spinner from 'react-native-loading-spinner-overlay';
 import utils from '../../utils';
+import LightTextCB from './../../components/LightTextCB';
 
 export default function BookingAcceptance(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetail, setBookingDetail] = useState();
+  const [orderId, setOrderId] = useState();
   useEffect(() => {
     const getToken = async () => {
       getBookingDetail();
       const unsubscribe = props.navigation.addListener('focus', () => {
-        console.log('working ==== ......');
+        // console.log('working ==== ......');
         getBookingDetail();
       });
       return unsubscribe;
@@ -40,7 +42,8 @@ export default function BookingAcceptance(props) {
     let token = await AsyncStorage.getItem(Constants.accessToken);
     setIsLoading(true);
     const onSuccess = ({data}) => {
-      console.log(' Schedule Bookings Detail  =====', data);
+      // console.log(' Schedule Bookings Detail  =====', data.data.id);
+      setOrderId(data.data.id);
       setBookingDetail(data.data);
       // setscheduleBookings(data.data.records);
       setIsLoading(false);
@@ -68,9 +71,14 @@ export default function BookingAcceptance(props) {
     let token = await AsyncStorage.getItem(Constants.accessToken);
     setIsLoading(true);
     const onSuccess = ({data}) => {
-      console.log('>>>>>>>> ', data);
+      // console.log('>>>>>>>> ', data);
       setIsLoading(false);
       utils.showToast('Booking Has Been Accepted');
+      setTimeout(() => {
+        props.navigation.navigate(Constants.JobInProgress, {
+          orderId: orderId,
+        });
+      }, 800);
     };
 
     const onFailure = (error) => {
@@ -92,9 +100,6 @@ export default function BookingAcceptance(props) {
     Axios.post(Constants.orderStatus, params, options)
       .then(onSuccess)
       .catch(onFailure);
-    setTimeout(() => {
-      props.navigation.goBack();
-    }, 500);
   };
 
   const cancelOrder = async () => {
@@ -203,7 +208,7 @@ export default function BookingAcceptance(props) {
               justifyContent: 'space-between',
             }}>
             <View>
-              <RegularTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+              <RegularTextCB style={[{color: Colors.black, fontSize: 16}]}>
                 {bookingDetail?.category.name !== null &&
                 bookingDetail?.category.name !== undefined
                   ? bookingDetail?.category.name
@@ -211,13 +216,13 @@ export default function BookingAcceptance(props) {
               </RegularTextCB>
             </View>
 
-            <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
+            <LightTextCB style={{color: Colors.black, fontSize: 14}}>
               $
               {bookingDetail?.grandTotal !== null &&
               bookingDetail?.grandTotal !== undefined
                 ? bookingDetail?.grandTotal
                 : ''}
-            </BoldTextCB>
+            </LightTextCB>
           </View>
           <View style={{marginVertical: SIZES.ten}}>
             <RegularTextCB style={{color: Colors.coolGrey}}>
@@ -421,9 +426,14 @@ export default function BookingAcceptance(props) {
         </TouchableOpacity>
 
         {bookingDetail?.orderStatus === 'cancelled' && (
-          <Text style={{marginTop: SIZES.twenty, alignSelf: 'center'}}>
-            You Have cancel this order{' '}
-          </Text>
+          <LightTextCB
+            style={{
+              marginTop: SIZES.twenty,
+              alignSelf: 'center',
+              color: Colors.coolGrey,
+            }}>
+            * you Have canceled this order{' '}
+          </LightTextCB>
         )}
       </View>
       <Spinner
