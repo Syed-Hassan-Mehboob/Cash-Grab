@@ -9,11 +9,13 @@ const ButtonRadius10 = ({
   onPress,
   bgColor = Colors.sickGreen,
   textColor = Colors.black,
+  disabled,
 }) => (
   <View>
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={onPress}
+      disabled={disabled}
       style={[styles.loginBtnBg, {backgroundColor: bgColor}]}>
       <Text style={[styles.buttonLoginText, {color: textColor}]}>{label}</Text>
     </TouchableOpacity>

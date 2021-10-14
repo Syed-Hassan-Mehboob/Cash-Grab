@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Image,
   Platform,
@@ -8,19 +8,19 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-} from 'react-native';
-import StarRating from 'react-native-star-rating';
-import Constants, {SIZES, STYLES, width, FONTS} from '../common/Constants';
-import BoldTextCB from '../components/BoldTextCB';
-import RegularTextCB from '../components/RegularTextCB';
-import Colors from '../common/Colors';
-import Images from '../common/Images';
-import {Icon} from 'native-base';
-import {useNavigation} from '@react-navigation/native';
-import NormalHeader from '../components/NormalHeader';
-import utils from '../utils';
-import Axios from '../network/APIKit';
-import Spinner from 'react-native-loading-spinner-overlay';
+} from "react-native";
+import StarRating from "react-native-star-rating";
+import Constants, { SIZES, STYLES, width, FONTS } from "../common/Constants";
+import BoldTextCB from "../components/BoldTextCB";
+import RegularTextCB from "../components/RegularTextCB";
+import Colors from "../common/Colors";
+import Images from "../common/Images";
+import { Icon } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import NormalHeader from "../components/NormalHeader";
+import utils from "../utils";
+import Axios from "../network/APIKit";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function JobAcceptance(props) {
   const [isLoading, setIsloading] = useState(true);
@@ -36,7 +36,7 @@ export default function JobAcceptance(props) {
 
   const getUserAccessToken = async () => {
     setIsloading(true);
-    const value = await AsyncStorage.getItem('user');
+    const value = await AsyncStorage.getItem("user");
     const accessToken = JSON.parse(value);
     if (accessToken !== undefined) {
       getJobAcceptance(accessToken.token);
@@ -48,7 +48,7 @@ export default function JobAcceptance(props) {
     const value = await AsyncStorage.getItem(Constants.accessToken);
     let config = {
       params: {
-        jobId: '1',
+        jobId: "1",
       },
       headers: {
         Authorization: value,
@@ -57,7 +57,7 @@ export default function JobAcceptance(props) {
 
     // //console.log('tokennnnn', token);
 
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       // //console.log("Job Acceptanceeeeeeeee ======================>", data.data);
       setJobAccept(data.data.records);
       setJobAcceptList(data.data.records.requests);
@@ -84,14 +84,14 @@ export default function JobAcceptance(props) {
   const updateJobs = async (statuses) => {
     const value2 = await AsyncStorage.getItem(Constants.accessToken);
 
-    const onSuccess = ({data}) => {
-      console.log('Job Requesttttt ======================>', data.data);
+    const onSuccess = ({ data }) => {
+      console.log("Job Requesttttt ======================>", data.data);
       // setJobRequest(data);
       setIsloading(false);
 
-      if (statuses === 'accepted') {
+      if (statuses === "accepted") {
         setJobAcceptList([]);
-      } else if (statuses === 'cancelled') {
+      } else if (statuses === "cancelled") {
       }
       utils.showToast(data.message);
     };
@@ -99,49 +99,52 @@ export default function JobAcceptance(props) {
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
-      console.log('==============222222222222222=>', error);
+      console.log("==============222222222222222=>", error);
     };
 
     Axios.post(
       Constants.jobRequest,
       {
-        request_id: '1',
+        request_id: "1",
         status: statuses,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: value2,
         },
-      },
+      }
     )
       .then(onSuccess)
       .catch(onFailure);
   };
 
-  const renderJobRequest = ({item, index}) => {
+  const renderJobRequest = ({ item, index }) => {
     //console.log("==================>>>>>>> ", item);
 
     return (
       <View>
-        {jobAccept.status !== 'accepted' ? (
+        {jobAccept.status !== "accepted" ? (
           <View
             style={[
               styles.card,
-              {marginTop: SIZES.twenty, padding: SIZES.ten},
-            ]}>
+              { marginTop: SIZES.twenty, padding: SIZES.ten },
+            ]}
+          >
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
                 marginVertical: SIZES.fifteen,
-                justifyContent: 'space-between',
-              }}>
+                justifyContent: "space-between",
+              }}
+            >
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
                 <View>
                   <Image
                     source={Images.emp2}
@@ -149,26 +152,28 @@ export default function JobAcceptance(props) {
                       height: 50,
                       width: 50,
                       borderRadius: 60 / 2,
-                      resizeMode: 'contain',
+                      resizeMode: "contain",
                     }}
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{marginStart: 10}}>
-                  <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                    {item.vendor !== null ? item.vendor.name : ''}
+                <View style={{ marginStart: 10 }}>
+                  <BoldTextCB style={{ color: Colors.black, fontSize: 16 }}>
+                    {item.vendor !== null ? item.vendor.name : ""}
                   </BoldTextCB>
                   <View
                     style={{
-                      flexDirection: 'row',
+                      flexDirection: "row",
                       marginTop: 5,
-                      alignItems: 'center',
-                    }}>
+                      alignItems: "center",
+                    }}
+                  >
                     <RegularTextCB
                       style={{
                         color: Colors.coolGrey,
                         fontSize: 13.5,
-                      }}>
+                      }}
+                    >
                       {/* {item.vendor !== null ? item.vendor.type : ""} */}
                     </RegularTextCB>
                   </View>
@@ -181,34 +186,37 @@ export default function JobAcceptance(props) {
                   padding: SIZES.fifteen,
                   borderRadius: SIZES.ten,
                   width: SIZES.fifty * 1.7,
-                  alignItems: 'center',
+                  alignItems: "center",
                 }}
                 activeOpacity={0.6}
                 onPress={() => {
                   // props.navigation.navigate(Constants.confirmPayment);
-                  updateJobs('accepted');
+                  updateJobs("accepted");
                   setTimeout(() => {
                     navigation.goBack();
                   }, 500);
-                }}>
+                }}
+              >
                 <BoldTextCB>Accept</BoldTextCB>
               </TouchableOpacity>
             </View>
 
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   marginTop: 5,
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
+                  alignItems: "center",
+                  justifyContent: "flex-start",
                   paddingHorizontal: SIZES.ten,
-                }}>
+                }}
+              >
                 <StarRating
                   disabled={true}
                   maxStars={5}
@@ -221,7 +229,7 @@ export default function JobAcceptance(props) {
                     height: SIZES.twenty,
                     marginRight: SIZES.five,
                   }}
-                  containerStyle={{width: SIZES.fifty * 1.5}}
+                  containerStyle={{ width: SIZES.fifty * 1.5 }}
                 />
 
                 <RegularTextCB
@@ -230,7 +238,8 @@ export default function JobAcceptance(props) {
                     fontSize: 13.5,
                     marginStart: SIZES.twenty * 1.8,
                     marginTop: SIZES.five / 2,
-                  }}>
+                  }}
+                >
                   4.4 Ratings
                 </RegularTextCB>
               </View>
@@ -241,14 +250,15 @@ export default function JobAcceptance(props) {
                   padding: SIZES.fifteen,
                   borderRadius: SIZES.ten,
                   width: SIZES.fifty * 1.7,
-                  alignItems: 'center',
+                  alignItems: "center",
                 }}
                 onPress={() => {
                   // props.navigation.replace(Constants.PostedJob);
-                  updateJobs('cancelled');
+                  updateJobs("cancelled");
                 }}
-                activeOpacity={0.6}>
-                <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
+                activeOpacity={0.6}
+              >
+                <BoldTextCB style={{ color: Colors.white }}>Decline</BoldTextCB>
               </TouchableOpacity>
             </View>
           </View>
@@ -262,7 +272,7 @@ export default function JobAcceptance(props) {
       {isLoading ? (
         <Spinner
           visible={isLoading}
-          textContent={'Loading...'}
+          textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
       ) : (
@@ -292,45 +302,51 @@ export default function JobAcceptance(props) {
       </View> */}
 
           <NormalHeader name="Job Acceptance" />
-          <View style={{paddingHorizontal: SIZES.fifteen}}>
+          <View style={{ paddingHorizontal: SIZES.fifteen }}>
             <TouchableOpacity
               activeOpacity={1}
               style={[
                 styles.card,
-                {padding: SIZES.fifteen, marginTop: SIZES.twentyFive},
+                { padding: SIZES.fifteen, marginTop: SIZES.twentyFive },
               ]}
               onPress={() => {
                 //   props.navigation.navigate(Constants.JobAcceptance)
-              }}>
+              }}
+            >
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                   marginVertical: SIZES.ten,
-                }}>
+                }}
+              >
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri: Constants.imageURL + jobAccept.user.image}}
+                    source={{
+                      uri:
+                        Constants.imageURL + jobAccept.user.userProfile.image,
+                    }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{marginStart: 10}}>
-                  <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
+                <View style={{ marginStart: 10 }}>
+                  <BoldTextCB style={{ color: Colors.black, fontSize: 16 }}>
                     {jobAccept.user.name}
                   </BoldTextCB>
                   <View
                     style={{
-                      flexDirection: 'row',
+                      flexDirection: "row",
                       marginTop: 5,
-                      alignItems: 'center',
-                    }}>
+                      alignItems: "center",
+                    }}
+                  >
                     <Image
                       source={Images.iconVerified}
                       style={{
                         height: 25,
                         width: 25,
-                        resizeMode: 'contain',
+                        resizeMode: "contain",
                         tintColor: Colors.turqoiseGreen,
                       }}
                     />
@@ -339,7 +355,8 @@ export default function JobAcceptance(props) {
                         color: Colors.turqoiseGreen,
                         fontSize: 16,
                         marginStart: 5,
-                      }}>
+                      }}
+                    >
                       Verified
                     </RegularTextCB>
                   </View>
@@ -347,127 +364,146 @@ export default function JobAcceptance(props) {
               </View>
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   marginTop: 5,
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <View>
-                  <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+                  <RegularTextCB style={{ color: Colors.black, fontSize: 16 }}>
                     {jobAccept.title}
                   </RegularTextCB>
                   <RegularTextCB
-                    style={{color: Colors.sickGreen, fontSize: 14.5}}>
+                    style={{ color: Colors.sickGreen, fontSize: 14.5 }}
+                  >
                     Automobile
                   </RegularTextCB>
                 </View>
 
-                <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
+                <BoldTextCB style={{ color: Colors.black, fontSize: 12 }}>
                   ${jobAccept.price}
                 </BoldTextCB>
               </View>
-              <View style={{marginVertical: SIZES.ten}}>
-                <RegularTextCB style={{color: Colors.coolGrey}}>
+              <View style={{ marginVertical: SIZES.ten }}>
+                <RegularTextCB style={{ color: Colors.coolGrey }}>
                   {jobAccept.description}
                 </RegularTextCB>
               </View>
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   marginTop: 5,
-                  alignItems: 'center',
+                  alignItems: "center",
                   marginVertical: SIZES.fifteen,
-                }}>
+                }}
+              >
                 <Image
                   source={Images.iconLocationPin}
-                  style={{height: 25, width: 25, resizeMode: 'contain'}}
+                  style={{ height: 25, width: 25, resizeMode: "contain" }}
                 />
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
                     marginStart: 5,
-                  }}>
+                  }}
+                >
                   {jobAccept.location}, {jobAccept.address}
                 </RegularTextCB>
               </View>
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                   marginTop: SIZES.ten,
-                }}>
+                }}
+              >
                 <Image
                   source={Images.iconStopWatch}
-                  style={{height: 25, width: 25, resizeMode: 'contain'}}
+                  style={{ height: 25, width: 25, resizeMode: "contain" }}
                 />
                 <View
                   style={{
-                    flexDirection: 'row',
+                    flexDirection: "row",
                     marginStart: 5,
-                    alignItems: 'center',
+                    alignItems: "center",
                     flex: 1,
-                    justifyContent: 'space-between',
-                  }}>
+                    justifyContent: "space-between",
+                  }}
+                >
                   <RegularTextCB
                     style={{
                       color: Colors.coolGrey,
-                    }}>
+                    }}
+                  >
                     {jobAccept.time}
                   </RegularTextCB>
                 </View>
               </View>
 
               {/* paste hereeeeeeeeeeeeeeeee {selectedView === 'general'? (view) : null*/}
-              {jobAccept.status === 'accepted' ? (
+              {jobAccept.status === "accepted" ? (
                 <View>
                   <View
                     style={{
                       borderBottomColor: Colors.coolGrey,
                       borderBottomWidth: 1.5,
                       marginTop: SIZES.fifteen,
-                    }}></View>
-                  <View style={[{marginTop: SIZES.twenty, padding: SIZES.ten}]}>
+                    }}
+                  ></View>
+                  <View
+                    style={[{ marginTop: SIZES.twenty, padding: SIZES.ten }]}
+                  >
                     <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
+                        flexDirection: "row",
+                        alignItems: "center",
                         marginVertical: SIZES.fifteen,
-                        justifyContent: 'space-between',
-                      }}>
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <View
                         style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
                         <View>
                           <Image
-                            source={Images.emp2}
+                            source={{
+                              uri:
+                                Constants.imageURL +
+                                jobAccept.vendor_accepted.userProfile.image,
+                            }}
                             style={{
                               height: 50,
                               width: 50,
                               borderRadius: 60 / 2,
-                              resizeMode: 'contain',
+                              resizeMode: "contain",
                             }}
                             resizeMode="cover"
                           />
                         </View>
-                        <View style={{marginStart: 10}}>
+                        <View style={{ marginStart: 10 }}>
                           <BoldTextCB
-                            style={{color: Colors.black, fontSize: 16}}>
+                            style={{ color: Colors.black, fontSize: 16 }}
+                          >
                             {/* {item.vendor !== null ? item.vendor.name : ""} */}
                             {jobAccept.vendor_accepted.name}
                           </BoldTextCB>
                           <View
                             style={{
-                              flexDirection: 'row',
+                              flexDirection: "row",
                               marginTop: 5,
-                              alignItems: 'center',
-                            }}>
+                              alignItems: "center",
+                            }}
+                          >
                             <RegularTextCB
                               style={{
                                 color: Colors.coolGrey,
                                 fontSize: 13.5,
-                              }}>
+                              }}
+                            >
                               {/* {item.vendor !== null ? item.vendor.type : ""} */}
                             </RegularTextCB>
                           </View>
@@ -477,18 +513,20 @@ export default function JobAcceptance(props) {
 
                     <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}>
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <View
                         style={{
-                          flexDirection: 'row',
+                          flexDirection: "row",
                           marginTop: 5,
-                          alignItems: 'center',
-                          justifyContent: 'flex-start',
+                          alignItems: "center",
+                          justifyContent: "flex-start",
                           paddingHorizontal: SIZES.ten,
-                        }}>
+                        }}
+                      >
                         <StarRating
                           disabled={true}
                           maxStars={5}
@@ -501,7 +539,7 @@ export default function JobAcceptance(props) {
                             height: SIZES.twenty,
                             marginRight: SIZES.five,
                           }}
-                          containerStyle={{width: SIZES.fifty * 1.5}}
+                          containerStyle={{ width: SIZES.fifty * 1.5 }}
                         />
 
                         <RegularTextCB
@@ -510,7 +548,8 @@ export default function JobAcceptance(props) {
                             fontSize: 13.5,
                             marginStart: SIZES.twenty * 1.8,
                             marginTop: SIZES.five / 2,
-                          }}>
+                          }}
+                        >
                           4.4 Ratings
                         </RegularTextCB>
                       </View>
@@ -547,13 +586,13 @@ const styles = StyleSheet.create({
   iconBack: {
     height: SIZES.twenty,
     width: SIZES.twenty,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
@@ -562,37 +601,37 @@ const styles = StyleSheet.create({
     height: 65,
     width: 65,
     borderRadius: 60 / 2,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   circleCard: {
     height: 64,
     width: 64,
     borderRadius: 30,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowColor: "#c5c5c5",
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 5,
   },
   spinnerTextStyle: {
-    color: '#FFF',
+    color: "#FFF",
     fontFamily: Constants.fontRegular,
   },
 });
 const Data = [
   {
     id: 1,
-    name: 'Ray Hammad',
-    tittle: 'Car Macanic Applyed',
+    name: "Ray Hammad",
+    tittle: "Car Macanic Applyed",
   },
   {
     id: 2,
-    name: 'Domian Miller',
-    tittle: 'Car Macanic Applyed',
+    name: "Domian Miller",
+    tittle: "Car Macanic Applyed",
   },
   {
     id: 3,
-    name: 'Ray Hammad',
-    tittle: 'Car Macanic Applyed',
+    name: "Ray Hammad",
+    tittle: "Car Macanic Applyed",
   },
 ];

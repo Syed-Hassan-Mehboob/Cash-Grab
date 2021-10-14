@@ -25,8 +25,17 @@ export default function Bookings(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getUserAccessToken();
-  }, []);
+    const getBookings = async () => {
+      getUserAccessToken();
+      const unsubscribe = props.navigation.addListener('focus', () => {
+        console.log('working ==== ......');
+        getUserAccessToken();
+      });
+      return unsubscribe;
+    };
+
+    getBookings();
+  }, [props.navigation]);
 
   const getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
@@ -111,27 +120,3 @@ const styles = StyleSheet.create({
     fontFamily: Constants.fontRegular,
   },
 });
-
-// const Data = [
-//   {
-//     id: 1,
-//     name: 'Ray Hammad',
-//     tittle: 'Car Machanic Needed',
-//     price: '300.00',
-//     service: 'AutoMobile',
-//     description:
-//       'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power',
-//     address: '111,NYC Street, NY 1121',
-//     time: '12:00 - 3:00 ',
-//   },
-//   circleCard: {
-//     height: SIZES.ten * 6,
-//     width: SIZES.ten * 6,
-//     borderRadius: SIZES.ten * 6,
-//     overflow: 'hidden',
-//   },
-//   spinnerTextStyle: {
-//     color: '#FFF',
-//     fontFamily: Constants.fontRegular,
-//   },
-// });

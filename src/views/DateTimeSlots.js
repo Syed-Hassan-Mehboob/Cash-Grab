@@ -14,12 +14,21 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Slider from '@react-native-community/slider';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import Modal from 'react-native-modal';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Constants, {FONTS, SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import MessageEditText from '../components/MessageEditText';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Axios from '../network/APIKit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import EditText from './../components/EditText';
+import CountryPicker from 'react-native-country-picker-modal';
+import {Icon, Radio, ListItem} from 'native-base';
+import utils from '../utils';
 
 const {height, width} = Dimensions.get('window');
 
@@ -70,6 +79,18 @@ export default class DateTimeSlots extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      accessToken: '',
+      name: '',
+      avatar: '',
+      isCountryCodePickerVisible: false,
+      countryCode: '+1',
+      countryFlag: 'US',
+      phone: '',
+      location: '',
+      address: '',
+      lat: '',
+      lng: '',
+      description: '',
       selected: '',
       selectedTimeSlot: '',
       sliderValue: 0,
@@ -78,8 +99,141 @@ export default class DateTimeSlots extends Component {
       minFrom: '',
       hrTo: '',
       minTo: '',
+      isLoading: false,
+      showModal: false,
+      fromItemSelected: 'am',
+      toItemSelected: 'am',
     };
   }
+
+  componentDidMount() {
+    console.log(
+      'BBBBBBBBBBAAAAAABBBBBBBBBBAAAAAAAAAARRRRRRRRR =================== ',
+      this.props.route.params,
+    );
+    this.getUserAccessToken();
+  }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => {
+      this.getUserProfile();
+    });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({
+        avatar: data.data.records.user_profiles.image,
+        name: data.data.records.name,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  GooglePlacesInput = (props) => {
+    return (
+      <GooglePlacesAutocomplete
+        placeholder={'Search'}
+        //   renderLeftButton={() => }
+        minLength={2}
+        keyboardKeyType={'search'}
+        fetchDetails={true}
+        onPress={(data, details = null) => {
+          this.setState(
+            {
+              location: details.formatted_address,
+              lat: details.geometry.location.lat,
+              long: details.geometry.location.lng,
+            },
+            () => {
+              setTimeout(() => {
+                this.setState({showModal: false});
+              }, 400);
+            },
+          );
+        }}
+        query={{
+          key: 'AIzaSyC-MPat5umkTuxfvfqe1FN1ZMSafBpPcpM',
+          language: 'en',
+          types: '',
+        }}
+        enablePoweredByContainer={false}
+        styles={{
+          textInputContainer: {
+            backgroundColor: '#fff',
+            marginTop: 0,
+            marginBottom: 0,
+            marginLeft: 0,
+            marginRight: 0,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: SIZES.five,
+            },
+            shadowOpacity: 0.36,
+            shadowRadius: 6.68,
+            elevation: 11,
+            paddingHorizontal: SIZES.five,
+            borderRadius: 8,
+          },
+          textInput: {
+            marginTop: 0,
+            marginBottom: 0,
+            marginLeft: 0,
+            marginRight: 0,
+          },
+          listView: {
+            marginTop: SIZES.ten,
+            borderRadius: 8,
+            overflow: 'hidden',
+            backgroundColor: '#fff',
+          },
+          row: {borderRadius: 8},
+        }}
+        GooglePlacesSearchQuery={{rankby: 'distance'}}
+        GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
+        renderDescription={(row) => row.description}
+        currentLocation={true}
+        currentLocationLabel="Current location"
+        nearbyPlacesAPI="GooglePlacesSearch"
+        predefinedPlaces={[]}
+        debounce={200}
+        google
+      />
+    );
+  };
+
+  toggleIsLoading = () => {
+    this.setState({isLoading: !this.state.isLoading});
+  };
+
+  toggleIsCountryCodePickerVisible = () => {
+    this.setState({
+      isCountryCodePickerVisible: !this.state.isCountryCodePickerVisible,
+    });
+  };
+
+  onSelect = (country) => {
+    this.setState({
+      countryFlag: country.cca2,
+      countryCode: country.callingCode[0],
+    });
+  };
 
   onDayPress = (day) => {
     console.log('day press===============>>>>', day);
@@ -95,6 +249,144 @@ export default class DateTimeSlots extends Component {
 
   selectTimeSlot = (slot) => {
     this.setState({selectedTimeSlot: slot});
+  };
+
+  postScheduleJob = () => {
+    let phone = this.state.phone;
+    let countryCode = this.state.countryCode;
+    let address = this.state.address;
+    let location = this.state.location;
+    let description = this.state.description;
+    let lat = this.state.lat;
+    let lng = this.state.lng;
+    let hrFrom = this.state.hrFrom;
+    let minFrom = this.state.minFrom;
+    let hrTo = this.state.hrTo;
+    let minTo = this.state.minTo;
+    let selectedDate = this.state.selected;
+    let fromItemSelected = this.state.fromItemSelected;
+    let toItemSelected = this.state.toItemSelected;
+
+    if (selectedDate === '') {
+      utils.showToast('Please Select Date');
+      return;
+    }
+
+    if (hrFrom === '') {
+      utils.showToast('From Hour should not be empty');
+      return;
+    }
+
+    if (fromItemSelected === 'am') {
+      if (Number(hrFrom) < 1 || Number(hrFrom) > 12)
+        utils.showToast('From Hour should be in between 1 and 12');
+      return;
+    }
+
+    if (fromItemSelected === 'pm') {
+      if (Number(hrFrom) < 1 || Number(hrFrom) > 23)
+        utils.showToast('From Hour should be in between 1 and 23');
+      return;
+    }
+
+    if (minFrom === '') {
+      utils.showToast('From Minutes should not be empty');
+      return;
+    }
+
+    if (Number(minFrom) < 1 || Number(minFrom) > 59) {
+      utils.showToast('From Minute should be in between 1 and 59');
+      return;
+    }
+
+    if (hrTo === '') {
+      utils.showToast('To Hour should not be empty');
+      return;
+    }
+
+    if (toItemSelected === 'am') {
+      if (Number(hrTo) < 1 || Number(hrFrom) > 12) {
+        utils.showToast('To Hour should be in between 1 and 12');
+        return;
+      }
+    }
+    if (toItemSelected === 'pm') {
+      if (Number(hrTo) < 1 || Number(hrFrom) > 23) {
+        utils.showToast('To Hour should be in between 1 and 23');
+        return;
+      }
+    }
+
+    if (minTo === '') {
+      utils.showToast('To Minutes should not be empty');
+      return;
+    }
+    if (Number(minTo) < 1 || Number(minTo) > 59) {
+      utils.showToast('To Minute should be in between 1 and 59');
+      return;
+    }
+
+    if (countryCode === '') {
+      utils.showToast('Select Country Code');
+      return;
+    }
+    if (phone === '') {
+      utils.showToast(' should not be empty');
+      return;
+    }
+    if (phone === '') {
+      utils.showToast(' should not be empty');
+      return;
+    }
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+    if (location === '') {
+      utils.showToast('Location Should not be Empty');
+      return;
+    }
+    if (address === '') {
+      utils.showToast('Address Should not be Empty');
+      return;
+    }
+    if (description === '') {
+      utils.showToast('Description Should not be Empty');
+      return;
+    }
+
+    // const onSuccess = ({data}) => {
+    //   utils.showToast(data.message);
+    //   this.toggleIsLoading();
+
+    //   setTimeout(() => {
+    //     this.props.navigation.goBack();
+    //   }, 1000);
+    // };
+
+    // const onFailure = (error) => {
+    //   this.toggleIsLoading();
+    //   utils.showResponseError(error);
+    // };
+
+    // const params = {
+    //   old_password: currentPassword,
+    //   password: newPassword,
+    //   password_confirmation: confirmPassword,
+    // };
+
+    // const options = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: this.state.accessToken,
+    //   },
+    // };
+
+    // this.toggleIsLoading();
+
+    // Axios.post(Constants.updatePasswordURL, params, options)
+    //   .then(onSuccess)
+    //   .catch(onFailure);
   };
 
   renderTimeSlotItem = ({item}) => {
@@ -118,157 +410,165 @@ export default class DateTimeSlots extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            padding: SIZES.fifteen,
-            marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image source={Images.arrowBack} style={[styles.iconBack]} />
-          </TouchableOpacity>
-          <View style={{alignItems: 'center'}}>
-            <View style={styles.circleCard}>
-              <Image source={Images.emp1} style={styles.iconUser} />
-            </View>
-            <RegularTextCB style={{fontSize: 14}}>Damian Miller</RegularTextCB>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: SIZES.fifteen,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconRepairing}
-            style={{height: 35, width: 35, resizeMode: 'contain'}}
-          />
-          <View style={{marginStart: SIZES.ten}}>
-            <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-              Repairing
-            </RegularTextCB>
-            <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
-              3 AC split units maintenace
-            </RegularTextCB>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            marginHorizontal: SIZES.fifteen,
-          }}>
-          <Image
-            source={Images.iconCalendar}
-            style={{
-              width: SIZES.twentyFive,
-              height: SIZES.twentyFive,
-              resizeMode: 'contain',
-            }}
-          />
-          <Calendar
-            firstDay={1}
-            minDate={new Date()}
-            monthFormat={'MMM yyyy'}
-            disabledByDefault={true}
-            hideExtraDays
-            onDayPress={this.onDayPress}
-            markingType={'custom'}
-            renderrArow={(direction) =>
-              direction === 'left' ? (
-                <Image
-                  source={Images.arrowBack}
-                  style={{
-                    height: SIZES.twenty,
-                    width: SIZES.twenty,
-                    resizeMode: 'contain',
-                  }}
-                />
-              ) : (
-                <Image
-                  source={Images.arrowBack}
-                  style={{
-                    transform: [{scaleX: -1}],
-                    height: SIZES.twenty,
-                    width: SIZES.twenty,
-                    resizeMode: 'contain',
-                  }}
-                />
-              )
-            }
-            markedDates={{
-              [this.state.selected]: {
-                customStyles: {
-                  container: styles.selectedDateBG,
-                  text: {
-                    color: Colors.white,
-                    fontFamily: Constants.fontRegular,
-                  },
-                },
-              },
-            }}
-            theme={{
-              textDayFontFamily: Constants.fontRegular,
-              textMonthFontFamily: Constants.fontRegular,
-              textDayHeaderFontFamily: Constants.fontRegular,
-              color: Colors.black,
-              dayTextColor: Colors.navy,
-              monthTextColor: Colors.navy,
-            }}
-            style={{
-              width: width / 1.15,
-              height: height / 2,
-              color: Colors.black,
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            marginHorizontal: SIZES.fifteen,
-            marginTop: SIZES.ten * 3,
-          }}>
-          <Image
-            source={Images.iconStopWatchGrey}
-            style={{
-              width: SIZES.twentyFive,
-              height: SIZES.twentyFive,
-              resizeMode: 'contain',
-            }}
-          />
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}>
           <View
             style={{
-              borderWidth: 2,
-              borderRadius: SIZES.ten,
-              marginStart: SIZES.twenty,
-              borderColor: Colors.sickGreen,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              padding: SIZES.fifteen,
+              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
             }}>
-            <FlatList
-              horizontal
-              data={this.timeDurations}
-              extraData={this.state.selectedTimeSlot}
-              keyExtractor={(timeSlot) => timeSlot.id}
-              renderItem={this.renderTimeSlotItem}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingEnd: SIZES.fifty,
+            <TouchableOpacity
+              style={{position: 'absolute', left: SIZES.ten}}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}>
+              <Image source={Images.arrowBack} style={[styles.iconBack]} />
+            </TouchableOpacity>
+            <View style={{alignItems: 'center'}}>
+              <View style={styles.circleCard}>
+                <Image
+                  source={{uri: Constants.imageURL + this.state.avatar}}
+                  style={styles.iconUser}
+                />
+              </View>
+              <RegularTextCB style={{fontSize: 14}}>
+                {this.state.name}
+              </RegularTextCB>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: SIZES.fifteen,
+              alignItems: 'center',
+            }}>
+            <Image
+              source={{
+                uri: Constants.imageURL + this.props.route.params.item.image,
+              }}
+              style={{height: 35, width: 35, resizeMode: 'contain'}}
+            />
+            <View style={{marginStart: SIZES.ten}}>
+              <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
+                {this.props.route.params.item.name}
+              </RegularTextCB>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              alignItems: 'center',
+              marginHorizontal: SIZES.fifteen,
+            }}>
+            <Image
+              source={Images.iconCalendar}
+              style={{
+                width: SIZES.twentyFive,
+                height: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
+            />
+            <Calendar
+              firstDay={1}
+              minDate={new Date()}
+              monthFormat={'MMM yyyy'}
+              disabledByDefault={true}
+              hideExtraDays
+              onDayPress={this.onDayPress}
+              markingType={'custom'}
+              renderArrow={(direction) =>
+                direction === 'left' ? (
+                  <Image
+                    source={Images.arrowBack}
+                    style={{
+                      height: SIZES.twenty,
+                      width: SIZES.twenty,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={Images.arrowBack}
+                    style={{
+                      transform: [{scaleX: -1}],
+                      height: SIZES.twenty,
+                      width: SIZES.twenty,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                )
+              }
+              markedDates={{
+                [this.state.selected]: {
+                  customStyles: {
+                    container: styles.selectedDateBG,
+                    text: {
+                      color: Colors.white,
+                      fontFamily: Constants.fontRegular,
+                    },
+                  },
+                },
+              }}
+              theme={{
+                textDayFontFamily: Constants.fontRegular,
+                textMonthFontFamily: Constants.fontRegular,
+                textDayHeaderFontFamily: Constants.fontRegular,
+                textDisabledColor: Colors.navy,
+                monthTextColor: Colors.navy,
+                dayTextColor: 'red',
+                todayTextColor: 'yellow',
+                textSectionTitleColor: Colors.navy,
+              }}
+              style={{
+                width: width / 1.15,
+                height: height / 2,
               }}
             />
           </View>
-        </View>
-        {/* <View
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              alignItems: 'center',
+              marginHorizontal: SIZES.fifteen,
+              marginTop: SIZES.ten * 3,
+            }}>
+            <Image
+              source={Images.iconStopWatchGrey}
+              style={{
+                width: SIZES.twentyFive,
+                height: SIZES.twentyFive,
+                resizeMode: 'contain',
+              }}
+            />
+            <View
+              style={{
+                borderWidth: 2,
+                borderRadius: SIZES.ten,
+                marginStart: SIZES.twenty,
+                borderColor: Colors.sickGreen,
+              }}>
+              <FlatList
+                horizontal
+                data={this.timeDurations}
+                extraData={this.state.selectedTimeSlot}
+                keyExtractor={(timeSlot) => timeSlot.id}
+                renderItem={this.renderTimeSlotItem}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingEnd: SIZES.fifty,
+                }}
+              />
+            </View>
+          </View>
+          {/* <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -295,163 +595,393 @@ export default class DateTimeSlots extends Component {
             }
           />
         </View> */}
-        <Text
-          style={[
-            FONTS.mediumFont16,
-            {marginHorizontal: SIZES.fifteen, marginTop: SIZES.fifteen * 1.8},
-          ]}>
-          Add Custom Time
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginHorizontal: SIZES.fifteen,
-            flex: 1,
-            marginTop: SIZES.fifteen,
-          }}>
-          <View
-            style={[
-              styles.card,
-              {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
-            ]}>
-            <View style={{alignItems: 'center'}}>
-              <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
-                From
-              </RegularTextCB>
-              <View style={{flexDirection: 'row'}}>
-                <TextInput
-                  placeholderTextColor={Colors.black}
-                  placeholder={'Hr'}
-                  style={styles.textInput}
-                  maxLength={2}
-                  value={this.state.hrFrom}
-                  keyboardType={'numeric'}
-                  onChangeText={(text) =>
-                    this.setState({hrFrom: text.replace(/[^0-9]/g, '')})
-                  }
-                />
-                <TextInput
-                  placeholderTextColor={Colors.black}
-                  placeholder={'Min'}
-                  style={styles.textInput}
-                  maxLength={2}
-                  keyboardType={'numeric'}
-                  value={this.state.minFrom}
-                  onChangeText={(text) =>
-                    this.setState({minFrom: text.replace(/[^0-9]/g, '')})
-                  }
-                />
-              </View>
-            </View>
-          </View>
-          <View
-            style={[
-              styles.card,
-              {borderWidth: 2, borderColor: Colors.sickGreen, flex: 1},
-            ]}>
-            <View style={{alignItems: 'center'}}>
-              <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
-                To
-              </RegularTextCB>
-              <View style={{flexDirection: 'row'}}>
-                <TextInput
-                  placeholderTextColor={Colors.black}
-                  placeholder={'Hr'}
-                  placeholderTextColor={Colors.black}
-                  style={styles.textInput}
-                  maxLength={2}
-                  value={this.state.hrTo}
-                  keyboardType={'numeric'}
-                  onChangeText={(text) =>
-                    this.setState({hrTo: text.replace(/[^0-9]/g, '')})
-                  }
-                />
-                <TextInput
-                  placeholderTextColor={Colors.black}
-                  placeholder={'Min'}
-                  style={styles.textInput}
-                  maxLength={2}
-                  value={this.state.hrMin}
-                  keyboardType={'numeric'}
-                  onChangeText={(text) =>
-                    this.setState({hrMin: text.replace(/[^0-9]/g, '')})
-                  }
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-        <View>
           <Text
             style={[
               FONTS.mediumFont16,
-              {
-                paddingHorizontal: SIZES.fifteen,
-                marginVertical: SIZES.twenty,
-              },
+              {marginHorizontal: SIZES.fifteen, marginTop: SIZES.fifteen * 1.8},
             ]}>
-            Description
+            Add Custom Time
           </Text>
-          <View style={{paddingHorizontal: SIZES.fifteen}}>
-            <MessageEditText
-              placeholder={'Write'}
-              height={SIZES.twentyFive * 4.5}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: SIZES.fifteen,
+              flex: 1,
+              marginTop: SIZES.fifteen,
+            }}>
+            <View
+              style={[
+                styles.card,
+                {
+                  borderWidth: 2,
+                  borderColor: Colors.sickGreen,
+                  width: '45%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
+              ]}>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}>
+                <RegularTextCB
+                  style={{
+                    fontSize: 12,
+                    color: Colors.coolGrey,
+                    marginTop: SIZES.five,
+                  }}>
+                  From
+                </RegularTextCB>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Hr'}
+                    style={[styles.textInput, {alignItems: 'center'}]}
+                    maxLength={2}
+                    value={this.state.hrFrom}
+                    keyboardType={'numeric'}
+                    onChangeText={(text) =>
+                      this.setState({
+                        hrFrom: text,
+                      })
+                    }
+                  />
+
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Min'}
+                    style={styles.textInput}
+                    maxLength={2}
+                    keyboardType={'numeric'}
+                    value={this.state.minFrom}
+                    onChangeText={(text) =>
+                      this.setState({
+                        minFrom: text,
+                      })
+                    }
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <ListItem>
+                  <Radio
+                    onPress={() => {
+                      if (this.state.fromItemSelected !== 'am') {
+                        let temp = Number(this.state.hrFrom) - 12;
+                        this.setState({
+                          hrFrom: temp.toString(),
+                          fromItemSelected: 'am',
+                        });
+                      }
+                    }}
+                    selected={this.state.fromItemSelected === 'am'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>AM</Text>
+                </ListItem>
+                <ListItem>
+                  <Radio
+                    onPress={() => {
+                      if (this.state.fromItemSelected !== 'pm') {
+                        let temp = Number(this.state.hrFrom) + 12;
+                        this.setState({
+                          hrFrom: temp.toString(),
+                          fromItemSelected: 'pm',
+                        });
+                      }
+                    }}
+                    selected={this.state.fromItemSelected === 'pm'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>PM</Text>
+                </ListItem>
+              </View>
+            </View>
+
+            <View
+              style={[
+                styles.card,
+                {
+                  borderWidth: 2,
+                  borderColor: Colors.sickGreen,
+                  width: '45%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
+              ]}>
+              <View style={{alignItems: 'center'}}>
+                <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
+                  To
+                </RegularTextCB>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Hr'}
+                    placeholderTextColor={Colors.black}
+                    style={styles.textInput}
+                    maxLength={2}
+                    value={this.state.hrTo}
+                    keyboardType={'numeric'}
+                    onChangeText={(text) =>
+                      this.setState({
+                        hrTo: text,
+                      })
+                    }
+                  />
+                  <TextInput
+                    placeholderTextColor={Colors.black}
+                    placeholder={'Min'}
+                    style={styles.textInput}
+                    maxLength={2}
+                    value={this.state.minTo}
+                    keyboardType={'numeric'}
+                    onChangeText={(text) =>
+                      this.setState({
+                        minTo: text,
+                      })
+                    }
+                  />
+                </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <ListItem>
+                  <Radio
+                    onPress={() => {
+                      if (this.state.toItemSelected !== 'am') {
+                        let temp = Number(this.state.hrTo) - 12;
+                        this.setState({
+                          hrTo: temp.toString(),
+                          toItemSelected: 'am',
+                        });
+                      }
+                    }}
+                    selected={this.state.toItemSelected === 'am'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>AM</Text>
+                </ListItem>
+                <ListItem>
+                  <Radio
+                    onPress={() => {
+                      if (this.state.toItemSelected !== 'pm') {
+                        let temp = Number(this.state.hrTo) + 12;
+                        this.setState({
+                          hrTo: temp.toString(),
+                          toItemSelected: 'pm',
+                        });
+                      }
+                    }}
+                    selected={this.state.toItemSelected === 'pm'}
+                    color={Colors.sickGreen}
+                    selectedColor={Colors.sickGreen}
+                  />
+                  <Text>PM</Text>
+                </ListItem>
+              </View>
+            </View>
+          </View>
+          <View
+            style={[
+              styles.textInputContainer,
+              {marginTop: SIZES.fifteen, flexDirection: 'column'},
+            ]}>
+            <RegularTextCB style={[FONTS.mediumFont14, {color: Colors.black}]}>
+              Phone
+            </RegularTextCB>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => this.toggleIsCountryCodePickerVisible()}
+                style={[
+                  styles.card,
+                  {
+                    borderRadius: SIZES.ten,
+                    height: 60,
+                    padding: SIZES.ten,
+                    marginEnd: SIZES.ten,
+                    flex: 0,
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                  },
+                ]}>
+                <CountryPicker
+                  onSelect={this.onSelect}
+                  countryCode={this.state.countryFlag}
+                  visible={this.state.isCountryCodePickerVisible}
+                  withCallingCode
+                  theme={{
+                    fontFamily: Constants.fontRegular,
+                    resizeMode: 'contain',
+                  }}
+                />
+              </TouchableOpacity>
+              <EditText
+                ref={'phone'}
+                keyboardType="phone-pad"
+                placeholder={'12345678'}
+                value={this.state.phone}
+                onChangeText={(text) => {
+                  this.setState({phone: text});
+                }}
+                style={[styles.textInput, {flex: 1}]}
+              />
+            </View>
+          </View>
+          <View
+            style={[
+              {marginTop: SIZES.twenty, marginHorizontal: SIZES.fifteen},
+            ]}>
+            <RegularTextCB style={[FONTS.mediumFont14, {color: Colors.black}]}>
+              Location
+            </RegularTextCB>
+            <View style={[styles.card, {marginTop: 10, marginHorizontal: 5}]}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    showModal: true,
+                  });
+                }}>
+                <RegularTextCB numberOfLines={1}>
+                  {this.state.location
+                    ? this.state.location
+                    : 'Search Location'}
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View
+            style={[
+              {marginTop: SIZES.twenty, marginHorizontal: SIZES.fifteen},
+            ]}>
+            <RegularTextCB style={[FONTS.mediumFont14, {color: Colors.black}]}>
+              Address
+            </RegularTextCB>
+            <EditText
+              ref={'address'}
+              placeholder={'Enter Address'}
+              value={this.state.address}
+              onChangeText={(text) => {
+                this.setState({address: text});
+              }}
+              style={[styles.textInput]}
             />
           </View>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginHorizontal: SIZES.fifteen,
-            marginVertical: SIZES.fifteen * 1.6,
-          }}>
-          <Image
-            source={Images.barHome}
-            style={{
-              height: SIZES.twentyFive,
-              width: SIZES.twentyFive,
-              resizeMode: 'contain',
-              tintColor: Colors.coolGrey,
-            }}
-          />
-          <View style={{marginHorizontal: SIZES.ten, flex: 1}}>
-            <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-              Get service at home
-            </RegularTextCB>
-            <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
-              Set this service at my place
-            </RegularTextCB>
+          <View>
+            <Text
+              style={[
+                FONTS.mediumFont14,
+                {
+                  paddingHorizontal: SIZES.fifteen,
+                  marginVertical: SIZES.twenty,
+                },
+              ]}>
+              Description
+            </Text>
+            <View style={{paddingHorizontal: SIZES.fifteen}}>
+              <MessageEditText
+                placeholder={'Write'}
+                height={SIZES.twentyFive * 4.5}
+                value={this.state.description}
+                onChangeText={(txt) => {
+                  this.setState({
+                    description: txt,
+                  });
+                }}
+              />
+            </View>
           </View>
-          <Switch
-            trackColor={{
-              false: Colors.lightGrey,
-              true: Colors.lighNewGreen,
-            }}
-            thumbColor={
-              this.state.isSwitchEnabled ? Colors.sickGreen : Colors.sickGreen
-            }
-            ios_backgroundColor={Colors.lightGrey}
-            onValueChange={this.toggleIsEnabled}
-            value={this.state.isSwitchEnabled}
-          />
-        </View>
-        <View
-          style={{
-            marginVertical: SIZES.ten * 3,
-            marginHorizontal: SIZES.fifteen,
+
+          {/* <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: SIZES.fifteen,
+              marginVertical: SIZES.fifteen * 1.6,
+            }}>
+            <Image
+              source={Images.barHome}
+              style={{
+                height: SIZES.twentyFive,
+                width: SIZES.twentyFive,
+                resizeMode: 'contain',
+                tintColor: Colors.coolGrey,
+              }}
+            />
+            <View style={{marginHorizontal: SIZES.ten, flex: 1}}>
+              <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
+                Get service at home
+              </RegularTextCB>
+              <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
+                Set this service at my place
+              </RegularTextCB>
+            </View>
+            <Switch
+              trackColor={{
+                false: Colors.lightGrey,
+                true: Colors.lighNewGreen,
+              }}
+              thumbColor={
+                this.state.isSwitchEnabled ? Colors.sickGreen : Colors.sickGreen
+              }
+              ios_backgroundColor={Colors.lightGrey}
+              onValueChange={this.toggleIsEnabled}
+              value={this.state.isSwitchEnabled}
+            />
+          </View> */}
+          <View
+            style={{
+              marginVertical: SIZES.ten * 3,
+              marginHorizontal: SIZES.fifteen,
+            }}>
+            <ButtonRadius10
+              label="NEXT"
+              bgColor={Colors.sickGreen}
+              onPress={this.postScheduleJob}
+            />
+          </View>
+        </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.showModal}
+          onRequestClose={() => {
+            this.setState({showModal: false});
           }}>
-          <ButtonRadius10
-            label="NEXT"
-            bgColor={Colors.sickGreen}
-            onPress={() =>
-              this.props.navigation.navigate(Constants.bookingConfirmed)
-            }
-          />
-        </View>
-      </ScrollView>
+          <View
+            style={{
+              flex: 1,
+              padding: SIZES.twenty,
+              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+            }}>
+            <View style={{flex: 1, padding: SIZES.five, flexDirection: 'row'}}>
+              {this.GooglePlacesInput()}
+              <TouchableOpacity
+                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                onPress={() => {
+                  this.setState({showModal: false});
+                }}>
+                <Image
+                  style={{height: SIZES.fifteen, width: SIZES.fifteen}}
+                  resizeMode="contain"
+                  source={Images.iconClose}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
     );
   }
 }
@@ -530,8 +1060,12 @@ const styles = StyleSheet.create({
   iconUser: {
     height: SIZES.fifty,
     width: SIZES.fifty,
-    borderRadius: SIZES.twentyFive,
+    borderRadius: SIZES.fifty * 2,
     resizeMode: 'contain',
+  },
+  textInputContainer: {
+    flexDirection: 'row',
+    marginHorizontal: SIZES.fifteen,
   },
   textInput: {
     fontSize: 16,
@@ -552,5 +1086,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: SIZES.ten,
     flex: 1,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });
