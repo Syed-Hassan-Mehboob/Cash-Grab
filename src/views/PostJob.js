@@ -222,12 +222,13 @@ export default class postJob extends Component {
 
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(
-      //   'Post Jobe Data =====================================================',
-      //   data,
-      // );
-      utils.showToast('Your Job Has Been Posted');
+      console.log(
+        'Post Jobe Data =====================================================',
+        data,
+      );
       this.setState({isLoading: false});
+      utils.showToast('Your Job Has Been Posted');
+      this.props.navigation.navigate(Constants.home);
     };
 
     const onFailure = (error) => {
@@ -487,8 +488,6 @@ export default class postJob extends Component {
                   </RegularTextCB>
                 </TouchableOpacity>
               </View>
-
-
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
@@ -640,7 +639,7 @@ export default class postJob extends Component {
                 onPress={() => {
                   this.postJob();
                   setTimeout(() => {
-                    this.props.navigation.navigate(Constants.home);
+                    // this.props.navigation.navigate(Constants.home);
                   }, 5000);
                 }}
               />

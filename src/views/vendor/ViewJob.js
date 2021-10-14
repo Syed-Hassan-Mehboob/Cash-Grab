@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import React from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
 import {
   Image,
   LogBox,
@@ -9,23 +9,18 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-} from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import Colors from "../../common/Colors";
-import Constants, {
-  height,
-  SIZES,
-  STYLES,
-  FONTS,
-} from "../../common/Constants";
-import Images from "../../common/Images";
-import ButtonRadius10 from "../../components/ButtonRadius10";
-import LightTextCB from "../../components/LightTextCB";
-import RegularTextCB from "../../components/RegularTextCB";
-import Axios from "../../network/APIKit";
-import utils from "../../utils";
-import Spinner from "react-native-loading-spinner-overlay";
-import NormalHeader from "../../components/NormalHeader";
+} from 'react-native';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import Colors from '../../common/Colors';
+import Constants, {height, SIZES, STYLES, FONTS} from '../../common/Constants';
+import Images from '../../common/Images';
+import ButtonRadius10 from '../../components/ButtonRadius10';
+import LightTextCB from '../../components/LightTextCB';
+import RegularTextCB from '../../components/RegularTextCB';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import Spinner from 'react-native-loading-spinner-overlay';
+import NormalHeader from '../../components/NormalHeader';
 export default class ViewJob extends React.Component {
   initialMapState = {
     region: {
@@ -40,84 +35,85 @@ export default class ViewJob extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      accessToken: "",
+      accessToken: '',
       viewJob: [],
       images: [],
       userData: {},
-      userImage: "",
-      username: "",
-      title: "",
-      price: "",
-      location: "",
-      time: "",
+      userImage: '',
+      username: '',
+      title: '',
+      price: '',
+      location: '',
+      time: '',
       region: this.initialMapState.region,
-      latitude: "",
-      longitude: "",
-      description: "",
+      latitude: '',
+      longitude: '',
+      description: '',
       jobService: [],
-      buttonlabel: "REQUEST FOR ACCEPTENCE",
+      buttonlabel: 'REQUEST FOR ACCEPTENCE',
+      jobId: '',
+      jobStatus: '',
     };
   }
 
   componentDidMount() {
     console.log(
-      "yeh le idddddd===============> ",
-      this.props.route.params.item
+      'yeh le idddddd===============> ',
+      this.props.route.params.item,
     );
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
-    this.props.navigation.addListener("focus", () => {
+    this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
     });
   }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({ accessToken: token }, () => {
+    this.setState({accessToken: token}, () => {
       this.viewJob();
     });
   };
 
   viewJob = () => {
-    this.setState({ isLoading: true });
-    const onSuccess = ({ data }) => {
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
       console.log(
-        "View Job Data ==== ==== ",
-        JSON.stringify(data.data.records)
+        'View Job Data ==== ==== ',
+        JSON.stringify(data.data.records.title),
       );
 
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       this.setState({
-        userImage: data.data.records.user.user_profiles.image,
+        userImage: data.data.records.user.userProfile.image,
         title: data.data.records.title,
         location: data.data.records.location,
         time: data.data.records.time,
         images: data.data.records.images,
         username: data.data.records.user.name,
-        lat: data.data.records.user.user_profiles.latitude,
-        lng: data.data.records.user.user_profiles.longitude,
+        latitude: data.data.records.user.userProfile.latitude,
+        longitude: data.data.records.user.userProfile.longitude,
         price: data.data.records.price,
         description: data.data.records.description,
-        latitude: data.data.records.user.user_profiles.latitude,
-        longitude: data.data.records.user.user_profiles.longitude,
-        // jobService: data.data.records.job_service,
+        jobId: data.data.records.id,
+        jobStatus: data.data.records.status,
       });
 
       // utils.showToast(data.message)
 
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     let params = {
       jobId: this.props.route.params.item,
     };
-    Axios.get(Constants.viewJob, {
+    Axios.get(Constants.VendorviewJobUrl, {
       params,
       headers: {
         Authorization: this.state.accessToken,
@@ -127,79 +123,82 @@ export default class ViewJob extends React.Component {
       .catch(onFailure);
   };
 
-  render() {
-    // this.state.jobService.map((item) => {
-    //   console.log('========== Job Services ==== =', item.name);
-    // });
-    // console.log('View Job ===== ==== ', this.props.route.params.item);
+  createJobRequest = () => {
+    const postData = {
+      job_id: this.state.jobId,
+    };
 
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      console.log('Request job Data ========', data);
+      utils.showToast(data.message);
+      this.setState({isLoading: false});
+    };
+    const onFailure = (error) => {
+      console.log(
+        'error =====================================================================>',
+        error,
+      );
+      utils.showResponseError(error.massage);
+      this.setState({isLoading: false});
+    };
+    const options = {
+      headers: {
+        Authorization: this.state.accessToken,
+        //    'Content-Type':'application/x-www-form-urlencoded'
+      },
+    };
+    Axios.post(Constants.createJobRequest, postData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  render() {
     return (
       <View style={STYLES.container}>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // width: '100%',
-            padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image source={Images.arrowBack} style={[styles.iconBack]} />
-          </TouchableOpacity>
-          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
-            View Job
-          </RegularTextCB>
-        </View> */}
         <NormalHeader name="View Job" />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ marginBottom: SIZES.five }}>
-            <View style={{ padding: SIZES.twenty }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: SIZES.twenty}}>
+          <View style={{marginBottom: SIZES.five}}>
+            <View style={{padding: SIZES.twenty}}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{ uri: Constants.imageURL + this.state.userImage }}
+                    source={{uri: Constants.imageURL + this.state.userImage}}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
                 </View>
-                <View style={{ marginStart: SIZES.ten }}>
+                <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
                     style={{
                       color: Colors.black,
                       fontSize: 16,
-                    }}
-                  >
+                    }}>
                     {this.state.username}
                   </RegularTextCB>
                   <View
                     style={{
-                      flexDirection: "row",
+                      flexDirection: 'row',
                       marginTop: SIZES.five,
-                      alignItems: "center",
-                    }}
-                  >
+                      alignItems: 'center',
+                    }}>
                     <Image
                       source={Images.iconVerified}
-                      style={{ height: 15, width: 15, resizeMode: "contain" }}
+                      style={{height: 15, width: 15, resizeMode: 'contain'}}
                     />
                     <RegularTextCB
                       style={{
                         color: Colors.turqoiseGreen,
                         fontSize: 12,
                         marginStart: SIZES.five,
-                      }}
-                    >
+                      }}>
                       Verified
                     </RegularTextCB>
                   </View>
@@ -207,26 +206,23 @@ export default class ViewJob extends React.Component {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginTop: SIZES.five,
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
                 <RegularTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 16,
-                  }}
-                >
-                  {this.state.title === null ? "" : this.state.title}
+                  }}>
+                  {this.state.title === null ? '' : this.state.title}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
-                  }}
-                >
+                  }}>
                   ${this.state.price}
                 </LightTextCB>
               </View>
@@ -235,56 +231,50 @@ export default class ViewJob extends React.Component {
                 style={{
                   color: Colors.sickGreen,
                   fontSize: 12,
-                }}
-              >
+                }}>
                 {this.state.jobService[0]?.categories.name}
               </RegularTextCB>
 
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
-                }}
-              >
+                }}>
                 {this.state.description}
               </RegularTextCB>
 
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginTop: SIZES.five,
-                  alignItems: "center",
-                }}
-              >
+                  alignItems: 'center',
+                }}>
                 <Image
                   source={Images.iconLocationPin}
-                  style={{ height: 17, width: 17, resizeMode: "contain" }}
+                  style={{height: 17, width: 17, resizeMode: 'contain'}}
                 />
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
-                  }}
-                >
+                  }}>
                   {this.state.location}
                 </RegularTextCB>
               </View>
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginTop: SIZES.five,
-                  alignItems: "center",
-                }}
-              >
+                  alignItems: 'center',
+                }}>
                 <Image
                   source={Images.iconStopWatch}
-                  style={{ height: 17, width: 17, resizeMode: "contain" }}
+                  style={{height: 17, width: 17, resizeMode: 'contain'}}
                 />
                 <RegularTextCB
                   style={{
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
-                  }}
-                >
+                  }}>
                   {this.state.time}
                 </RegularTextCB>
               </View>
@@ -294,8 +284,8 @@ export default class ViewJob extends React.Component {
               horizontal
               data={this.state.images}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => {
-                console.log("images===", item.images);
+              renderItem={({item}) => {
+                console.log('images===', item.images);
                 return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}
@@ -313,8 +303,7 @@ export default class ViewJob extends React.Component {
               showsMyLocationButton={false}
               zoomEnabled={false}
               scrollEnabled={false}
-              style={styles.mapStyle}
-            >
+              style={styles.mapStyle}>
               <Marker
                 coordinate={{
                   latitude: Number(this.state.latitude),
@@ -326,28 +315,28 @@ export default class ViewJob extends React.Component {
               style={{
                 marginVertical: SIZES.ten * 3,
                 marginHorizontal: SIZES.twenty,
-              }}
-            >
-              <ButtonRadius10
-                label={this.state.buttonlabel}
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  // this.props.navigation.navigate(Constants.chat);
-                  if (this.state.buttonlabel === "REQUEST FOR ACCEPTENCE") {
-                    this.setState({ buttonlabel: "PENDING" });
-                    if (this.state.buttonlabel === "PENDING") {
-                      this.setState({ buttonlabel: "PENDING" });
-                    }
+              }}>
+              {!this.state.isLoading ? (
+                <ButtonRadius10
+                  label={
+                    this.state.jobStatus === 'pending'
+                      ? 'PENDING'
+                      : 'REQUEST FOR ACCEPTANCE'
                   }
-                }}
-              />
+                  disabled={this.state.jobStatus == 'pending' ? true : false}
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.createJobRequest();
+                  }}
+                />
+              ) : null}
             </View>
           </View>
         </ScrollView>
         <Spinner
           visible={this.state.isLoading}
-          textContent={"Loading..."}
-          textStyle={{ color: "#FFF", fontFamily: Constants.fontRegular }}
+          textContent={'Loading...'}
+          textStyle={{color: '#FFF', fontFamily: Constants.fontRegular}}
         />
       </View>
     );
@@ -369,20 +358,20 @@ const styles = StyleSheet.create({
   iconBack: {
     height: SIZES.twenty,
     width: SIZES.twenty,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
-    shadowColor: "#c5c5c5",
-    shadowOffset: { width: SIZES.five, height: SIZES.five },
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     elevation: SIZES.ten,
   },
   circleCard: {
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: SIZES.ten * 3,
-    shadowColor: "#c5c5c5",
+    shadowColor: '#c5c5c5',
     shadowOpacity: 0.15,
     shadowRadius: SIZES.five,
     elevation: SIZES.five,
@@ -395,7 +384,7 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 8,
     width: SIZES.ten * 8,
     borderRadius: SIZES.ten,
-    shadowColor: "#c5c5c5",
+    shadowColor: '#c5c5c5',
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
   },
@@ -403,10 +392,10 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: (SIZES.ten * 6) / 2,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   spinnerTextStyle: {
-    color: "#FFF",
+    color: '#FFF',
     fontFamily: Constants.fontRegular,
   },
 });

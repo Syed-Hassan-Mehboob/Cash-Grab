@@ -177,8 +177,9 @@ export default class VendorAllJobs extends Component {
             {item.title !== null && item.title !== undefined ? item.title : ''}
           </RegularTextCB>
 
-          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
-            ${item.price !== null && item.price !== undefined ? item.price : ''}
+          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
+            {'$ '}
+            {item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
@@ -224,8 +225,15 @@ export default class VendorAllJobs extends Component {
               }}>
               {item.time !== null && item.time !== undefined ? item.time : ''}
             </RegularTextCB>
-            <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
-              {'View Job >'}
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  fontSize: 18,
+                  textDecorationLine: 'underline',
+                },
+              ]}>
+              {'View Job '}
             </RegularTextCB>
           </View>
         </View>

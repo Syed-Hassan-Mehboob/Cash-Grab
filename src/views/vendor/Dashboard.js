@@ -59,7 +59,7 @@ export default class Dashboard extends Component {
     this.setState({isLoading: true});
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
-    this.getCompleteJob();
+    this.getCompleteJob(token);
     this.getDashboardData();
     this.setState({isLoading: false});
   };
@@ -133,38 +133,33 @@ export default class Dashboard extends Component {
       .catch(onFailure);
   };
 
-  getCompleteJob = () => {
+  getCompleteJob = (token) => {
     // this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log('Complete job vvv======= ', data.data.withdraw);
+      // console.log('Complete job vvv======= ', data.data.records);
 
       this.setState({
-        completeJob: data?.data.completed,
-        progress: data.data.progress,
-        withDraw: data?.data.withdraw,
-        // name:data?.data.progress.user.name,
-        // title:data?.data.progress.title,
-        // price:data?.data.progress.price,
-        // description:data?.data.progress.description,
-        // time:data?.data.progress.time,
-        // image:data?.data.progress.user.user_profiles.image,
-        // location:data?.data.progress.location,
-        // verfiyAt:data?.data.progress.user.email_verified_at
+        completeJob: data.data.records,
       });
 
-      // this.setState({isLoading: false});
+      this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
+    let params = {
+      offset: 0,
+      limit: 1,
+    };
 
     this.setState({isLoading: true});
-    Axios.get(Constants.getCompleteJob, {
+    Axios.get(Constants.orderCompleted, {
+      params,
       headers: {
-        Authorization: this.state.accessToken,
+        Authorization: token,
       },
     })
       .then(onSuccess)
@@ -172,7 +167,7 @@ export default class Dashboard extends Component {
   };
 
   rendercompletedJobsItem = ({item}) => {
-    console.log('COmplete job item   =========', item);
+    // console.log('COmplete job item   =========', item);
 
     return (
       <View
@@ -192,11 +187,12 @@ export default class Dashboard extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.user_profiles.image}}
+              source={{uri: Constants.imageURL + item.userProfile.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
+
           <View style={{marginStart: SIZES.ten}}>
             <BoldTextCB
               style={{
@@ -244,7 +240,7 @@ export default class Dashboard extends Component {
               color: Colors.black,
               fontSize: 16,
             }}>
-            {item.title}
+            {item.description !== null ? item.description : 'N/A'}
           </RegularTextCB>
           <RegularTextCB
             style={{
@@ -254,67 +250,23 @@ export default class Dashboard extends Component {
             ${item.price}
           </RegularTextCB>
         </View>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconLocationPin}
-            style={{
-              height: SIZES.fifteen + 2,
-              width: SIZES.fifteen + 2,
-              resizeMode: 'contain',
-            }}
-          />
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              marginStart: SIZES.five,
-            }}>
-            {item.location}
-          </RegularTextCB>
-        </View> */}
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{
-              height: SIZES.fifteen + 2,
-              width: SIZES.fifteen + 2,
-              resizeMode: 'contain',
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: SIZES.five,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-              }}>
-              {item.time}
-            </RegularTextCB>
-            <RegularTextCB
-              style={{
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={[FONTS.mediumFont12, {color: Colors.sickGreen}]}>
+            {item.category !== '' ? item.category.name : 'N/A'}
+          </Text>
+
+          <Text
+            style={[
+              FONTS.mediumFont12,
+              {
                 color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB>
-          </View>
-        </View> */}
-        <Text style={[FONTS.mediumFont12, {color: Colors.sickGreen}]}>
-          Automobile
-        </Text>
+                textDecorationLine: 'underline',
+                fontSize: 16,
+              },
+            ]}>
+            {'View Job'}
+          </Text>
+        </View>
       </View>
     );
   };

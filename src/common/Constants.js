@@ -130,8 +130,7 @@ const Constants = {
   getVenderByCatagory: 'customer/get-vendor-profile?',
   getVenderAllCategory: 'vendors/categories',
   getJobAround: 'vendors/get-around-job?',
-  viewJob: 'customer/jobs/detail?',
-  getCompleteJob: 'vendors/get-completed-job',
+  VendorviewJobUrl: 'customer/jobs/detail?',
   VendorDashboardEarning: 'order/earning',
   search: 'customer/filter-services?',
   venderFilterd: 'vendors/filter?',
@@ -150,10 +149,12 @@ const Constants = {
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
   orderProcess: 'order/proceed',
+  orderCompleted: 'order/completed',
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
+  createJobRequest: 'vendors/create-job-request?',
   /* * api urls * */
 };
 
