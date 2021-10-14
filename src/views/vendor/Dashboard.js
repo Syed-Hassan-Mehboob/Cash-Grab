@@ -28,7 +28,7 @@ export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       accessToken: '',
       completeJob: [],
       withDraw: {},
@@ -75,7 +75,7 @@ export default class Dashboard extends Component {
           value:
             Number(mItem.earning) === 0
               ? (Number(mItem.earning) + 10) / 100
-              : Number(mItem.earning) / 100,
+              : Number(mItem.earning) * 0.5,
           label: mItem.name.substring(0, 3),
           labelTextStyle: [
             FONTS.mediumFont14,
@@ -98,24 +98,15 @@ export default class Dashboard extends Component {
         {
           totalEarning: data?.data.total_earning,
           chartData: tempMonthlyData,
-          // name:data?.data.progress.user.name,
-          // title:data?.data.progress.title,
-          // price:data?.data.progress.price,
-          // description:data?.data.progress.description,
-          // time:data?.data.progress.time,
-          // image:data?.data.progress.user.user_profiles.image,
-          // location:data?.data.progress.location,
-          // verfiyAt:data?.data.progress.user.email_verified_at
         },
         () => {
           console.log(
             'chart data =======   >>>>>>>  ',
             JSON.stringify(this.state.chartData),
           );
+          this.setState({isLoading: false});
         },
       );
-
-      // this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
@@ -531,8 +522,6 @@ export default class Dashboard extends Component {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            // padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
             style={{
@@ -570,49 +559,6 @@ export default class Dashboard extends Component {
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Quick job notification tab */}
-          {/* <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
-            <RegularTextCB
-              style={{
-                fontSize: SIZES.twenty,
-                color: Colors.black,
-              }}>
-              Quick Job
-            </RegularTextCB>
-            <View
-              style={{
-                // marginTop: SIZES.ten,
-                borderColor: Colors.sickGreen,
-                borderWidth: 1.1,
-                borderRadius: SIZES.ten,
-                marginVertical: SIZES.twenty,
-              }}>
-              <View
-                style={[
-                  styles.card,
-                  {
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: SIZES.twenty,
-                    paddingVertical: SIZES.fifteen * 1.2,
-                    borderRadius: SIZES.ten,
-                  },
-                ]}>
-                <RegularTextCB>1 Job Available in your location</RegularTextCB>
-                <Image
-                  source={Images.iconDrawerBell}
-                  style={{
-                    height: SIZES.twenty * 1.3,
-                    width: SIZES.twenty * 1.3,
-                    tintColor: Colors.coolGrey,
-                  }}
-                  resizeMode="contain"
-                />
-              </View>
-            </View>
-          </View> */}
-          {/* Quick job notification tab */}
           <View style={{}}>
             <View
               style={{
@@ -645,11 +591,6 @@ export default class Dashboard extends Component {
                 {this.state.selectedMonth !== undefined
                   ? `Monthly Earnings (${this.state.selectedMonth.label})`
                   : null}
-                {/* {`Monthly Earnings (${
-                  this.state.selectedMonth.label === undefined
-                    ? ''
-                    : this.state.selectedMonth.label
-                })`} */}
               </RegularTextCB>
               <BoldTextCB
                 style={{
@@ -684,20 +625,6 @@ export default class Dashboard extends Component {
                 Platform.OS === 'ios' ? SIZES.five * 0.5 : SIZES.ten * 1.5
               }
             />
-            {/* <TouchableGraph
-              onPressBar={(data) => {
-                console.log(data);
-              }}
-              onPressTickAxis={(data) => {
-                console.log(data);
-              }}>
-              <VictoryChart>
-                <VictoryAxis crossAxis orientation="left" />
-                <VictoryAxis dependentAxis crossAxis orientation="bottom" />
-                <VictoryBar data={data} />
-                <VictoryArea data={data} />
-              </VictoryChart>
-            </TouchableGraph> */}
           </View>
           <View
             style={{

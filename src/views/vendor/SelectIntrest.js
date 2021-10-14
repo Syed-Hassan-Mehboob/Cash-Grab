@@ -19,6 +19,7 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import NormalHeader from '../../components/NormalHeader';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SelectIntrest(props) {
   const [Data, setData] = useState();
@@ -70,9 +71,8 @@ export default function SelectIntrest(props) {
       utils.showToast('Specify atleast 1 interest');
     } else {
       // let;
-      props.navigation.navigate(Constants.SelectIndustry, {
-        interestId: interestId,
-        venderData: props.route.params.payload,
+      AsyncStorage.setItem('SignUpInterestID', interestId).then(() => {
+        props.navigation.navigate(Constants.SelectIndustry);
       });
     }
   };

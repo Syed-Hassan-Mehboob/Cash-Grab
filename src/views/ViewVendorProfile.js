@@ -22,6 +22,7 @@ import Axios from '../network/APIKit';
 import utils from '../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Icon, Text} from 'native-base';
+import moment from 'moment';
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
@@ -110,7 +111,7 @@ export default class ViewVendorProfile extends React.Component {
         rating: data.data.records.ratings,
         year: data.data.records.year,
         interests: data.data.records.interest,
-        review: data.data.records.comments,
+        review: data.data.records.reviews,
         customer: data.data.records.customers,
         abuteMe: data.data.records.user_profiles.about_me,
         categories: tempCats,
@@ -275,7 +276,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
-    //console.log(' Vender view item Reviews Item==========', item);
+    let date = moment(item.created_at).format('MMMM Do YYYY');
     return (
       <View
         style={{
@@ -283,20 +284,22 @@ export default class ViewVendorProfile extends React.Component {
           borderBottomWidth: 1,
           borderColor: Colors.pinkishGrey,
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: SIZES.ten,
+          }}>
           <View
             style={{
               height: SIZES.ten * 6,
-              width: SIZES.ten * 6,
+              width: SIZES.ten * 9,
               borderRadius: SIZES.ten * 3,
-              shadowColor: '#c5c5c5',
-              shadowOffset: {width: SIZES.five, height: SIZES.five},
-              shadowOpacity: 1.0,
-              shadowRadius: SIZES.ten,
-              elevation: SIZES.ten,
             }}>
             <Image
-              source={{uri: Constants.imageURL + item.profiles.image}}
+              source={{
+                uri: Constants.imageURL + item.customer.user_profiles.image,
+              }}
               style={{
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
@@ -308,24 +311,24 @@ export default class ViewVendorProfile extends React.Component {
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
               {item.customer.name === null ? 'Undefined' : item.customer.name}
             </RegularTextCB>
-            <Image
+            {/* <Image
               source={Images.like}
               style={{
                 position: 'absolute',
-                right: SIZES.ten * 7,
+                right: SIZES.ten * 11,
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
                 resizeMode: 'contain',
               }}
-            />
+            /> */}
             <RegularTextCB
               style={{
                 fontSize: 14,
                 color: Colors.coolGrey,
-                marginTop: SIZES.five,
+                marginTop: 5,
                 width: width - 80,
               }}>
-              {item.comments === null ? 'Undefined' : item.comments}
+              {item.comments === null ? 'Undefine' : item.comments}
             </RegularTextCB>
             <View style={{alignSelf: 'baseline', marginTop: SIZES.five}}>
               <StarRating
@@ -334,8 +337,8 @@ export default class ViewVendorProfile extends React.Component {
                 fullStar={Images.starFull}
                 halfStar={Images.starHalf}
                 emptyStar={Images.starHalf}
-                starSize={SIZES.fifteen}
-                rating={parseInt(item.ratings)}
+                starSize={15}
+                rating={parseInt(item.rating)}
               />
             </View>
             <RegularTextCB
@@ -343,19 +346,19 @@ export default class ViewVendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.created_at === null ? 'Undefined' : item.created_at}
+              {date === null ? 'Undefined' : date}
             </RegularTextCB>
-            <Image
+            {/* <Image
               source={Images.moreDots}
               style={{
                 position: 'absolute',
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
-                right: SIZES.ten * 7,
+                right: SIZES.ten * 11,
                 bottom: 0,
                 resizeMode: 'contain',
               }}
-            />
+            /> */}
           </View>
         </View>
       </View>
@@ -705,45 +708,27 @@ export default class ViewVendorProfile extends React.Component {
             {this.state.isReviewsSelected && (
               <View style={{marginTop: SIZES.ten}}>
                 <FlatList
+                  style={{paddingBottom: SIZES.fifty}}
                   showsVerticalScrollIndicator={false}
                   data={this.state.review}
                   renderItem={this.renderReviewsItem}
+                  // contentContainerStyle={{backgroundColor: 'red'}}
                   keyExtractor={(item) => item.id}
+                  ListEmptyComponent={() => (
+                    <Text
+                      style={[
+                        FONTS.boldFont18,
+                        {
+                          flex: 1,
+                          alignSelf: 'center',
+                          justifyContent: 'center',
+                          marginTop: SIZES.twenty,
+                        },
+                      ]}>
+                      No Review(s)!
+                    </Text>
+                  )}
                 />
-                {/* <View
-                  style={[
-                    styles.card,
-                    {
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginHorizontal: -SIZES.twenty,
-                      paddingHorizontal: SIZES.ten,
-                      paddingVertical: SIZES.five,
-                      width: '100%',
-                    },
-                  ]}>
-                  <Image
-                    source={Images.iconpencil}
-                    style={{height: SIZES.twentyFive, width: SIZES.twentyFive}}
-                  />
-                  <TextInput
-                    placeholder={'Write Review'}
-                    value={this.state.typeReview}
-                    style={styles.textInput}
-                    onChangeText={(text) => this.setState({typeReview: text})}
-                  />
-                  <TouchableOpacity onPress={() => {}}>
-                    <Image
-                      source={Images.iconSend}
-                      style={{
-                        height: SIZES.ten * 4,
-                        width: SIZES.ten * 4,
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                 */}
               </View>
             )}
           </View>

@@ -51,6 +51,7 @@ export default class ForgetPassword extends Component {
       setTimeout(() => {
         this.props.navigation.navigate(Constants.otp, {
           email: this.state.email,
+          fp: 'fp',
         });
       }, 600);
     };
