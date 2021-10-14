@@ -263,91 +263,94 @@ export default class DateTimeSlots extends Component {
     let minTo = this.state.minTo;
     let selectedDate = this.state.selected;
 
-    // if (selectedDate === '') {
-    //   utils.showToast('Date Should not be Empty');
-    //   return;
-    // }
+    if (selectedDate === '') {
+      utils.showToast('Date Should not be Empty');
+      return;
+    }
 
-    // if (hrFrom === '') {
-    //   utils.showToast('From Hour should not be empty');
-    //   return;
-    // }
+    if (hrFrom === '') {
+      utils.showToast('From Hour should not be empty');
+      return;
+    }
 
-    // if (Number(hrFrom) < 1 || Number(hrFrom) > 23) {
-    //   utils.showToast('From Hour should be in between 1 and 23');
-    //   return;
-    // }
+    if (Number(hrFrom) < 1 || Number(hrFrom) > 23) {
+      utils.showToast('From Hour should be in between 1 and 23');
+      return;
+    }
 
-    // if (minFrom === '') {
-    //   utils.showToast('From Minutes should not be empty');
-    //   return;
-    // }
+    if (minFrom === '') {
+      utils.showToast('From Minutes should not be empty');
+      return;
+    }
 
-    // if (Number(minFrom) < 1 || Number(minFrom) > 59) {
-    //   utils.showToast('From Minute should be in between 1 and 59');
-    //   return;
-    // }
+    if (Number(minFrom) < 1 || Number(minFrom) > 59) {
+      utils.showToast('From Minute should be in between 1 and 59');
+      return;
+    }
 
-    // if (hrTo === '') {
-    //   utils.showToast('To Hour should not be empty');
-    //   return;
-    // }
+    if (hrTo === '') {
+      utils.showToast('To Hour should not be empty');
+      return;
+    }
 
-    // if (Number(hrTo) < 1 || Number(hrTo) > 23) {
-    //   utils.showToast('To Hour should be in between 1 and 23');
-    //   return;
-    // }
+    if (Number(hrTo) < 1 || Number(hrTo) > 23) {
+      utils.showToast('To Hour should be in between 1 and 23');
+      return;
+    }
 
-    // if (minTo === '') {
-    //   utils.showToast('To Minutes should not be empty');
-    //   return;
-    // }
-    // if (Number(minTo) < 1 || Number(minTo) > 59) {
-    //   utils.showToast('To Minute should be in between 1 and 59');
-    //   return;
-    // }
+    if (minTo === '') {
+      utils.showToast('To Minutes should not be empty');
+      return;
+    }
+    if (Number(minTo) < 1 || Number(minTo) > 59) {
+      utils.showToast('To Minute should be in between 1 and 59');
+      return;
+    }
 
-    // if (countryCode === '') {
-    //   utils.showToast('Select Country Code');
-    //   return;
-    // }
-    // if (phone === '') {
-    //   utils.showToast('Phone Number should not be empty');
-    //   return;
-    // }
+    if (countryCode === '') {
+      utils.showToast('Select Country Code');
+      return;
+    }
+    if (phone === '') {
+      utils.showToast('Phone Number should not be empty');
+      return;
+    }
 
-    // if (phone.length < 9) {
-    //   utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
-    //   return;
-    // }
-    // if (phone.length > 9) {
-    //   utils.showToast('Phone Number Should Not Be Greator Than 9 Characters');
-    //   return;
-    // }
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+    if (phone.length > 9) {
+      utils.showToast('Phone Number Should Not Be Greator Than 9 Characters');
+      return;
+    }
 
-    // if (location === '') {
-    //   utils.showToast('Location Should not be Empty');
-    //   return;
-    // }
-    // if (address === '') {
-    //   utils.showToast('Address Should not be Empty');
-    //   return;
-    // }
-    // if (description === '') {
-    //   utils.showToast('Description Should not be Empty');
-    //   return;
-    // }
+    if (location === '') {
+      utils.showToast('Location Should not be Empty');
+      return;
+    }
+    if (address === '') {
+      utils.showToast('Address Should not be Empty');
+      return;
+    }
+    if (description === '') {
+      utils.showToast('Description Should not be Empty');
+      return;
+    }
 
     // console.log(this.props.route.params);
 
     // console.log('Data======>>>>>>>>>>>>>>', params);
 
     const onSuccess = ({data}) => {
-      utils.showToast(data.message);
+      // utils.showToast(data.message);
+      console.log('order Data========', data);
       this.toggleIsLoading();
 
       setTimeout(() => {
-        this.props.navigation.goBack();
+        this.props.navigation.navigate(Constants.bookingConfirmed, {
+          orderData: data.data,
+        });
       }, 1000);
     };
 
@@ -598,7 +601,7 @@ export default class DateTimeSlots extends Component {
                   style={{
                     fontSize: 12,
                     color: Colors.coolGrey,
-                    marginTop: SIZES.five,
+                    // marginTop: SIZES.five,
                   }}>
                   From
                 </RegularTextCB>
@@ -654,7 +657,7 @@ export default class DateTimeSlots extends Component {
                     placeholderTextColor={Colors.black}
                     placeholder={'Hr'}
                     placeholderTextColor={Colors.black}
-                    style={styles.textInput}
+                    style={[styles.textInput, {alignItems: 'center'}]}
                     maxLength={2}
                     value={this.state.hrTo}
                     keyboardType={'numeric'}
@@ -699,6 +702,7 @@ export default class DateTimeSlots extends Component {
                     borderRadius: SIZES.ten,
                     height: 60,
                     padding: SIZES.ten,
+                    margin: SIZES.five,
                     marginEnd: SIZES.ten,
                     flex: 0,
                     justifyContent: 'center',

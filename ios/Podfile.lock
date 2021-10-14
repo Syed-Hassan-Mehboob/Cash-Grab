@@ -287,8 +287,7 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - ReactNativeGetLocation (2.1.2):
-
-    - React-Core
+    - React
   - RNCAsyncStorage (1.15.9):
     - React-Core
   - RNCClipboard (1.5.1):
