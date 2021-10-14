@@ -101,8 +101,6 @@ export default class DateTimeSlots extends Component {
       minTo: '',
       isLoading: false,
       showModal: false,
-      fromItemSelected: 'am',
-      toItemSelected: 'am',
     };
   }
 
@@ -158,7 +156,7 @@ export default class DateTimeSlots extends Component {
             {
               location: details.formatted_address,
               lat: details.geometry.location.lat,
-              long: details.geometry.location.lng,
+              lng: details.geometry.location.lng,
             },
             () => {
               setTimeout(() => {
@@ -264,129 +262,127 @@ export default class DateTimeSlots extends Component {
     let hrTo = this.state.hrTo;
     let minTo = this.state.minTo;
     let selectedDate = this.state.selected;
-    let fromItemSelected = this.state.fromItemSelected;
-    let toItemSelected = this.state.toItemSelected;
 
-    if (selectedDate === '') {
-      utils.showToast('Please Select Date');
-      return;
-    }
+    // if (selectedDate === '') {
+    //   utils.showToast('Date Should not be Empty');
+    //   return;
+    // }
 
-    if (hrFrom === '') {
-      utils.showToast('From Hour should not be empty');
-      return;
-    }
+    // if (hrFrom === '') {
+    //   utils.showToast('From Hour should not be empty');
+    //   return;
+    // }
 
-    if (fromItemSelected === 'am') {
-      if (Number(hrFrom) < 1 || Number(hrFrom) > 12)
-        utils.showToast('From Hour should be in between 1 and 12');
-      return;
-    }
+    // if (Number(hrFrom) < 1 || Number(hrFrom) > 23) {
+    //   utils.showToast('From Hour should be in between 1 and 23');
+    //   return;
+    // }
 
-    if (fromItemSelected === 'pm') {
-      if (Number(hrFrom) < 1 || Number(hrFrom) > 23)
-        utils.showToast('From Hour should be in between 1 and 23');
-      return;
-    }
+    // if (minFrom === '') {
+    //   utils.showToast('From Minutes should not be empty');
+    //   return;
+    // }
 
-    if (minFrom === '') {
-      utils.showToast('From Minutes should not be empty');
-      return;
-    }
+    // if (Number(minFrom) < 1 || Number(minFrom) > 59) {
+    //   utils.showToast('From Minute should be in between 1 and 59');
+    //   return;
+    // }
 
-    if (Number(minFrom) < 1 || Number(minFrom) > 59) {
-      utils.showToast('From Minute should be in between 1 and 59');
-      return;
-    }
+    // if (hrTo === '') {
+    //   utils.showToast('To Hour should not be empty');
+    //   return;
+    // }
 
-    if (hrTo === '') {
-      utils.showToast('To Hour should not be empty');
-      return;
-    }
+    // if (Number(hrTo) < 1 || Number(hrTo) > 23) {
+    //   utils.showToast('To Hour should be in between 1 and 23');
+    //   return;
+    // }
 
-    if (toItemSelected === 'am') {
-      if (Number(hrTo) < 1 || Number(hrFrom) > 12) {
-        utils.showToast('To Hour should be in between 1 and 12');
-        return;
-      }
-    }
-    if (toItemSelected === 'pm') {
-      if (Number(hrTo) < 1 || Number(hrFrom) > 23) {
-        utils.showToast('To Hour should be in between 1 and 23');
-        return;
-      }
-    }
+    // if (minTo === '') {
+    //   utils.showToast('To Minutes should not be empty');
+    //   return;
+    // }
+    // if (Number(minTo) < 1 || Number(minTo) > 59) {
+    //   utils.showToast('To Minute should be in between 1 and 59');
+    //   return;
+    // }
 
-    if (minTo === '') {
-      utils.showToast('To Minutes should not be empty');
-      return;
-    }
-    if (Number(minTo) < 1 || Number(minTo) > 59) {
-      utils.showToast('To Minute should be in between 1 and 59');
-      return;
-    }
+    // if (countryCode === '') {
+    //   utils.showToast('Select Country Code');
+    //   return;
+    // }
+    // if (phone === '') {
+    //   utils.showToast('Phone Number should not be empty');
+    //   return;
+    // }
 
-    if (countryCode === '') {
-      utils.showToast('Select Country Code');
-      return;
-    }
-    if (phone === '') {
-      utils.showToast(' should not be empty');
-      return;
-    }
-    if (phone === '') {
-      utils.showToast(' should not be empty');
-      return;
-    }
-    if (phone.length < 9) {
-      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
-      return;
-    }
-    if (location === '') {
-      utils.showToast('Location Should not be Empty');
-      return;
-    }
-    if (address === '') {
-      utils.showToast('Address Should not be Empty');
-      return;
-    }
-    if (description === '') {
-      utils.showToast('Description Should not be Empty');
-      return;
-    }
+    // if (phone.length < 9) {
+    //   utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+    //   return;
+    // }
+    // if (phone.length > 9) {
+    //   utils.showToast('Phone Number Should Not Be Greator Than 9 Characters');
+    //   return;
+    // }
 
-    // const onSuccess = ({data}) => {
-    //   utils.showToast(data.message);
-    //   this.toggleIsLoading();
+    // if (location === '') {
+    //   utils.showToast('Location Should not be Empty');
+    //   return;
+    // }
+    // if (address === '') {
+    //   utils.showToast('Address Should not be Empty');
+    //   return;
+    // }
+    // if (description === '') {
+    //   utils.showToast('Description Should not be Empty');
+    //   return;
+    // }
 
-    //   setTimeout(() => {
-    //     this.props.navigation.goBack();
-    //   }, 1000);
-    // };
+    // console.log(this.props.route.params);
 
-    // const onFailure = (error) => {
-    //   this.toggleIsLoading();
-    //   utils.showResponseError(error);
-    // };
+    // console.log('Data======>>>>>>>>>>>>>>', params);
 
-    // const params = {
-    //   old_password: currentPassword,
-    //   password: newPassword,
-    //   password_confirmation: confirmPassword,
-    // };
+    const onSuccess = ({data}) => {
+      utils.showToast(data.message);
+      this.toggleIsLoading();
 
-    // const options = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: this.state.accessToken,
-    //   },
-    // };
+      setTimeout(() => {
+        this.props.navigation.goBack();
+      }, 1000);
+    };
 
-    // this.toggleIsLoading();
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
 
-    // Axios.post(Constants.updatePasswordURL, params, options)
-    //   .then(onSuccess)
-    //   .catch(onFailure);
+    const params = {
+      phone: phone,
+      location: location,
+      lat: lat,
+      lng: lng,
+      services: this.props.route.params.serviceIds,
+      address: address,
+      vendor_id: this.props.route.params.vendorId,
+      date: selectedDate,
+      from_time: hrFrom + ':' + minFrom,
+      to_time: hrTo + ':' + minTo,
+      description: description,
+      country: countryCode,
+    };
+
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
+    };
+
+    this.toggleIsLoading();
+
+    Axios.post(Constants.orderProcess, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   renderTimeSlotItem = ({item}) => {
@@ -568,33 +564,6 @@ export default class DateTimeSlots extends Component {
               />
             </View>
           </View>
-          {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginHorizontal: SIZES.fifteen,
-            alignSelf: 'flex-end',
-            marginTop: SIZES.fifteen,
-          }}>
-          <RegularTextCB style={{fontSize: 14}}>
-            {this.state.sliderValue}
-          </RegularTextCB>
-          <Slider
-            style={{
-              width: width / 1.3,
-              height: 55,
-              marginStart: SIZES.ten,
-            }}
-            minimumValue={0}
-            maximumValue={340}
-            minimumTrackTintColor={Colors.silver}
-            maximumTrackTintColor={Colors.silver}
-            thumbImage={Images.sliderThumb}
-            onValueChange={(number) =>
-              this.setState({sliderValue: parseInt(number)})
-            }
-          />
-        </View> */}
           <Text
             style={[
               FONTS.mediumFont16,
@@ -663,45 +632,6 @@ export default class DateTimeSlots extends Component {
                   />
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.fromItemSelected !== 'am') {
-                        let temp = Number(this.state.hrFrom) - 12;
-                        this.setState({
-                          hrFrom: temp.toString(),
-                          fromItemSelected: 'am',
-                        });
-                      }
-                    }}
-                    selected={this.state.fromItemSelected === 'am'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>AM</Text>
-                </ListItem>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.fromItemSelected !== 'pm') {
-                        let temp = Number(this.state.hrFrom) + 12;
-                        this.setState({
-                          hrFrom: temp.toString(),
-                          fromItemSelected: 'pm',
-                        });
-                      }
-                    }}
-                    selected={this.state.fromItemSelected === 'pm'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>PM</Text>
-                </ListItem>
-              </View>
             </View>
 
             <View
@@ -748,42 +678,6 @@ export default class DateTimeSlots extends Component {
                     }
                   />
                 </View>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.toItemSelected !== 'am') {
-                        let temp = Number(this.state.hrTo) - 12;
-                        this.setState({
-                          hrTo: temp.toString(),
-                          toItemSelected: 'am',
-                        });
-                      }
-                    }}
-                    selected={this.state.toItemSelected === 'am'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>AM</Text>
-                </ListItem>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.toItemSelected !== 'pm') {
-                        let temp = Number(this.state.hrTo) + 12;
-                        this.setState({
-                          hrTo: temp.toString(),
-                          toItemSelected: 'pm',
-                        });
-                      }
-                    }}
-                    selected={this.state.toItemSelected === 'pm'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>PM</Text>
-                </ListItem>
               </View>
             </View>
           </View>

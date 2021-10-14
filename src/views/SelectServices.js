@@ -97,6 +97,7 @@ export default function SelectServices(props) {
       props.navigation.navigate(Constants.dateTimeSlots, {
         serviceIds: selectedServices,
         item: props.route.params.item,
+        vendorId: props.route.params.vendorid,
       });
     }
   };

@@ -188,6 +188,7 @@ export default class SingleCategory extends Component {
           onPress={() =>
             this.props.navigation.navigate(Constants.SelectServices, {
               item: this.props.route.params.item,
+              vendorid: item.id,
             })
           }
           activeOpacity={0.6}>

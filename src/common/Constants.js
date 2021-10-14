@@ -149,6 +149,7 @@ const Constants = {
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
+  orderProcess: 'order/proceed',
   /* * api urls * */
 };
 
