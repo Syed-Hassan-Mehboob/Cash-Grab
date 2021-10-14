@@ -23,6 +23,7 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
+import moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - 10;
@@ -196,7 +197,7 @@ export default class VendorProfile extends React.Component {
         rating: data.data.records.ratings,
         year: data.data.records.year,
         interests: data.data.records.interest,
-        review: data.data.records.comments,
+        review: data.data.records.reviews,
         customer: data.data.records.customers,
         abuteMe: data.data.records.user_profiles.about_me,
         categories: tempCats,
@@ -312,6 +313,7 @@ export default class VendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
+    let date = moment(item.created_at).format('MMMM Do YYYY');
     return (
       <View
         style={{
@@ -330,7 +332,9 @@ export default class VendorProfile extends React.Component {
               // elevation:10,
             }}>
             <Image
-              source={{uri: Constants.imageURL + item.profiles.image}}
+              source={{
+                uri: Constants.imageURL + item.customer.user_profiles.image,
+              }}
               style={{
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
@@ -377,7 +381,7 @@ export default class VendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.created_at === null ? 'Undefined' : item.created_at}
+              {date === null ? 'Undefined' : date}
             </RegularTextCB>
             <Image
               source={Images.moreDots}
@@ -776,7 +780,22 @@ export default class VendorProfile extends React.Component {
                   showsVerticalScrollIndicator={false}
                   data={this.state.review}
                   renderItem={this.renderReviewsItem}
+                  // contentContainerStyle={{backgroundColor: 'red'}}
                   keyExtractor={(item) => item.id}
+                  ListEmptyComponent={() => (
+                    <Text
+                      style={[
+                        FONTS.boldFont18,
+                        {
+                          flex: 1,
+                          alignSelf: 'center',
+                          justifyContent: 'center',
+                          marginTop: SIZES.twenty,
+                        },
+                      ]}>
+                      No Review(s)!
+                    </Text>
+                  )}
                 />
               </View>
             )}

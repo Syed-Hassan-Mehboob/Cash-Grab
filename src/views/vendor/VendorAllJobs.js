@@ -119,9 +119,9 @@ export default class VendorAllJobs extends Component {
             <Image
               source={{
                 uri:
-                  item.user.user_profiles.image !== null &&
-                  item.user.user_profiles.image !== undefined
-                    ? Constants.imageURL + item.user.user_profiles.image
+                  item.user.userProfile.image !== null &&
+                  item.user.userProfile.image !== undefined
+                    ? Constants.imageURL + item.user.userProfile.image
                     : '',
               }}
               style={styles.iconUser}

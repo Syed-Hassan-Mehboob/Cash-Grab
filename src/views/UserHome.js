@@ -181,31 +181,55 @@ export default class UserHome extends Component {
       description: this.state.description,
     };
 
+    console.log("myData=======>>>>> ", postData);
+
+    const formData = new FormData();
+
+    for (const [key, value] in postData) {
+      formData.append(key, value);
+    }
+
+    //     address:New York
+    // category_id:2
+    // //from_time:08:27:09
+    // lat:24.90628280557342
+    // lng:67.07237028142383
+    // price:200
+    // location:
+    // description:
+
     this.setState({ isLoading: true });
 
     if (utils.isEmpty(postData.address)) {
       utils.showToast("Address field can't be empty");
+      this.setState({ isLoading: false });
       return;
-    } else if (utils.isEmpty(postData.category_id)) {
-      utils.showToast("category field can't be empty");
-      return;
-    } else if (utils.isEmpty(postData.from_time)) {
+    }
+    // else if (utils.isEmpty(postData.category_id)) {
+    //   utils.showToast("category field can't be empty");
+    //   return;
+    // }
+    else if (utils.isEmpty(postData.from_time)) {
       utils.showToast("time field can't be empty");
+      this.setState({ isLoading: false });
       return;
     } else if (utils.isEmpty(postData.price)) {
       utils.showToast("Rate field can't be empty");
+      this.setState({ isLoading: false });
       return;
     } else if (utils.isEmpty(postData.location)) {
       utils.showToast("Location field can't be empty");
-      return;
-    } else if (utils.isEmpty(postData.description)) {
-      utils.showToast("Description field can't be empty");
+      this.setState({ isLoading: false });
       return;
     }
+    //  else if (utils.isEmpty(postData.description)) {
+    //   utils.showToast("Description field can't be empty");
+    //   return;
+    // }
 
     const onSuccess = ({ data }) => {
-      utils.showToast(data.message);
       this.setState({ isLoading: false });
+      utils.showToast(data.message);
       this.props.navigation.navigate(Constants.home);
     };
     const onFailure = (error) => {
@@ -213,8 +237,8 @@ export default class UserHome extends Component {
         "error =====================================================================>",
         error
       );
-      utils.showResponseError(error.massage);
       this.setState({ isLoading: false });
+      utils.showResponseError(error);
     };
     const options = {
       headers: {
@@ -222,7 +246,7 @@ export default class UserHome extends Component {
         //    'Content-Type':'application/x-www-form-urlencoded'
       },
     };
-    Axios.post(Constants.quickOrder2, postData, options)
+    Axios.post(Constants.quickOrder2, formData, options)
       .then(onSuccess)
       .catch(onFailure);
   };

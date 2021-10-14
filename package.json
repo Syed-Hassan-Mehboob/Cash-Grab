@@ -56,7 +56,6 @@
     "react-native-touchable-graph": "^0.0.15",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
-    "rn-fetch-blob": "^0.10.16",
     "save": "^2.4.0",
     "victory-native": "^35.5.5"
   },

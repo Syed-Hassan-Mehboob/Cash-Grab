@@ -150,6 +150,14 @@ const Constants = {
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
+<<<<<<< HEAD
+=======
+  orderProcess: 'order/proceed',
+  jobRequest: 'customer/job-request',
+  getScheduleBookings: 'order/get-schedule-bookings-vendor',
+  orderDetail: 'order/details?',
+  orderStatus: 'order/order-status?',
+>>>>>>> 60193abf6746d6c91b4a2d6c8fdf45a517ece5a5
   /* * api urls * */
 };
 

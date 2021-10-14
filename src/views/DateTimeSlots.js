@@ -101,8 +101,6 @@ export default class DateTimeSlots extends Component {
       minTo: '',
       isLoading: false,
       showModal: false,
-      fromItemSelected: 'am',
-      toItemSelected: 'am',
     };
   }
 
@@ -158,7 +156,7 @@ export default class DateTimeSlots extends Component {
             {
               location: details.formatted_address,
               lat: details.geometry.location.lat,
-              long: details.geometry.location.lng,
+              lng: details.geometry.location.lng,
             },
             () => {
               setTimeout(() => {
@@ -264,11 +262,9 @@ export default class DateTimeSlots extends Component {
     let hrTo = this.state.hrTo;
     let minTo = this.state.minTo;
     let selectedDate = this.state.selected;
-    let fromItemSelected = this.state.fromItemSelected;
-    let toItemSelected = this.state.toItemSelected;
 
     if (selectedDate === '') {
-      utils.showToast('Please Select Date');
+      utils.showToast('Date Should not be Empty');
       return;
     }
 
@@ -277,15 +273,8 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    if (fromItemSelected === 'am') {
-      if (Number(hrFrom) < 1 || Number(hrFrom) > 12)
-        utils.showToast('From Hour should be in between 1 and 12');
-      return;
-    }
-
-    if (fromItemSelected === 'pm') {
-      if (Number(hrFrom) < 1 || Number(hrFrom) > 23)
-        utils.showToast('From Hour should be in between 1 and 23');
+    if (Number(hrFrom) < 1 || Number(hrFrom) > 23) {
+      utils.showToast('From Hour should be in between 1 and 23');
       return;
     }
 
@@ -304,17 +293,9 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    if (toItemSelected === 'am') {
-      if (Number(hrTo) < 1 || Number(hrFrom) > 12) {
-        utils.showToast('To Hour should be in between 1 and 12');
-        return;
-      }
-    }
-    if (toItemSelected === 'pm') {
-      if (Number(hrTo) < 1 || Number(hrFrom) > 23) {
-        utils.showToast('To Hour should be in between 1 and 23');
-        return;
-      }
+    if (Number(hrTo) < 1 || Number(hrTo) > 23) {
+      utils.showToast('To Hour should be in between 1 and 23');
+      return;
     }
 
     if (minTo === '') {
@@ -331,17 +312,19 @@ export default class DateTimeSlots extends Component {
       return;
     }
     if (phone === '') {
-      utils.showToast(' should not be empty');
+      utils.showToast('Phone Number should not be empty');
       return;
     }
-    if (phone === '') {
-      utils.showToast(' should not be empty');
-      return;
-    }
+
     if (phone.length < 9) {
       utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
       return;
     }
+    if (phone.length > 9) {
+      utils.showToast('Phone Number Should Not Be Greator Than 9 Characters');
+      return;
+    }
+
     if (location === '') {
       utils.showToast('Location Should not be Empty');
       return;
@@ -355,38 +338,54 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    // const onSuccess = ({data}) => {
-    //   utils.showToast(data.message);
-    //   this.toggleIsLoading();
+    // console.log(this.props.route.params);
 
-    //   setTimeout(() => {
-    //     this.props.navigation.goBack();
-    //   }, 1000);
-    // };
+    // console.log('Data======>>>>>>>>>>>>>>', params);
 
-    // const onFailure = (error) => {
-    //   this.toggleIsLoading();
-    //   utils.showResponseError(error);
-    // };
+    const onSuccess = ({data}) => {
+      // utils.showToast(data.message);
+      console.log('order Data========', data);
+      this.toggleIsLoading();
 
-    // const params = {
-    //   old_password: currentPassword,
-    //   password: newPassword,
-    //   password_confirmation: confirmPassword,
-    // };
+      setTimeout(() => {
+        this.props.navigation.navigate(Constants.bookingConfirmed, {
+          orderData: data.data,
+        });
+      }, 1000);
+    };
 
-    // const options = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: this.state.accessToken,
-    //   },
-    // };
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
 
-    // this.toggleIsLoading();
+    const params = {
+      phone: phone,
+      location: location,
+      lat: lat,
+      lng: lng,
+      services: this.props.route.params.serviceIds,
+      address: address,
+      vendor_id: this.props.route.params.vendorId,
+      date: selectedDate,
+      from_time: hrFrom + ':' + minFrom,
+      to_time: hrTo + ':' + minTo,
+      description: description,
+      country: countryCode,
+    };
 
-    // Axios.post(Constants.updatePasswordURL, params, options)
-    //   .then(onSuccess)
-    //   .catch(onFailure);
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.state.accessToken,
+      },
+    };
+
+    this.toggleIsLoading();
+
+    Axios.post(Constants.orderProcess, params, options)
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   renderTimeSlotItem = ({item}) => {
@@ -568,33 +567,6 @@ export default class DateTimeSlots extends Component {
               />
             </View>
           </View>
-          {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginHorizontal: SIZES.fifteen,
-            alignSelf: 'flex-end',
-            marginTop: SIZES.fifteen,
-          }}>
-          <RegularTextCB style={{fontSize: 14}}>
-            {this.state.sliderValue}
-          </RegularTextCB>
-          <Slider
-            style={{
-              width: width / 1.3,
-              height: 55,
-              marginStart: SIZES.ten,
-            }}
-            minimumValue={0}
-            maximumValue={340}
-            minimumTrackTintColor={Colors.silver}
-            maximumTrackTintColor={Colors.silver}
-            thumbImage={Images.sliderThumb}
-            onValueChange={(number) =>
-              this.setState({sliderValue: parseInt(number)})
-            }
-          />
-        </View> */}
           <Text
             style={[
               FONTS.mediumFont16,
@@ -629,7 +601,7 @@ export default class DateTimeSlots extends Component {
                   style={{
                     fontSize: 12,
                     color: Colors.coolGrey,
-                    marginTop: SIZES.five,
+                    // marginTop: SIZES.five,
                   }}>
                   From
                 </RegularTextCB>
@@ -663,45 +635,6 @@ export default class DateTimeSlots extends Component {
                   />
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.fromItemSelected !== 'am') {
-                        let temp = Number(this.state.hrFrom) - 12;
-                        this.setState({
-                          hrFrom: temp.toString(),
-                          fromItemSelected: 'am',
-                        });
-                      }
-                    }}
-                    selected={this.state.fromItemSelected === 'am'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>AM</Text>
-                </ListItem>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.fromItemSelected !== 'pm') {
-                        let temp = Number(this.state.hrFrom) + 12;
-                        this.setState({
-                          hrFrom: temp.toString(),
-                          fromItemSelected: 'pm',
-                        });
-                      }
-                    }}
-                    selected={this.state.fromItemSelected === 'pm'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>PM</Text>
-                </ListItem>
-              </View>
             </View>
 
             <View
@@ -724,7 +657,7 @@ export default class DateTimeSlots extends Component {
                     placeholderTextColor={Colors.black}
                     placeholder={'Hr'}
                     placeholderTextColor={Colors.black}
-                    style={styles.textInput}
+                    style={[styles.textInput, {alignItems: 'center'}]}
                     maxLength={2}
                     value={this.state.hrTo}
                     keyboardType={'numeric'}
@@ -749,42 +682,6 @@ export default class DateTimeSlots extends Component {
                   />
                 </View>
               </View>
-              <View style={{flexDirection: 'row'}}>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.toItemSelected !== 'am') {
-                        let temp = Number(this.state.hrTo) - 12;
-                        this.setState({
-                          hrTo: temp.toString(),
-                          toItemSelected: 'am',
-                        });
-                      }
-                    }}
-                    selected={this.state.toItemSelected === 'am'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>AM</Text>
-                </ListItem>
-                <ListItem>
-                  <Radio
-                    onPress={() => {
-                      if (this.state.toItemSelected !== 'pm') {
-                        let temp = Number(this.state.hrTo) + 12;
-                        this.setState({
-                          hrTo: temp.toString(),
-                          toItemSelected: 'pm',
-                        });
-                      }
-                    }}
-                    selected={this.state.toItemSelected === 'pm'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>PM</Text>
-                </ListItem>
-              </View>
             </View>
           </View>
           <View
@@ -805,6 +702,7 @@ export default class DateTimeSlots extends Component {
                     borderRadius: SIZES.ten,
                     height: 60,
                     padding: SIZES.ten,
+                    margin: SIZES.five,
                     marginEnd: SIZES.ten,
                     flex: 0,
                     justifyContent: 'center',

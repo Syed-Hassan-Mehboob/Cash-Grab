@@ -10,6 +10,7 @@ import ButtonRadius10 from '../components/ButtonRadius10';
 import LightTextCB from '../components/LightTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
+import moment from 'moment';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -26,6 +27,29 @@ export default class BookingConfirmed extends Component {
   }
 
   render() {
+    // console.log(
+    //   'order data >>>>>>>>>',
+    //   this.props.route.params.orderData.order_date,
+    // );
+    var date = moment(this.props.route.params.orderData.order_date)
+      .format('LLLLL')
+      .split(',')[0]
+      .concat(
+        moment(this.props.route.params.orderData.order_date)
+          .format('LLLLL')
+          .split(',')[1],
+      )
+      .concat(
+        ' ' +
+          moment(this.props.route.params.orderData.order_date)
+            .format('LLLLL')
+            .split(',')[2]
+            .split(' ')[1],
+      );
+    // let date = moment(this.props.route.params.orderData.order_date).format(
+    //   'MMMM Do YYYY',
+    // );
+    // console.log('ffffff', date);
     return (
       <View style={STYLES.container}>
         <View style={[styles.childContainer, {marginTop: SIZES.five}]}>
@@ -47,7 +71,11 @@ export default class BookingConfirmed extends Component {
               textAlign: 'center',
               color: Colors.coolGrey,
             }}>
-            Your booking has been confirmed for Tue 14th Mar, 2020 (10:30pm)
+            Your booking has been confirmed for {date !== null ? date : ''} (
+            {this.props.route.params.orderData.order_time !== null
+              ? this.props.route.params.orderData.order_time
+              : ''}
+            )
           </RegularTextCB>
           <View
             style={[
@@ -59,14 +87,24 @@ export default class BookingConfirmed extends Component {
             <View style={styles.itemContainer}>
               <View style={styles.circleCard}>
                 <Image
-                  source={Images.emp1}
+                  source={{
+                    uri:
+                      this.props.route.params.orderData.vendor.user_profiles
+                        .image !== null
+                        ? Constants.imageURL +
+                          this.props.route.params.orderData.vendor.user_profiles
+                            .image
+                        : '',
+                  }}
                   style={styles.iconUser}
                   resizeMode="cover"
                 />
               </View>
               <RegularTextCB
                 style={{fontSize: SIZES.twenty, marginTop: SIZES.five * 4}}>
-                Ray Hammond
+                {this.props.route.params.orderData.vendor.name !== null
+                  ? this.props.route.params.orderData.vendor.name
+                  : ''}
               </RegularTextCB>
               <View
                 style={{
@@ -88,7 +126,10 @@ export default class BookingConfirmed extends Component {
                     fontSize: 16,
                     marginStart: SIZES.five,
                   }}>
-                  Verified
+                  {this.props.route.params.orderData.vendor.user_profiles
+                    .created_at !== null
+                    ? 'Verified'
+                    : 'unVerified'}
                 </RegularTextCB>
               </View>
               <RegularTextCB
@@ -97,7 +138,11 @@ export default class BookingConfirmed extends Component {
                   color: Colors.coolGrey,
                   marginTop: SIZES.five,
                 }}>
-                Gardening, NY (2km)
+                {this.props.route.params.orderData.vendor.user_profiles
+                  .location !== null
+                  ? this.props.route.params.orderData.vendor.user_profiles
+                      .location
+                  : ''}
               </RegularTextCB>
               <RegularTextCB
                 style={{
@@ -105,7 +150,10 @@ export default class BookingConfirmed extends Component {
                   color: Colors.orangeYellow,
                   marginTop: SIZES.five,
                 }}>
-                4.6 ratings
+                {this.props.route.params.orderData.vendor.ratings !== null
+                  ? this.props.route.params.orderData.vendor.ratings
+                  : ''}{' '}
+                ratings
               </RegularTextCB>
             </View>
           </View>
@@ -168,6 +216,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten * 10,
     elevation: SIZES.ten * 10,
+    paddingHorizontal: SIZES.twenty,
   },
   iconPassword: {
     fontSize: SIZES.twenty,
