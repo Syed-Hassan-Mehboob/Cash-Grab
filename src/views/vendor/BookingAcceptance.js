@@ -312,7 +312,11 @@ export default function BookingAcceptance(props) {
               }}>
               <View>
                 <Image
-                  source={Images.emp2}
+                  source={{
+                    uri:
+                      Constants.imageURL +
+                      bookingDetail?.vendor.user_profiles.image,
+                  }}
                   style={{
                     height: 50,
                     width: 50,

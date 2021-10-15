@@ -57,6 +57,8 @@ const Constants = {
   UserHome: 'UserHome',
   AddServices: 'AddServices',
   AddTeamMember: 'AddTeamMember',
+  MyAcceptedJobs: 'MyAcceptedJobs',
+  MyAcceptedJobDetails: 'MyAcceptedJobDetails',
   /* * Screens * */
 
   /* * tabs * */
@@ -146,6 +148,7 @@ const Constants = {
   jobAcceptance: 'customer/jobs/detail?',
   rescheduleBooking: 'order/reschedule-bookings?',
   orderCancel: 'order/order-cancel?',
+  checkPostedJobStatusURL: 'vendors/check-job-request?',
   // jobAcceptance: 'customer/jobs/detail',
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
@@ -158,6 +161,8 @@ const Constants = {
   orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
   createJobRequest: 'vendors/create-job-request?',
+  orderAccepted: 'order/accepted',
+  VendorviewOrderDetailUrl: 'order/details?',
   /* * api urls * */
 };
 

@@ -73,7 +73,7 @@ export default class VendorAllJobs extends Component {
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log(' Job All Job Around you =====', data.data);
+      // console.log(' Job All Job Around you =====', data.data);
 
       // utils.showToast(data.message);
       this.setState({
@@ -100,7 +100,7 @@ export default class VendorAllJobs extends Component {
   renderSingleCategoriesItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.6}
         style={[
           styles.card,
           {
@@ -109,11 +109,11 @@ export default class VendorAllJobs extends Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() =>
+        onPress={() => {
           this.props.navigation.navigate(Constants.viewJob, {
             item: item.id,
-          })
-        }>
+          });
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image

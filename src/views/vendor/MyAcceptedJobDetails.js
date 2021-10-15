@@ -21,7 +21,7 @@ import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
 import NormalHeader from '../../components/NormalHeader';
-export default class ViewJob extends React.Component {
+export default class MyAcceptedJobDetails extends React.Component {
   initialMapState = {
     region: {
       latitude: 24.9050562,
@@ -55,6 +55,7 @@ export default class ViewJob extends React.Component {
       jobStatus: '',
       orderStatus: undefined,
       myRequestAceepted: undefined,
+      orderId: '',
     };
   }
 
@@ -73,35 +74,30 @@ export default class ViewJob extends React.Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      this.viewJob();
+      this.getMyAcceptedJobDetails();
     });
   };
 
-  viewJob = () => {
+  getMyAcceptedJobDetails = () => {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console.log(
-        'View Job Data ==== ==== ',
-        JSON.stringify(data.data.records),
-      );
+      console.log('View Job Data ==== ==== ', JSON.stringify(data));
 
       this.setState({isLoading: false});
       this.setState({
-        userImage: data.data.records.user.userProfile.image,
-        title: data.data.records.title,
-        location: data.data.records.location,
-        time: data.data.records.time,
-        images: data.data.records.images,
-        username: data.data.records.user.name,
-        latitude: data.data.records.user.userProfile.latitude,
-        longitude: data.data.records.user.userProfile.longitude,
-        price: data.data.records.price,
-        description: data.data.records.description,
-        jobId: data.data.records.id,
+        userImage: data.data.user.user_profiles.image,
+        title: data.data.category.name,
+        location: data.data.address,
+        time: data.data.start_time,
+        // images: data.data.records.images,
+        username: data.data.name,
+        latitude: data.data.lat !== null ? data.data.lat : '',
+        longitude: data.data.lng !== null ? data.data.lng : '',
+        price: data.data.grandTotal,
+        description: data.data.description,
         buttonlabel:
-          data.data.records.status === ''
-            ? 'REQUEST FOR ACCEPTANCE'
-            : 'PENDING',
+          data.data.orderStatus === 'accepted' ? 'START NOW' : 'WORK STARTED',
+        orderId: data.data.id,
       });
 
       // utils.showToast(data.message)
@@ -116,9 +112,9 @@ export default class ViewJob extends React.Component {
 
     this.setState({isLoading: true});
     let params = {
-      jobId: this.props.route.params.item,
+      orderId: this.props.route.params.orderId,
     };
-    Axios.get(Constants.VendorviewJobUrl, {
+    Axios.get(Constants.VendorviewOrderDetailUrl, {
       params,
       headers: {
         Authorization: this.state.accessToken,
@@ -128,41 +124,49 @@ export default class ViewJob extends React.Component {
       .catch(onFailure);
   };
 
-  createJobRequest = () => {
-    const postData = {
-      job_id: this.state.jobId,
+  progressOrder = () => {
+    this.setState({
+      isLoading: true,
+    });
+    const onSuccess = ({data}) => {
+      console.log('>>>>>>>> ', data);
+      this.getUserAccessToken();
+      this.setState({
+        isLoading: false,
+      });
+
+      utils.showToast('Work Has Been Started');
     };
 
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      this.viewJob();
-      console.log('Request job Data ========', data);
-      utils.showToast(data.message);
-      this.setState({isLoading: false});
-    };
     const onFailure = (error) => {
-      console.log(
-        'error =====================================================================>',
-        error,
-      );
-      utils.showResponseError(error.massage);
-      this.setState({isLoading: false});
+      this.setState({
+        isLoading: false,
+      });
+      utils.showResponseError(error);
+      console.log('++++==========', error);
     };
+    // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {
       headers: {
         Authorization: this.state.accessToken,
-        //    'Content-Type':'application/x-www-form-urlencoded'
       },
     };
-    Axios.post(Constants.createJobRequest, postData, options)
+    const params = {
+      order_id: this.state.orderId,
+      status: 'progress',
+    };
+    Axios.post(Constants.orderStatus, params, options)
       .then(onSuccess)
       .catch(onFailure);
+    // setTimeout(() => {
+    //   this.props.navigation.goBack();
+    // }, 500);
   };
 
   render() {
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="View Job" />
+        <NormalHeader name="My Job Details" />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -292,12 +296,7 @@ export default class ViewJob extends React.Component {
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
                 console.log('images===', item.images);
-                return (
-                  <Image
-                    source={{uri: Constants.imageURL + item.images}}
-                    style={styles.carImage}
-                  />
-                );
+                return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}
             />
@@ -361,10 +360,13 @@ export default class ViewJob extends React.Component {
               {!this.state.isLoading ? (
                 <ButtonRadius10
                   label={this.state.buttonlabel}
-                  disabled={this.state.buttonlabel === 'PENDING'}
                   bgColor={Colors.sickGreen}
+                  disabled={
+                    this.state.buttonlabel === 'WORK STARTED' ? true : false
+                  }
                   onPress={() => {
-                    this.createJobRequest();
+                    console.log('order id ===== ===', this.state.orderId);
+                    this.progressOrder();
                   }}
                 />
               ) : null}

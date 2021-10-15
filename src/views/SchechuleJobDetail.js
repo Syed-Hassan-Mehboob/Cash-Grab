@@ -38,9 +38,7 @@ export default function ScheduleJobDetails(props) {
   const [minfrom, setminfrom] = useState();
   const [hrto, sethrto] = useState();
   const [minto, setminto] = useState();
-  const [value, setValue] = useState('one');
-  const [fromItemSelected, setfromItemSelected] = useState('');
-  const [toItemSelected, settoItemSelected] = useState('');
+  const [orderStatus, setOrderStatus] = useState('one');
   const [orderId, setOrderId] = useState();
   const [errorMassage, setErrormsg] = useState('');
 
@@ -62,8 +60,8 @@ export default function ScheduleJobDetails(props) {
     setIsloading(true);
 
     const onSuccess = ({data}) => {
-      console.log('Order Job Data  ====>>>>>>>>>> ', data.data);
-
+      console.log('Order Job Data  ====>>>>>>>>>> ', data.data.orderStatus);
+      setOrderStatus(data.data.orderStatus);
       setOrderId(data.data.id);
       setAllScheduleJobDetail(data.data);
       setIsloading(false);
@@ -298,7 +296,7 @@ export default function ScheduleJobDetails(props) {
                   scheduleJobdetail?.vendor?.user_profiles?.image !== null &&
                   scheduleJobdetail?.vendor?.user_profiles?.image !== undefined
                     ? Constants?.imageURL +
-                      scheduleJobdetail.vendor?.user_profiles?.image
+                      scheduleJobdetail?.vendor.user_profiles?.image
                     : '',
               }}
               style={styles.iconUser}
@@ -476,92 +474,6 @@ export default function ScheduleJobDetails(props) {
           }}
         />
 
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-            justifyContent: 'space-between',
-          }}> */}
-
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <View>
-            <Image
-              source={Images.emp2}
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 60 / 2,
-                resizeMode: 'contain',
-              }}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{marginStart: 10}}>
-            <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-              {'Damian Miller'}
-            </BoldTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 13.5,
-                }}>
-                Car Mechanic applied
-              </RegularTextCB>
-            </View>
-          </View>
-        </View> */}
-
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}> */}
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            paddingHorizontal: SIZES.ten,
-          }}>
-          <StarRating
-            disabled={true}
-            maxStars={5}
-            fullStar={Images.starFull}
-            emptyStar={Images.starHalf}
-            starSize={SIZES.fifteen}
-            rating={4}
-            starStyle={{
-              width: SIZES.twenty,
-              height: SIZES.twenty,
-              marginRight: SIZES.five,
-            }}
-            containerStyle={{width: SIZES.fifty * 1.5}}
-          />
-
-          <RegularTextCB
-            style={{
-              color: Colors.sunflowerYellow,
-              fontSize: 13.5,
-              marginStart: SIZES.twenty * 1.8,
-              marginTop: SIZES.five / 2,
-            }}>
-            4.4 Ratings
-          </RegularTextCB>
-        </View> */}
-
         <View
           style={{
             flexDirection: 'row',
@@ -604,15 +516,17 @@ export default function ScheduleJobDetails(props) {
         </View>
       </TouchableOpacity>
 
-      <View style={{marginTop: SIZES.ten * 5}}>
-        <ButtonRadius10
-          label="SERVICE COMPLETED"
-          bgColor={Colors.sickGreen}
-          onPress={() => {
-            props.navigation.navigate(Constants.confirmPayment);
-          }}
-        />
-      </View>
+      {!isLoading && orderStatus === 'progress' ? (
+        <View style={{marginTop: SIZES.ten * 5}}>
+          <ButtonRadius10
+            label="SERVICE COMPLETED"
+            bgColor={Colors.sickGreen}
+            onPress={() => {
+              props.navigation.navigate(Constants.confirmPayment);
+            }}
+          />
+        </View>
+      ) : null}
 
       <Modal
         isVisible={cancelJobModal}

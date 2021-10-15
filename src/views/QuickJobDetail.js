@@ -129,33 +129,10 @@ export default class QuickJobDetail extends React.Component {
   // };
 
   render() {
-    // this.state.jobService.map((item) => {
-    //   console.log('========== Job Services ==== =', item.name);
-    // });
+    ``;
 
     return (
       <View style={STYLES.container}>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // width: '100%',
-            padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image source={Images.arrowBack} style={[styles.iconBack]} />
-          </TouchableOpacity>
-          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
-            Job in Progress
-          </RegularTextCB>
-        </View> */}
-
         <NormalHeader name="Quick Job Detail" />
 
         <ScrollView showsVerticalScrollIndicator={false}>
