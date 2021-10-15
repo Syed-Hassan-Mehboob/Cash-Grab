@@ -163,6 +163,7 @@ const Constants = {
   createJobRequest: 'vendors/create-job-request?',
   orderAccepted: 'order/accepted',
   VendorviewOrderDetailUrl: 'order/details?',
+  WidrawAmount: 'vendors/withdraw-amount',
   /* * api urls * */
 };
 
