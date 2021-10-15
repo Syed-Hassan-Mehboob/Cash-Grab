@@ -451,6 +451,11 @@ export default class postJob extends Component {
                 placeholder={'Enter Rate'}
                 value={this.state.rateRequested}
                 onChangeText={(text) => {
+                  var numbers = /^[0-9]+$/;
+                  if (!text.match(numbers)) {
+                    utils.showToast('Price can only be Number');
+                    return;
+                  }
                   this.setState({rateRequested: text});
                 }}
                 style={[styles.textInput]}

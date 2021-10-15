@@ -66,8 +66,6 @@ export default class Dashboard extends Component {
 
   getDashboardData = () => {
     const onSuccess = ({data}) => {
-      console.log('Complete job vvv======= ', data.data.withdraw);
-
       let tempMonthlyData = [];
       data.data.months.map((mItem, index) => {
         tempMonthlyData.push({
@@ -125,11 +123,7 @@ export default class Dashboard extends Component {
   };
 
   getCompleteJob = (token) => {
-    // this.setState({isLoading: true});
-
     const onSuccess = ({data}) => {
-      // console.log('Complete job vvv======= ', data.data.records);
-
       this.setState({
         completeJob: data.data.records,
       });
@@ -143,7 +137,7 @@ export default class Dashboard extends Component {
     };
     let params = {
       offset: 0,
-      limit: 1,
+      limit: 5,
     };
 
     this.setState({isLoading: true});
@@ -158,19 +152,22 @@ export default class Dashboard extends Component {
   };
 
   rendercompletedJobsItem = ({item}) => {
-    // console.log('COmplete job item   =========', item);
-
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.card,
           {
             padding: SIZES.fifteen,
-            marginHorizontal: SIZES.five,
+            marginHorizontal: SIZES.five * 2.3,
             marginBottom: SIZES.twenty,
             marginTop: SIZES.five,
           },
-        ]}>
+        ]}
+        onPress={() => {
+          this.props.navigation.navigate(Constants.SingleJobHistory, {
+            singleHistoryData: item,
+          });
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -258,13 +255,11 @@ export default class Dashboard extends Component {
             {'View Job'}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   renderProgressJob = ({item}) => {
-    console.log('Progress Job ======= ,', item);
-
     return (
       <View
         style={[
@@ -345,13 +340,6 @@ export default class Dashboard extends Component {
             ${item.price}
           </LightTextCB>
         </View>
-        {/* <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {this.completedJobs[0].type}
-        </RegularTextCB> */}
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
@@ -408,111 +396,11 @@ export default class Dashboard extends Component {
               }}>
               {item.time}
             </RegularTextCB>
-            {/* <RegularTextCB
-              style={{
-                color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB> */}
           </View>
         </View>
       </View>
     );
   };
-
-  data = [
-    {
-      value: 70,
-      label: 'Jan',
-      labelTextStyle: [
-        FONTS.mediumFont14,
-        {
-          color: Colors.coolGrey,
-        },
-      ],
-      frontColor: Colors.sickGreen,
-      onPress: (value) => {
-        this.setState({selectedMonth: this.data[0]});
-        console.log(
-          'this.data[0][value]========================>',
-          this.data[0]['value'],
-        );
-      },
-    },
-    {
-      value: 50,
-      label: 'Feb',
-      labelTextStyle: [
-        FONTS.mediumFont14,
-        {
-          color: Colors.coolGrey,
-        },
-      ],
-      frontColor: Colors.sickGreen,
-      onPress: (value) => {
-        this.setState({selectedMonth: this.data[1]});
-        console.log(
-          'this.data[0][value]========================>',
-          this.data[1]['value'],
-        );
-      },
-    },
-    {
-      value: 90,
-      label: 'Mar',
-      labelTextStyle: [
-        FONTS.mediumFont14,
-        {
-          color: Colors.black,
-        },
-      ],
-      frontColor: Colors.sickGreen,
-      activeOpacity: 0.8,
-      onPress: (value) => {
-        this.setState({selectedMonth: this.data[2]});
-        console.log(
-          'this.data[0][value]========================>',
-          this.data[2]['value'],
-        );
-      },
-    },
-    {
-      label: 'Apr',
-      value: 60,
-      labelTextStyle: [
-        FONTS.mediumFont14,
-        {
-          color: Colors.coolGrey,
-        },
-      ],
-      frontColor: Colors.sickGreen,
-      onPress: (value) => {
-        this.setState({selectedMonth: this.data[3]});
-        console.log(
-          'this.data[0][value]========================>',
-          this.data[3]['value'],
-        );
-      },
-    },
-    {
-      label: 'May',
-      value: 20,
-      labelTextStyle: [
-        FONTS.mediumFont14,
-        {
-          color: Colors.coolGrey,
-        },
-      ],
-      frontColor: Colors.sickGreen,
-      onPress: (value) => {
-        this.setState({selectedMonth: this.data[4]});
-        console.log(
-          'this.data[0][value]========================>',
-          this.data[4]['value'],
-        );
-      },
-    },
-  ];
 
   render() {
     return (
@@ -659,6 +547,8 @@ export default class Dashboard extends Component {
               </TouchableOpacity>
             </View>
             <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
               data={this.state.completeJob}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
@@ -666,7 +556,7 @@ export default class Dashboard extends Component {
             />
           </View>
 
-          <View
+          {/* <View
             style={{marginTop: SIZES.five, marginHorizontal: SIZES.fifteen}}>
             <RegularTextCB
               style={{
@@ -683,7 +573,7 @@ export default class Dashboard extends Component {
               renderItem={this.renderProgressJob}
               style={{paddingBottom: 100}}
             />
-          </View>
+          </View> */}
         </ScrollView>
         <Spinner
           visible={this.state.isLoading}
@@ -723,6 +613,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
+    width: width / 1.5,
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
@@ -748,3 +639,103 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
+
+// dashboard dummy data/
+{
+  /*
+  data = [
+    {
+      value: 70,
+      label: 'Jan',
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[0]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[0]['value'],
+        );
+      },
+    },
+    {
+      value: 50,
+      label: 'Feb',
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[1]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[1]['value'],
+        );
+      },
+    },
+    {
+      value: 90,
+      label: 'Mar',
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.black,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      activeOpacity: 0.8,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[2]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[2]['value'],
+        );
+      },
+    },
+    {
+      label: 'Apr',
+      value: 60,
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[3]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[3]['value'],
+        );
+      },
+    },
+    {
+      label: 'May',
+      value: 20,
+      labelTextStyle: [
+        FONTS.mediumFont14,
+        {
+          color: Colors.coolGrey,
+        },
+      ],
+      frontColor: Colors.sickGreen,
+      onPress: (value) => {
+        this.setState({selectedMonth: this.data[4]});
+        console.log(
+          'this.data[0][value]========================>',
+          this.data[4]['value'],
+        );
+      },
+    },
+  ];
+
+*/
+}
