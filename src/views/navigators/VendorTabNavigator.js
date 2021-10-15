@@ -53,7 +53,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AddProfileServices from '../vendor/AddProfileServices';
 import History from '../vendor/History';
 import SingleJobHistory from '../vendor/SingleJobHistory';
-
+import MyAcceptedJobs from '../vendor/MyAcceptedJobs';
+import MyAcceptedJobDetails from '../vendor/MyAcceptedJobDetails';
 // import EditText from '../components/EditText';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -86,6 +87,14 @@ const HomeNavigator = () => {
       <HomeStack.Screen
         name={Constants.vendorAllJobs}
         component={VendorAllJobs}
+      />
+      <HomeStack.Screen
+        name={Constants.MyAcceptedJobs}
+        component={MyAcceptedJobs}
+      />
+      <HomeStack.Screen
+        name={Constants.MyAcceptedJobDetails}
+        component={MyAcceptedJobDetails}
       />
       <HomeStack.Screen
         name={Constants.venderFilter}
@@ -187,6 +196,10 @@ const ProfileNavigator = () => {
       <ProfileStack.Screen
         name={Constants.AddTeamMember}
         component={AddTeamMember}
+      />
+      <ProfileStack.Screen
+        name={Constants.AddProfileServices}
+        component={AddProfileServices}
       />
     </ProfileStack.Navigator>
   );

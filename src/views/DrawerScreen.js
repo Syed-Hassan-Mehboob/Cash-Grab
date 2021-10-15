@@ -199,6 +199,23 @@ export default class DrawerScreen extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
 
+              {this.state.isVendor ? (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    width: '100%',
+                    padding: SIZES.fifteen,
+                  }}
+                  onPress={() => {
+                    this.props.navigation.navigate(Constants.MyAcceptedJobs);
+                  }}>
+                  <Image source={Images.bookings} style={styles.iconDrawer} />
+                  <RegularTextCB style={styles.drawerSubText}>
+                    My Job
+                  </RegularTextCB>
+                </TouchableOpacity>
+              ) : null}
+
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
