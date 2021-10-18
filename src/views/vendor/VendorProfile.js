@@ -138,6 +138,7 @@ export default class VendorProfile extends React.Component {
     services: [],
     review: [],
     abouteMe: '',
+    selectedCategory: '',
   };
 
   componentDidMount() {
@@ -181,6 +182,7 @@ export default class VendorProfile extends React.Component {
         data.data.records.category.map((item, index) => {
           if (index === 0) {
             tempCats.push({...item, isSelected: true});
+            this.setState({selectedCategory: item});
           } else {
             tempCats.push({...item, isSelected: false});
           }
@@ -265,7 +267,11 @@ export default class VendorProfile extends React.Component {
           let temp = this.state.categories;
           temp.map((tItem) => {
             if (tItem.id !== item.id) tItem.isSelected = false;
-            else tItem.isSelected = true;
+            else {
+              tItem.isSelected = true;
+              console.log('selectedCategory======>>>>>>tItem  ', tItem);
+              this.setState({selectedCategory: item});
+            }
           });
           this.setState({categories: temp});
           this.getServicesOfCategory(item.id, false);
@@ -899,6 +905,7 @@ export default class VendorProfile extends React.Component {
                   onPress={() => {
                     this.props.navigation.navigate(
                       Constants.AddProfileServices,
+                      {categoryName: this.state.selectedCategory},
                     );
                   }}
                 />

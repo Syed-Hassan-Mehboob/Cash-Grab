@@ -164,6 +164,7 @@ const Constants = {
   orderAccepted: 'order/accepted',
   VendorviewOrderDetailUrl: 'order/details?',
   WidrawAmount: 'vendors/withdraw-amount',
+  AddPrifileServiceURL: 'vendors/create-service?',
   /* * api urls * */
 };
 
