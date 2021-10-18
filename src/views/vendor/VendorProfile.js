@@ -218,7 +218,7 @@ export default class VendorProfile extends React.Component {
       utils.showResponseError(error);
     };
 
-    this.toggleIsLoading();
+    // this.toggleIsLoading();
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -827,6 +827,7 @@ export default class VendorProfile extends React.Component {
                   keyExtractor={(item, index) => String(index)}
                   renderItem={this.rendorInterest}
                   showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   contentInset={{
                     // for ios
                     top: 0,
@@ -856,6 +857,7 @@ export default class VendorProfile extends React.Component {
                 <FlatList
                   style={{}}
                   horizontal
+                  showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.categories}
                   renderItem={this.renderServicesItem}

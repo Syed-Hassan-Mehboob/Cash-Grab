@@ -116,8 +116,6 @@ export default class JobInProgress extends React.Component {
       this.setState({
         isLoading: false,
       });
-
-      utils.showToast('Work Has Been Started');
     };
 
     const onFailure = (error) => {

@@ -48,7 +48,8 @@ export default function QuickJobs(props) {
             // marginTop: SIZES.twenty,
           },
         ]}
-        onPress={() => props.navigation.navigate(Constants.JobInProgress)}>
+        // onPress={() => props.navigation.navigate(Constants.JobInProgress)}
+      >
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -76,23 +77,24 @@ export default function QuickJobs(props) {
                   height: 15,
                   width: 15,
                   resizeMode: 'contain',
-                  tintColor: Colors.turqoiseGreen,
-                  //   item.email_verified_at !== null
-                  //     ? Colors.turqoiseGreen
-                  //     : 'red',
+                  tintColor:
+                    item.user_email_verified_at !== null
+                      ? Colors.turqoiseGreen
+                      : 'red',
                 }}
               />
               <RegularTextCB
                 style={{
-                  color: Colors.turqoiseGreen,
-                  //   item.email_verified_at !== null
-                  //     ? Colors.turqoiseGreen
-                  //     : 'red',
+                  color:
+                    item.user_email_verified_at !== null
+                      ? Colors.turqoiseGreen
+                      : 'red',
                   fontSize: 12,
                   marginStart: 5,
                 }}>
-                {/* {item.email_verified_at !== null ? 'Verified' : 'Unverified'} */}
-                Verified
+                {item.user_email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>

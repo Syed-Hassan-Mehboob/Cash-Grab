@@ -52,6 +52,7 @@ export default class ViewVendorProfile extends React.Component {
       services: [],
       review: [],
       abouteMe: '',
+      selectedCategory: '',
     };
   }
 
@@ -74,6 +75,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   getUserAccessToken = async () => {
+    const user = await AsyncStorage.getItem('user');
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       this.getVenderProfile();
@@ -88,7 +90,7 @@ export default class ViewVendorProfile extends React.Component {
     // //console.log('======', this.props.route.params.item)
 
     const onSuccess = ({data}) => {
-      //console.log('Vender By catagory =======', data.data.records);
+      // console.log('Vender By catagory =======', data.data.records);
 
       this.toggleIsLoading();
       let tempCats = [];
@@ -103,6 +105,7 @@ export default class ViewVendorProfile extends React.Component {
       this.setState({
         avatar: Constants.imageURL + data.data.records.user_profiles.image,
         name: data.data.records.name,
+        userId: data.data.records.id,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag: data.data.records.country_flag,
@@ -116,6 +119,13 @@ export default class ViewVendorProfile extends React.Component {
         abuteMe: data.data.records.user_profiles.about_me,
         categories: tempCats,
       });
+      for (let i = 0; i < tempCats.length; i++) {
+        // console.log('tempmcats =====', tempCats[i]);
+        if (tempCats[i].isSelected) {
+          this.getServicesOfCategory(tempCats[i].id, true);
+          break;
+        }
+      }
     };
 
     const onFailure = (error) => {
@@ -126,7 +136,7 @@ export default class ViewVendorProfile extends React.Component {
     // this.setState({isLoading: true});
 
     let params = {
-      id: this.props.route.params.item,
+      id: this.props.route.params.vendorid,
     };
 
     Axios.post(Constants.getVenderByCatagory, params, {
@@ -143,6 +153,7 @@ export default class ViewVendorProfile extends React.Component {
       if (!isFirstTime) {
         this.toggleIsLoading();
       }
+      console.log('Selectes Service Data === ', data);
       this.setState({services: data.data});
     };
 
@@ -159,7 +170,7 @@ export default class ViewVendorProfile extends React.Component {
     Axios.get(Constants.getServicesOfVendorURL, {
       params: {
         category_id: id,
-        vendor_id: this.state.userId,
+        vendor_id: this.props.route.params.vendorid,
       },
       headers: {
         Authorization: this.state.accessToken,
@@ -170,6 +181,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderServicePrice = ({item}) => {
+    console.log('Services Item price ==== ===>>>> ', item);
     return (
       <View
         style={{
@@ -191,7 +203,11 @@ export default class ViewVendorProfile extends React.Component {
           let temp = this.state.categories;
           temp.map((tItem) => {
             if (tItem.id !== item.id) tItem.isSelected = false;
-            else tItem.isSelected = true;
+            else {
+              tItem.isSelected = true;
+              // console.log('selectedCategory======>>>>>>tItem  ', tItem);
+              this.setState({selectedCategory: item});
+            }
           });
           this.setState({categories: temp});
           this.getServicesOfCategory(item.id, false);
@@ -784,10 +800,17 @@ export default class ViewVendorProfile extends React.Component {
                     }}>
                     Services We Offer
                   </RegularTextCB>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     activeOpacity={0.6}
                     onPress={() =>
-                      this.props.navigation.navigate(Constants.SelectServices)
+                      // console.log(
+                      //   'Category Data === ',
+                      //   this.props.route.params.item,
+                      // )
+                      this.props.navigation.navigate(Constants.SelectServices, {
+                        item: this.props.route.params.item,
+                        vendorid: this.state.userId,
+                      })
                     }>
                     <Text
                       style={[
@@ -796,7 +819,7 @@ export default class ViewVendorProfile extends React.Component {
                       ]}>
                       Book Now ?
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
                 <FlatList
                   // style={{paddingBottom: SIZES.ten * 10}}
@@ -826,11 +849,17 @@ export default class ViewVendorProfile extends React.Component {
               </View>
 
               <FlatList
-                style={{paddingBottom: SIZES.ten * 10}}
+                style={{paddingBottom: SIZES.ten * 4}}
                 showsVerticalScrollIndicator={false}
-                data={services}
+                data={this.state.services}
                 renderItem={this.renderServicePrice}
                 keyExtractor={(item) => item.id}
+                ListEmptyComponent={() => (
+                  <Text
+                    style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+                    No Service(s)!
+                  </Text>
+                )}
                 contentInset={{
                   // for ios
                   top: 0,

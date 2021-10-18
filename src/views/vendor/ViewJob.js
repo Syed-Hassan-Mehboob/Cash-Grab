@@ -82,7 +82,7 @@ export default class ViewJob extends React.Component {
     const onSuccess = ({data}) => {
       console.log(
         'View Job Data ==== ==== ',
-        JSON.stringify(data.data.records),
+        JSON.stringify(data.data.records.status),
       );
 
       this.setState({isLoading: false});
@@ -137,7 +137,7 @@ export default class ViewJob extends React.Component {
     const onSuccess = ({data}) => {
       this.viewJob();
       console.log('Request job Data ========', data);
-      utils.showToast(data.message);
+      // utils.showToast(data.message);
       this.setState({isLoading: false});
     };
     const onFailure = (error) => {
@@ -291,7 +291,7 @@ export default class ViewJob extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                console.log('images===', item.images);
+                // console.log('images===', item.images);
                 return (
                   <Image
                     source={{uri: Constants.imageURL + item.images}}

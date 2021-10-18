@@ -9,13 +9,14 @@ import {
   Image,
 } from 'react-native';
 import Colors from '../../common/Colors';
-import Constants, {SIZES, STYLES} from '../../common/Constants';
+import Constants, {FONTS, height, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import LightTextCB from '../../components/LightTextCB';
 import NormalHeader from '../../components/NormalHeader';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function MyAcceptedJobs(props) {
   const [myAcceptedJob, setMyAcceptedJob] = useState([]);
@@ -36,7 +37,8 @@ export default function MyAcceptedJobs(props) {
 
   const getMyAcceptedJob = (token) => {
     const onSuccess = ({data}) => {
-      console.log('My Accepted Jobs ==== ', data.data.records);
+      setIsLoading(false);
+      console.log('My Accepted Jobs ==== ', data.data);
       setMyAcceptedJob(data.data.records);
     };
 
@@ -227,8 +229,29 @@ export default function MyAcceptedJobs(props) {
             paddingBottom: 150,
           }}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            !isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: height / 1.5,
+                }}>
+                <Text style={[FONTS.boldFont18, {alignSelf: 'center'}]}>
+                  No Record(s)!
+                </Text>
+              </View>
+            ) : null
+          }
         />
       </View>
+
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }

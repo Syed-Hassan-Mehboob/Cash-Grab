@@ -25,7 +25,7 @@ const FilterComponent = (props) => {
       ]}
       onPress={() => {
         navigation.navigate(Constants.viewVendorProfile, {
-          item: item.id,
+          vendorid: item.id,
         });
       }}>
       <View

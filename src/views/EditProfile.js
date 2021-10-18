@@ -90,7 +90,10 @@ export default class EditProfile extends Component {
         fullName: data.data.records.name,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
-        countryFlag: data.data.records.country_flag.toUpperCase(),
+        countryFlag:
+          data.data.records.country_flag !== null
+            ? data.data.records.country_flag.toUpperCase()
+            : '',
         phoneNumber: data.data.records.phone,
         location: data.data.records.user_profiles.location,
         abouteMe: data.data.records.user_profiles.about_me,

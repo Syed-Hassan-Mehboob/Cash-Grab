@@ -33,7 +33,7 @@ export default function Search(props) {
           style={styles.itemContainer}
           onPress={() => {
             props.navigation.navigate(Constants.viewVendorProfile, {
-              item: item.id,
+              vendorid: item.id,
             });
           }}>
           <View

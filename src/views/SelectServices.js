@@ -23,7 +23,7 @@ export default function SelectServices(props) {
   const [serviceData, setServiceData] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
 
-  console.log('this.props.route.params.item', props.route.params.item);
+  // console.log('this.props.route.params.item', props.route.params.item);
 
   useEffect(() => {
     getUserAccessToken();

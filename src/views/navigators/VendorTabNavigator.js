@@ -109,11 +109,6 @@ const HomeNavigator = () => {
         name={Constants.JobInProgress}
         component={JobInProgress}
       />
-      <HomeStack.Screen name={Constants.History} component={History} />
-      <HomeStack.Screen
-        name={Constants.SingleJobHistory}
-        component={SingleJobHistory}
-      />
 
       <HomeStack.Screen
         name={Constants.viewVendorProfile}
@@ -174,6 +169,11 @@ const DashboardNavigator = () => {
       <DashboardStack.Screen name={Constants.dashboard} component={Dashboard} />
       <DashboardStack.Screen name={Constants.withDraw} component={WithDraw} />
       <DashboardStack.Screen name={Constants.viewJob} component={ViewJob} />
+      <DashboardStack.Screen name={Constants.History} component={History} />
+      <DashboardStack.Screen
+        name={Constants.SingleJobHistory}
+        component={SingleJobHistory}
+      />
     </DashboardStack.Navigator>
   );
 };

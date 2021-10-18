@@ -300,7 +300,7 @@ export default class Home extends Component {
     }
     return (
       <TouchableOpacity
-        activeOpacity={0.8}
+        activeOpacity={1}
         style={[
           styles.card,
           {
@@ -308,16 +308,17 @@ export default class Home extends Component {
             marginHorizontal: SIZES.fifteen,
             marginTop: SIZES.ten,
           },
-        ]}
-        onPress={() => {
-          this.props.navigation.navigate(Constants.viewVendorProfile, {
-            item: item.id,
-          });
-        }}>
-        <View
+        ]}>
+        <TouchableOpacity
           style={{
             flexDirection: 'row',
             alignItems: 'center',
+          }}
+          activeOpacity={0.6}
+          onPress={() => {
+            this.props.navigation.navigate(Constants.viewVendorProfile, {
+              vendorid: item.id,
+            });
           }}>
           <Image
             source={{uri: Constants.imageURL + item.image}}
@@ -340,7 +341,7 @@ export default class Home extends Component {
             }}>
             View Profile
           </RegularTextCB>
-        </View>
+        </TouchableOpacity>
         <RegularTextCB
           style={{
             color: Colors.black,

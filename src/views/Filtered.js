@@ -225,47 +225,8 @@ export default class FileredScreen extends Component {
   render() {
     return (
       <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: 0}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Icon
-              type="AntDesign"
-              name="left"
-              style={{color: Colors.black, fontSize: SIZES.ten * 3}}
-            />
-          </TouchableOpacity>
-
-          <RegularTextCB style={[{fontSize: 22}]}>Filtered Job</RegularTextCB>
-        </View> */}
-
         <NormalHeader name="Filtered Job" />
 
-        {/* <FlatList
-          style={{marginTop: SIZES.ten}}
-          data={this.state.allJobs}
-          numColumns={2}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={this.renderSingleCategoriesItem}
-          contentInset={{
-            // for ios
-            bottom: SIZES.ten,
-          }}
-          contentContainerStyle={{
-            // for android
-            // paddingBottom: SIZES.twenty,
-            alignItems: 'center',
-          }}
-        /> */}
         <View style={{alignItems: 'center'}}>
           <FlatList
             numColumns={2}

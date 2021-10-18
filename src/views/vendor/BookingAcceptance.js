@@ -104,7 +104,6 @@ export default function BookingAcceptance(props) {
 
   const cancelOrder = async () => {
     let token = await AsyncStorage.getItem(Constants.accessToken);
-    setIsLoading(true);
     const onSuccess = ({data}) => {
       console.log('>>>>>>>> ', data);
       setIsLoading(false);
@@ -127,6 +126,7 @@ export default function BookingAcceptance(props) {
       order_id: bookingDetail?.id,
       status: 'cancelled',
     };
+    setIsLoading(true);
     Axios.post(Constants.orderStatus, params, options)
       .then(onSuccess)
       .catch(onFailure);

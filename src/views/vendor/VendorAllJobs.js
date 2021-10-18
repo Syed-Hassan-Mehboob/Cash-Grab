@@ -43,28 +43,6 @@ export default class VendorAllJobs extends Component {
     });
   };
 
-  // getUserProfile = async () => {
-  //   const onSuccess = ({data}) => {
-  //     // console.log('Data============',data.data.records)
-  //     const latitude = data.data.records.user_profiles.latitude;
-  //     const longitude = data.data.records.user_profiles.longitude;
-  //   };
-  //   // console.log('lat',this.state.lat)
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //     utils.showResponseError(error);
-  //   };
-
-  //   this.setState({isLoading: true});
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
   getJobAroundYou = async () => {
     // let params = {
     //   lat: latitude,
