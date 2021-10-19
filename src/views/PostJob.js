@@ -468,7 +468,7 @@ export default class postJob extends Component {
               <View
                 style={[
                   {
-                    eight: 60,
+                    height: 60,
                     paddingHorizontal: SIZES.twenty,
                     backgroundColor: Colors.white,
                     borderRadius: SIZES.ten,
