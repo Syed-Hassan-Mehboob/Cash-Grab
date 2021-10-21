@@ -167,6 +167,17 @@ const Constants = {
   AddPrifileServiceURL: 'vendors/create-service?',
   /* * api urls * */
 };
+export const FIREBASECONSTANTS = {
+  // region firebase key
+  FIREBASE_PATH_STRING: '1QyufxP3T0P9J4gV6rUe0o1EW9WzIs5jQWJ5hQN71zQo',
+  FIREBASE_CHAT: 'Chat',
+  FIREBASE_MESSAGES: 'messages',
+  FIREBASE_USERS: 'Users',
+  FIREBASE_CHATHEADS: 'ChatHeads',
+  FIREBASE_READ: 'read',
+  FIREBASE_TOKEN: 'Tokens',
+  FCM: 'https://fcm.googleapis.com/fcm/send',
+};
 
 export const SIZES = {
   // global sizes

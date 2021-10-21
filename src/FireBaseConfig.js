@@ -2,13 +2,13 @@ import firebase from '@react-native-firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyBza97wLNIobQVng0ar7M6zCV9EXV_REo0',
-  authDomain: '',
-  databaseURL: '',
+  apiKey: 'AIzaSyCGlDm7qTUpB4cK3K1jkXBORw6oCCFrEes',
+  authDomain: 'cashgrab-db612.firebaseapp.com',
   projectId: 'cashgrab-db612',
   storageBucket: 'cashgrab-db612.appspot.com',
   messagingSenderId: '409712438268',
-  appId: '1:409712438268:android:a4784578a68650da87e079',
+  databaseURL: '',
+  appId: '1:409712438268:ios:b42cc00f9b98af7987e079',
 };
 
 export default Firebase = () => {

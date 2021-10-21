@@ -3,15 +3,11 @@ import React, {useEffect} from 'react';
 import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import Routes from './src/routes/Routes';
+import FireBaseConfig from './src/FireBaseConfig';
 
 const App = () => {
   useEffect(() => {
-    Alert.alert('A new FCM message arrived!');
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
+    FireBaseConfig();
   }, []);
 
   return (
