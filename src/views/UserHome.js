@@ -64,7 +64,6 @@ export default class UserHome extends Component {
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      // this.getServies();
       this.getAllCategories();
     });
   };
@@ -73,7 +72,6 @@ export default class UserHome extends Component {
     return (
       <GooglePlacesAutocomplete
         placeholder={'Search Location'}
-        //   renderLeftButton={() => }
         minLength={2}
         keyboardKeyType={'search'}
         fetchDetails={true}
@@ -141,20 +139,6 @@ export default class UserHome extends Component {
       />
     );
   };
-
-  // getServies = () => {
-  //   this.setState({isLoading: true});
-  //   const onSuccess = ({data}) => {
-  //     this.setState({selections: data.data.records});
-  //     this.setState({isLoading: false});
-  //   };
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //     utils.showResponseError(error);
-  //   };
-  //   Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
-  // };
-
   handleConfirm = (date) => {
     const newTime = Moment(date).format('h:mm').toString();
     this.setState({startTime: newTime});
@@ -188,15 +172,6 @@ export default class UserHome extends Component {
     for (const [key, value] in postData) {
       formData.append(key, value);
     }
-
-    //     address:New York
-    // category_id:2
-    // //from_time:08:27:09
-    // lat:24.90628280557342
-    // lng:67.07237028142383
-    // price:200
-    // location:
-    // description:
 
     if (!postData['category_id']) {
       utils.showToast('Please Select category');
@@ -240,8 +215,6 @@ export default class UserHome extends Component {
       });
 
       utils.showToast('Your Request was successfull.');
-      // console.log('ssssss======>>>> ', data.data);
-      // this.props.navigation.navigate(Constants.home);
     };
     const onFailure = (error) => {
       console.log(
@@ -254,7 +227,6 @@ export default class UserHome extends Component {
     const options = {
       headers: {
         Authorization: this.state.accessToken,
-        //    'Content-Type':'application/x-www-form-urlencoded'
       },
     };
     this.setState({isLoading: true});
@@ -327,8 +299,6 @@ export default class UserHome extends Component {
 
         <View
           style={{
-            // borderRadius: SIZES.twenty,
-            // backgroundColor: 'red',
             height: 60,
             backgroundColor: Colors.white,
             borderRadius: height * 0.01,
@@ -336,9 +306,7 @@ export default class UserHome extends Component {
             shadowOffset: {width: SIZES.five, height: SIZES.five},
             shadowOpacity: 1.0,
             shadowRadius: 10,
-            // elevation: SIZES.ten,
             justifyContent: 'center',
-            // paddingLeft: SIZES.twenty,
             marginTop: SIZES.ten,
           }}>
           <MultiDropdownPicker
@@ -494,28 +462,6 @@ export default class UserHome extends Component {
             Job Description
           </RegularTextCB>
 
-          {/* <View
-            style={[
-              {
-                marginTop: SIZES.ten,
-                height: SIZES.twentyFive * 5,
-              },
-            ]}>
-            <EditText
-              placeholderTextColor={Colors.grey}
-              autoCapitalize="none"
-              blurOnSubmit={true}
-              selectionColor={Colors.sickGreen}
-              placeholder={'Enter Job Description '}
-              keyboardType={'default'}
-              placeholderTextColor={Colors.coolGrey}
-              numberOfLines={4}
-              multiline={true}
-              style={{height: SIZES.twentyFive * 5}}
-              textAlignVertical="top"
-            />
-          </View> */}
-
           <MesageEditText
             placeholder={'Enter Job Description '}
             height={SIZES.twentyFive * 4.5}
@@ -536,7 +482,6 @@ export default class UserHome extends Component {
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
             onPress={() => {
-              // this.props.navigation.navigate(Constants.confirmPayment);
               this.postQuickOrder();
             }}
           />
@@ -576,8 +521,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: SIZES.twenty,
-    // borderWidth:1,
-    // borderColor:Colors.lightYellowGreen,
     flex: 1,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},

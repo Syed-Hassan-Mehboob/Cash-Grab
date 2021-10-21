@@ -106,7 +106,7 @@ export default class Notifications extends Component {
                         style={{fontSize: 16, color: Colors.black}}>
                         {notification.title}
                       </RegularTextCB>
-                      <RegularTextCB>time lgana hai</RegularTextCB>
+                      {/* <RegularTextCB>time lgana hai</RegularTextCB> */}
                     </View>
                     <RegularTextCB
                       numberOfLines={1}
