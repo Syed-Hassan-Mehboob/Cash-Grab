@@ -30,43 +30,47 @@ export default class ForgetPassword extends Component {
   }
 
   forgotPassword = () => {
-    this.props.navigation.goBack();
-    // let email = this.state.email;
+    // this.props.navigation.goBack();
+    let email = this.state.email;
 
-    // if (utils.isEmpty(email)) {
-    //   utils.showToast('Invalid Email');
-    //   return;
-    // }
+    if (utils.isEmpty(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
 
-    // if (!utils.validateEmail(email)) {
-    //   utils.showToast('Invalid Email');
-    //   return;
-    // }
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
 
-    // const onSuccess = ({data}) => {
-    //   this.setState({isLoading: false});
-    //   utils.showToast(data.message);
+    const onSuccess = ({data}) => {
+      this.setState({isLoading: false});
+      console.log('sdssasassssS', data);
+      utils.showToast(data.message);
 
-    //   setTimeout(() => {
-    //     this.props.navigation.goBack();
-    //   }, 1000);
-    // };
+      setTimeout(() => {
+        this.props.navigation.navigate(Constants.otp, {
+          email: this.state.email,
+          fp: 'fp',
+        });
+      }, 600);
+    };
 
-    // const onFailure = (error) => {
-    //   this.setState({isLoading: false});
-    //   utils.showResponseError(error);
-    // };
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+    };
 
-    // this.setState({isLoading: true});
-    // let params = {
-    //   email: email,
-    // };
+    this.setState({isLoading: true});
+    let params = {
+      email: email,
+    };
 
-    // Axios.get(Constants.forgotPasswordURL, {
-    //   params: params,
-    // })
-    //   .then(onSuccess)
-    //   .catch(onFailure);
+    Axios.get(Constants.forgotPasswordURL, {
+      params: params,
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   render() {

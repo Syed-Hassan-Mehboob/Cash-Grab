@@ -22,6 +22,7 @@ import Axios from '../network/APIKit';
 import utils from '../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Icon, Text} from 'native-base';
+import moment from 'moment';
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - SIZES.ten;
 
@@ -51,6 +52,7 @@ export default class ViewVendorProfile extends React.Component {
       services: [],
       review: [],
       abouteMe: '',
+      selectedCategory: '',
     };
   }
 
@@ -73,6 +75,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   getUserAccessToken = async () => {
+    const user = await AsyncStorage.getItem('user');
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       this.getVenderProfile();
@@ -87,7 +90,7 @@ export default class ViewVendorProfile extends React.Component {
     // //console.log('======', this.props.route.params.item)
 
     const onSuccess = ({data}) => {
-      //console.log('Vender By catagory =======', data.data.records);
+      // console.log('Vender By catagory =======', data.data.records);
 
       this.toggleIsLoading();
       let tempCats = [];
@@ -102,6 +105,7 @@ export default class ViewVendorProfile extends React.Component {
       this.setState({
         avatar: Constants.imageURL + data.data.records.user_profiles.image,
         name: data.data.records.name,
+        userId: data.data.records.id,
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag: data.data.records.country_flag,
@@ -110,11 +114,18 @@ export default class ViewVendorProfile extends React.Component {
         rating: data.data.records.ratings,
         year: data.data.records.year,
         interests: data.data.records.interest,
-        review: data.data.records.comments,
+        review: data.data.records.reviews,
         customer: data.data.records.customers,
         abuteMe: data.data.records.user_profiles.about_me,
         categories: tempCats,
       });
+      for (let i = 0; i < tempCats.length; i++) {
+        // console.log('tempmcats =====', tempCats[i]);
+        if (tempCats[i].isSelected) {
+          this.getServicesOfCategory(tempCats[i].id, true);
+          break;
+        }
+      }
     };
 
     const onFailure = (error) => {
@@ -125,7 +136,7 @@ export default class ViewVendorProfile extends React.Component {
     // this.setState({isLoading: true});
 
     let params = {
-      id: this.props.route.params.item,
+      id: this.props.route.params.vendorid,
     };
 
     Axios.post(Constants.getVenderByCatagory, params, {
@@ -142,6 +153,7 @@ export default class ViewVendorProfile extends React.Component {
       if (!isFirstTime) {
         this.toggleIsLoading();
       }
+      console.log('Selectes Service Data === ', data);
       this.setState({services: data.data});
     };
 
@@ -158,7 +170,7 @@ export default class ViewVendorProfile extends React.Component {
     Axios.get(Constants.getServicesOfVendorURL, {
       params: {
         category_id: id,
-        vendor_id: this.state.userId,
+        vendor_id: this.props.route.params.vendorid,
       },
       headers: {
         Authorization: this.state.accessToken,
@@ -169,6 +181,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderServicePrice = ({item}) => {
+    console.log('Services Item price ==== ===>>>> ', item);
     return (
       <View
         style={{
@@ -190,7 +203,11 @@ export default class ViewVendorProfile extends React.Component {
           let temp = this.state.categories;
           temp.map((tItem) => {
             if (tItem.id !== item.id) tItem.isSelected = false;
-            else tItem.isSelected = true;
+            else {
+              tItem.isSelected = true;
+              // console.log('selectedCategory======>>>>>>tItem  ', tItem);
+              this.setState({selectedCategory: item});
+            }
           });
           this.setState({categories: temp});
           this.getServicesOfCategory(item.id, false);
@@ -275,7 +292,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
-    //console.log(' Vender view item Reviews Item==========', item);
+    let date = moment(item.created_at).format('MMMM Do YYYY');
     return (
       <View
         style={{
@@ -283,20 +300,22 @@ export default class ViewVendorProfile extends React.Component {
           borderBottomWidth: 1,
           borderColor: Colors.pinkishGrey,
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: SIZES.ten,
+          }}>
           <View
             style={{
               height: SIZES.ten * 6,
-              width: SIZES.ten * 6,
+              width: SIZES.ten * 9,
               borderRadius: SIZES.ten * 3,
-              shadowColor: '#c5c5c5',
-              shadowOffset: {width: SIZES.five, height: SIZES.five},
-              shadowOpacity: 1.0,
-              shadowRadius: SIZES.ten,
-              elevation: SIZES.ten,
             }}>
             <Image
-              source={{uri: Constants.imageURL + item.profiles.image}}
+              source={{
+                uri: Constants.imageURL + item.customer.user_profiles.image,
+              }}
               style={{
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
@@ -308,24 +327,24 @@ export default class ViewVendorProfile extends React.Component {
             <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
               {item.customer.name === null ? 'Undefined' : item.customer.name}
             </RegularTextCB>
-            <Image
+            {/* <Image
               source={Images.like}
               style={{
                 position: 'absolute',
-                right: SIZES.ten * 7,
+                right: SIZES.ten * 11,
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
                 resizeMode: 'contain',
               }}
-            />
+            /> */}
             <RegularTextCB
               style={{
                 fontSize: 14,
                 color: Colors.coolGrey,
-                marginTop: SIZES.five,
+                marginTop: 5,
                 width: width - 80,
               }}>
-              {item.comments === null ? 'Undefined' : item.comments}
+              {item.comments === null ? 'Undefine' : item.comments}
             </RegularTextCB>
             <View style={{alignSelf: 'baseline', marginTop: SIZES.five}}>
               <StarRating
@@ -334,8 +353,8 @@ export default class ViewVendorProfile extends React.Component {
                 fullStar={Images.starFull}
                 halfStar={Images.starHalf}
                 emptyStar={Images.starHalf}
-                starSize={SIZES.fifteen}
-                rating={parseInt(item.ratings)}
+                starSize={15}
+                rating={parseInt(item.rating)}
               />
             </View>
             <RegularTextCB
@@ -343,19 +362,19 @@ export default class ViewVendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.created_at === null ? 'Undefined' : item.created_at}
+              {date === null ? 'Undefined' : date}
             </RegularTextCB>
-            <Image
+            {/* <Image
               source={Images.moreDots}
               style={{
                 position: 'absolute',
                 height: SIZES.twentyFive,
                 width: SIZES.twentyFive,
-                right: SIZES.ten * 7,
+                right: SIZES.ten * 11,
                 bottom: 0,
                 resizeMode: 'contain',
               }}
-            />
+            /> */}
           </View>
         </View>
       </View>
@@ -705,45 +724,27 @@ export default class ViewVendorProfile extends React.Component {
             {this.state.isReviewsSelected && (
               <View style={{marginTop: SIZES.ten}}>
                 <FlatList
+                  style={{paddingBottom: SIZES.fifty}}
                   showsVerticalScrollIndicator={false}
                   data={this.state.review}
                   renderItem={this.renderReviewsItem}
+                  // contentContainerStyle={{backgroundColor: 'red'}}
                   keyExtractor={(item) => item.id}
+                  ListEmptyComponent={() => (
+                    <Text
+                      style={[
+                        FONTS.boldFont18,
+                        {
+                          flex: 1,
+                          alignSelf: 'center',
+                          justifyContent: 'center',
+                          marginTop: SIZES.twenty,
+                        },
+                      ]}>
+                      No Review(s)!
+                    </Text>
+                  )}
                 />
-                {/* <View
-                  style={[
-                    styles.card,
-                    {
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginHorizontal: -SIZES.twenty,
-                      paddingHorizontal: SIZES.ten,
-                      paddingVertical: SIZES.five,
-                      width: '100%',
-                    },
-                  ]}>
-                  <Image
-                    source={Images.iconpencil}
-                    style={{height: SIZES.twentyFive, width: SIZES.twentyFive}}
-                  />
-                  <TextInput
-                    placeholder={'Write Review'}
-                    value={this.state.typeReview}
-                    style={styles.textInput}
-                    onChangeText={(text) => this.setState({typeReview: text})}
-                  />
-                  <TouchableOpacity onPress={() => {}}>
-                    <Image
-                      source={Images.iconSend}
-                      style={{
-                        height: SIZES.ten * 4,
-                        width: SIZES.ten * 4,
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                 */}
               </View>
             )}
           </View>
@@ -799,10 +800,17 @@ export default class ViewVendorProfile extends React.Component {
                     }}>
                     Services We Offer
                   </RegularTextCB>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     activeOpacity={0.6}
                     onPress={() =>
-                      this.props.navigation.navigate(Constants.SelectServices)
+                      // console.log(
+                      //   'Category Data === ',
+                      //   this.props.route.params.item,
+                      // )
+                      this.props.navigation.navigate(Constants.SelectServices, {
+                        item: this.props.route.params.item,
+                        vendorid: this.state.userId,
+                      })
                     }>
                     <Text
                       style={[
@@ -811,7 +819,7 @@ export default class ViewVendorProfile extends React.Component {
                       ]}>
                       Book Now ?
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
                 <FlatList
                   // style={{paddingBottom: SIZES.ten * 10}}
@@ -841,11 +849,17 @@ export default class ViewVendorProfile extends React.Component {
               </View>
 
               <FlatList
-                style={{paddingBottom: SIZES.ten * 10}}
+                style={{paddingBottom: SIZES.ten * 4}}
                 showsVerticalScrollIndicator={false}
-                data={services}
+                data={this.state.services}
                 renderItem={this.renderServicePrice}
                 keyExtractor={(item) => item.id}
+                ListEmptyComponent={() => (
+                  <Text
+                    style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
+                    No Service(s)!
+                  </Text>
+                )}
                 contentInset={{
                   // for ios
                   top: 0,

@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Icon} from 'native-base';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,82 +8,83 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
 import RegularTextCB from '../../components/RegularTextCB';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 import Colors from './../../common/Colors';
 import NormalHeader from './../../components/NormalHeader';
 
 export default function AddProfileServices(props) {
-  // this will be attached with each input onChangeText
-  const [textValue, setTextValue] = useState('');
-  // our number of inputs, we can add the length or decrease
-  const [numInputs, setNumInputs] = useState(1);
-  // all our input fields are tracked with this array
-  const refService = useRef([textValue]);
+  console.log(props.route.params.categoryName);
 
-  const addInputFields = () => {
-    refService.current.push('');
-    setNumInputs((prev) => prev + 1);
+  const [service, setService] = useState('');
+  const [servicePrice, setServicePrice] = useState('');
+  const [accessToken, setAccessToken] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getUserAccessToken();
+  }, []);
+
+  const getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    setAccessToken(token);
+    setIsLoading(false);
   };
 
-  const setInputValues = (index, serviceName) => {
-    const inputs = refService.current;
-    inputs[index] = serviceName;
+  _addServicesAgainstCategory = () => {
+    const body = {
+      name: service,
+      price: servicePrice,
+      cat_id: props.route.params.categoryName.id,
+    };
 
-    setTextValue(serviceName);
+    if (utils.isEmpty(body.name)) {
+      utils.showToast('Service Name is required.!');
+      return;
+    }
+    if (utils.isEmpty(body.price)) {
+      utils.showToast('Service Price is required.!');
+      return;
+    }
+    const onSuccess = ({data}) => {
+      console.log('========>>>>>> ', data);
+      setIsLoading(false);
+      props.navigation.replace(Constants.vendorProfile);
+    };
+    const onFailure = (error) => {
+      console.log('========>>>>>> ', error);
+      setIsLoading(false);
+    };
+
+    let config = {
+      headers: {
+        Authorization: accessToken,
+      },
+    };
+
+    console.log('configgggggggggg====>>>> ', config);
+
+    setIsLoading(true);
+    Axios.post(Constants.AddPrifileServiceURL, body, config)
+      .then(onSuccess)
+      .catch(onFailure);
   };
-  const inputs = [];
-  for (let i = 0; i < numInputs; i++) {
-    inputs.push(
-      <View
-        style={[
-          {
-            paddingHorizontal: SIZES.fifteen,
-          },
-        ]}>
-        <View>
-          <Text style={[FONTS.mediumFont16, {marginTop: SIZES.ten}]}>Name</Text>
-          <EditText
-            placeholder="Enter Service Name"
-            value={refService.current[i]}
-            onChangeText={(text) => {
-              setInputValues(i, text);
-            }}
-          />
-        </View>
 
-        <View style={{marginTop: SIZES.five, marginBottom: SIZES.fifteen}}>
-          <Text style={[FONTS.mediumFont16, {marginTop: SIZES.ten}]}>
-            Price
-          </Text>
-          <EditText
-            placeholder="Enter Service Price"
-            keyboardType="number-pad"
-          />
-        </View>
-
-        <View
-          style={{
-            backgroundColor: Colors.lightGrey,
-            height: 0.4,
-            marginVertical: SIZES.ten,
-          }}
-        />
-      </View>,
-    );
-  }
   return (
     <View style={[STYLES.container, {paddingHorizontal: SIZES.fifteen}]}>
-      <NormalHeader name={'Cleaning'} />
+      <NormalHeader name={props.route.params.categoryName.name} />
       <ScrollView
         contentContainerStyle={{paddingBottom: 110}}
         overScrollMode="never"
         bounces={false}
         showsVerticalScrollIndicator={false}>
         <Text style={[FONTS.boldFont18, {paddingVertical: SIZES.twenty}]}>
-          Add Services
+          Add Service
         </Text>
         <View
           style={[
@@ -96,10 +98,10 @@ export default function AddProfileServices(props) {
             </Text>
             <EditText
               placeholder="Enter Service Name"
-              //   value={refService.current}
-              //   onChangeText={(text) => {
-              //     setInputValues(i, text);
-              //   }}
+              value={service}
+              onChangeText={(text) => {
+                setService(text);
+              }}
             />
           </View>
 
@@ -110,6 +112,15 @@ export default function AddProfileServices(props) {
             <EditText
               placeholder="Enter Service Price"
               keyboardType="number-pad"
+              value={servicePrice}
+              onChangeText={(text) => {
+                var numbers = /^[0-9]+$/;
+                if (!text.match(numbers)) {
+                  utils.showToast('Price can only be Number');
+                  return;
+                }
+                setServicePrice(text);
+              }}
             />
           </View>
         </View>
@@ -132,10 +143,15 @@ export default function AddProfileServices(props) {
           bgColor={Colors.sickGreen}
           label=" ADD"
           onPress={() => {
-            props.navigation.navigate(Constants.vendorProfile);
+            _addServicesAgainstCategory();
           }}
         />
       </View>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
@@ -152,5 +168,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

@@ -23,6 +23,7 @@ import ButtonRadius10 from '../../components/ButtonRadius10';
 import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
+import moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
 const SPACING_FOR_CARD_INSET = width * 0.05 - 10;
@@ -137,6 +138,7 @@ export default class VendorProfile extends React.Component {
     services: [],
     review: [],
     abouteMe: '',
+    selectedCategory: '',
   };
 
   componentDidMount() {
@@ -180,6 +182,7 @@ export default class VendorProfile extends React.Component {
         data.data.records.category.map((item, index) => {
           if (index === 0) {
             tempCats.push({...item, isSelected: true});
+            this.setState({selectedCategory: item});
           } else {
             tempCats.push({...item, isSelected: false});
           }
@@ -196,7 +199,7 @@ export default class VendorProfile extends React.Component {
         rating: data.data.records.ratings,
         year: data.data.records.year,
         interests: data.data.records.interest,
-        review: data.data.records.comments,
+        review: data.data.records.reviews,
         customer: data.data.records.customers,
         abuteMe: data.data.records.user_profiles.about_me,
         categories: tempCats,
@@ -215,7 +218,7 @@ export default class VendorProfile extends React.Component {
       utils.showResponseError(error);
     };
 
-    this.toggleIsLoading();
+    // this.toggleIsLoading();
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -264,7 +267,11 @@ export default class VendorProfile extends React.Component {
           let temp = this.state.categories;
           temp.map((tItem) => {
             if (tItem.id !== item.id) tItem.isSelected = false;
-            else tItem.isSelected = true;
+            else {
+              tItem.isSelected = true;
+              console.log('selectedCategory======>>>>>>tItem  ', tItem);
+              this.setState({selectedCategory: item});
+            }
           });
           this.setState({categories: temp});
           this.getServicesOfCategory(item.id, false);
@@ -312,6 +319,7 @@ export default class VendorProfile extends React.Component {
   };
 
   renderReviewsItem = ({item}) => {
+    let date = moment(item.created_at).format('MMMM Do YYYY');
     return (
       <View
         style={{
@@ -330,7 +338,9 @@ export default class VendorProfile extends React.Component {
               // elevation:10,
             }}>
             <Image
-              source={{uri: Constants.imageURL + item.profiles.image}}
+              source={{
+                uri: Constants.imageURL + item.customer.user_profiles.image,
+              }}
               style={{
                 height: SIZES.ten * 6,
                 width: SIZES.ten * 6,
@@ -377,7 +387,7 @@ export default class VendorProfile extends React.Component {
                 marginTop: SIZES.five,
                 color: Colors.pinkishGrey,
               }}>
-              {item.created_at === null ? 'Undefined' : item.created_at}
+              {date === null ? 'Undefined' : date}
             </RegularTextCB>
             <Image
               source={Images.moreDots}
@@ -776,7 +786,22 @@ export default class VendorProfile extends React.Component {
                   showsVerticalScrollIndicator={false}
                   data={this.state.review}
                   renderItem={this.renderReviewsItem}
+                  // contentContainerStyle={{backgroundColor: 'red'}}
                   keyExtractor={(item) => item.id}
+                  ListEmptyComponent={() => (
+                    <Text
+                      style={[
+                        FONTS.boldFont18,
+                        {
+                          flex: 1,
+                          alignSelf: 'center',
+                          justifyContent: 'center',
+                          marginTop: SIZES.twenty,
+                        },
+                      ]}>
+                      No Review(s)!
+                    </Text>
+                  )}
                 />
               </View>
             )}
@@ -802,6 +827,7 @@ export default class VendorProfile extends React.Component {
                   keyExtractor={(item, index) => String(index)}
                   renderItem={this.rendorInterest}
                   showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   contentInset={{
                     // for ios
                     top: 0,
@@ -831,6 +857,7 @@ export default class VendorProfile extends React.Component {
                 <FlatList
                   style={{}}
                   horizontal
+                  showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.categories}
                   renderItem={this.renderServicesItem}
@@ -880,6 +907,7 @@ export default class VendorProfile extends React.Component {
                   onPress={() => {
                     this.props.navigation.navigate(
                       Constants.AddProfileServices,
+                      {categoryName: this.state.selectedCategory},
                     );
                   }}
                 />

@@ -8,7 +8,8 @@ import {
   ImageBackground,
   Platform,
 } from 'react-native';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
+import {CommonActions} from '@react-navigation/routers';
+
 import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
@@ -16,78 +17,49 @@ import Constants, {SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
+import EditText from '../components/EditText';
 import Axios from '../network/APIKit';
 import utils from '../utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CommonActions} from '@react-navigation/routers';
 
-export default class OTP extends Component {
+export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      newPassword: '',
+      confirmPassword: '',
       isLoading: false,
-      code: '',
     };
   }
 
-  async saveUser(user) {
-    const resetAction = CommonActions.reset({
-      index: 0,
-      routes: [{name: Constants.drawerNavigator}],
-    });
+  resetAction = CommonActions.reset({
+    index: 0,
+    routes: [{name: Constants.login}],
+  });
 
-    try {
-      await AsyncStorage.setItem(Constants.accessToken, 'Bearer ' + user.token);
-      var data = JSON.stringify(user);
-      // console.log('User======',user)
-      await AsyncStorage.setItem('user', data);
-      this.setState({isLoading: false});
-      setTimeout(() => {
-        this.props.navigation.dispatch(resetAction);
-      }, 500);
-    } catch (error) {
-      utils.showToast(error);
-    }
-  }
-
-  toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
-  };
-
-  verifyOTP = () => {
-    let code = this.state.code;
-
-    if (utils.isEmpty(code) || code.length < 4) {
-      utils.showToast('Invalid OTP');
-      return;
-    }
+  resetPassword = () => {
+    let params = {
+      email: this.props.route.params.email,
+      password: this.state.newPassword,
+      password_confirmation: this.state.confirmPassword,
+    };
 
     const onSuccess = ({data}) => {
-      this.toggleIsLoading();
-      utils.showToast(data.message);
-
-      this.props.route.params.fp === 'fp'
-        ? this.props.navigation.replace(Constants.ResetPassword, {
-            email: this.props.route.params.email,
-          })
-        : this.saveUser(data.data);
+      this.setState({isLoading: false});
+      console.log('sdssasassssS', data);
+      this.props.navigation.dispatch(this.resetAction);
+      // utils.showToast(data.message);
     };
 
     const onFailure = (error) => {
-      this.toggleIsLoading();
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.toggleIsLoading();
-
-    Axios.post(Constants.verifyOtpURL, {
-      email: this.props.route.params.email,
-      otp: code,
-    })
+    Axios.post(Constants.resetPasswordURL, params)
       .then(onSuccess)
       .catch(onFailure);
   };
-
   render() {
     return (
       <ImageBackground
@@ -109,10 +81,10 @@ export default class OTP extends Component {
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: 70,
+                height: SIZES.ten * 7,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: SIZES.ten * 4,
+                marginTop: 40,
               }}
             />
             <BoldTextCB
@@ -121,7 +93,7 @@ export default class OTP extends Component {
                 color: Colors.black,
                 marginTop: SIZES.ten * 3,
               }}>
-              Verification
+              Reset Password
             </BoldTextCB>
             <RegularTextCB
               style={{
@@ -129,39 +101,50 @@ export default class OTP extends Component {
                 color: Colors.coolGrey,
                 textAlign: 'center',
               }}>
-              Enter your verification code that we sent{'\n'}you through your
-              email or phone number
+              Enter and Confirm your desired password.
             </RegularTextCB>
           </View>
           <View style={[styles.childContainer]}>
-            <View style={[styles.textInputContainer]}>
-              <OTPInputView
-                style={{
-                  width: '90%',
-                  height: SIZES.ten * 7,
-                  marginTop: SIZES.ten * 3,
+            <View
+              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+              <EditText
+                ref={'password'}
+                placeholder={'Password'}
+                secureTextEntry={true}
+                value={this.state.newPassword}
+                onChangeText={(text) => {
+                  this.setState({
+                    newPassword: text,
+                  });
                 }}
-                pinCount={4}
-                code={this.state.code}
-                onCodeChanged={(code) => {
-                  this.setState({code});
+                style={[styles.textInput]}
+              />
+            </View>
+            <View
+              style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
+              <EditText
+                ref={'confirm_password'}
+                placeholder={'Confirm Password'}
+                secureTextEntry={true}
+                value={this.state.confirmPassword}
+                onChangeText={(text) => {
+                  this.setState({
+                    confirmPassword: text,
+                  });
                 }}
-                autoFocusOnLoad
-                codeInputFieldStyle={styles.card}
-                codeInputHighlightStyle={styles.card}
-                onCodeFilled={(code) => {}}
+                style={[styles.textInput]}
               />
             </View>
           </View>
           <View
             style={{
-              marginVertical: SIZES.fifty,
+              marginVertical: SIZES.ten * 3,
               marginHorizontal: SIZES.fifteen,
             }}>
             <ButtonRadius10
-              label="VERIFY"
+              label="CONTINUE"
               bgColor={Colors.sickGreen}
-              onPress={() => this.verifyOTP()}
+              onPress={() => this.resetPassword()}
             />
           </View>
           <Spinner
@@ -205,26 +188,17 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     marginHorizontal: SIZES.fifteen,
   },
-  card: {
-    height: SIZES.ten * 6,
-    width: SIZES.ten * 6,
-    backgroundColor: Colors.white,
-    borderColor: Colors.sickGreen,
-    borderRadius: SIZES.ten,
-    paddingHorizontal: SIZES.twenty,
-    paddingVertical: SIZES.five,
-    shadowColor: '#c5c5c5',
-    color: Colors.black,
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
-    shadowOpacity: 1.0,
-    shadowRadius: SIZES.ten,
-    elevation: SIZES.ten,
-    alignItems: 'center',
-    fontFamily: Constants.fontRegular,
-    fontSize: 24,
+  underlineText: {
+    color: Colors.black1,
+    textDecorationLine: 'underline',
+    fontSize: 16,
+  },
+  noUnderlineText: {
+    color: Colors.black1,
+    textDecorationLine: 'none',
+    fontSize: 16,
   },
   spinnerTextStyle: {
     color: '#FFF',

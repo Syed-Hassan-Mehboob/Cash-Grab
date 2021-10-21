@@ -187,7 +187,9 @@ export default class VendorSignUp extends Component {
       aboutMe,
     };
 
-    this.props.navigation.navigate(Constants.SelectIntrest, {payload});
+    AsyncStorage.setItem('SignUpPayload', payload).then(() => {
+      this.props.navigation.navigate(Constants.SelectIntrest);
+    });
   };
 
   GooglePlacesInput = (props) => {
@@ -261,6 +263,42 @@ export default class VendorSignUp extends Component {
         google
       />
     );
+  };
+
+  _ValidateEmail = () => {
+    if (!utils.validateEmail(this.state.email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    Axios.post(Constants.CheckEmailNPhone, {email: this.state.email})
+      .then(({data}) => {})
+      .catch((error) => {
+        utils.showResponseError(error);
+      });
+  };
+
+  _ValidatePhone = () => {
+    if (utils.isEmpty(this.state.phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
+
+    if (this.state.phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+
+    if (this.state.phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
+
+    Axios.post(Constants.CheckEmailNPhone, {phone: this.state.phone})
+      .then(({data}) => {})
+      .catch((error) => {
+        utils.showResponseError(error);
+      });
   };
 
   render() {
@@ -344,6 +382,12 @@ export default class VendorSignUp extends Component {
                   onChangeText={(text) => {
                     this.setState({email: text});
                   }}
+                  onFocuss={() => {
+                    this._ValidateEmail();
+                  }}
+                  onBlurs={() => {
+                    this._ValidateEmail();
+                  }}
                   style={[styles.textInput]}
                 />
               </View>
@@ -419,6 +463,12 @@ export default class VendorSignUp extends Component {
                   value={this.state.phone}
                   onChangeText={(text) => {
                     this.setState({phone: text});
+                  }}
+                  onFocuss={() => {
+                    this._ValidatePhone();
+                  }}
+                  onBlurs={() => {
+                    this._ValidatePhone();
                   }}
                   style={[styles.textInput, {flex: 1}]}
                 />

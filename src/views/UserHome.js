@@ -39,6 +39,7 @@ export default class UserHome extends Component {
       accessToken: '',
       services: '',
       rateRequested: '',
+      description: '',
       location: '',
       address: '',
       exactTime: '',
@@ -48,7 +49,10 @@ export default class UserHome extends Component {
       showModal: false,
       lat: '',
       long: '',
-      servicesid: '',
+      servicesid: undefined,
+      getAllCategories: [],
+      selectedCategory: '',
+      price: '',
     };
   }
 
@@ -61,6 +65,7 @@ export default class UserHome extends Component {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       // this.getServies();
+      this.getAllCategories();
     });
   };
 
@@ -151,7 +156,7 @@ export default class UserHome extends Component {
   // };
 
   handleConfirm = (date) => {
-    const newTime = Moment(date).format('h:mm:ss');
+    const newTime = Moment(date).format('h:mm').toString();
     this.setState({startTime: newTime});
     this.hideDatePicker();
   };
@@ -163,30 +168,88 @@ export default class UserHome extends Component {
   hideDatePicker = () => {
     this.setState({isDatePickerVisible: false});
   };
+
   postQuickOrder = () => {
     const postData = {
       address: this.state.address,
-      service_id: this.state.servicesid,
-      time: this.state.startTime,
+      category_id: this.state.selectedCategory,
+      from_time: this.state.startTime,
       lat: this.state.lat,
       lng: this.state.long,
-      price: this.state.rateRequested,
+      price: Number(this.state.rateRequested),
       location: this.state.location,
+      description: this.state.description,
     };
 
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      utils.showToast(data.message);
+    console.log('myData=======>>>>> ', postData);
+
+    const formData = new FormData();
+
+    for (const [key, value] in postData) {
+      formData.append(key, value);
+    }
+
+    //     address:New York
+    // category_id:2
+    // //from_time:08:27:09
+    // lat:24.90628280557342
+    // lng:67.07237028142383
+    // price:200
+    // location:
+    // description:
+
+    if (!postData['category_id']) {
+      utils.showToast('Please Select category');
+      return;
+    }
+    if (!postData.price) {
+      utils.showToast("Rate field can't be empty");
       this.setState({isLoading: false});
-      this.props.navigation.navigate(Constants.home);
+      return;
+    }
+    if (utils.isEmpty(postData.location)) {
+      utils.showToast("Location field can't be empty");
+      this.setState({isLoading: false});
+      return;
+    }
+    if (utils.isEmpty(postData.address)) {
+      utils.showToast("Address field can't be empty");
+      this.setState({isLoading: false});
+      return;
+    }
+    if (utils.isEmpty(postData.from_time)) {
+      utils.showToast("time field can't be empty");
+      this.setState({isLoading: false});
+      return;
+    } else if (utils.isEmpty(postData.description)) {
+      utils.showToast("Description field can't be empty");
+      return;
+    }
+
+    const onSuccess = ({data}) => {
+      this.setState({
+        isLoading: false,
+        address: '',
+        selectedCategory: '',
+        startTime: '',
+        lat: '',
+        long: '',
+        rateRequested: '',
+        location: '',
+        description: '',
+      });
+
+      utils.showToast('Your Request was successfull.');
+      // console.log('ssssss======>>>> ', data.data);
+      // this.props.navigation.navigate(Constants.home);
     };
     const onFailure = (error) => {
       console.log(
         'error =====================================================================>',
         error,
       );
-      utils.showResponseError(error.massage);
       this.setState({isLoading: false});
+      utils.showResponseError(error);
     };
     const options = {
       headers: {
@@ -194,7 +257,32 @@ export default class UserHome extends Component {
         //    'Content-Type':'application/x-www-form-urlencoded'
       },
     };
-    Axios.post(Constants.quickOrder, postData, options)
+    this.setState({isLoading: true});
+
+    Axios.post(Constants.quickOrder2, postData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getAllCategories = () => {
+    const onSuccess = ({data}) => {
+      console.log('All Categoryyyyy ==========> ', data.data.records);
+      this.setState({isLoading: false, getAllCategories: data.data.records});
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      console.log('=================', error);
+      utils.showResponseError(error);
+    };
+
+    this.setState({isLoading: true});
+
+    Axios.get(Constants.getCategories, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -256,12 +344,12 @@ export default class UserHome extends Component {
           <MultiDropdownPicker
             viewProperty="name"
             value={this.state.services}
-            data={this.state.selections}
+            data={this.state.getAllCategories}
             onChangeValue={(val) => {
-              this.setState({servicesid: val}, () => {
+              this.setState({selectedCategory: val}, () => {
                 console.log(
                   'multidropdown picker ',
-                  this.state.servicesid,
+                  typeof this.state.servicesid,
                   'value',
                   val,
                 );
@@ -277,8 +365,14 @@ export default class UserHome extends Component {
         <EditText
           ref={'rate'}
           placeholder={'Enter Rate'}
+          keyboardType={'number-pad'}
           value={this.state.rateRequested}
           onChangeText={(text) => {
+            var numbers = /^[0-9]+$/;
+            if (!text.match(numbers)) {
+              utils.showToast('Price can only be Number');
+              return;
+            }
             this.setState({
               rateRequested: text,
             });
@@ -312,7 +406,7 @@ export default class UserHome extends Component {
                 });
               }}>
               <RegularTextCB style={{fontSize: 16}}>
-                {this.state.location ? this.state.location : 'Enter Location'}
+                {this.state.location ? this.state.location : 'Search Location'}
               </RegularTextCB>
             </TouchableOpacity>
           </View>
@@ -425,6 +519,10 @@ export default class UserHome extends Component {
           <MesageEditText
             placeholder={'Enter Job Description '}
             height={SIZES.twentyFive * 4.5}
+            value={this.state.description}
+            onChangeText={(text) => {
+              this.setState({description: text});
+            }}
           />
         </View>
 
@@ -438,7 +536,8 @@ export default class UserHome extends Component {
             bgColor={Colors.sickGreen}
             label="QUICK NOTIFY"
             onPress={() => {
-              this.props.navigation.navigate(Constants.confirmPayment);
+              // this.props.navigation.navigate(Constants.confirmPayment);
+              this.postQuickOrder();
             }}
           />
         </View>

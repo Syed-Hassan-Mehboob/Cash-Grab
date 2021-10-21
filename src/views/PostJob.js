@@ -222,12 +222,13 @@ export default class postJob extends Component {
 
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(
-      //   'Post Jobe Data =====================================================',
-      //   data,
-      // );
-      utils.showToast('Your Job Has Been Posted');
+      console.log(
+        'Post Jobe Data =====================================================',
+        data,
+      );
       this.setState({isLoading: false});
+      utils.showToast('Your Job Has Been Posted');
+      this.props.navigation.navigate(Constants.home);
     };
 
     const onFailure = (error) => {
@@ -450,6 +451,11 @@ export default class postJob extends Component {
                 placeholder={'Enter Rate'}
                 value={this.state.rateRequested}
                 onChangeText={(text) => {
+                  var numbers = /^[0-9]+$/;
+                  if (!text.match(numbers)) {
+                    utils.showToast('Price can only be Number');
+                    return;
+                  }
                   this.setState({rateRequested: text});
                 }}
                 style={[styles.textInput]}
@@ -462,7 +468,7 @@ export default class postJob extends Component {
               <View
                 style={[
                   {
-                    eight: 60,
+                    height: 60,
                     paddingHorizontal: SIZES.twenty,
                     backgroundColor: Colors.white,
                     borderRadius: SIZES.ten,
@@ -487,8 +493,6 @@ export default class postJob extends Component {
                   </RegularTextCB>
                 </TouchableOpacity>
               </View>
-
-
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
@@ -640,7 +644,7 @@ export default class postJob extends Component {
                 onPress={() => {
                   this.postJob();
                   setTimeout(() => {
-                    this.props.navigation.navigate(Constants.home);
+                    // this.props.navigation.navigate(Constants.home);
                   }, 5000);
                 }}
               />

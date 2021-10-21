@@ -30,6 +30,7 @@ export default class Notifications extends Component {
   }
 
   componentDidMount() {
+    this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
 
@@ -50,12 +51,13 @@ export default class Notifications extends Component {
   };
 
   renderNotificationsItem = ({item}) => {
-    console.log(
-      'Item  ===============>',
-      item.notifications.map((item) => {
-        console.log(item);
-      }),
-    );
+    console.log('Notification Item ==== =====', item);
+    // console.log(
+    //   'Item  ===============>',
+    //   item.notifications.map((item) => {
+    //     console.log(item);
+    //   }),
+    // );
     return (
       <View style={{marginHorizontal: SIZES.fifteen}}>
         <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
@@ -104,7 +106,7 @@ export default class Notifications extends Component {
                         style={{fontSize: 16, color: Colors.black}}>
                         {notification.title}
                       </RegularTextCB>
-                      <RegularTextCB>{item.time}</RegularTextCB>
+                      <RegularTextCB>time lgana hai</RegularTextCB>
                     </View>
                     <RegularTextCB
                       numberOfLines={1}
@@ -113,7 +115,7 @@ export default class Notifications extends Component {
                         color: Colors.coolGrey,
                         marginTop: SIZES.five,
                       }}>
-                      {notification.content}
+                      {notification.message}
                     </RegularTextCB>
                   </View>
                 </View>

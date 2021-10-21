@@ -43,28 +43,6 @@ export default class VendorAllJobs extends Component {
     });
   };
 
-  // getUserProfile = async () => {
-  //   const onSuccess = ({data}) => {
-  //     // console.log('Data============',data.data.records)
-  //     const latitude = data.data.records.user_profiles.latitude;
-  //     const longitude = data.data.records.user_profiles.longitude;
-  //   };
-  //   // console.log('lat',this.state.lat)
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //     utils.showResponseError(error);
-  //   };
-
-  //   this.setState({isLoading: true});
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
   getJobAroundYou = async () => {
     // let params = {
     //   lat: latitude,
@@ -73,7 +51,7 @@ export default class VendorAllJobs extends Component {
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log(' Job All Job Around you =====', data.data);
+      // console.log(' Job All Job Around you =====', data.data);
 
       // utils.showToast(data.message);
       this.setState({
@@ -100,7 +78,7 @@ export default class VendorAllJobs extends Component {
   renderSingleCategoriesItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.6}
         style={[
           styles.card,
           {
@@ -109,19 +87,19 @@ export default class VendorAllJobs extends Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() =>
+        onPress={() => {
           this.props.navigation.navigate(Constants.viewJob, {
             item: item.id,
-          })
-        }>
+          });
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
               source={{
                 uri:
-                  item.user.user_profiles.image !== null &&
-                  item.user.user_profiles.image !== undefined
-                    ? Constants.imageURL + item.user.user_profiles.image
+                  item.user.userProfile.image !== null &&
+                  item.user.userProfile.image !== undefined
+                    ? Constants.imageURL + item.user.userProfile.image
                     : '',
               }}
               style={styles.iconUser}
@@ -177,8 +155,9 @@ export default class VendorAllJobs extends Component {
             {item.title !== null && item.title !== undefined ? item.title : ''}
           </RegularTextCB>
 
-          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
-            ${item.price !== null && item.price !== undefined ? item.price : ''}
+          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
+            {'$ '}
+            {item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
         <View style={{}}>
@@ -224,8 +203,15 @@ export default class VendorAllJobs extends Component {
               }}>
               {item.time !== null && item.time !== undefined ? item.time : ''}
             </RegularTextCB>
-            <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
-              {'View Job >'}
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  fontSize: 18,
+                  textDecorationLine: 'underline',
+                },
+              ]}>
+              {'View Job '}
             </RegularTextCB>
           </View>
         </View>

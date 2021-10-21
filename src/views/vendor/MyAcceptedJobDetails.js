@@ -20,11 +20,8 @@ import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Modal from 'react-native-modal';
-import BoldTextCB from '../../components/BoldTextCB';
 import NormalHeader from '../../components/NormalHeader';
-
-export default class JobInProgress extends React.Component {
+export default class MyAcceptedJobDetails extends React.Component {
   initialMapState = {
     region: {
       latitude: 24.9050562,
@@ -40,82 +37,105 @@ export default class JobInProgress extends React.Component {
       isLoading: false,
       accessToken: '',
       viewJob: [],
+      images: [],
       userData: {},
+      userImage: '',
+      username: '',
+      title: '',
+      price: '',
+      location: '',
+      time: '',
       region: this.initialMapState.region,
       latitude: '',
       longitude: '',
+      description: '',
       jobService: [],
-      thankYouModal: false,
+      buttonlabel: '',
+      jobId: '',
+      jobStatus: '',
+      orderStatus: undefined,
+      myRequestAceepted: undefined,
+      orderId: '',
     };
   }
 
   componentDidMount() {
+    console.log(
+      'yeh le idddddd===============> ',
+      this.props.route.params.item,
+    );
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
     });
   }
-  // componentWillMount() {
-  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  //   this.getUserAccessToken();
-  //   this.props.navigation.addListener('focus', () => {
-  //     this.getUserAccessToken();
-  //   });
-  // }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
-      this.getBookingDetail(token);
+      this.getMyAcceptedJobDetails();
     });
   };
 
-  getBookingDetail = async (token) => {
-    this.setState({
-      isLoading: true,
-    });
+  getMyAcceptedJobDetails = () => {
+    this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(' Schedule Bookings Detail  =====', data.data);
+      console.log('View Job Data ==== ==== ', JSON.stringify(data));
+
+      this.setState({isLoading: false});
       this.setState({
-        userData: data.data,
+        userImage: data.data.user.user_profiles.image,
+        title: data.data.category.name,
+        location: data.data.address,
+        time: data.data.start_time,
+        // images: data.data.records.images,
+        username: data.data.name,
+        latitude: data.data.lat !== null ? data.data.lat : '',
+        longitude: data.data.lng !== null ? data.data.lng : '',
+        price: data.data.grandTotal,
+        description: data.data.description,
+        buttonlabel:
+          data.data.orderStatus === 'accepted' ? 'START NOW' : 'WORK STARTED',
+        orderId: data.data.id,
       });
-      this.setState({
-        isLoading: false,
-      });
+
+      // utils.showToast(data.message)
+
+      this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
-      this.setState({
-        isLoading: false,
-      });
+      this.setState({isLoading: false});
       utils.showResponseError(error);
-      console.log('==================Error', error);
     };
+
+    this.setState({isLoading: true});
     let params = {
       orderId: this.props.route.params.orderId,
     };
-    Axios.get(Constants.orderDetail, {
-      params: params,
+    Axios.get(Constants.VendorviewOrderDetailUrl, {
+      params,
       headers: {
-        Authorization: token,
+        Authorization: this.state.accessToken,
       },
     })
       .then(onSuccess)
       .catch(onFailure);
   };
 
-  progressOrder = async () => {
-    let token = await AsyncStorage.getItem(Constants.accessToken);
+  progressOrder = () => {
     this.setState({
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      // console.log('>>>>>>>> ', data);
+      console.log('>>>>>>>> ', data);
       this.getUserAccessToken();
       this.setState({
         isLoading: false,
       });
+
+      utils.showToast('Work Has Been Started');
     };
 
     const onFailure = (error) => {
@@ -128,11 +148,11 @@ export default class JobInProgress extends React.Component {
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {
       headers: {
-        Authorization: token,
+        Authorization: this.state.accessToken,
       },
     };
     const params = {
-      order_id: this.state.userData?.id,
+      order_id: this.state.orderId,
       status: 'progress',
     };
     Axios.post(Constants.orderStatus, params, options)
@@ -144,13 +164,13 @@ export default class JobInProgress extends React.Component {
   };
 
   render() {
-    // console.log('>>>>>>>>>>>>', this.props.route.params.orderId);
-
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="Job Details" />
+        <NormalHeader name="My Job Details" />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: SIZES.twenty}}>
           <View style={{marginBottom: SIZES.five}}>
             <View style={{padding: SIZES.twenty}}>
               <View
@@ -159,19 +179,11 @@ export default class JobInProgress extends React.Component {
                   alignItems: 'center',
                 }}>
                 <View style={styles.circleCard}>
-                  {this.state.userData?.user?.user_profiles.image !== '' &&
-                  this.state.userData?.user?.user_profiles.image !==
-                    undefined ? (
-                    <Image
-                      source={{
-                        uri:
-                          Constants.imageURL +
-                          this.state.userData?.user?.user_profiles.image,
-                      }}
-                      style={styles.iconUser}
-                      resizeMode="cover"
-                    />
-                  ) : null}
+                  <Image
+                    source={{uri: Constants.imageURL + this.state.userImage}}
+                    style={styles.iconUser}
+                    resizeMode="cover"
+                  />
                 </View>
                 <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
@@ -179,10 +191,7 @@ export default class JobInProgress extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.state.userData?.name !== null &&
-                    this.state.userData.name !== undefined
-                      ? this.state.userData.name
-                      : ''}
+                    {this.state.username}
                   </RegularTextCB>
                   <View
                     style={{
@@ -214,28 +223,33 @@ export default class JobInProgress extends React.Component {
                 }}>
                 <RegularTextCB
                   style={{
-                    color: Colors.sickGreen,
+                    color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.state.userData?.category?.name}
+                  {this.state.title === null ? '' : this.state.title}
                 </RegularTextCB>
                 <LightTextCB
-                  style={[
-                    {
-                      color: Colors.black,
-                      fontSize: 14,
-                    },
-                  ]}>
-                  $ {this.state.userData?.grandTotal}
+                  style={{
+                    color: Colors.black,
+                    fontSize: 12,
+                  }}>
+                  ${this.state.price}
                 </LightTextCB>
               </View>
 
               <RegularTextCB
                 style={{
-                  color: Colors.coolGrey,
-                  marginVertical: SIZES.ten * 0.5,
+                  color: Colors.sickGreen,
+                  fontSize: 12,
                 }}>
-                {this.state.userData?.description}
+                {this.state.jobService[0]?.categories.name}
+              </RegularTextCB>
+
+              <RegularTextCB
+                style={{
+                  color: Colors.coolGrey,
+                }}>
+                {this.state.description}
               </RegularTextCB>
 
               <View
@@ -253,13 +267,13 @@ export default class JobInProgress extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.state.userData?.address}
+                  {this.state.location}
                 </RegularTextCB>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  marginVertical: SIZES.ten,
+                  marginTop: SIZES.five,
                   alignItems: 'center',
                 }}>
                 <Image
@@ -271,7 +285,7 @@ export default class JobInProgress extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.state.userData?.end_time}
+                  {this.state.time}
                 </RegularTextCB>
               </View>
             </View>
@@ -295,10 +309,10 @@ export default class JobInProgress extends React.Component {
                 latitudeDelta: 0.04864195044303443,
                 longitudeDelta: 0.04014281769006,
               }}
-              scrollEnabled={false}
               showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
+              scrollEnabled={false}
               style={styles.mapStyle}>
               <Marker
                 coordinate={{
@@ -309,23 +323,49 @@ export default class JobInProgress extends React.Component {
             </MapView>
             <View
               style={{
-                marginVertical: SIZES.ten * 1.8,
+                marginVertical: SIZES.ten * 3,
                 marginHorizontal: SIZES.twenty,
               }}>
-              {this.state.userData?.orderStatus ? (
+              {/* {this.state.orderStatus !== undefined &&
+              this.state.orderStatus !== 'accepted' ? (
                 <ButtonRadius10
-                  label={
-                    this.state.userData?.orderStatus === 'accepted'
-                      ? 'START NOW'
-                      : 'WORK STARTED'
-                  }
-                  disabled={
-                    this.state.userData?.orderStatus !== 'accepted'
-                      ? true
-                      : false
-                  }
+                  label={this.state.buttonlabel}
+                  disabled={'sss'}
                   bgColor={Colors.sickGreen}
+                  onPress={() => {}}
+                />
+              ) : !this.state.isLoading &&
+                this.state.buttonlabel !== undefined ? (
+                <ButtonRadius10
+                  label={this.state.buttonlabel}
+                  disabled={this.state.buttonlabel === 'PENDING' ? true : false}
+                  bgColor={
+                    this.state.buttonlabel === 'PENDING'
+                      ? Colors.lighNewGreen
+                      : Colors.sickGreen
+                  }
                   onPress={() => {
+                    if (this.state.buttonlabel === 'REQUEST FOR ACCEPTANCE') {
+                      this.createJobRequest();
+                      return;
+                    }
+                    if (this.state.buttonlabel === 'START NOW') {
+                      this.progressOrder();
+                      return;
+                    }
+                  }}
+                />
+              ) : null} */}
+
+              {!this.state.isLoading ? (
+                <ButtonRadius10
+                  label={this.state.buttonlabel}
+                  bgColor={Colors.sickGreen}
+                  disabled={
+                    this.state.buttonlabel === 'WORK STARTED' ? true : false
+                  }
+                  onPress={() => {
+                    console.log('order id ===== ===', this.state.orderId);
                     this.progressOrder();
                   }}
                 />
@@ -338,62 +378,6 @@ export default class JobInProgress extends React.Component {
           textContent={'Loading...'}
           textStyle={{color: '#FFF', fontFamily: Constants.fontRegular}}
         />
-
-        <Modal
-          isVisible={this.state.thankYouModal}
-          animationIn="zoomInDown"
-          animationOut="zoomOutUp"
-          animationInTiming={600}
-          animationOutTiming={600}
-          backdropTransitionInTiming={600}
-          backdropTransitionOutTiming={600}>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              padding: SIZES.fifteen,
-              alignItems: 'center',
-              borderRadius: 10,
-            }}>
-            <Image
-              source={Images.greenTick}
-              resizeMode="contain"
-              style={{
-                height: SIZES.fifteen * 5,
-                width: SIZES.fifteen * 5,
-                marginBottom: 15,
-              }}
-            />
-            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-              Thank You
-            </BoldTextCB>
-            <RegularTextCB
-              style={{
-                marginVertical: SIZES.ten,
-                fontSize: 16,
-                color: Colors.coolGrey,
-              }}>
-              For your great service
-            </RegularTextCB>
-            <View
-              style={{
-                marginVertical: SIZES.ten * 3,
-                width: '100%',
-              }}>
-              <ButtonRadius10
-                label="JOB COMPLETED"
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  //   setThankYouModal();
-                  this.setState({thankYouModal: false}, () => {
-                    setTimeout(() => {
-                      this.props.navigation.navigate(Constants.vendorHome);
-                    }, 500);
-                  });
-                }}
-              />
-            </View>
-          </View>
-        </Modal>
       </View>
     );
   }
@@ -427,6 +411,10 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: SIZES.ten * 3,
+    shadowColor: '#c5c5c5',
+    shadowOpacity: 0.15,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
   },
   carImage: {
     height: SIZES.fifty * 2,

@@ -1,4 +1,5 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,15 +8,63 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../../common/Colors';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
+import Constants, {FONTS, height, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import BoldTextCB from '../../components/BoldTextCB';
 import NormalHeader from '../../components/NormalHeader';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
 import RegularTextCB from './../../components/RegularTextCB';
 
 export default function History(props) {
-  const renderHistoryCard = ({item}) => {
+  const [accessToken, setAcessToken] = useState();
+  const [completeJobs, setCompletedJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalCompletedJobs, setTotalCompletedJobs] = useState(true);
+
+  useEffect(() => {
+    getUserAccessToken();
+  }, []);
+
+  const getUserAccessToken = async () => {
+    setIsLoading(true);
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    setAcessToken(token);
+    getCompleteJob(token);
+    setIsLoading(false);
+  };
+
+  const getCompleteJob = (token) => {
+    const onSuccess = ({data}) => {
+      setCompletedJobs(data.data.records);
+      setTotalCompletedJobs(data.data.records.length);
+      console.log(data.data.records);
+
+      // setIsLoading(false);
+    };
+
+    const onFailure = (error) => {
+      // setIsLoading(false);
+      utils.showResponseError(error);
+    };
+    // let params = {
+    //   offset: 0,
+    //   limit: 1,
+    // };
+
+    // setIsLoading(true);
+    Axios.get(Constants.orderCompleted, {
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  const rendercompletedJobsItem = ({item}) => {
     return (
       <TouchableOpacity
         style={[
@@ -27,61 +76,58 @@ export default function History(props) {
             marginTop: SIZES.five,
           },
         ]}
-        activeOpacity={0.6}
         onPress={() => {
-          props.navigation.navigate(Constants.SingleJobHistory);
+          props.navigation.navigate(Constants.SingleJobHistory, {
+            singleHistoryData: item,
+          });
         }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
           }}>
-          <View style={{flexDirection: 'row'}}>
-            <View style={styles.circleCard}>
-              <Image
-                source={{uri: item.image}}
-                style={styles.iconUser}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={{marginStart: SIZES.ten}}>
-              <BoldTextCB
-                style={{
-                  color: Colors.black,
-                  fontSize: 16,
-                }}>
-                {item.name}
-              </BoldTextCB>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: SIZES.five,
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={Images.iconVerified}
-                  style={{
-                    height: SIZES.fifteen * 1.5,
-                    width: SIZES.fifteen * 1.5,
-                  }}
-                  resizeMode="contain"
-                />
-                <RegularTextCB
-                  style={{
-                    color: Colors.turqoiseGreen,
-                    fontSize: 12,
-                    marginStart: SIZES.five,
-                  }}>
-                  Verified
-                </RegularTextCB>
-              </View>
-            </View>
+          <View style={styles.circleCard}>
+            <Image
+              source={{uri: Constants.imageURL + item.userProfile.image}}
+              style={styles.iconUser}
+              resizeMode="cover"
+            />
           </View>
 
-          <RegularTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
-            {item.price}
-          </RegularTextCB>
+          <View style={{marginStart: SIZES.ten}}>
+            <BoldTextCB
+              style={{
+                color: Colors.black,
+                fontSize: 16,
+              }}>
+              {item.user.name}
+            </BoldTextCB>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: SIZES.five,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={Images.iconVerified}
+                style={{
+                  height: SIZES.fifteen * 1.5,
+                  width: SIZES.fifteen * 1.5,
+                }}
+                resizeMode="contain"
+              />
+              <RegularTextCB
+                style={{
+                  color: Colors.turqoiseGreen,
+                  fontSize: 12,
+                  marginStart: SIZES.five,
+                }}>
+                {item.user.email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
+              </RegularTextCB>
+            </View>
+          </View>
         </View>
         <View
           style={{
@@ -95,25 +141,31 @@ export default function History(props) {
               color: Colors.black,
               fontSize: 16,
             }}>
-            {item.title}
+            {item.description !== null ? item.description : 'N/A'}
+          </RegularTextCB>
+          <RegularTextCB
+            style={{
+              color: Colors.black,
+              fontSize: 14,
+            }}>
+            ${item.grandTotal}
           </RegularTextCB>
         </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[FONTS.mediumFont12, {color: Colors.sickGreen}]}>
-            {item.service}
+            {item.category !== '' ? item.category.name : 'N/A'}
           </Text>
+
           <Text
             style={[
-              FONTS.mediumFont14,
-              {color: Colors.black, textDecorationLine: 'underline'},
+              FONTS.mediumFont12,
+              {
+                color: Colors.black,
+                textDecorationLine: 'underline',
+                fontSize: 16,
+              },
             ]}>
-            View Job
+            {'View Job'}
           </Text>
         </View>
       </TouchableOpacity>
@@ -122,24 +174,47 @@ export default function History(props) {
 
   return (
     <View style={[STYLES.container]}>
-      <NormalHeader name="History" />
+      <NormalHeader name="Completed Orders" />
       <Text
         style={[
           FONTS.mediumFont16,
           {marginVertical: SIZES.twenty, paddingLeft: SIZES.twenty},
         ]}>
-        25 Jobs Commpleted
+        {totalCompletedJobs > 0
+          ? `${totalCompletedJobs} Commpleted jobs`
+          : null}
       </Text>
       <FlatList
-        data={DummyData}
+        data={completeJobs}
         keyExtractor={(item) => item.id}
-        renderItem={renderHistoryCard}
+        renderItem={rendercompletedJobsItem}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          !isLoading && completeJobs.length === 0 ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: height / 1.5,
+              }}>
+              <Text style={[FONTS.boldFont18, {alignSelf: 'center'}]}>
+                No Record(s)!
+              </Text>
+            </View>
+          ) : null
+        }
         contentContainerStyle={{
           paddingHorizontal: SIZES.twenty,
-          paddingBottom: SIZES.ten,
+          paddingBottom: SIZES.fifty,
           marginTop: SIZES.twenty,
         }}
+      />
+
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFFf', fontFamily: Constants.fontRegular}}
       />
     </View>
   );

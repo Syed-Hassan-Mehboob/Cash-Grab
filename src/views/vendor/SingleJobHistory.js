@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import moment from 'moment';
 import StarRating from 'react-native-star-rating';
 import Constants, {FONTS, SIZES, width} from '../../common/Constants';
 import BoldTextCB from '../../components/BoldTextCB';
@@ -16,6 +17,11 @@ import Images from '../../common/Images';
 import {Icon} from 'native-base';
 
 export default function SingleJobHistory(props) {
+  console.log(
+    'single job history ======>>>>>>   ',
+    props.route.params.singleHistoryData,
+  );
+
   return (
     <View style={styles.container}>
       <View
@@ -37,7 +43,7 @@ export default function SingleJobHistory(props) {
           />
         </TouchableOpacity>
         <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
-          Automobile Job
+          {props.route.params.singleHistoryData.category.name} Job
         </RegularTextCB>
       </View>
 
@@ -55,14 +61,18 @@ export default function SingleJobHistory(props) {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={Images.emp3}
+              source={{
+                uri:
+                  Constants.imageURL +
+                  props.route.params.singleHistoryData.userProfile.image,
+              }}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
             <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-              {'Ray Hammond'}
+              {props.route.params.singleHistoryData.user.name}
             </BoldTextCB>
             <View
               style={{
@@ -85,7 +95,10 @@ export default function SingleJobHistory(props) {
                   fontSize: 16,
                   marginStart: 5,
                 }}>
-                Verified
+                {props.route.params.singleHistoryData.user.email_verified_at !==
+                null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>
@@ -99,21 +112,24 @@ export default function SingleJobHistory(props) {
           }}>
           <View>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              Car Mechanic Needed
+              {props.route.params.singleHistoryData.description !== ''
+                ? props.route.params.singleHistoryData.description
+                : 'N/A'}
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.sickGreen, fontSize: 14.5}}>
-              Automobile
+              {props.route.params.singleHistoryData.category.name}
             </RegularTextCB>
           </View>
 
-          <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
-            $270.00
-          </BoldTextCB>
+          <RegularTextCB style={{color: Colors.black, fontSize: 12}}>
+            ${props.route.params.singleHistoryData.grandTotal}
+          </RegularTextCB>
         </View>
         <View style={{marginVertical: SIZES.ten}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {props.route.params.singleHistoryData.description !== ''
+              ? props.route.params.singleHistoryData.description
+              : 'Looking for a car mechanic that can look into the battery setup. The car is in a still position & would require some man power'}
           </RegularTextCB>
         </View>
         <View
@@ -132,7 +148,7 @@ export default function SingleJobHistory(props) {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            111,NYC Street, NY 1121
+            {props.route.params.singleHistoryData.address}
           </RegularTextCB>
         </View>
         <View
@@ -158,7 +174,15 @@ export default function SingleJobHistory(props) {
               style={{
                 color: Colors.coolGrey,
               }}>
-              12:00 - 3:00
+              {props.route.params.singleHistoryData.start_time !== null
+                ? props.route.params.singleHistoryData.start_time
+                : ''}
+              {'N/A'}
+              {' - '}
+              {' N/A'}
+              {props.route.params.singleHistoryData.end_time !== null
+                ? props.route.params.singleHistoryData.end_time
+                : ''}
             </RegularTextCB>
           </View>
         </View>
@@ -185,7 +209,11 @@ export default function SingleJobHistory(props) {
             }}>
             <View>
               <Image
-                source={Images.emp2}
+                source={{
+                  uri:
+                    Constants.imageURL +
+                    props.route.params.singleHistoryData.vendorProfile.image,
+                }}
                 style={{
                   height: 50,
                   width: 50,
@@ -197,7 +225,7 @@ export default function SingleJobHistory(props) {
             </View>
             <View style={{marginStart: 10}}>
               <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                {'Damian Miller'}
+                {props.route.params.singleHistoryData.vendor.name}
               </BoldTextCB>
               <View
                 style={{
@@ -210,7 +238,7 @@ export default function SingleJobHistory(props) {
                     color: Colors.coolGrey,
                     fontSize: 13.5,
                   }}>
-                  Car Mechanic applied
+                  {props.route.params.singleHistoryData.vendorProfile.about_me}
                 </RegularTextCB>
               </View>
             </View>
@@ -289,7 +317,10 @@ export default function SingleJobHistory(props) {
               paddingLeft: SIZES.ten,
             },
           ]}>
-          Completed Job for 05 - 12 - 2021
+          Completed Job for{' '}
+          {props.route.params.singleHistoryData.date !== null
+            ? props.route.params.singleHistoryData.date
+            : 'N/A'}
         </Text>
       </TouchableOpacity>
     </View>

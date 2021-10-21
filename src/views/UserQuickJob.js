@@ -76,7 +76,9 @@ export default function UserQuickJobs(props) {
             margin: SIZES.five,
           },
         ]}
-        onPress={() => props.navigation.navigate(Constants.BookingAcceptance)}>
+        onPress={() =>
+          props.navigation.navigate(Constants.ServiceProviderOnTheWay)
+        }>
         <View
           style={{
             flexDirection: 'row',

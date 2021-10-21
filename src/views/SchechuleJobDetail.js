@@ -26,6 +26,7 @@ import Axios from '../network/APIKit';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Calendar} from 'react-native-calendars';
 import {Toast} from 'native-base';
+import LightTextCB from '../components/LightTextCB';
 
 export default function ScheduleJobDetails(props) {
   const [cancelJobModal, setCancelJobModal] = useState(false);
@@ -37,9 +38,7 @@ export default function ScheduleJobDetails(props) {
   const [minfrom, setminfrom] = useState();
   const [hrto, sethrto] = useState();
   const [minto, setminto] = useState();
-  const [value, setValue] = useState('one');
-  const [fromItemSelected, setfromItemSelected] = useState('');
-  const [toItemSelected, settoItemSelected] = useState('');
+  const [orderStatus, setOrderStatus] = useState('one');
   const [orderId, setOrderId] = useState();
   const [errorMassage, setErrormsg] = useState('');
 
@@ -61,8 +60,8 @@ export default function ScheduleJobDetails(props) {
     setIsloading(true);
 
     const onSuccess = ({data}) => {
-      // console.log('Order Job Data  ====>>>>>>>>>> ', data.data.id);
-
+      console.log('Order Job Data  ====>>>>>>>>>> ', data.data.orderStatus);
+      setOrderStatus(data.data.orderStatus);
       setOrderId(data.data.id);
       setAllScheduleJobDetail(data.data);
       setIsloading(false);
@@ -153,8 +152,8 @@ export default function ScheduleJobDetails(props) {
       return;
     }
 
-    if (Number(hrfrom) < 1 || Number(hrfrom) > 12) {
-      setErrormsg('From Hour should be in between 1 and 12');
+    if (Number(hrfrom) < 1 || Number(hrfrom) > 23) {
+      setErrormsg('From Hour should be in between 1 and 23');
       setTimeout(() => {
         setErrormsg('');
       }, 5000);
@@ -185,8 +184,8 @@ export default function ScheduleJobDetails(props) {
       return;
     }
 
-    if (Number(hrto) < 1 || Number(hrto) > 12) {
-      setErrormsg('To Hour should be in between 1 and 12');
+    if (Number(hrto) < 1 || Number(hrto) > 23) {
+      setErrormsg('To Hour should be in between 1 and 23');
       setTimeout(() => {
         setErrormsg('');
       }, 5000);
@@ -209,39 +208,11 @@ export default function ScheduleJobDetails(props) {
       return;
     }
 
-    if (fromItemSelected === '') {
-      setErrormsg('Please select whether From Time is am/pm');
-      setTimeout(() => {
-        setErrormsg('');
-      }, 5000);
-      return;
-    }
-
-    if (toItemSelected === '') {
-      setErrormsg('Please select whether To Time is am/pm');
-      setTimeout(() => {
-        setErrormsg('');
-      }, 5000);
-      return;
-    }
-
-    if (fromItemSelected === 'pm') {
-      from_time = (Number(hrfrom) + 12).toString() + ':' + minfrom;
-    } else {
-      from_time = hrfrom + ':' + minfrom;
-    }
-
-    if (toItemSelected === 'pm') {
-      to_time = (Number(hrto) + 12).toString() + ':' + minto;
-    } else {
-      to_time = hrto + ':' + minto;
-    }
-
     const params = {
       orderId: orderid,
       date: date,
-      from_time: from_time,
-      to_time: to_time,
+      from_time: hrfrom + ':' + minfrom,
+      to_time: hrto + ':' + minto,
     };
     console.log(params);
 
@@ -252,8 +223,13 @@ export default function ScheduleJobDetails(props) {
     };
 
     const onSuccess = ({data}) => {
-      console.log('reschedule  Data  ====>>>>>>>>>> ', data.data);
-      setIsloading(false);
+      console.log('reschedule  Data  ====>>>>>>>>>> ', data);
+
+      setTimeout(() => {
+        getScheduleJob();
+        setIsloading(false);
+        utils.showToast(data.message);
+      }, 1000);
     };
 
     const onFailure = (error) => {
@@ -268,10 +244,8 @@ export default function ScheduleJobDetails(props) {
     Axios.post(Constants.rescheduleBooking, params, options)
       .then(onSuccess)
       .catch(onFailure);
-
-    setRescheduleJobModal(false);
   };
-
+  console.log('.....', props.route.params);
   return (
     <ScrollView
       style={styles.container}
@@ -322,7 +296,7 @@ export default function ScheduleJobDetails(props) {
                   scheduleJobdetail?.vendor?.user_profiles?.image !== null &&
                   scheduleJobdetail?.vendor?.user_profiles?.image !== undefined
                     ? Constants?.imageURL +
-                      scheduleJobdetail.vendor?.user_profiles?.image
+                      scheduleJobdetail?.vendor.user_profiles?.image
                     : '',
               }}
               style={styles.iconUser}
@@ -417,12 +391,13 @@ export default function ScheduleJobDetails(props) {
             </RegularTextCB>
           </View>
 
-          <BoldTextCB style={{color: Colors.black, fontSize: 12}}>
+          <LightTextCB style={{color: Colors.black, fontSize: 12}}>
+            {'$ '}
             {scheduleJobdetail?.grandTotal !== null &&
             scheduleJobdetail?.grandTotal !== undefined
               ? scheduleJobdetail?.grandTotal
               : ''}
-          </BoldTextCB>
+          </LightTextCB>
         </View>
 
         <View style={{marginVertical: SIZES.ten}}>
@@ -482,7 +457,7 @@ export default function ScheduleJobDetails(props) {
               scheduleJobdetail?.start_time !== undefined
                 ? scheduleJobdetail?.start_time
                 : ''}
-              -{' '}
+              {' - '}
               {scheduleJobdetail?.end_time !== null &&
               scheduleJobdetail?.end_time !== undefined
                 ? scheduleJobdetail?.end_time
@@ -498,92 +473,6 @@ export default function ScheduleJobDetails(props) {
             marginVertical: SIZES.twenty,
           }}
         />
-
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: SIZES.fifteen,
-            justifyContent: 'space-between',
-          }}> */}
-
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <View>
-            <Image
-              source={Images.emp2}
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 60 / 2,
-                resizeMode: 'contain',
-              }}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={{marginStart: 10}}>
-            <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-              {'Damian Miller'}
-            </BoldTextCB>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 5,
-                alignItems: 'center',
-              }}>
-              <RegularTextCB
-                style={{
-                  color: Colors.coolGrey,
-                  fontSize: 13.5,
-                }}>
-                Car Mechanic applied
-              </RegularTextCB>
-            </View>
-          </View>
-        </View> */}
-
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}> */}
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            paddingHorizontal: SIZES.ten,
-          }}>
-          <StarRating
-            disabled={true}
-            maxStars={5}
-            fullStar={Images.starFull}
-            emptyStar={Images.starHalf}
-            starSize={SIZES.fifteen}
-            rating={4}
-            starStyle={{
-              width: SIZES.twenty,
-              height: SIZES.twenty,
-              marginRight: SIZES.five,
-            }}
-            containerStyle={{width: SIZES.fifty * 1.5}}
-          />
-
-          <RegularTextCB
-            style={{
-              color: Colors.sunflowerYellow,
-              fontSize: 13.5,
-              marginStart: SIZES.twenty * 1.8,
-              marginTop: SIZES.five / 2,
-            }}>
-            4.4 Ratings
-          </RegularTextCB>
-        </View> */}
 
         <View
           style={{
@@ -627,18 +516,21 @@ export default function ScheduleJobDetails(props) {
         </View>
       </TouchableOpacity>
 
-      <View style={{marginTop: SIZES.ten * 5}}>
-        <ButtonRadius10
-          label="SERVICE COMPLETED"
-          bgColor={Colors.sickGreen}
-          onPress={() => {
-            props.navigation.navigate(Constants.confirmPayment);
-          }}
-        />
-      </View>
+      {!isLoading && orderStatus === 'progress' ? (
+        <View style={{marginTop: SIZES.ten * 5}}>
+          <ButtonRadius10
+            label="SERVICE COMPLETED"
+            bgColor={Colors.sickGreen}
+            onPress={() => {
+              props.navigation.navigate(Constants.confirmPayment);
+            }}
+          />
+        </View>
+      ) : null}
 
       <Modal
         isVisible={cancelJobModal}
+        visible={cancelJobModal}
         animationIn="zoomInDown"
         animationOut="zoomOutUp"
         animationInTiming={600}
@@ -721,16 +613,23 @@ export default function ScheduleJobDetails(props) {
         animationInTiming={600}
         animationOutTiming={600}
         backdropTransitionInTiming={600}
-        backdropTransitionOutTiming={600}
-        style={{
-          borderRadius: SIZES.five,
-          borderWidth: 1,
-          borderColor: Colors.sickGreen,
-          backgroundColor: '#fff',
-        }}>
-        <View style={{alignItems: 'center', backgroundColor: '#fff'}}>
+        backdropTransitionOutTiming={600}>
+        <View
+          style={{
+            paddingHorizontal: SIZES.fifteen,
+            paddingBottom: SIZES.ten,
+            backgroundColor: 'white',
+            borderRadius: SIZES.five,
+            borderWidth: 1,
+            borderColor: Colors.sickGreen,
+          }}>
           <Text style={{color: 'red'}}>{errorMassage}</Text>
-
+          <Icon
+            type="AntDesign"
+            name="closecircleo"
+            style={{color: Colors.sickGreen, alignSelf: 'flex-end'}}
+            onPress={() => setRescheduleJobModal(false)}
+          />
           <Calendar
             firstDay={1}
             minDate={new Date()}
@@ -764,7 +663,7 @@ export default function ScheduleJobDetails(props) {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginTop: SIZES.fifteen,
+              marginVertical: SIZES.twenty,
               justifyContent: 'space-between',
 
               width: '100%',
@@ -815,29 +714,6 @@ export default function ScheduleJobDetails(props) {
                   />
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <ListItem>
-                  <Radio
-                    onPress={() => setfromItemSelected('am')}
-                    selected={fromItemSelected === 'am'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>AM</Text>
-                </ListItem>
-                <ListItem>
-                  <Radio
-                    onPress={() => setfromItemSelected('pm')}
-                    selected={fromItemSelected === 'pm'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>PM</Text>
-                </ListItem>
-              </View>
             </View>
 
             <View
@@ -877,40 +753,29 @@ export default function ScheduleJobDetails(props) {
                   />
                 </View>
               </View>
-              <View style={{flexDirection: 'row'}}>
-                <ListItem>
-                  <Radio
-                    onPress={() => settoItemSelected('am')}
-                    selected={toItemSelected === 'am'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>AM</Text>
-                </ListItem>
-                <ListItem>
-                  <Radio
-                    onPress={() => settoItemSelected('pm')}
-                    selected={toItemSelected === 'pm'}
-                    color={Colors.sickGreen}
-                    selectedColor={Colors.sickGreen}
-                  />
-                  <Text>PM</Text>
-                </ListItem>
-              </View>
             </View>
           </View>
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.sickGreen,
-              paddingHorizontal: SIZES.twenty * 5,
-              paddingVertical: SIZES.fifteen,
-              borderRadius: SIZES.ten,
-              marginTop: SIZES.twenty * 2,
+
+          <ButtonRadius10
+            label="RESCHEDULE"
+            onPress={() => {
+              setRescheduleJobModal(false);
+
+              handelReschedule();
             }}
-            onPress={handelReschedule}
-            activeOpacity={0.6}>
-            <Text style={[FONTS.boldFont16, {}]}>RESCHEDULE</Text>
-          </TouchableOpacity>
+          />
+          {/* <TouchableOpacity
+          style={{
+            backgroundColor: Colors.sickGreen,
+            paddingHorizontal: SIZES.twenty * 5,
+            paddingVertical: SIZES.fifteen,
+            borderRadius: SIZES.ten,
+            marginTop: SIZES.twenty * 2,
+          }}
+          onPress={handelReschedule}
+          activeOpacity={0.6}>
+          <Text style={[FONTS.boldFont16, {}]}>RESCHEDULE</Text>
+        </TouchableOpacity> */}
         </View>
       </Modal>
       <Spinner

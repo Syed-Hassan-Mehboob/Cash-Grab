@@ -28,7 +28,7 @@ export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       accessToken: '',
       completeJob: [],
       withDraw: {},
@@ -59,15 +59,13 @@ export default class Dashboard extends Component {
     this.setState({isLoading: true});
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token});
-    this.getCompleteJob();
+    this.getCompleteJob(token);
     this.getDashboardData();
     this.setState({isLoading: false});
   };
 
   getDashboardData = () => {
     const onSuccess = ({data}) => {
-      console.log('Complete job vvv======= ', data.data.withdraw);
-
       let tempMonthlyData = [];
       data.data.months.map((mItem, index) => {
         tempMonthlyData.push({
@@ -75,7 +73,7 @@ export default class Dashboard extends Component {
           value:
             Number(mItem.earning) === 0
               ? (Number(mItem.earning) + 10) / 100
-              : Number(mItem.earning) / 100,
+              : Number(mItem.earning) * 0.5,
           label: mItem.name.substring(0, 3),
           labelTextStyle: [
             FONTS.mediumFont14,
@@ -98,24 +96,15 @@ export default class Dashboard extends Component {
         {
           totalEarning: data?.data.total_earning,
           chartData: tempMonthlyData,
-          // name:data?.data.progress.user.name,
-          // title:data?.data.progress.title,
-          // price:data?.data.progress.price,
-          // description:data?.data.progress.description,
-          // time:data?.data.progress.time,
-          // image:data?.data.progress.user.user_profiles.image,
-          // location:data?.data.progress.location,
-          // verfiyAt:data?.data.progress.user.email_verified_at
         },
         () => {
           console.log(
             'chart data =======   >>>>>>>  ',
             JSON.stringify(this.state.chartData),
           );
+          this.setState({isLoading: false});
         },
       );
-
-      // this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
@@ -133,38 +122,29 @@ export default class Dashboard extends Component {
       .catch(onFailure);
   };
 
-  getCompleteJob = () => {
-    // this.setState({isLoading: true});
-
+  getCompleteJob = (token) => {
     const onSuccess = ({data}) => {
-      console.log('Complete job vvv======= ', data.data.withdraw);
-
       this.setState({
-        completeJob: data?.data.completed,
-        progress: data.data.progress,
-        withDraw: data?.data.withdraw,
-        // name:data?.data.progress.user.name,
-        // title:data?.data.progress.title,
-        // price:data?.data.progress.price,
-        // description:data?.data.progress.description,
-        // time:data?.data.progress.time,
-        // image:data?.data.progress.user.user_profiles.image,
-        // location:data?.data.progress.location,
-        // verfiyAt:data?.data.progress.user.email_verified_at
+        completeJob: data.data.records,
       });
 
-      // this.setState({isLoading: false});
+      this.setState({isLoading: false});
     };
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
+    let params = {
+      offset: 0,
+      limit: 5,
+    };
 
     this.setState({isLoading: true});
-    Axios.get(Constants.getCompleteJob, {
+    Axios.get(Constants.orderCompleted, {
+      params,
       headers: {
-        Authorization: this.state.accessToken,
+        Authorization: token,
       },
     })
       .then(onSuccess)
@@ -172,19 +152,22 @@ export default class Dashboard extends Component {
   };
 
   rendercompletedJobsItem = ({item}) => {
-    console.log('COmplete job item   =========', item);
-
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.card,
           {
             padding: SIZES.fifteen,
-            marginHorizontal: SIZES.five,
+            marginHorizontal: SIZES.five * 2.3,
             marginBottom: SIZES.twenty,
             marginTop: SIZES.five,
           },
-        ]}>
+        ]}
+        onPress={() => {
+          this.props.navigation.navigate(Constants.SingleJobHistory, {
+            singleHistoryData: item,
+          });
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -192,11 +175,12 @@ export default class Dashboard extends Component {
           }}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.user_profiles.image}}
+              source={{uri: Constants.imageURL + item.userProfile.image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
+
           <View style={{marginStart: SIZES.ten}}>
             <BoldTextCB
               style={{
@@ -244,7 +228,7 @@ export default class Dashboard extends Component {
               color: Colors.black,
               fontSize: 16,
             }}>
-            {item.title}
+            {item.description !== null ? item.description : 'N/A'}
           </RegularTextCB>
           <RegularTextCB
             style={{
@@ -254,74 +238,28 @@ export default class Dashboard extends Component {
             ${item.price}
           </RegularTextCB>
         </View>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconLocationPin}
-            style={{
-              height: SIZES.fifteen + 2,
-              width: SIZES.fifteen + 2,
-              resizeMode: 'contain',
-            }}
-          />
-          <RegularTextCB
-            style={{
-              color: Colors.coolGrey,
-              marginStart: SIZES.five,
-            }}>
-            {item.location}
-          </RegularTextCB>
-        </View> */}
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.five,
-            alignItems: 'center',
-          }}>
-          <Image
-            source={Images.iconStopWatch}
-            style={{
-              height: SIZES.fifteen + 2,
-              width: SIZES.fifteen + 2,
-              resizeMode: 'contain',
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginStart: SIZES.five,
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <RegularTextCB
-              style={{
-                color: Colors.coolGrey,
-              }}>
-              {item.time}
-            </RegularTextCB>
-            <RegularTextCB
-              style={{
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={[FONTS.mediumFont12, {color: Colors.sickGreen}]}>
+            {item.category !== '' ? item.category.name : 'N/A'}
+          </Text>
+
+          <Text
+            style={[
+              FONTS.mediumFont12,
+              {
                 color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB>
-          </View>
-        </View> */}
-        <Text style={[FONTS.mediumFont12, {color: Colors.sickGreen}]}>
-          Automobile
-        </Text>
-      </View>
+                textDecorationLine: 'underline',
+                fontSize: 16,
+              },
+            ]}>
+            {'View Job'}
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
   renderProgressJob = ({item}) => {
-    console.log('Progress Job ======= ,', item);
-
     return (
       <View
         style={[
@@ -402,13 +340,6 @@ export default class Dashboard extends Component {
             ${item.price}
           </LightTextCB>
         </View>
-        {/* <RegularTextCB
-          style={{
-            color: Colors.sickGreen,
-            fontSize: 12,
-          }}>
-          {this.completedJobs[0].type}
-        </RegularTextCB> */}
         <RegularTextCB
           style={{
             color: Colors.coolGrey,
@@ -465,18 +396,253 @@ export default class Dashboard extends Component {
               }}>
               {item.time}
             </RegularTextCB>
-            {/* <RegularTextCB
-              style={{
-                color: Colors.black,
-              }}>
-              {'Contact >'}
-            </RegularTextCB> */}
           </View>
         </View>
       </View>
     );
   };
 
+  render() {
+    return (
+      <View style={STYLES.container}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              left: SIZES.ten,
+              width: SIZES.fifteen,
+              height: SIZES.fifteen,
+            }}
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}>
+            <Image
+              source={Images.arrowBack}
+              style={[styles.iconBack, {tintColor: Colors.black1}]}
+            />
+          </TouchableOpacity>
+
+          <RegularTextCB
+            style={[
+              FONTS.mediumFont20,
+              {color: Colors.black, fontSize: SIZES.ten * 3},
+            ]}>
+            Dashboard
+          </RegularTextCB>
+
+          <TouchableOpacity
+            style={{position: 'absolute', right: SIZES.ten}}
+            onPress={() => {
+              this.props.navigation.navigate(Constants.withDraw);
+            }}>
+            <Image
+              source={Images.iconWithDraw}
+              style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
+            />
+          </TouchableOpacity>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{}}>
+            <View
+              style={{
+                marginTop: SIZES.fifteen,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+                paddingHorizontal: SIZES.fifteen,
+              }}>
+              <RegularTextCB style={{fontSize: SIZES.twenty}}>
+                Total Earnings
+              </RegularTextCB>
+              <BoldTextCB
+                style={{
+                  fontSize: SIZES.twenty * 1.2,
+                  marginStart: SIZES.five,
+                  color: Colors.black1,
+                }}>
+                ${this.state.totalEarning}
+              </BoldTextCB>
+            </View>
+            <View
+              style={{
+                marginTop: SIZES.fifteen,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                paddingHorizontal: SIZES.fifteen,
+              }}>
+              <RegularTextCB style={{fontSize: SIZES.twenty}}>
+                {this.state.selectedMonth !== undefined
+                  ? `Monthly Earnings (${this.state.selectedMonth.label})`
+                  : null}
+              </RegularTextCB>
+              <BoldTextCB
+                style={{
+                  fontSize: SIZES.twenty * 1.2,
+                  marginStart: SIZES.five,
+                  color: Colors.black1,
+                }}>
+                {this.state.selectedMonth !== undefined
+                  ? ` $${this.state.selectedMonth.displayvalue}`
+                  : null}
+              </BoldTextCB>
+            </View>
+
+            <BarChart
+              data={this.state.chartData}
+              barWidth={
+                Platform.OS === 'ios'
+                  ? SIZES.fifteen * 3.5
+                  : SIZES.fifteen * 4.1
+              }
+              hideRules={true}
+              activeOpacity={0.7}
+              animationEasing={Easing.cubic}
+              showYAxisIndices={false}
+              hideYAxisText
+              yAxisIndicesColor={'transparent'}
+              barBorderRadius={SIZES.five * 1.8}
+              intactTopLabel={50}
+              xAxisThickness={0}
+              yAxisThickness={0}
+              initialSpacing={
+                Platform.OS === 'ios' ? SIZES.five * 0.5 : SIZES.ten * 1.5
+              }
+            />
+          </View>
+          <View
+            style={{
+              marginHorizontal: SIZES.fifteen,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <RegularTextCB
+                style={{
+                  fontSize: SIZES.twenty,
+                  color: Colors.black,
+                  marginVertical: SIZES.ten * 1.5,
+                }}>
+                Completed Order
+              </RegularTextCB>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.History);
+                }}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    textDecorationLine: 'underline',
+                  }}>
+                  See All
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={this.state.completeJob}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={this.rendercompletedJobsItem}
+            />
+          </View>
+
+          {/* <View
+            style={{marginTop: SIZES.five, marginHorizontal: SIZES.fifteen}}>
+            <RegularTextCB
+              style={{
+                fontSize: SIZES.twenty,
+                color: Colors.black,
+                marginVertical: SIZES.ten * 1.5,
+              }}>
+              Job in Progress
+            </RegularTextCB>
+            <FlatList
+              data={this.state.progress}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={this.renderProgressJob}
+              style={{paddingBottom: 100}}
+            />
+          </View> */}
+        </ScrollView>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={{color: '#FFFf', fontFamily: Constants.fontRegular}}
+        />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  iconBack: {
+    height: SIZES.twenty,
+    width: SIZES.twenty,
+    resizeMode: 'contain',
+  },
+  quickJobCard: {
+    flexDirection: 'row',
+    height: SIZES.fifty,
+    borderColor: Colors.sickGreen,
+    borderWidth: 1.5,
+    backgroundColor: Colors.white,
+    borderRadius: SIZES.ten,
+    paddingHorizontal: SIZES.fifteen,
+    paddingVertical: SIZES.five,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOpacity: 1.0,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
+    alignItems: 'center',
+  },
+  card: {
+    backgroundColor: '#fff',
+    width: width / 1.5,
+    borderRadius: SIZES.twenty,
+    flex: 1,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOpacity: 1.0,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
+  },
+  circleCard: {
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: SIZES.ten * 3,
+    shadowColor: '#c5c5c5',
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOpacity: 0.5,
+    shadowRadius: SIZES.five,
+    elevation: SIZES.five,
+  },
+  iconUser: {
+    height: SIZES.ten * 6,
+    width: SIZES.ten * 6,
+    borderRadius: (SIZES.ten * 6) / 2,
+    resizeMode: 'contain',
+  },
+});
+
+// dashboard dummy data/
+{
+  /*
   data = [
     {
       value: 70,
@@ -571,301 +737,5 @@ export default class Dashboard extends Component {
     },
   ];
 
-  render() {
-    return (
-      <View style={STYLES.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{
-              position: 'absolute',
-              left: SIZES.ten,
-              width: SIZES.fifteen,
-              height: SIZES.fifteen,
-            }}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image
-              source={Images.arrowBack}
-              style={[styles.iconBack, {tintColor: Colors.black1}]}
-            />
-          </TouchableOpacity>
-
-          <RegularTextCB
-            style={[
-              FONTS.mediumFont20,
-              {color: Colors.black, fontSize: SIZES.ten * 3},
-            ]}>
-            Dashboard
-          </RegularTextCB>
-
-          <TouchableOpacity
-            style={{position: 'absolute', right: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.navigate(Constants.withDraw);
-            }}>
-            <Image
-              source={Images.iconWithDraw}
-              style={{height: SIZES.ten * 4, width: SIZES.ten * 4}}
-            />
-          </TouchableOpacity>
-        </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Quick job notification tab */}
-          {/* <View style={{marginTop: SIZES.ten, marginHorizontal: SIZES.fifteen}}>
-            <RegularTextCB
-              style={{
-                fontSize: SIZES.twenty,
-                color: Colors.black,
-              }}>
-              Quick Job
-            </RegularTextCB>
-            <View
-              style={{
-                // marginTop: SIZES.ten,
-                borderColor: Colors.sickGreen,
-                borderWidth: 1.1,
-                borderRadius: SIZES.ten,
-                marginVertical: SIZES.twenty,
-              }}>
-              <View
-                style={[
-                  styles.card,
-                  {
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: SIZES.twenty,
-                    paddingVertical: SIZES.fifteen * 1.2,
-                    borderRadius: SIZES.ten,
-                  },
-                ]}>
-                <RegularTextCB>1 Job Available in your location</RegularTextCB>
-                <Image
-                  source={Images.iconDrawerBell}
-                  style={{
-                    height: SIZES.twenty * 1.3,
-                    width: SIZES.twenty * 1.3,
-                    tintColor: Colors.coolGrey,
-                  }}
-                  resizeMode="contain"
-                />
-              </View>
-            </View>
-          </View> */}
-          {/* Quick job notification tab */}
-          <View style={{}}>
-            <View
-              style={{
-                marginTop: SIZES.fifteen,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-                paddingHorizontal: SIZES.fifteen,
-              }}>
-              <RegularTextCB style={{fontSize: SIZES.twenty}}>
-                Total Earnings
-              </RegularTextCB>
-              <BoldTextCB
-                style={{
-                  fontSize: SIZES.twenty * 1.2,
-                  marginStart: SIZES.five,
-                  color: Colors.black1,
-                }}>
-                ${this.state.totalEarning}
-              </BoldTextCB>
-            </View>
-            <View
-              style={{
-                marginTop: SIZES.fifteen,
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                paddingHorizontal: SIZES.fifteen,
-              }}>
-              <RegularTextCB style={{fontSize: SIZES.twenty}}>
-                {this.state.selectedMonth !== undefined
-                  ? `Monthly Earnings (${this.state.selectedMonth.label})`
-                  : null}
-                {/* {`Monthly Earnings (${
-                  this.state.selectedMonth.label === undefined
-                    ? ''
-                    : this.state.selectedMonth.label
-                })`} */}
-              </RegularTextCB>
-              <BoldTextCB
-                style={{
-                  fontSize: SIZES.twenty * 1.2,
-                  marginStart: SIZES.five,
-                  color: Colors.black1,
-                }}>
-                {this.state.selectedMonth !== undefined
-                  ? ` $${this.state.selectedMonth.displayvalue}`
-                  : null}
-              </BoldTextCB>
-            </View>
-
-            <BarChart
-              data={this.state.chartData}
-              barWidth={
-                Platform.OS === 'ios'
-                  ? SIZES.fifteen * 3.5
-                  : SIZES.fifteen * 4.1
-              }
-              hideRules={true}
-              activeOpacity={0.7}
-              animationEasing={Easing.cubic}
-              showYAxisIndices={false}
-              hideYAxisText
-              yAxisIndicesColor={'transparent'}
-              barBorderRadius={SIZES.five * 1.8}
-              intactTopLabel={50}
-              xAxisThickness={0}
-              yAxisThickness={0}
-              initialSpacing={
-                Platform.OS === 'ios' ? SIZES.five * 0.5 : SIZES.ten * 1.5
-              }
-            />
-            {/* <TouchableGraph
-              onPressBar={(data) => {
-                console.log(data);
-              }}
-              onPressTickAxis={(data) => {
-                console.log(data);
-              }}>
-              <VictoryChart>
-                <VictoryAxis crossAxis orientation="left" />
-                <VictoryAxis dependentAxis crossAxis orientation="bottom" />
-                <VictoryBar data={data} />
-                <VictoryArea data={data} />
-              </VictoryChart>
-            </TouchableGraph> */}
-          </View>
-          <View
-            style={{
-              marginHorizontal: SIZES.fifteen,
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <RegularTextCB
-                style={{
-                  fontSize: SIZES.twenty,
-                  color: Colors.black,
-                  marginVertical: SIZES.ten * 1.5,
-                }}>
-                Completed Order
-              </RegularTextCB>
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => {
-                  this.props.navigation.navigate(Constants.History);
-                }}>
-                <RegularTextCB
-                  style={{
-                    color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
-                  See All
-                </RegularTextCB>
-              </TouchableOpacity>
-            </View>
-            <FlatList
-              data={this.state.completeJob}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              renderItem={this.rendercompletedJobsItem}
-            />
-          </View>
-
-          <View
-            style={{marginTop: SIZES.five, marginHorizontal: SIZES.fifteen}}>
-            <RegularTextCB
-              style={{
-                fontSize: SIZES.twenty,
-                color: Colors.black,
-                marginVertical: SIZES.ten * 1.5,
-              }}>
-              Job in Progress
-            </RegularTextCB>
-            <FlatList
-              data={this.state.progress}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              renderItem={this.renderProgressJob}
-              style={{paddingBottom: 100}}
-            />
-          </View>
-        </ScrollView>
-        <Spinner
-          visible={this.state.isLoading}
-          textContent={'Loading...'}
-          textStyle={{color: '#FFFf', fontFamily: Constants.fontRegular}}
-        />
-      </View>
-    );
-  }
+*/
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  iconBack: {
-    height: SIZES.twenty,
-    width: SIZES.twenty,
-    resizeMode: 'contain',
-  },
-  quickJobCard: {
-    flexDirection: 'row',
-    height: SIZES.fifty,
-    borderColor: Colors.sickGreen,
-    borderWidth: 1.5,
-    backgroundColor: Colors.white,
-    borderRadius: SIZES.ten,
-    paddingHorizontal: SIZES.fifteen,
-    paddingVertical: SIZES.five,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
-    shadowOpacity: 1.0,
-    shadowRadius: SIZES.ten,
-    elevation: SIZES.ten,
-    alignItems: 'center',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: SIZES.twenty,
-    flex: 1,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
-    shadowOpacity: 1.0,
-    shadowRadius: SIZES.ten,
-    elevation: SIZES.ten,
-  },
-  circleCard: {
-    height: SIZES.ten * 6,
-    width: SIZES.ten * 6,
-    borderRadius: SIZES.ten * 3,
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
-    shadowOpacity: 0.5,
-    shadowRadius: SIZES.five,
-    elevation: SIZES.five,
-  },
-  iconUser: {
-    height: SIZES.ten * 6,
-    width: SIZES.ten * 6,
-    borderRadius: (SIZES.ten * 6) / 2,
-    resizeMode: 'contain',
-  },
-});

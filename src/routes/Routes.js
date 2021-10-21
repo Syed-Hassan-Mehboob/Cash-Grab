@@ -38,6 +38,7 @@ import {Text} from 'react-native';
 import Colors from '../common/Colors';
 import EditText from '../components/EditText';
 import {TouchableOpacity} from 'react-native';
+import ResetPassword from '../views/ResetPassword';
 
 const Stack = createStackNavigator();
 
@@ -108,6 +109,10 @@ export default function Routes(props) {
           <Stack.Screen
             name={Constants.forgetPassword}
             component={ForgetPassword}
+          />
+          <Stack.Screen
+            name={Constants.ResetPassword}
+            component={ResetPassword}
           />
           <Stack.Screen name={Constants.verifyVia} component={VerifyVia} />
           <Stack.Screen name={Constants.otp} component={OTP} />

@@ -310,7 +310,10 @@ export default function JobAcceptance(props) {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri: Constants.imageURL + jobAccept.user.image}}
+                    source={{
+                      uri:
+                        Constants.imageURL + jobAccept.user.userProfile.image,
+                    }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -441,7 +444,11 @@ export default function JobAcceptance(props) {
                         }}>
                         <View>
                           <Image
-                            source={Images.emp2}
+                            source={{
+                              uri:
+                                Constants.imageURL +
+                                jobAccept.vendor_accepted.userProfile.image,
+                            }}
                             style={{
                               height: 50,
                               width: 50,

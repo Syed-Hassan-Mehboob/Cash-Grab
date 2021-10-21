@@ -32,6 +32,10 @@ export default class SingleCategory extends Component {
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
+      console.log(
+        'Parent Category id ====== ',
+        this.props.route.params.item.id,
+      );
     });
   }
 
@@ -51,7 +55,7 @@ export default class SingleCategory extends Component {
 
   getCategoryData = (token) => {
     const onSuccess = ({data}) => {
-      console.log('==== catagory data ====', data.data);
+      console.log('==== catagory data ====', JSON.stringify(data.data));
       this.toggleIsLoading();
       this.setState({vendors: data.data});
       // utils.showToast(data.message)
@@ -103,9 +107,9 @@ export default class SingleCategory extends Component {
           styles.card,
           {
             marginHorizontal: SIZES.fifteen + 2,
-            marginTop: SIZES.ten * 4,
+            marginTop: SIZES.ten * 5,
             alignItems: 'center',
-            paddingVertical: SIZES.five,
+            paddingVertical: SIZES.fifteen,
           },
         ]}
         //   onPress={
@@ -119,7 +123,8 @@ export default class SingleCategory extends Component {
         <TouchableOpacity
           onPress={() =>
             this.props.navigation.navigate(Constants.viewVendorProfile, {
-              item: item.id,
+              vendorid: item.id,
+              item: this.props.route.params.item,
             })
           }
           activeOpacity={0.6}
@@ -181,20 +186,21 @@ export default class SingleCategory extends Component {
               backgroundColor: Colors.sickGreen,
               padding: SIZES.ten * 2,
               borderRadius: SIZES.ten * 4,
-              zIndex: 1,
+              position: 'absolute',
               bottom: -SIZES.ten * 3,
             },
           ]}
           onPress={() =>
             this.props.navigation.navigate(Constants.SelectServices, {
               item: this.props.route.params.item,
+              vendorid: item.id,
             })
           }
           activeOpacity={0.6}>
           <Icon
             type="AntDesign"
             name="right"
-            style={{color: Colors.white, fontSize: 20}}
+            style={{color: Colors.white, fontSize: 18}}
           />
         </TouchableOpacity>
       </TouchableOpacity>
@@ -284,7 +290,7 @@ export default class SingleCategory extends Component {
             numColumns={2}
             // horizontal
             data={this.formatData(this.state.vendors, 2)}
-            keyExtractor={(index) => index}
+            keyExtractor={(item) => item.id}
             renderItem={this.renderSingleCategoriesItem}
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={() => {

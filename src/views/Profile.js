@@ -136,7 +136,7 @@ export default class Profile extends React.Component {
 
     let params = {
       offset: 0,
-      limit: 4,
+      limit: 1,
     };
 
     // this.toggleIsLoading();
@@ -213,7 +213,7 @@ export default class Profile extends React.Component {
               : ''}
           </LightTextCB>
 
-          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
             ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
@@ -314,7 +314,7 @@ export default class Profile extends React.Component {
               ? item.category_name
               : ''}
           </LightTextCB>
-          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
             $
             {item.grandTotal !== null && item.grandTotal !== undefined
               ? item.grandTotal
@@ -438,7 +438,7 @@ export default class Profile extends React.Component {
               ? item.category_name
               : ''}
           </LightTextCB>
-          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
+          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
             $
             {item.grand_total !== null && item.grand_total !== undefined
               ? item.grand_total
@@ -490,8 +490,15 @@ export default class Profile extends React.Component {
                 ? item.from_time
                 : ''}
             </RegularTextCB>
-            <RegularTextCB style={[FONTS.boldFont18, {color: Colors.black}]}>
-              {'View Job >'}
+            <RegularTextCB
+              style={[
+                {
+                  color: Colors.black,
+                  textDecorationLine: 'underline',
+                  fontSize: 18,
+                },
+              ]}>
+              {'View Job'}
             </RegularTextCB>
           </View>
         </View>

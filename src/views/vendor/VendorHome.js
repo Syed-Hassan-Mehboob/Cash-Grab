@@ -46,6 +46,7 @@ export default class VendorHome extends Component {
       permissionModalVisibility: false,
       scheduleBookings: [],
       ordrStatus: '',
+      quickOrder: [],
     };
   }
 
@@ -66,6 +67,7 @@ export default class VendorHome extends Component {
       this.getUserProfile(token);
       this.getJobAroundYou();
       this.getBookings();
+      this.getQuickOrder();
     });
   };
 
@@ -109,9 +111,8 @@ export default class VendorHome extends Component {
     //   lng: this.state.currentLong,
     // };
 
-    this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      //console.log(' Job for You =====', data);
+      console.log(' Job for You =====', data);
       // utils.showToast(data.message)
       this.setState({
         isLoading: false,
@@ -124,8 +125,36 @@ export default class VendorHome extends Component {
       utils.showResponseError(error);
       //console.log('==================Error', error);
     };
-
+    this.setState({isLoading: true});
     Axios.get(Constants.getAllJobs, {
+      params: {
+        limit: 1,
+        offset: 0,
+      },
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+  getQuickOrder = async () => {
+    const onSuccess = ({data}) => {
+      console.log(' Quick Jobs for You =====', data.data.records);
+      // utils.showToast(data.message)
+      this.setState({
+        isLoading: false,
+        quickOrder: data.data.records,
+      });
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      utils.showResponseError(error);
+      //console.log('==================Error', error);
+    };
+    this.setState({isLoading: true});
+    Axios.get(Constants.quickJobsVendor, {
       params: {
         limit: 1,
         offset: 0,
@@ -139,9 +168,8 @@ export default class VendorHome extends Component {
   };
 
   getBookings = async () => {
-    this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(' Schedule Bookings  =====', data.data.records);
+      console.log(' Schedule Bookings  =====', data.data.records);
       this.setState({
         scheduleBookings: data.data.records,
       });
@@ -157,6 +185,8 @@ export default class VendorHome extends Component {
       console.log('==================Error', error);
     };
 
+    this.setState({isLoading: true});
+
     Axios.get(Constants.getScheduleBookings, {
       params: {
         limit: 1,
@@ -170,9 +200,9 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-  toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
-  };
+  // toggleIsLoading = () => {
+  //   this.setState({isLoading: !this.state.isLoading});
+  // };
 
   checkLocationPermission = async () => {
     try {
@@ -199,14 +229,16 @@ export default class VendorHome extends Component {
           styles.card,
           {
             padding: SIZES.fifteen,
-            marginHorizontal: SIZES.five / 1.3,
+            marginHorizontal: SIZES.five * 2.3,
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() =>
-          this.props.navigation.navigate(Constants.viewJob, {
-            item: item.id,
-          })
+        onPress={
+          () =>
+            this.props.navigation.navigate(Constants.viewJob, {
+              item: item.id,
+            })
+          // console.log("item lele tu===========> ", item)
         }>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
@@ -340,22 +372,23 @@ export default class VendorHome extends Component {
           styles.card,
           {
             padding: SIZES.fifteen,
-            marginHorizontal: SIZES.five / 1.3,
+            marginHorizontal: SIZES.five * 2.3,
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        onPress={() => this.props.navigation.navigate(Constants.JobInProgress)}>
+        // onPress={() => this.props.navigation.navigate(Constants.JobInProgress)}
+      >
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
-              source={{uri: Constants.imageURL + item.user.userProfile.image}}
+              source={{uri: Constants.imageURL + item.user_image}}
               style={styles.iconUser}
               resizeMode="cover"
             />
           </View>
           <View style={{marginStart: 10}}>
             <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-              {item.user.name}
+              {item.name}
             </RegularTextCB>
             <View
               style={{
@@ -370,7 +403,7 @@ export default class VendorHome extends Component {
                   width: 15,
                   resizeMode: 'contain',
                   tintColor:
-                    item.email_verified_at !== null
+                    item.user_email_verified_at !== null
                       ? Colors.turqoiseGreen
                       : 'red',
                 }}
@@ -378,13 +411,15 @@ export default class VendorHome extends Component {
               <RegularTextCB
                 style={{
                   color:
-                    item.email_verified_at !== null
+                    item.user_email_verified_at !== null
                       ? Colors.turqoiseGreen
                       : 'red',
                   fontSize: 12,
                   marginStart: 5,
                 }}>
-                {item.email_verified_at !== null ? 'Verified' : 'Unverified'}
+                {item.user_email_verified_at !== null
+                  ? 'Verified'
+                  : 'Unverified'}
               </RegularTextCB>
             </View>
           </View>
@@ -396,18 +431,19 @@ export default class VendorHome extends Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title}
-          </RegularTextCB>
+          <View>
+            <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
+              {item.category_name}
+            </RegularTextCB>
+          </View>
 
           <LightTextCB style={{color: Colors.black, fontSize: 12}}>
-            ${item.price}
+            ${item.grand_total}
           </LightTextCB>
         </View>
         <View style={{}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
-            Looking for a car mechanic that can look into the battery setup. The
-            car is in a still position & would require some man power
+            {item.description !== '' ? item.description : 'N/A'}
           </RegularTextCB>
         </View>
         <View
@@ -421,7 +457,7 @@ export default class VendorHome extends Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.address}
+            {item.location}
           </RegularTextCB>
         </View>
         <View
@@ -442,7 +478,7 @@ export default class VendorHome extends Component {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.time}
+              {item.from_time}
             </RegularTextCB>
             <RegularTextCB
               style={{
@@ -466,7 +502,7 @@ export default class VendorHome extends Component {
           styles.card,
           {
             padding: SIZES.fifteen,
-            marginHorizontal: SIZES.five / 1.3,
+            marginHorizontal: SIZES.five * 2.3,
             marginVertical: SIZES.five * 1.5,
           },
         ]}
@@ -799,7 +835,7 @@ export default class VendorHome extends Component {
 
             <View style={{paddingHorizontal: SIZES.twenty}}>
               <FlatList
-                data={this.state.jobAround}
+                data={this.state.quickOrder}
                 // horizontal
                 keyExtractor={(item) => item.id}
                 renderItem={this.renderQuickJob}

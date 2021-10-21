@@ -99,7 +99,6 @@ const ServiceProviderOnTheWay = (props) => {
 
   // console.log("response =============>", vendorAround)
   const getVendorAroundYou = (latatide, longitude) => {
-    setisLoading(true);
     const onSuccess = ({data}) => {
       console.log('Around Data ============== > ', data);
       setvendorAround(data.data);
@@ -304,7 +303,7 @@ const ServiceProviderOnTheWay = (props) => {
             longitudeDelta: 0.0041,
           }}
           zoomEnabled
-          showsUserLocation
+          // showsUserLocation
           maxZoomLevel={15}
           minZoomLevel={2}
           scrollEnabled={false}
@@ -431,8 +430,8 @@ const ServiceProviderOnTheWay = (props) => {
               borderRadius: SIZES.ten * 5,
             }}>
             <Icon
-              type={'Ionicons'}
-              name={'call-outline'}
+              type={'MaterialIcons'}
+              name={'call'}
               style={{color: Colors.white, fontSize: SIZES.fifteen + 2}}
             />
           </View>

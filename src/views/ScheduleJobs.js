@@ -61,6 +61,7 @@ export default function ScheduleJobs(props) {
   };
 
   const renderScheduleJob = ({item}) => {
+    // console.log('=========Schedule item ', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -73,7 +74,7 @@ export default function ScheduleJobs(props) {
         ]}
         onPress={() =>
           props.navigation.navigate(Constants.SchechuleJobDetail, {
-            catName: item.category.name,
+            catName: item.category_name,
             joid: item.id,
           })
         }>
@@ -81,7 +82,7 @@ export default function ScheduleJobs(props) {
           <View style={styles.circleCard}>
             <Image
               source={{
-                uri: Constants.imageURL + item.vendorProfile.image,
+                uri: Constants.imageURL + item.vendor_image,
               }}
               style={styles.iconUser}
               resizeMode="cover"
@@ -90,7 +91,9 @@ export default function ScheduleJobs(props) {
 
           <View style={{marginStart: 10}}>
             <RegularTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
-              {item.name !== null && item.name !== undefined ? item.name : ''}
+              {item.vendor_name !== null && item.vendor_name !== undefined
+                ? item.vendor_name
+                : ''}
             </RegularTextCB>
             <View
               style={{
@@ -139,15 +142,15 @@ export default function ScheduleJobs(props) {
                 fontSize: 14,
                 //   marginVertical: SIZES.ten,
               }}>
-              {item.category.name !== null && item.category.name !== undefined
-                ? item.category.name
+              {item.category_name !== null && item.category_name !== undefined
+                ? item.category_name
                 : ''}
             </RegularTextCB>
           </View>
-          <LightTextCB style={[FONTS.boldFont14, {color: Colors.black}]}>
-            $
-            {item.grandTotal !== null && item.grandTotal !== undefined
-              ? item.grandTotal
+          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
+            {'$ '}
+            {item.grand_total !== null && item.grand_total !== undefined
+              ? item.grand_total
               : ''}
           </LightTextCB>
         </View>
@@ -169,8 +172,8 @@ export default function ScheduleJobs(props) {
               color: Colors.coolGrey,
               // marginVertical: SIZES.ten,
             }}>
-            {item.address !== null && item.address !== undefined
-              ? item.address
+            {item.location !== null && item.location !== undefined
+              ? item.location
               : ''}
           </RegularTextCB>
         </View>
@@ -192,12 +195,12 @@ export default function ScheduleJobs(props) {
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.start_time !== null && start_time !== undefined
-                ? start_time
+              {item.from_time !== null && item.from_time !== undefined
+                ? item.from_time
                 : ''}{' '}
               -{' '}
-              {item.end_time !== null && item.end_time !== undefined
-                ? item.end_time
+              {item.to_time !== null && item.to_time !== undefined
+                ? item.to_time
                 : ''}
             </RegularTextCB>
           </View>

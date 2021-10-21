@@ -50,11 +50,19 @@ export default class ViewJob extends React.Component {
       longitude: '',
       description: '',
       jobService: [],
-      buttonlabel: 'REQUEST FOR ACCEPTENCE',
+      buttonlabel: '',
+      jobId: '',
+      jobStatus: '',
+      orderStatus: undefined,
+      myRequestAceepted: undefined,
     };
   }
 
   componentDidMount() {
+    console.log(
+      'yeh le idddddd===============> ',
+      this.props.route.params.item,
+    );
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
@@ -74,24 +82,26 @@ export default class ViewJob extends React.Component {
     const onSuccess = ({data}) => {
       console.log(
         'View Job Data ==== ==== ',
-        JSON.stringify(data.data.records),
+        JSON.stringify(data.data.records.status),
       );
 
       this.setState({isLoading: false});
       this.setState({
-        userImage: data.data.records.user.user_profiles.image,
+        userImage: data.data.records.user.userProfile.image,
         title: data.data.records.title,
         location: data.data.records.location,
         time: data.data.records.time,
         images: data.data.records.images,
         username: data.data.records.user.name,
-        lat: data.data.records.user.user_profiles.latitude,
-        lng: data.data.records.user.user_profiles.longitude,
+        latitude: data.data.records.user.userProfile.latitude,
+        longitude: data.data.records.user.userProfile.longitude,
         price: data.data.records.price,
         description: data.data.records.description,
-        latitude: data.data.records.user.user_profiles.latitude,
-        longitude: data.data.records.user.user_profiles.longitude,
-        // jobService: data.data.records.job_service,
+        jobId: data.data.records.id,
+        buttonlabel:
+          data.data.records.status === ''
+            ? 'REQUEST FOR ACCEPTANCE'
+            : 'PENDING',
       });
 
       // utils.showToast(data.message)
@@ -108,7 +118,7 @@ export default class ViewJob extends React.Component {
     let params = {
       jobId: this.props.route.params.item,
     };
-    Axios.get(Constants.viewJob, {
+    Axios.get(Constants.VendorviewJobUrl, {
       params,
       headers: {
         Authorization: this.state.accessToken,
@@ -118,37 +128,45 @@ export default class ViewJob extends React.Component {
       .catch(onFailure);
   };
 
-  render() {
-    // this.state.jobService.map((item) => {
-    //   console.log('========== Job Services ==== =', item.name);
-    // });
-    // console.log('View Job ===== ==== ', this.props.route.params.item);
+  createJobRequest = () => {
+    const postData = {
+      job_id: this.state.jobId,
+    };
 
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      this.viewJob();
+      console.log('Request job Data ========', data);
+      // utils.showToast(data.message);
+      this.setState({isLoading: false});
+    };
+    const onFailure = (error) => {
+      console.log(
+        'error =====================================================================>',
+        error,
+      );
+      utils.showResponseError(error.massage);
+      this.setState({isLoading: false});
+    };
+    const options = {
+      headers: {
+        Authorization: this.state.accessToken,
+        //    'Content-Type':'application/x-www-form-urlencoded'
+      },
+    };
+    Axios.post(Constants.createJobRequest, postData, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  render() {
     return (
       <View style={STYLES.container}>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // width: '100%',
-            padding: SIZES.ten * 2,
-            // marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
-          }}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: SIZES.ten}}
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}>
-            <Image source={Images.arrowBack} style={[styles.iconBack]} />
-          </TouchableOpacity>
-          <RegularTextCB style={[FONTS.boldFont24, {color: Colors.black}]}>
-            View Job
-          </RegularTextCB>
-        </View> */}
         <NormalHeader name="View Job" />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: SIZES.twenty}}>
           <View style={{marginBottom: SIZES.five}}>
             <View style={{padding: SIZES.twenty}}>
               <View
@@ -273,8 +291,13 @@ export default class ViewJob extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                console.log('images===', item.images);
-                return <Image source={Images.car1} style={styles.carImage} />;
+                // console.log('images===', item.images);
+                return (
+                  <Image
+                    source={{uri: Constants.imageURL + item.images}}
+                    style={styles.carImage}
+                  />
+                );
               }}
               showsHorizontalScrollIndicator={false}
             />
@@ -304,19 +327,47 @@ export default class ViewJob extends React.Component {
                 marginVertical: SIZES.ten * 3,
                 marginHorizontal: SIZES.twenty,
               }}>
-              <ButtonRadius10
-                label={this.state.buttonlabel}
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  // this.props.navigation.navigate(Constants.chat);
-                  if (this.state.buttonlabel === 'REQUEST FOR ACCEPTENCE') {
-                    this.setState({buttonlabel: 'PENDING'});
-                    if (this.state.buttonlabel === 'PENDING') {
-                      this.setState({buttonlabel: 'PENDING'});
-                    }
+              {/* {this.state.orderStatus !== undefined &&
+              this.state.orderStatus !== 'accepted' ? (
+                <ButtonRadius10
+                  label={this.state.buttonlabel}
+                  disabled={'sss'}
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {}}
+                />
+              ) : !this.state.isLoading &&
+                this.state.buttonlabel !== undefined ? (
+                <ButtonRadius10
+                  label={this.state.buttonlabel}
+                  disabled={this.state.buttonlabel === 'PENDING' ? true : false}
+                  bgColor={
+                    this.state.buttonlabel === 'PENDING'
+                      ? Colors.lighNewGreen
+                      : Colors.sickGreen
                   }
-                }}
-              />
+                  onPress={() => {
+                    if (this.state.buttonlabel === 'REQUEST FOR ACCEPTANCE') {
+                      this.createJobRequest();
+                      return;
+                    }
+                    if (this.state.buttonlabel === 'START NOW') {
+                      this.progressOrder();
+                      return;
+                    }
+                  }}
+                />
+              ) : null} */}
+
+              {!this.state.isLoading ? (
+                <ButtonRadius10
+                  label={this.state.buttonlabel}
+                  disabled={this.state.buttonlabel === 'PENDING'}
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.createJobRequest();
+                  }}
+                />
+              ) : null}
             </View>
           </View>
         </ScrollView>

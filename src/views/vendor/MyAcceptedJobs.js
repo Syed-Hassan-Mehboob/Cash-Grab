@@ -1,42 +1,63 @@
-import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
   View,
+  FlatList,
   TouchableOpacity,
   Image,
-  FlatList,
 } from 'react-native';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
-import COLORS from '../../common/Colors';
-import IMAGES from '../../common/Images';
-import RegularTextCB from '../../components/RegularTextCB';
-import AllBookings from '../../components/AllBookings';
-import {Icon} from 'native-base';
 import Colors from '../../common/Colors';
-import NormalHeader from '../../components/NormalHeader';
+import Constants, {FONTS, height, SIZES, STYLES} from '../../common/Constants';
 import Images from '../../common/Images';
 import LightTextCB from '../../components/LightTextCB';
-import utils from '../../utils';
+import NormalHeader from '../../components/NormalHeader';
+import RegularTextCB from '../../components/RegularTextCB';
 import Axios from '../../network/APIKit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import utils from '../../utils';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default function QuickJobs(props) {
-  const [quickJobs, setQuickJobs] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+export default function MyAcceptedJobs(props) {
+  const [myAcceptedJob, setMyAcceptedJob] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getUserAccessToken();
   }, []);
 
   const getUserAccessToken = async () => {
+    setIsLoading(true);
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    console.log('access token ============>>> ', token);
-    getQuickJobs(token);
+    if (token !== undefined) {
+      getMyAcceptedJob(token);
+      // updateJobs(accessToken.token);
+    }
   };
 
-  const renderQuickJob = ({item}) => {
+  const getMyAcceptedJob = (token) => {
+    const onSuccess = ({data}) => {
+      setIsLoading(false);
+      console.log('My Accepted Jobs ==== ', data.data);
+      setMyAcceptedJob(data.data.records);
+    };
+
+    const onFailure = (error) => {
+      setIsLoading(false);
+      console.log('=================', error);
+      utils.showResponseError(error);
+    };
+
+    Axios.get(Constants.orderAccepted, {
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  const renderMyAcceptedJob = ({item}) => {
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -44,12 +65,15 @@ export default function QuickJobs(props) {
           styles.card,
           {
             padding: SIZES.fifteen,
-            margin: SIZES.five,
+            // marginHorizontal: SIZES.five * 10,
             // marginTop: SIZES.twenty,
           },
         ]}
-        // onPress={() => props.navigation.navigate(Constants.JobInProgress)}
-      >
+        onPress={() =>
+          props.navigation.navigate(Constants.MyAcceptedJobDetails, {
+            orderId: item.id,
+          })
+        }>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -77,24 +101,23 @@ export default function QuickJobs(props) {
                   height: 15,
                   width: 15,
                   resizeMode: 'contain',
-                  tintColor:
-                    item.user_email_verified_at !== null
-                      ? Colors.turqoiseGreen
-                      : 'red',
+                  tintColor: Colors.turqoiseGreen,
+                  //   item.email_verified_at !== null
+                  //     ? Colors.turqoiseGreen
+                  //     : 'red',
                 }}
               />
               <RegularTextCB
                 style={{
-                  color:
-                    item.user_email_verified_at !== null
-                      ? Colors.turqoiseGreen
-                      : 'red',
+                  color: Colors.turqoiseGreen,
+                  //   item.email_verified_at !== null
+                  //     ? Colors.turqoiseGreen
+                  //     : 'red',
                   fontSize: 12,
                   marginStart: 5,
                 }}>
-                {item.user_email_verified_at !== null
-                  ? 'Verified'
-                  : 'Unverified'}
+                {/* {item.email_verified_at !== null ? 'Verified' : 'Unverified'} */}
+                Verified
               </RegularTextCB>
             </View>
           </View>
@@ -192,45 +215,38 @@ export default function QuickJobs(props) {
       </TouchableOpacity>
     );
   };
-
-  const getQuickJobs = async (accessToken) => {
-    setIsLoading(true);
-    const onSuccess = ({data}) => {
-      setQuickJobs(data.data.records);
-      setIsLoading(false);
-    };
-
-    const onFailure = (error) => {
-      setIsLoading(false);
-      utils.showResponseError(error);
-    };
-
-    Axios.get(Constants.quickJobsVendor, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
   return (
     <View style={STYLES.container}>
-      <NormalHeader name="Quick Jobs" />
-
+      <NormalHeader name="My Jobs" />
       <View style={{}}>
         <FlatList
-          data={quickJobs}
-          renderItem={renderQuickJob}
+          data={myAcceptedJob}
+          renderItem={renderMyAcceptedJob}
           keyExtractor={(id) => id.id}
           contentContainerStyle={{
-            paddingHorizontal: SIZES.ten * 2,
+            paddingHorizontal: SIZES.fifteen,
             paddingTop: SIZES.ten * 2,
             paddingBottom: 150,
           }}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            !isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: height / 1.5,
+                }}>
+                <Text style={[FONTS.boldFont18, {alignSelf: 'center'}]}>
+                  No Record(s)!
+                </Text>
+              </View>
+            ) : null
+          }
         />
       </View>
+
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
@@ -247,7 +263,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   card: {
-    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 20,
     // width: width - SIZES.fifteen,

@@ -23,7 +23,7 @@ export default function SelectServices(props) {
   const [serviceData, setServiceData] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
 
-  console.log('this.props.route.params.item', props.route.params.item);
+  // console.log('this.props.route.params.item', props.route.params.item);
 
   useEffect(() => {
     getUserAccessToken();
@@ -97,6 +97,7 @@ export default function SelectServices(props) {
       props.navigation.navigate(Constants.dateTimeSlots, {
         serviceIds: selectedServices,
         item: props.route.params.item,
+        vendorId: props.route.params.vendorid,
       });
     }
   };
