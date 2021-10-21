@@ -55,7 +55,7 @@ export default class SingleCategory extends Component {
 
   getCategoryData = (token) => {
     const onSuccess = ({data}) => {
-      console.log('==== catagory data ====', data.data);
+      console.log('==== catagory data ====', JSON.stringify(data.data));
       this.toggleIsLoading();
       this.setState({vendors: data.data});
       // utils.showToast(data.message)
@@ -290,7 +290,7 @@ export default class SingleCategory extends Component {
             numColumns={2}
             // horizontal
             data={this.formatData(this.state.vendors, 2)}
-            keyExtractor={(index) => index}
+            keyExtractor={(item) => item.id}
             renderItem={this.renderSingleCategoriesItem}
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={() => {
