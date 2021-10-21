@@ -342,10 +342,10 @@ export default class DrawerScreen extends Component {
               style={{
                 flexDirection: 'row',
                 width: '100%',
-                flex: 0.3,
                 alignItems: 'center',
                 paddingHorizontal: SIZES.ten,
                 paddingVertical: SIZES.ten,
+                marginBottom: SIZES.ten,
               }}>
               <Image
                 source={Images.iconDrawerLogOut}

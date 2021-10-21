@@ -11,8 +11,6 @@ import android.util.Log;
 
 import com.facebook.react.ReactActivity;
 
-import org.devio.rn.splashscreen.SplashScreen;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 

@@ -21,6 +21,7 @@ import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
+import {getFcmToken} from '../FirebaseServices';
 
 export default class Login extends Component {
   constructor(props) {
@@ -93,6 +94,7 @@ export default class Login extends Component {
         this.props.navigation.navigate(Constants.otp, {email: email});
       } else {
         this.saveUser(data.data);
+        getFcmToken(data.data.token);
       }
     };
 

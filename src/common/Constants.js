@@ -165,6 +165,7 @@ const Constants = {
   VendorviewOrderDetailUrl: 'order/details?',
   WidrawAmount: 'vendors/withdraw-amount',
   AddPrifileServiceURL: 'vendors/create-service?',
+  SaveUserDeviceTokenURL: 'auth/device-token',
   /* * api urls * */
 };
 export const FIREBASECONSTANTS = {

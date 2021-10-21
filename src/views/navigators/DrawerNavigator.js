@@ -36,6 +36,8 @@ export default class DrawerNavigator extends React.Component {
   state = {isVendor: false, gotUser: false, isVisible: false};
 
   componentDidMount() {
+    this.notificationListener();
+
     // this.interval = setInterval(() => {
     //   this.setState({isVisible: true}, () => {
     //     console.log(
@@ -48,7 +50,7 @@ export default class DrawerNavigator extends React.Component {
   }
 
   componentWillUnmount() {
-    // clearInterval(this.interval);
+    clearInterval(this.interval);
   }
 
   getUserType = async () => {
@@ -59,6 +61,48 @@ export default class DrawerNavigator extends React.Component {
       () => console.log('userType: ', this.state.isVendor),
       this.setState({gotUser: true}),
     );
+  };
+
+  /*  ###################################   ###################################* */
+  /*  ************************** FIREBASE NOTIFICATIION ************************ */
+  /*  ###################################   ###################################* */
+  notificationListener = async () => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      console.warn(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+    });
+
+    // Check forGround
+    messaging().onMessage(async (rm) => {
+      console.log('recived in forground', rm);
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          console.warn(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+        }
+      })
+      .catch((error) => {
+        console.log('getInitialNotification ======> ', error);
+        console.log('getInitialNotification ======> ', error);
+      });
   };
 
   DrawerScreens = () => {
