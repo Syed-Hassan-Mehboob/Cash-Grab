@@ -26,6 +26,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import ConfirmPayment from './../ConfirmPayment';
 import BookingConfirmed from '../BookingConfirmed';
 
+import messaging from '@react-native-firebase/messaging';
+
 const Drawer = createDrawerNavigator();
 
 export default class DrawerNavigator extends React.Component {
@@ -33,10 +35,15 @@ export default class DrawerNavigator extends React.Component {
     super(props);
   }
 
-  state = {isVendor: false, gotUser: false, isVisible: false};
+  state = {
+    isVendor: false,
+    gotUser: false,
+    isVisible: false,
+    quickNotifyOrderItem: '',
+  };
 
   componentDidMount() {
-    this.notificationListener();
+    // this.notificationListener();
 
     // this.interval = setInterval(() => {
     //   this.setState({isVisible: true}, () => {
@@ -56,17 +63,18 @@ export default class DrawerNavigator extends React.Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem('user');
     var userData = JSON.parse(user);
-    this.setState(
-      {isVendor: userData.type === 'vendor'},
-      () => console.log('userType: ', this.state.isVendor),
-      this.setState({gotUser: true}),
-    );
+    this.setState({isVendor: userData.type === 'vendor'}, () => {
+      console.log('userType: ', this.state.isVendor),
+        this.setState({gotUser: true});
+      this.notificationListener();
+    });
   };
 
   /*  ###################################   ###################################* */
   /*  ************************** FIREBASE NOTIFICATIION ************************ */
   /*  ###################################   ###################################* */
   notificationListener = async () => {
+    console.log('notificationListener started');
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     messaging().onNotificationOpenedApp((remoteMessage) => {
       console.log(
@@ -82,6 +90,9 @@ export default class DrawerNavigator extends React.Component {
     // Check forGround
     messaging().onMessage(async (rm) => {
       console.log('recived in forground', rm);
+      if (rm.data.trigger_type === 'quick_notify') {
+        this.setState({isVisible: true});
+      }
     });
 
     // Check whether an initial notification is available
