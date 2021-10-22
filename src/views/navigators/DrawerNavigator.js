@@ -27,6 +27,9 @@ import ConfirmPayment from './../ConfirmPayment';
 import BookingConfirmed from '../BookingConfirmed';
 
 import messaging from '@react-native-firebase/messaging';
+import Axios from '../../network/APIKit';
+import utils from '../../utils';
+import moment from 'moment';
 
 const Drawer = createDrawerNavigator();
 
@@ -40,6 +43,13 @@ export default class DrawerNavigator extends React.Component {
     gotUser: false,
     isVisible: false,
     quickNotifyOrderItem: '',
+    quickNotifyOrderId: '',
+    QuickJobCategoryName: '',
+    QuickJobPrice: '',
+    QuickJobLocation: '',
+    QuickJobAddress: '',
+    QuickJobTime: '',
+    accessToken: '',
   };
 
   componentDidMount() {
@@ -63,6 +73,8 @@ export default class DrawerNavigator extends React.Component {
   getUserType = async () => {
     const user = await AsyncStorage.getItem('user');
     var userData = JSON.parse(user);
+
+    this.setState({accessToken: userData.token});
     this.setState({isVendor: userData.type === 'vendor'}, () => {
       console.log('userType: ', this.state.isVendor),
         this.setState({gotUser: true});
@@ -90,8 +102,10 @@ export default class DrawerNavigator extends React.Component {
     // Check forGround
     messaging().onMessage(async (rm) => {
       console.log('recived in forground', rm);
+
       if (rm.data.trigger_type === 'quick_notify') {
-        this.setState({isVisible: true});
+        this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        this.getQuickOrderRequestData(rm.data.trigger_id);
       }
     });
 
@@ -116,9 +130,71 @@ export default class DrawerNavigator extends React.Component {
       });
   };
 
-  DrawerScreens = () => {
-    //
+  getQuickOrderRequestData = (orderId) => {
+    const onSuccess = ({data}) => {
+      this.setState(
+        {
+          quickNotifyOrderItem: data.data,
+          QuickJobCategoryName: data.data.category.name,
+          QuickJobPrice: data.data.grandTotal,
+          QuickJobAddress: data.data.address,
+          QuickJobLocation: data.data.location,
+          QuickJobTime: data.data.start_time,
+        },
+        () => {
+          this.setState({isVisible: true});
+        },
+      );
+    };
 
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+      s;
+      console.log('++++==========', error);
+    };
+
+    const params = {
+      orderId: orderId,
+    };
+
+    Axios.get(Constants.VendorviewOrderDetailUrl, {
+      params,
+      headers: {
+        Authorization: `Bearer ${this.state.accessToken}`,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  Accept_DeclineQuickJob = (status) => {
+    const params = {
+      orderId: this.state.quickNotifyOrderId,
+      status: status,
+    };
+
+    const onSuccess = ({data}) => {
+      console.log(data);
+      this.setState({isVisible: false});
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+      this.setState({isVisible: false});
+      console.log('++++==========', error);
+    };
+
+    Axios.post(Constants.ChangeQuickJobStatus_Vendor, {
+      params,
+      headers: {
+        Authorization: `Bearer ${this.state.accessToken}`,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  DrawerScreens = () => {
     return this.state.gotUser === false ? (
       <Spinner
         visible={true}
@@ -187,14 +263,16 @@ export default class DrawerNavigator extends React.Component {
                       FONTS.mediumFont14,
                       {color: Colors.black, marginVertical: SIZES.five},
                     ]}>
-                    Service
+                    Category
                   </Text>
                   <View
                     style={[
                       STYLES.card,
                       {borderWidth: 1, borderColor: Colors.sickGreen},
                     ]}>
-                    <Text style={FONTS.mediumFont16}>Service</Text>
+                    <Text style={FONTS.mediumFont16}>
+                      {this.state.QuickJobCategoryName}
+                    </Text>
                   </View>
                 </View>
                 <View style={{marginVertical: SIZES.five}}>
@@ -210,7 +288,9 @@ export default class DrawerNavigator extends React.Component {
                       STYLES.card,
                       {borderWidth: 1, borderColor: Colors.sickGreen},
                     ]}>
-                    <Text style={FONTS.mediumFont16}>$100.00</Text>
+                    <Text style={FONTS.mediumFont16}>
+                      ${this.state.QuickJobPrice}
+                    </Text>
                   </View>
                 </View>
                 <View style={{marginVertical: SIZES.five}}>
@@ -226,7 +306,9 @@ export default class DrawerNavigator extends React.Component {
                       STYLES.card,
                       {borderWidth: 1, borderColor: Colors.sickGreen},
                     ]}>
-                    <Text style={FONTS.mediumFont16}>New York, USA</Text>
+                    <Text style={FONTS.mediumFont16}>
+                      {this.state.QuickJobLocation}
+                    </Text>
                   </View>
                 </View>
                 <View style={{marginVertical: SIZES.five}}>
@@ -243,7 +325,7 @@ export default class DrawerNavigator extends React.Component {
                       {borderWidth: 1, borderColor: Colors.sickGreen},
                     ]}>
                     <Text style={FONTS.mediumFont16}>
-                      111,NYC Street, NY 1121
+                      {this.state.QuickJobLocation}
                     </Text>
                   </View>
                 </View>
@@ -260,7 +342,12 @@ export default class DrawerNavigator extends React.Component {
                       STYLES.card,
                       {borderWidth: 1, borderColor: Colors.sickGreen},
                     ]}>
-                    <Text style={FONTS.mediumFont16}>12:00 PM</Text>
+                    <Text style={FONTS.mediumFont16}>
+                      {this.state.QuickJobTime}
+                      {/* {moment(new Date(this.state.QuickJobTime)).format(
+                        'hh:mm',
+                      )} */}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -275,7 +362,8 @@ export default class DrawerNavigator extends React.Component {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
-                    this.setState({isVisible: false});
+                    // this.setState({isVisible: false});
+                    this.Accept_DeclineQuickJob('accepted');
                   }}
                   style={{
                     padding: SIZES.fifteen,
@@ -290,7 +378,8 @@ export default class DrawerNavigator extends React.Component {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
-                    this.setState({isVisible: false});
+                    // this.setState({isVisible: false});
+                    this.Accept_DeclineQuickJob('cancelled');
                   }}
                   style={{
                     padding: SIZES.fifteen,

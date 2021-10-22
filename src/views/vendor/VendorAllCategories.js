@@ -41,7 +41,7 @@ export default class VendorSingleCategory extends Component {
 
   getAllCategories = () => {
     const onSuccess = ({data}) => {
-      console.log('All Catagor==========', data.data.records);
+      // console.log('All Catagor==========', data.data.records);
       this.setState({isLoading: false, getAllCategories: data.data.records});
     };
 

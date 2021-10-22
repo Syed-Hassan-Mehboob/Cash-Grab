@@ -32,10 +32,10 @@ export default class SingleCategory extends Component {
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
       this.getUserAccessToken();
-      console.log(
-        'Parent Category id ====== ',
-        this.props.route.params.item.id,
-      );
+      // console.log(
+      //   'Parent Category id ====== ',
+      //   this.props.route.params.item.id,
+      // );
     });
   }
 
@@ -55,7 +55,7 @@ export default class SingleCategory extends Component {
 
   getCategoryData = (token) => {
     const onSuccess = ({data}) => {
-      console.log('==== catagory data ====', JSON.stringify(data.data));
+      // console.log('==== catagory data ====', JSON.stringify(data.data));
       this.toggleIsLoading();
       this.setState({vendors: data.data});
       // utils.showToast(data.message)

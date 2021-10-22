@@ -134,7 +134,7 @@ export default class VendorSingleCategory extends Component {
   };
 
   getJobsByCategory = () => {
-    console.log('==================', this.props.route.params.item.id);
+    // console.log('==================', this.props.route.params.item.id);
     const onSuccess = ({data}) => {
       // utils.showToast(data.message)
       this.setState({isLoading: false, getJobsByCatagory: data.data});
@@ -160,7 +160,7 @@ export default class VendorSingleCategory extends Component {
   };
 
   renderSingleCategoriesItem = ({item}) => {
-    console.log('======================single ', item);
+    // console.log('======================single ', item);
 
     return (
       <TouchableOpacity

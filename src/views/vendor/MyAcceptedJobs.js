@@ -38,13 +38,13 @@ export default function MyAcceptedJobs(props) {
   const getMyAcceptedJob = (token) => {
     const onSuccess = ({data}) => {
       setIsLoading(false);
-      console.log('My Accepted Jobs ==== ', data.data);
+      // console.log('My Accepted Jobs ==== ', data.data);
       setMyAcceptedJob(data.data.records);
     };
 
     const onFailure = (error) => {
       setIsLoading(false);
-      console.log('=================', error);
+      // console.log('=================', error);
       utils.showResponseError(error);
     };
 

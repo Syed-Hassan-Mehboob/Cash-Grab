@@ -153,7 +153,7 @@ export default class ViewVendorProfile extends React.Component {
       if (!isFirstTime) {
         this.toggleIsLoading();
       }
-      console.log('Selectes Service Data === ', data);
+      // console.log('Selectes Service Data === ', data);
       this.setState({services: data.data});
     };
 
@@ -181,7 +181,7 @@ export default class ViewVendorProfile extends React.Component {
   };
 
   renderServicePrice = ({item}) => {
-    console.log('Services Item price ==== ===>>>> ', item);
+    // console.log('Services Item price ==== ===>>>> ', item);
     return (
       <View
         style={{

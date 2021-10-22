@@ -12,7 +12,7 @@ const firebaseConfig = {
 };
 
 export default Firebase = () => {
-  console.log('========================>', firebase.apps.length);
+  // console.log('========================>', firebase.apps.length);
   if (!firebase.apps.length) {
     return firebase.initializeApp(firebaseConfig);
   } else {

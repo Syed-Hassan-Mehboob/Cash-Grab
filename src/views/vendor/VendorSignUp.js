@@ -317,7 +317,7 @@ export default class VendorSignUp extends Component {
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.goBack();
-                  console.log('sign up back====');
+                  // console.log('sign up back====');
                 }}
                 style={{
                   // position: 'absolute',

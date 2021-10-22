@@ -45,7 +45,7 @@ export default class ForgetPassword extends Component {
 
     const onSuccess = ({data}) => {
       this.setState({isLoading: false});
-      console.log('sdssasassssS', data);
+      // console.log('sdssasassssS', data);
       utils.showToast(data.message);
 
       setTimeout(() => {

@@ -46,7 +46,7 @@ export default class ResetPassword extends Component {
 
     const onSuccess = ({data}) => {
       this.setState({isLoading: false});
-      console.log('sdssasassssS', data);
+      // console.log('sdssasassssS', data);
       this.props.navigation.dispatch(this.resetAction);
       // utils.showToast(data.message);
     };

@@ -42,7 +42,7 @@ export default function SelectIntrest(props) {
 
   useEffect(() => {
     const onSuccess = ({data}) => {
-      console.log('get intrests success=============>>>', data.data);
+      // console.log('get intrests success=============>>>', data.data);
       let temp = [];
       data.data.interests.map((e) => {
         temp.push({...e, isSlected: false});
@@ -51,7 +51,7 @@ export default function SelectIntrest(props) {
       setIsLoading(false);
     };
     const onFaliure = (error) => {
-      console.log('get intrests error=============>>>', error);
+      // console.log('get intrests error=============>>>', error);
       setIsLoading(false);
     };
     Axios.get(Constants.getInterests).then(onSuccess).catch(onFaliure);
@@ -63,7 +63,7 @@ export default function SelectIntrest(props) {
     Data.map((val) => {
       if (val.isSlected) {
         interestId.push(val.id);
-        console.log(val.id);
+        // console.log(val.id);
       }
     });
 

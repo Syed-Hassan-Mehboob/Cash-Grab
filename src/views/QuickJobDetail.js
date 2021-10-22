@@ -375,7 +375,7 @@ export default class QuickJobDetail extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                console.log('images===', item.images);
+                // console.log('images===', item.images);
                 return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}

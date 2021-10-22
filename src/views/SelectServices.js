@@ -28,7 +28,7 @@ export default function SelectServices(props) {
   useEffect(() => {
     getUserAccessToken();
     const unsubscribe = props.navigation.addListener('focus', () => {
-      console.log('working ==== ......');
+      // console.log('working ==== ......');
       getUserAccessToken();
     });
     return unsubscribe;
@@ -60,7 +60,7 @@ export default function SelectServices(props) {
     // console.log('tokennnnn', token);
 
     const onSuccess = ({data}) => {
-      console.log('All Servicessssssss ======================>', data);
+      // console.log('All Servicessssssss ======================>', data);
       // setAllServices(data.data[0].services);
       let temp = [];
       let temp1 = data.data[0].services;
@@ -75,7 +75,7 @@ export default function SelectServices(props) {
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
-      console.log('=======Servicessssss========>', error);
+      // console.log('=======Servicessssss========>', error);
     };
     Axios.get(Constants.customerViewCategoriesURL, config)
       .then(onSuccess)
@@ -87,7 +87,7 @@ export default function SelectServices(props) {
     serviceData.map((val) => {
       if (val.isSelected) {
         selectedServices.push(val.id);
-        console.log('Services Id ==== ', val.id);
+        // console.log('Services Id ==== ', val.id);
       }
     });
 

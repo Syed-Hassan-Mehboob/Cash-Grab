@@ -81,13 +81,13 @@ const ServiceProviderOnTheWay = (props) => {
           // longitudeDelta: 0.0041,
         });
 
-        console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        // console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
       (error) => {
-        console.log(
-          'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
-          error,
-        );
+        // console.log(
+        //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
+        //   error,
+        // );
       },
     );
 
@@ -100,7 +100,7 @@ const ServiceProviderOnTheWay = (props) => {
   // console.log("response =============>", vendorAround)
   const getVendorAroundYou = (latatide, longitude) => {
     const onSuccess = ({data}) => {
-      console.log('Around Data ============== > ', data);
+      // console.log('Around Data ============== > ', data);
       setvendorAround(data.data);
       setisLoading(false);
     };

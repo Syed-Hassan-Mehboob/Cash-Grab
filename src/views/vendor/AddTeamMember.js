@@ -88,11 +88,12 @@ export default function AddTeamMember(props) {
           // console.log("image converted to base 64 =======>>>>", 'data:image/png;base64,'+base64String)
           setImage('data:image/png;base64,' + base64String);
         })
-        .catch((err) =>
-          console.log(
-            'catch error while converting image to base 64=====>>>>',
-            err,
-          ),
+        .catch(
+          (err) => {},
+          // console.log(
+          //   'catch error while converting image to base 64=====>>>>',
+          //   err,
+          // ),
         );
     });
   };
@@ -109,11 +110,12 @@ export default function AddTeamMember(props) {
           // console.log("image converted to base 64 =======>>>>", 'data:image/png;base64,'+base64String)
           setImage('data:image/png;base64,' + base64String);
         })
-        .catch((err) =>
-          console.log(
-            'catch error while converting image to base 64=====>>>>',
-            err,
-          ),
+        .catch(
+          (err) => {},
+          // console.log(
+          //   'catch error while converting image to base 64=====>>>>',
+          //   err,
+          // ),
         );
     });
   };
@@ -132,10 +134,10 @@ export default function AddTeamMember(props) {
       utils.showResponseError(error);
     };
 
-    console.log(
-      'sdfkjhsfkjhsflkhsklhdf ===================== >>>>>>>> name: ',
-      name + ' image: ' + image,
-    );
+    // console.log(
+    //   'sdfkjhsfkjhsflkhsklhdf ===================== >>>>>>>> name: ',
+    //   name + ' image: ' + image,
+    // );
 
     if (name === '') {
       utils.showToast('Invalid Name');

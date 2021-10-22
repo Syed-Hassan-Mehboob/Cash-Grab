@@ -85,7 +85,7 @@ export default function BookingAcceptance(props) {
       setIsLoading(false);
 
       utils.showResponseError(error);
-      console.log('++++==========', error);
+      // console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {
@@ -105,7 +105,7 @@ export default function BookingAcceptance(props) {
   const cancelOrder = async () => {
     let token = await AsyncStorage.getItem(Constants.accessToken);
     const onSuccess = ({data}) => {
-      console.log('>>>>>>>> ', data);
+      // console.log('>>>>>>>> ', data);
       setIsLoading(false);
       utils.showToast('Your order has been canceled');
     };
@@ -114,7 +114,7 @@ export default function BookingAcceptance(props) {
       setIsLoading(false);
 
       utils.showResponseError(error);
-      console.log('++++==========', error);
+      // console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {

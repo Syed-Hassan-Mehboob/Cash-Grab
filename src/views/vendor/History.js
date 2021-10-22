@@ -40,7 +40,7 @@ export default function History(props) {
     const onSuccess = ({data}) => {
       setCompletedJobs(data.data.records);
       setTotalCompletedJobs(data.data.records.length);
-      console.log(data.data.records);
+      // console.log(data.data.records);
 
       // setIsLoading(false);
     };

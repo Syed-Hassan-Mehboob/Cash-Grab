@@ -54,7 +54,7 @@ export default class WithDraw extends Component {
 
   getDashboardData = () => {
     const onSuccess = ({data}) => {
-      console.log('Widraw screen ', data?.data.total_earning);
+      // console.log('Widraw screen ', data?.data.total_earning);
       this.setState(
         {
           totalEarning: data?.data.total_earning,
@@ -82,7 +82,7 @@ export default class WithDraw extends Component {
 
   handleWidrawAmount = () => {
     const onSuccess = ({data}) => {
-      console.log('widraw Responce =======>>>>>', data);
+      // console.log('widraw Responce =======>>>>>', data);
       this.setState({isLoading: false});
       utils.showToast(data.message);
       setTimeout(() => {

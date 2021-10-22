@@ -46,7 +46,7 @@ export default function ScheduleJobDetails(props) {
     const getToken = async () => {
       getScheduleJob();
       const unsubscribe = props.navigation.addListener('focus', () => {
-        console.log('working ==== ......');
+        // console.log('working ==== ......');
         getScheduleJob();
       });
       return unsubscribe;
@@ -60,7 +60,7 @@ export default function ScheduleJobDetails(props) {
     setIsloading(true);
 
     const onSuccess = ({data}) => {
-      console.log('Order Job Data  ====>>>>>>>>>> ', data.data.orderStatus);
+      // console.log('Order Job Data  ====>>>>>>>>>> ', data.data.orderStatus);
       setOrderStatus(data.data.orderStatus);
       setOrderId(data.data.id);
       setAllScheduleJobDetail(data.data);
@@ -71,7 +71,7 @@ export default function ScheduleJobDetails(props) {
       setIsloading(false);
 
       utils.showResponseError(error);
-      console.log('++++==========', error);
+      // console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
 
@@ -93,7 +93,7 @@ export default function ScheduleJobDetails(props) {
     setIsloading(true);
 
     const onSuccess = ({data}) => {
-      console.log('>>>>>>>> ', data);
+      // console.log('>>>>>>>> ', data);
 
       setIsloading(false);
     };
@@ -102,7 +102,7 @@ export default function ScheduleJobDetails(props) {
       setIsloading(false);
 
       utils.showResponseError(error);
-      console.log('++++==========', error);
+      // console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {
@@ -214,7 +214,7 @@ export default function ScheduleJobDetails(props) {
       from_time: hrfrom + ':' + minfrom,
       to_time: hrto + ':' + minto,
     };
-    console.log(params);
+    // console.log(params);
 
     const options = {
       headers: {

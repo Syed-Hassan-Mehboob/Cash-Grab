@@ -152,13 +152,11 @@ const Constants = {
   // jobAcceptance: 'customer/jobs/detail',
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
-  orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
   orderProcess: 'order/proceed',
   orderCompleted: 'order/completed',
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
-  orderDetail: 'order/details?',
   orderStatus: 'order/order-status?',
   createJobRequest: 'vendors/create-job-request?',
   orderAccepted: 'order/accepted',
@@ -166,6 +164,7 @@ const Constants = {
   WidrawAmount: 'vendors/withdraw-amount',
   AddPrifileServiceURL: 'vendors/create-service?',
   SaveUserDeviceTokenURL: 'auth/device-token',
+  ChangeQuickJobStatus_Vendor: 'order/quick-order-status?',
   /* * api urls * */
 };
 export const FIREBASECONSTANTS = {

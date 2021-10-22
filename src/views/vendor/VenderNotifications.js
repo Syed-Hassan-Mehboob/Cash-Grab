@@ -48,12 +48,12 @@ export default class VenderNotifications extends Component {
   };
 
   renderNotificationsItem = ({item}) => {
-    console.log(
-      'Item  ===============>',
-      item.notifications.map((item) => {
-        console.log(item.content);
-      }),
-    );
+    // console.log(
+    //   'Item  ===============>',
+    //   item.notifications.map((item) => {
+    //     console.log(item.content);
+    //   }),
+    // );
     return (
       <View style={{marginHorizontal: SIZES.fifteen}}>
         <RegularTextCB style={{color: Colors.black, fontSize: 18}}>

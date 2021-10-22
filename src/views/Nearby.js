@@ -71,13 +71,13 @@ const Nearby = (props) => {
           longitudeDelta: 0.002,
         });
 
-        console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        // console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
       (error) => {
-        console.log(
-          'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
-          error,
-        );
+        // console.log(
+        //   'BBBBBBBBBBBAAAAAAAAAAAAABBBBBBBBBBBBAAAAAAAAAAAARRRRRRRRRRRRR: error => ',
+        //   error,
+        // );
       },
     );
 
@@ -91,7 +91,7 @@ const Nearby = (props) => {
   const getVendorAroundYou = (latatide, longitude) => {
     setisLoading(true);
     const onSuccess = ({data}) => {
-      console.log('Around Data ============== > ', data);
+      // console.log('Around Data ============== > ', data);
       setvendorAround(data.data);
       setisLoading(false);
     };

@@ -269,7 +269,7 @@ export default class VendorProfile extends React.Component {
             if (tItem.id !== item.id) tItem.isSelected = false;
             else {
               tItem.isSelected = true;
-              console.log('selectedCategory======>>>>>>tItem  ', tItem);
+              // console.log('selectedCategory======>>>>>>tItem  ', tItem);
               this.setState({selectedCategory: item});
             }
           });

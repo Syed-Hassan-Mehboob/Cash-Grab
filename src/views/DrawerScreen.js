@@ -60,10 +60,10 @@ export default class DrawerScreen extends Component {
 
   getUserProfile = () => {
     const onSuccess = ({data}) => {
-      console.log(
-        'ssssssssssssssssssssdsdsssdsdsdsdsdssdsdsdsdsdsd ======== >>>>> ',
-        Constants.imageURL + data.data.records.user_profiles.image,
-      );
+      // console.log(
+      //   'ssssssssssssssssssssdsdsssdsdsdsdsdssdsdsdsdsdsd ======== >>>>> ',
+      //   Constants.imageURL + data.data.records.user_profiles.image,
+      // );
       this.setState({
         avatar: Constants.imageURL + data.data.records.user_profiles.image,
         name: data.data.records.name,

@@ -59,10 +59,10 @@ export default class ViewJob extends React.Component {
   }
 
   componentDidMount() {
-    console.log(
-      'yeh le idddddd===============> ',
-      this.props.route.params.item,
-    );
+    // console.log(
+    //   'yeh le idddddd===============> ',
+    //   this.props.route.params.item,
+    // );
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
@@ -80,10 +80,10 @@ export default class ViewJob extends React.Component {
   viewJob = () => {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console.log(
-        'View Job Data ==== ==== ',
-        JSON.stringify(data.data.records.status),
-      );
+      // console.log(
+      //   'View Job Data ==== ==== ',
+      //   JSON.stringify(data.data.records.status),
+      // );
 
       this.setState({isLoading: false});
       this.setState({
@@ -136,15 +136,15 @@ export default class ViewJob extends React.Component {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
       this.viewJob();
-      console.log('Request job Data ========', data);
+      // console.log('Request job Data ========', data);
       // utils.showToast(data.message);
       this.setState({isLoading: false});
     };
     const onFailure = (error) => {
-      console.log(
-        'error =====================================================================>',
-        error,
-      );
+      // console.log(
+      //   'error =====================================================================>',
+      //   error,
+      // );
       utils.showResponseError(error.massage);
       this.setState({isLoading: false});
     };

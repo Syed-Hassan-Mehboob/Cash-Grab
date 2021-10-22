@@ -100,7 +100,7 @@ export default class Home extends Component {
         }
       }
     } catch (err) {
-      console.log('getLocation catch: ==================> ', err);
+      // console.log('getLocation catch: ==================> ', err);
     }
   };
 
@@ -108,7 +108,7 @@ export default class Home extends Component {
   getLocation = async () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        console.log('======Geolocation ', position.coords.longitude);
+        // console.log('======Geolocation ', position.coords.longitude);
         this.setState({
           currentLat: position.coords.latitude,
           currentLong: position.coords.longitude,
@@ -116,11 +116,11 @@ export default class Home extends Component {
         this.getUserAccessToken();
       },
       (error) => {
-        console.log('Home Screen Get Location error ', error);
+        // console.log('Home Screen Get Location error ', error);
         this.getUserAccessToken();
         if (Platform.OS === 'ios') {
           if (error.PERMISSION_DENIED === 1) {
-            console.log('Humzaaaaaaa ', 'permission denied ask again');
+            // console.log('Humzaaaaaaa ', 'permission denied ask again');
 
             Geolocation.requestAuthorization();
             Geolocation.getCurrentPosition(
@@ -128,8 +128,8 @@ export default class Home extends Component {
                 console.log(position);
               },
               (error) => {
-                console.log('map error: ', error);
-                console.log(error.code, error.message);
+                // console.log('map error: ', error);
+                // console.log(error.code, error.message);
               },
               {enableHighAccuracy: false, timeout: 15000, maximumAge: 10000},
             );

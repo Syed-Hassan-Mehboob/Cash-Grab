@@ -32,7 +32,7 @@ export default function QuickJobs(props) {
 
   const getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    console.log('access token ============>>> ', token);
+    // console.log('access token ============>>> ', token);
     getQuickJobs(token);
   };
 

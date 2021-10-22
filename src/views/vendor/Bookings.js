@@ -28,7 +28,7 @@ export default function Bookings(props) {
     const getBookings = async () => {
       getUserAccessToken();
       const unsubscribe = props.navigation.addListener('focus', () => {
-        console.log('working ==== ......');
+        // console.log('working ==== ......');
         getUserAccessToken();
       });
       return unsubscribe;
@@ -39,7 +39,7 @@ export default function Bookings(props) {
 
   const getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    console.log('access token ============>>> ', token);
+    // console.log('access token ============>>> ', token);
     getScheduleBookings(token);
   };
 

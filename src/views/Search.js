@@ -146,10 +146,10 @@ export default function Search(props) {
       setIsloading(false);
       let data1 = data.data;
       setAllVender(data1);
-      console.log('data========', data);
+      // console.log('data========', data);
     };
     const onFailure = (error) => {
-      console.log('data========', error);
+      // console.log('data========', error);
 
       utils.showResponseError(error);
       setIsloading(false);

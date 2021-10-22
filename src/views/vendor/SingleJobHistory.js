@@ -17,10 +17,10 @@ import Images from '../../common/Images';
 import {Icon} from 'native-base';
 
 export default function SingleJobHistory(props) {
-  console.log(
-    'single job history ======>>>>>>   ',
-    props.route.params.singleHistoryData,
-  );
+  // console.log(
+  //   'single job history ======>>>>>>   ',
+  //   props.route.params.singleHistoryData,
+  // );
 
   return (
     <View style={styles.container}>

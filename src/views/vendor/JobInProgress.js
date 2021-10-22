@@ -90,7 +90,7 @@ export default class JobInProgress extends React.Component {
         isLoading: false,
       });
       utils.showResponseError(error);
-      console.log('==================Error', error);
+      // console.log('==================Error', error);
     };
     let params = {
       orderId: this.props.route.params.orderId,
@@ -123,7 +123,7 @@ export default class JobInProgress extends React.Component {
         isLoading: false,
       });
       utils.showResponseError(error);
-      console.log('++++==========', error);
+      // console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {
@@ -281,7 +281,7 @@ export default class JobInProgress extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                console.log('images===', item.images);
+                // console.log('images===', item.images);
                 return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}

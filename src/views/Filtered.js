@@ -102,7 +102,7 @@ export default class FileredScreen extends Component {
         //   1500,
         // );
 
-        console.log('Filterd Geo Location === ===', position.coords);
+        // console.log('Filterd Geo Location === ===', position.coords);
 
         this.setState({
           currentLat: position.coords.latitude,
@@ -159,15 +159,15 @@ export default class FileredScreen extends Component {
       // lng: 67.07237028142383,
     };
 
-    console.log('Post Data  ===== ', postData);
+    // console.log('Post Data  ===== ', postData);
 
     this.setState({isLoading: true});
 
     const onSuccess = ({data}) => {
-      console.log(
-        '======================== Filtered Data =================',
-        data,
-      );
+      // console.log(
+      //   '======================== Filtered Data =================',
+      //   data,
+      // );
       //   utils.showToast(data.message);
       this.setState({isLoading: false, allJobs: data.data});
 
@@ -179,10 +179,10 @@ export default class FileredScreen extends Component {
     };
 
     const onFailure = (error) => {
-      console.log(
-        '=========================== Filtered Error ===================',
-        error,
-      );
+      // console.log(
+      //   '=========================== Filtered Error ===================',
+      //   error,
+      // );
       this.setState({isLoading: false});
 
       // utils.showResponseError(error.massage);

@@ -60,10 +60,10 @@ export default class MyAcceptedJobDetails extends React.Component {
   }
 
   componentDidMount() {
-    console.log(
-      'yeh le idddddd===============> ',
-      this.props.route.params.item,
-    );
+    // console.log(
+    //   'yeh le idddddd===============> ',
+    //   this.props.route.params.item,
+    // );
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
@@ -81,7 +81,7 @@ export default class MyAcceptedJobDetails extends React.Component {
   getMyAcceptedJobDetails = () => {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console.log('View Job Data ==== ==== ', JSON.stringify(data));
+      // console.log('View Job Data ==== ==== ', JSON.stringify(data));
 
       this.setState({isLoading: false});
       this.setState({
@@ -129,7 +129,7 @@ export default class MyAcceptedJobDetails extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      console.log('>>>>>>>> ', data);
+      // console.log('>>>>>>>> ', data);
       this.getUserAccessToken();
       this.setState({
         isLoading: false,
@@ -143,7 +143,7 @@ export default class MyAcceptedJobDetails extends React.Component {
         isLoading: false,
       });
       utils.showResponseError(error);
-      console.log('++++==========', error);
+      // console.log('++++==========', error);
     };
     // console.log('==== Job id >>>>>>>', props.route.params.joid);
     const options = {
@@ -295,7 +295,7 @@ export default class MyAcceptedJobDetails extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                console.log('images===', item.images);
+                // console.log('images===', item.images);
                 return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}
@@ -365,7 +365,7 @@ export default class MyAcceptedJobDetails extends React.Component {
                     this.state.buttonlabel === 'WORK STARTED' ? true : false
                   }
                   onPress={() => {
-                    console.log('order id ===== ===', this.state.orderId);
+                    // console.log('order id ===== ===', this.state.orderId);
                     this.progressOrder();
                   }}
                 />

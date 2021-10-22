@@ -119,7 +119,7 @@ export default class Filter extends Component {
   };
 
   renderPriceItem = ({item, index}) => {
-    console.log('price ==== ', item.isSelected);
+    // console.log('price ==== ', item.isSelected);
     return (
       <TouchableOpacity
         style={
@@ -279,7 +279,7 @@ export default class Filter extends Component {
             label="APPLY"
             bgColor={Colors.sickGreen}
             onPress={() => {
-              console.log('========', this.state.maxPrice);
+              // console.log('========', this.state.maxPrice);
               this.props.navigation.navigate(Constants.Filtered, {
                 selectedCategory: this.state.selectedCategory,
                 minPrice: this.state.minPrice,

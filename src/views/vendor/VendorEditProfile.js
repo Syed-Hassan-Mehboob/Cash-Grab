@@ -197,7 +197,7 @@ export default class VendorEditProfile extends Component {
   getUserProfile = () => {
     const onSuccess = ({data}) => {
       this.toggleIsLoading();
-      console.log('User Profile Data ===== === =', data);
+      // console.log('User Profile Data ===== === =', data);
       this.setState({
         avatar: Constants.imageURL + data.data.records.user_profiles.image,
         fullName: data.data.records.name,
@@ -281,7 +281,7 @@ export default class VendorEditProfile extends Component {
 
     this.toggleIsLoading();
     const onSuccess = ({data}) => {
-      console.log('upload======', data);
+      // console.log('upload======', data);
       this.toggleIsLoading();
       utils.showToast(data.message);
 
@@ -394,7 +394,7 @@ export default class VendorEditProfile extends Component {
   };
 
   onSelect = (country) => {
-    console.log('Country Flag === ==== ', country.cca2);
+    // console.log('Country Flag === ==== ', country.cca2);
     this.setState({
       countryFlag: country.cca2,
       countryCode: country.callingCode[0],

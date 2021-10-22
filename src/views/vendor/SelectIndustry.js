@@ -50,7 +50,7 @@ export default class SelectIndustry extends Component {
       });
     };
     const onFaliure = (error) => {
-      console.log('get industry error=============>>>', error);
+      // console.log('get industry error=============>>>', error);
     };
     Axios.get(Constants.getCategories).then(onSuccess).catch(onFaliure);
   }
@@ -78,12 +78,12 @@ export default class SelectIndustry extends Component {
       this.state.myServices[index] !== undefined &&
       this.state.myServices[index].cat_id === item.id
     ) {
-      console.log(
-        'checking========>>>>>',
-        this.state.myServices[index].cat_id,
-        ' === ',
-        item.id,
-      );
+      // console.log(
+      //   'checking========>>>>>',
+      //   this.state.myServices[index].cat_id,
+      //   ' === ',
+      //   item.id,
+      // );
     }
     return (
       <View
@@ -158,10 +158,10 @@ export default class SelectIndustry extends Component {
       categories: JSON.parse(asyncServicesData),
     };
     if (asyncData !== null) {
-      console.log('datas===========>>>>>>>', JSON.stringify(body));
+      // console.log('datas===========>>>>>>>', JSON.stringify(body));
 
       const onSuccess = ({data}) => {
-        console.log('data', data.data);
+        // console.log('data', data.data);
         AsyncStorage.clear();
         this.props.navigation.navigate(Constants.otp, {
           email: this.props.route.params.venderData.email,
@@ -170,7 +170,7 @@ export default class SelectIndustry extends Component {
       };
 
       const onFailure = (error) => {
-        console.log('eeeeeeeeeeeeeeeeeeeeeeeee', error);
+        // console.log('eeeeeeeeeeeeeeeeeeeeeeeee', error);
         utils.showResponseError(error);
 
         this.setState({isLoading: false});
@@ -186,7 +186,7 @@ export default class SelectIndustry extends Component {
   };
 
   render() {
-    console.log(this.props.route.params);
+    // console.log(this.props.route.params);
 
     return (
       <View style={[STYLES.container, {paddingHorizontal: SIZES.ten}]}>

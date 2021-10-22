@@ -333,7 +333,7 @@ export default class EditProfile extends Component {
     const onFailure = (error) => {
       this.toggleIsLoading();
       // console.log('Error===== Responce ==', Object.keys(error));
-      console.log('Error===== Responce ==', error.isAxiosError);
+      // console.log('Error===== Responce ==', error.isAxiosError);
       utils.showResponseError('Error===== Responce ==', error);
     };
 
@@ -367,7 +367,7 @@ export default class EditProfile extends Component {
     formData.append('lat', lat);
     formData.append('lng', lng);
 
-    console.log('Form data ==== ', formData);
+    // console.log('Form data ==== ', formData);
     const options = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

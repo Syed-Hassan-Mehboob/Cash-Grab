@@ -165,7 +165,7 @@ export default class UserHome extends Component {
       description: this.state.description,
     };
 
-    console.log('myData=======>>>>> ', postData);
+    // console.log('myData=======>>>>> ', postData);
 
     const formData = new FormData();
 
@@ -217,10 +217,10 @@ export default class UserHome extends Component {
       utils.showToast('Your Request was successfull.');
     };
     const onFailure = (error) => {
-      console.log(
-        'error =====================================================================>',
-        error,
-      );
+      // console.log(
+      //   'error =====================================================================>',
+      //   error,
+      // );
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
@@ -238,13 +238,13 @@ export default class UserHome extends Component {
 
   getAllCategories = () => {
     const onSuccess = ({data}) => {
-      console.log('All Categoryyyyy ==========> ', data.data.records);
+      // console.log('All Categoryyyyy ==========> ', data.data.records);
       this.setState({isLoading: false, getAllCategories: data.data.records});
     };
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
-      console.log('=================', error);
+      // console.log('=================', error);
       utils.showResponseError(error);
     };
 
@@ -315,12 +315,12 @@ export default class UserHome extends Component {
             data={this.state.getAllCategories}
             onChangeValue={(val) => {
               this.setState({selectedCategory: val}, () => {
-                console.log(
-                  'multidropdown picker ',
-                  typeof this.state.servicesid,
-                  'value',
-                  val,
-                );
+                // console.log(
+                //   'multidropdown picker ',
+                //   typeof this.state.servicesid,
+                //   'value',
+                //   val,
+                // );
               });
             }}
           />

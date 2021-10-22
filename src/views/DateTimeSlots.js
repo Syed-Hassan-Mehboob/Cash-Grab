@@ -105,10 +105,10 @@ export default class DateTimeSlots extends Component {
   }
 
   componentDidMount() {
-    console.log(
-      'BBBBBBBBBBAAAAAABBBBBBBBBBAAAAAAAAAARRRRRRRRR =================== ',
-      this.props.route.params,
-    );
+    // console.log(
+    //   'BBBBBBBBBBAAAAAABBBBBBBBBBAAAAAAAAAARRRRRRRRR =================== ',
+    //   this.props.route.params,
+    // );
     this.getUserAccessToken();
   }
 
@@ -234,13 +234,13 @@ export default class DateTimeSlots extends Component {
   };
 
   onDayPress = (day) => {
-    console.log('day press===============>>>>', day);
+    // console.log('day press===============>>>>', day);
     this.setState(
       {
         selected: day.dateString,
       },
       () => {
-        console.log('state callback day press===============>>>>', day);
+        // console.log('state callback day press===============>>>>', day);
       },
     );
   };
@@ -344,7 +344,7 @@ export default class DateTimeSlots extends Component {
 
     const onSuccess = ({data}) => {
       // utils.showToast(data.message);
-      console.log('order Data========', data);
+      // console.log('order Data========', data);
       this.toggleIsLoading();
 
       setTimeout(() => {

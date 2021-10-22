@@ -85,7 +85,7 @@ export default function JobAcceptance(props) {
     const value2 = await AsyncStorage.getItem(Constants.accessToken);
 
     const onSuccess = ({data}) => {
-      console.log('Job Requesttttt ======================>', data.data);
+      // console.log('Job Requesttttt ======================>', data.data);
       // setJobRequest(data);
       setIsloading(false);
 
@@ -99,7 +99,7 @@ export default function JobAcceptance(props) {
     const onFailure = (error) => {
       utils.showResponseError(error);
       setIsloading(false);
-      console.log('==============222222222222222=>', error);
+      // console.log('==============222222222222222=>', error);
     };
 
     Axios.post(

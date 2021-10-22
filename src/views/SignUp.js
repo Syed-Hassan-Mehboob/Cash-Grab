@@ -84,7 +84,7 @@ export default class SignUp extends Component {
 
   getServices = () => {
     const onSuccess = ({data}) => {
-      console.log(data.data);
+      // console.log(data.data);
     };
 
     const onFailure = (error) => {

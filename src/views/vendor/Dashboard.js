@@ -84,10 +84,10 @@ export default class Dashboard extends Component {
           frontColor: Colors.sickGreen,
           onPress: (value) => {
             this.setState({selectedMonth: this.state.chartData[index]});
-            console.log(
-              'this.data[0][value]========================>',
-              this.state.chartData[index]['displayvalue'],
-            );
+            // console.log(
+            //   'this.data[0][value]========================>',
+            //   this.state.chartData[index]['displayvalue'],
+            // );
           },
         });
       });
@@ -98,10 +98,10 @@ export default class Dashboard extends Component {
           chartData: tempMonthlyData,
         },
         () => {
-          console.log(
-            'chart data =======   >>>>>>>  ',
-            JSON.stringify(this.state.chartData),
-          );
+          // console.log(
+          //   'chart data =======   >>>>>>>  ',
+          //   JSON.stringify(this.state.chartData),
+          // );
           this.setState({isLoading: false});
         },
       );

@@ -51,7 +51,7 @@ export default class VendorHome extends Component {
   }
 
   componentDidMount() {
-    console.log('Vendor Home ===== ');
+    // console.log('Vendor Home ===== ');
     this.getUserAccessToken();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.props.navigation.addListener('focus', () => {
@@ -73,10 +73,10 @@ export default class VendorHome extends Component {
 
   getUserProfile = async (token) => {
     const onSuccess = ({data}) => {
-      console.log(
-        'get profile success===========>>>>',
-        data.data.records.user_profiles.image,
-      );
+      // console.log(
+      //   'get profile success===========>>>>',
+      //   data.data.records.user_profiles.image,
+      // );
       this.setState({
         isLoading: false,
         avatar: data.data.records.user_profiles.image,
@@ -88,7 +88,7 @@ export default class VendorHome extends Component {
     // //console.log('lat',this.state.lat)
 
     const onFailure = (error) => {
-      console.log('get profile success===========>>>>', error);
+      // console.log('get profile success===========>>>>', error);
 
       this.setState({isLoading: false});
       utils.showResponseError(error);
@@ -112,7 +112,7 @@ export default class VendorHome extends Component {
     // };
 
     const onSuccess = ({data}) => {
-      console.log(' Job for You =====', data);
+      // console.log(' Job for You =====', data);
       // utils.showToast(data.message)
       this.setState({
         isLoading: false,
@@ -140,7 +140,7 @@ export default class VendorHome extends Component {
   };
   getQuickOrder = async () => {
     const onSuccess = ({data}) => {
-      console.log(' Quick Jobs for You =====', data.data.records);
+      // console.log(' Quick Jobs for You =====', data.data.records);
       // utils.showToast(data.message)
       this.setState({
         isLoading: false,
@@ -169,7 +169,7 @@ export default class VendorHome extends Component {
 
   getBookings = async () => {
     const onSuccess = ({data}) => {
-      console.log(' Schedule Bookings  =====', data.data.records);
+      // console.log(' Schedule Bookings  =====', data.data.records);
       this.setState({
         scheduleBookings: data.data.records,
       });
@@ -182,7 +182,7 @@ export default class VendorHome extends Component {
     const onFailure = (error) => {
       this.setState({isLoading: false});
       utils.showResponseError(error);
-      console.log('==================Error', error);
+      // console.log('==================Error', error);
     };
 
     this.setState({isLoading: true});
