@@ -76,6 +76,7 @@ export default class QuickJobDetail extends React.Component {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       //   this.viewJob();
+      console.log('priops======>>>> ', this.props.route.params.orderItem);
     });
   };
 
@@ -410,7 +411,6 @@ export default class QuickJobDetail extends React.Component {
                 label="SERVICE COMPLETED"
                 bgColor={Colors.sickGreen}
                 onPress={() => {
-                  //   this.props.navigation.navigate(Constants.);
                   this.setState({thankYouModal: true});
                 }}
               />
@@ -470,7 +470,7 @@ export default class QuickJobDetail extends React.Component {
                   //   setThankYouModal();
                   this.setState({thankYouModal: false}, () => {
                     setTimeout(() => {
-                      this.props.navigation.navigate(Constants.confirmPayment);
+                      this.props.navigation.replace(Constants.UserHome);
                     }, 500);
                   });
                 }}

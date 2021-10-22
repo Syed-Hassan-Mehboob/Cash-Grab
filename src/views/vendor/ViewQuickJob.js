@@ -128,37 +128,6 @@ export default class ViewQuickJob extends React.Component {
       .catch(onFailure);
   };
 
-  createJobRequest = () => {
-    const postData = {
-      job_id: this.state.jobId,
-    };
-
-    this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
-      this.viewJob();
-      // console.log('Request job Data ========', data);
-      // utils.showToast(data.message);
-      this.setState({isLoading: false});
-    };
-    const onFailure = (error) => {
-      // console.log(
-      //   'error =====================================================================>',
-      //   error,
-      // );
-      utils.showResponseError(error.massage);
-      this.setState({isLoading: false});
-    };
-    const options = {
-      headers: {
-        Authorization: this.state.accessToken,
-        //    'Content-Type':'application/x-www-form-urlencoded'
-      },
-    };
-    Axios.post(Constants.createJobRequest, postData, options)
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
   render() {
     return (
       <View style={STYLES.container}>
