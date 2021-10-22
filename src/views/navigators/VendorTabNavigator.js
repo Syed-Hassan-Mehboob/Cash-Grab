@@ -55,6 +55,7 @@ import History from '../vendor/History';
 import SingleJobHistory from '../vendor/SingleJobHistory';
 import MyAcceptedJobs from '../vendor/MyAcceptedJobs';
 import MyAcceptedJobDetails from '../vendor/MyAcceptedJobDetails';
+import ViewQuickJob from '../vendor/ViewQuickJob';
 // import EditText from '../components/EditText';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -105,6 +106,10 @@ const HomeNavigator = () => {
         component={VenderFileredScreen}
       />
       <HomeStack.Screen name={Constants.viewJob} component={ViewJob} />
+      <HomeStack.Screen
+        name={Constants.ViewQuickJob}
+        component={ViewQuickJob}
+      />
       <HomeStack.Screen
         name={Constants.JobInProgress}
         component={JobInProgress}

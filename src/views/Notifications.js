@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {
@@ -78,7 +79,12 @@ export default class Notifications extends Component {
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.itemContainer}
-                onPress={() => {}}>
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.confirmPayment, {
+                    orderId: notification.trigger_id,
+                    from: 'notification',
+                  });
+                }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -86,7 +92,11 @@ export default class Notifications extends Component {
                   }}>
                   <View style={styles.circleCard}>
                     <Image
-                      source={{uri: Constants.imageURL + notification.image}}
+                      source={{
+                        uri:
+                          Constants.imageURL +
+                          notification.sender?.user_profiles?.image,
+                      }}
                       style={styles.iconUser}
                       resizeMode="cover"
                     />
@@ -104,9 +114,13 @@ export default class Notifications extends Component {
                       }}>
                       <RegularTextCB
                         style={{fontSize: 16, color: Colors.black}}>
-                        {notification.title}
+                        {notification.sender !== null
+                          ? notification.sender.name
+                          : null}
                       </RegularTextCB>
-                      {/* <RegularTextCB>time lgana hai</RegularTextCB> */}
+                      <RegularTextCB style={{fontSize: SIZES.ten * 1.4}}>
+                        {moment(notification.created_at).format('hh:mm')}
+                      </RegularTextCB>
                     </View>
                     <RegularTextCB
                       numberOfLines={1}

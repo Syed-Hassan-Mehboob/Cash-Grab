@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CommonActions} from '@react-navigation/native';
 import React, {Component} from 'react';
 import {
@@ -12,6 +13,7 @@ import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
+import Axios from '../network/APIKit';
 
 const resetAction = CommonActions.reset({
   index: 0,
@@ -21,14 +23,53 @@ const resetAction = CommonActions.reset({
 export default class ConfirmPayment extends Component {
   constructor(props) {
     super(props);
+    this.state = {accessToken: '', currentOrder: ''};
   }
-
-  state = {};
 
   navigateToHome() {
     // this.props.navigation.replace(Constants.profile);
     this.props.navigation.dispatch(resetAction);
   }
+
+  componentDidMount() {
+    if (this.props.route.params.from === 'notification') {
+      this.getUserAccessToken();
+    }
+  }
+
+  getUserAccessToken = async () => {
+    const value = await AsyncStorage.getItem('user');
+    const accessToken = JSON.parse(value);
+    this.setState({accessToken: accessToken.token}, () => {
+      this.getOrderDetials();
+    });
+  };
+
+  getOrderDetials = () => {
+    const onSuccess = ({data}) => {
+      console.log('ssssssss>>>>>>>>>>', data.data.payment_status);
+      this.setState({currentOrder: data.data});
+      if (data.data.payment_status === 'paid') {
+        this.props.navigation.navigate(Constants.QuickJobDetail, {
+          orderItem: this.state.currentOrder,
+        });
+      }
+    };
+    const onFailure = (error) => {
+      console.log('ssssssss>>>>>>>>>>', error);
+    };
+    let params = {
+      orderId: this.props.route.params.orderId,
+    };
+    Axios.get(Constants.orderDetail, {
+      params,
+      headers: {
+        Authorization: `Bearer ${this.state.accessToken}`,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   render() {
     return (
@@ -173,7 +214,13 @@ export default class ConfirmPayment extends Component {
           }}>
           <ButtonRadius10
             onPress={() => {
-              this.navigateToHome();
+              if (this.props.route.params.from === 'notification') {
+                this.props.navigation.navigate(Constants.QuickJobDetail, {
+                  orderItem: this.state.currentOrder,
+                });
+              } else {
+                this.navigateToHome();
+              }
             }}
             label="PAY NOW"
             bgColor={Colors.sickGreen}

@@ -36,6 +36,7 @@ const Constants = {
   AddProfileServices: 'AddProfileServices',
   viewVendorProfile: 'ViewVendorProfile',
   SchechuleJobDetail: 'SchechuleJobDetail',
+  ViewQuickJob: 'ViewQuickJob',
   chat: 'Chat',
   chatListing: 'ChatListing',
   vendorSingleCategory: 'VendorSingleCategory',
@@ -164,7 +165,8 @@ const Constants = {
   WidrawAmount: 'vendors/withdraw-amount',
   AddPrifileServiceURL: 'vendors/create-service?',
   SaveUserDeviceTokenURL: 'auth/device-token',
-  ChangeQuickJobStatus_Vendor: 'order/quick-order-status?',
+  ChangeQuickJobStatus_Vendor: 'order/quick-order-status',
+  // ChangeQuickJobStatus_Vendor: 'order/quick-order-status?',
   /* * api urls * */
 };
 export const FIREBASECONSTANTS = {

@@ -48,8 +48,9 @@ export default function QuickJobs(props) {
             // marginTop: SIZES.twenty,
           },
         ]}
-        // onPress={() => props.navigation.navigate(Constants.JobInProgress)}
-      >
+        onPress={() =>
+          props.navigation.navigate(Constants.ViewQuickJob, {item: item.id})
+        }>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image

@@ -107,6 +107,16 @@ export default class DrawerNavigator extends React.Component {
         this.setState({quickNotifyOrderId: rm.data.trigger_id});
         this.getQuickOrderRequestData(rm.data.trigger_id);
       }
+      if (rm.data.trigger_type === 'no_vendor_found') {
+        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        // this.getQuickOrderRequestData(rm.data.trigger_id);
+        alert('no vendor available in your area');
+      }
+      if (rm.data.trigger_type === 'quick_order_accepted') {
+        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        // this.getQuickOrderRequestData(rm.data.trigger_id);
+        alert('Your quick job has been accepted.');
+      }
     });
 
     // Check whether an initial notification is available
@@ -132,6 +142,11 @@ export default class DrawerNavigator extends React.Component {
 
   getQuickOrderRequestData = (orderId) => {
     const onSuccess = ({data}) => {
+      console.log(
+        'get quick job pop up success ======>>>>>>> ',
+        this.state.accessToken,
+      );
+      console.log(data.data.address);
       this.setState(
         {
           quickNotifyOrderItem: data.data,
@@ -149,8 +164,7 @@ export default class DrawerNavigator extends React.Component {
 
     const onFailure = (error) => {
       utils.showResponseError(error);
-      s;
-      console.log('++++==========', error);
+      console.log('get quick job pop up error==========', error);
     };
 
     const params = {
@@ -168,8 +182,12 @@ export default class DrawerNavigator extends React.Component {
   };
 
   Accept_DeclineQuickJob = (status) => {
-    const params = {
-      orderId: this.state.quickNotifyOrderId,
+    console.log(
+      'bearer accept/decline ======>>>>>>> ',
+      this.state.quickNotifyOrderId,
+    );
+    let params = {
+      order_id: this.state.quickNotifyOrderId,
       status: status,
     };
 
@@ -180,11 +198,12 @@ export default class DrawerNavigator extends React.Component {
 
     const onFailure = (error) => {
       utils.showResponseError(error);
-      this.setState({isVisible: false});
-      console.log('++++==========', error);
+      // this.setState({isVisible: false});
+      console.log('accept/decline ==========', error.request);
+      // console.log('accept/decline ==========', Object.keys(error));
     };
 
-    Axios.post(Constants.ChangeQuickJobStatus_Vendor, {
+    Axios.get(Constants.ChangeQuickJobStatus_Vendor, {
       params,
       headers: {
         Authorization: `Bearer ${this.state.accessToken}`,
