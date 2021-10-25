@@ -120,7 +120,10 @@ export default class DrawerNavigator extends React.Component {
         // this.getQuickOrderRequestData(rm.data.trigger_id);
         alert('no vendor available in your area');
       }
-      if (rm.data.trigger_type === 'quick_order_accepted') {
+      if (
+        rm.data.trigger_type === 'quick_order_accepted' ||
+        rm.notification.body === 'your quick order has accepted successfully'
+      ) {
         // this.getQuickOrderRequestData(rm.data.trigger_id);
         // alert('Your quick job has been accepted.');
         this.setState({customerJobAcceptedModal: true}, () => {
@@ -131,9 +134,8 @@ export default class DrawerNavigator extends React.Component {
         });
       }
       if (
-        (rm.data.trigger_type === 'order' &&
-          rm.data.body === 'your order has completed successfully') ||
-        rm.notification.body === 'your quick order has accepted successfully'
+        rm.data.trigger_type === 'order' &&
+        rm.data.body === 'your order has completed successfully'
       ) {
         this.setState({vendorThankyoumodal: true});
       }
