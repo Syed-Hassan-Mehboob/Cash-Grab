@@ -94,7 +94,7 @@ export default class Login extends Component {
         this.props.navigation.navigate(Constants.otp, {email: email});
       } else {
         this.saveUser(data.data);
-        getFcmToken(data.data.token);
+        getFcmToken(data.data.token, data.data.id);
       }
     };
 

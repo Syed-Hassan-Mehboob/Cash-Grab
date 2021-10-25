@@ -66,6 +66,7 @@ export default function UserQuickJobs(props) {
   };
 
   const renderQuickJon = ({item}) => {
+    console.log('sssssssssssss item ====>>>>', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -77,7 +78,9 @@ export default function UserQuickJobs(props) {
           },
         ]}
         onPress={() =>
-          props.navigation.navigate(Constants.ServiceProviderOnTheWay)
+          props.navigation.navigate(Constants.QuickJobDetail, {
+            orderItem: item,
+          })
         }>
         <View
           style={{

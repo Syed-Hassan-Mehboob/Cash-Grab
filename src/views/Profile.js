@@ -39,6 +39,7 @@ export default class Profile extends React.Component {
     postedJob: [],
     scheduleJobs: [],
     quickJobs: [],
+    currentOrder: '',
   };
 
   componentDidMount() {
@@ -420,7 +421,12 @@ export default class Profile extends React.Component {
           },
         ]}
         onPress={() =>
-          this.props.navigation.navigate(Constants.ServiceProviderOnTheWay)
+          // this.props.navigation.navigate(Constants.QuickJobDetail, {
+          //   orderItem: item,
+          // })
+          {
+            this.getQuickJobDetails(item.id);
+          }
         }>
         <View
           style={{
@@ -504,6 +510,38 @@ export default class Profile extends React.Component {
         </View>
       </TouchableOpacity>
     );
+  };
+
+  getQuickJobDetails = (id) => {
+    const onSuccess = ({data}) => {
+      console.log('ssssssss>>>>>>>>>>', data.data.id);
+      this.setState({currentOrder: data.data});
+      if (data.data.payment_status === 'paid') {
+        this.props.navigation.navigate(Constants.QuickJobDetail, {
+          orderItem: this.state.currentOrder,
+        });
+      } else {
+        this.props.navigation.navigate(Constants.confirmPayment, {
+          orderId: data.data.id,
+          from: 'quick',
+        });
+      }
+    };
+
+    const onFailure = (error) => {
+      console.log('ssssssss>>>>>>>>>>', error);
+    };
+    let params = {
+      orderId: id,
+    };
+    Axios.get(Constants.orderDetail, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
   render() {
     return (

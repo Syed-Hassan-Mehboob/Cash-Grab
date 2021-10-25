@@ -38,7 +38,7 @@ export default class ViewQuickJob extends React.Component {
       accessToken: '',
       viewJob: [],
       images: [],
-      userData: {},
+      currentOrder: {},
       userImage: '',
       username: '',
       title: '',
@@ -55,14 +55,20 @@ export default class ViewQuickJob extends React.Component {
       jobStatus: '',
       orderStatus: undefined,
       myRequestAceepted: undefined,
+      initialRegion: {
+        latitude: 24.90628280557342,
+        longitude: 67.07237028142383,
+        latitudeDelta: 0.04864195044303443,
+        longitudeDelta: 0.04014281769006,
+      },
     };
   }
 
   componentDidMount() {
-    // console.log(
-    //   'yeh le idddddd===============> ',
-    //   this.props.route.params.item,
-    // );
+    console.log(
+      'yeh le idddddd===============> ',
+      this.props.route.params.item,
+    );
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => {
@@ -80,31 +86,36 @@ export default class ViewQuickJob extends React.Component {
   viewJob = () => {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(
-      //   'View Job Data ==== ==== ',
-      //   JSON.stringify(data.data.records.status),
-      // );
-
-      this.setState({isLoading: false});
-      this.setState({
-        userImage: data.data.records.user.userProfile.image,
-        title: data.data.records.title,
-        location: data.data.records.location,
-        time: data.data.records.time,
-        images: data.data.records.images,
-        username: data.data.records.user.name,
-        latitude: data.data.records.user.userProfile.latitude,
-        longitude: data.data.records.user.userProfile.longitude,
-        price: data.data.records.price,
-        description: data.data.records.description,
-        jobId: data.data.records.id,
-        buttonlabel:
-          data.data.records.status === ''
-            ? 'REQUEST FOR ACCEPTANCE'
-            : 'PENDING',
-      });
-
-      // utils.showToast(data.message)
+      console.log(
+        'View Quick jjob detail vendor side Data ==== ==== ',
+        data.data,
+      );
+      this.setState(
+        {
+          currentOrder: data.data,
+          latitude: Number(data.data.lat),
+          longitude: Number(data.data.lng),
+          initialRegion: {
+            latitude: Number(data.data.lat),
+            longitude: Number(data.data.lng),
+            latitudeDelta: 0.04864195044303443,
+            longitudeDelta: 0.04014281769006,
+          },
+        },
+        () => {
+          this.setState(
+            {
+              isLoading: false,
+            },
+            () => {
+              console.log(
+                'marker coordinates =======>>>>>> ',
+                this.state.initialRegion,
+              );
+            },
+          );
+        },
+      );
 
       this.setState({isLoading: false});
     };
@@ -116,10 +127,36 @@ export default class ViewQuickJob extends React.Component {
 
     this.setState({isLoading: true});
     let params = {
-      jobId: this.props.route.params.item,
+      orderId: this.props.route.params.item,
     };
-    Axios.get(Constants.VendorviewJobUrl, {
+    Axios.get(Constants.orderDetail, {
       params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  handleClick = (workStatus) => {
+    const formData = new FormData();
+
+    const onSuccess = ({data}) => {
+      console.log('order status change vendor side success=====>>>.', data);
+      this.viewJob();
+      this.setState({isLoading: false});
+    };
+    const onFailure = (error) => {
+      console.log('order status change vendor side failure =====>>>.', error);
+      this.setState({isLoading: false});
+    };
+
+    formData.append('order_id', this.state.currentOrder.id);
+    formData.append('status', workStatus);
+
+    this.setState({isLoading: true});
+    Axios.post(Constants.orderStatus, formData, {
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -145,7 +182,11 @@ export default class ViewQuickJob extends React.Component {
                 }}>
                 <View style={styles.circleCard}>
                   <Image
-                    source={{uri: Constants.imageURL + this.state.userImage}}
+                    source={{
+                      uri:
+                        Constants.imageURL +
+                        this.state.currentOrder?.user?.user_profiles?.image,
+                    }}
                     style={styles.iconUser}
                     resizeMode="cover"
                   />
@@ -156,7 +197,7 @@ export default class ViewQuickJob extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.state.username}
+                    {this.state.currentOrder?.user?.name}
                   </RegularTextCB>
                   <View
                     style={{
@@ -191,14 +232,14 @@ export default class ViewQuickJob extends React.Component {
                     color: Colors.black,
                     fontSize: 16,
                   }}>
-                  {this.state.title === null ? '' : this.state.title}
+                  {this.state.currentOrder?.category?.name}
                 </RegularTextCB>
                 <LightTextCB
                   style={{
                     color: Colors.black,
                     fontSize: 12,
                   }}>
-                  ${this.state.price}
+                  ${this.state.currentOrder?.grandTotal}
                 </LightTextCB>
               </View>
 
@@ -207,14 +248,14 @@ export default class ViewQuickJob extends React.Component {
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
-                {this.state.jobService[0]?.categories.name}
+                {/* {this.state.jobService[0]?.categories.name} */}
               </RegularTextCB>
 
               <RegularTextCB
                 style={{
                   color: Colors.coolGrey,
                 }}>
-                {this.state.description}
+                {this.state.currentOrder?.description}
               </RegularTextCB>
 
               <View
@@ -232,7 +273,7 @@ export default class ViewQuickJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.state.location}
+                  {this.state.currentOrder?.location}
                 </RegularTextCB>
               </View>
               <View
@@ -250,7 +291,7 @@ export default class ViewQuickJob extends React.Component {
                     color: Colors.coolGrey,
                     marginStart: SIZES.five,
                   }}>
-                  {this.state.time}
+                  {this.state.currentOrder?.start_time}
                 </RegularTextCB>
               </View>
             </View>
@@ -260,7 +301,6 @@ export default class ViewQuickJob extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                // console.log('images===', item.images);
                 return (
                   <Image
                     source={{uri: Constants.imageURL + item.images}}
@@ -271,72 +311,80 @@ export default class ViewQuickJob extends React.Component {
               showsHorizontalScrollIndicator={false}
             />
 
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: 24.90628280557342,
-                longitude: 67.07237028142383,
-                latitudeDelta: 0.04864195044303443,
-                longitudeDelta: 0.04014281769006,
-              }}
-              showsUserLocation={true}
-              showsMyLocationButton={false}
-              zoomEnabled={false}
-              scrollEnabled={false}
-              style={styles.mapStyle}>
-              <Marker
-                coordinate={{
-                  latitude: Number(this.state.latitude),
-                  longitude: Number(this.state.longitude),
-                }}
-              />
-            </MapView>
+            {!this.state.isLoading ? (
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                initialRegion={this.state.initialRegion}
+                showsUserLocation={true}
+                showsMyLocationButton={false}
+                zoomEnabled={false}
+                scrollEnabled={false}
+                style={styles.mapStyle}>
+                <Marker
+                  coordinate={{
+                    latitude: this.state.initialRegion.latitude,
+                    longitude: this.state.initialRegion.longitude,
+                  }}
+                />
+              </MapView>
+            ) : null}
             <View
               style={{
                 marginVertical: SIZES.ten * 3,
                 marginHorizontal: SIZES.twenty,
               }}>
-              {/* {this.state.orderStatus !== undefined &&
-              this.state.orderStatus !== 'accepted' ? (
+              {this.state.isLoading ? null : this.state.currentOrder
+                  .orderStatus !== 'completed' ? (
                 <ButtonRadius10
-                  label={this.state.buttonlabel}
-                  disabled={'sss'}
-                  bgColor={Colors.sickGreen}
-                  onPress={() => {}}
-                />
-              ) : !this.state.isLoading &&
-                this.state.buttonlabel !== undefined ? (
-                <ButtonRadius10
-                  label={this.state.buttonlabel}
-                  disabled={this.state.buttonlabel === 'PENDING' ? true : false}
-                  bgColor={
-                    this.state.buttonlabel === 'PENDING'
-                      ? Colors.lighNewGreen
-                      : Colors.sickGreen
+                  label={
+                    this.state.currentOrder.orderStatus === 'accepted'
+                      ? 'START WORK'
+                      : this.state.currentOrder.orderStatus === 'progress'
+                      ? 'WORK STARTED'
+                      : this.state.currentOrder.orderStatus === 'completed'
+                      ? 'completed'
+                      : null
                   }
+                  disabled={
+                    this.state.currentOrder.orderStatus === 'progress' ||
+                    this.state.currentOrder.orderStatus === 'completed'
+                      ? true
+                      : false
+                  }
+                  bgColor={Colors.sickGreen}
                   onPress={() => {
-                    if (this.state.buttonlabel === 'REQUEST FOR ACCEPTANCE') {
-                      this.createJobRequest();
+                    if (this.state.currentOrder.orderStatus === 'accepted') {
+                      this.handleClick('progress');
                       return;
                     }
-                    if (this.state.buttonlabel === 'START NOW') {
-                      this.progressOrder();
+                    if (this.state.currentOrder.orderStatus === 'progress') {
+                      // this.handleClick('completed');
                       return;
                     }
                   }}
                 />
-              ) : null} */}
+              ) : (
+                <LightTextCB
+                  style={{
+                    marginTop: SIZES.five,
+                    alignSelf: 'center',
+                    color: Colors.coolGrey,
+                  }}>
+                  *This job has been completed{' '}
+                </LightTextCB>
+              )}
 
-              {!this.state.isLoading ? (
+              {/* {this.state.isLoading ? null  :
+              this.state.currentOrder.orderStatus !== 'completed'  ? (
                 <ButtonRadius10
-                  label={this.state.buttonlabel}
+                  label={this.state.currentOrder.orderStatus === 'accepted' ? 'START WORK' : this.state.currentOrder.orderStatus === 'progress' ?  'WORK STARTED' : this.state.currentOrder.orderStatus === 'completed' ? null }
                   disabled={this.state.buttonlabel === 'PENDING'}
                   bgColor={Colors.sickGreen}
                   onPress={() => {
                     this.createJobRequest();
                   }}
                 />
-              ) : null}
+              ) : null} */}
             </View>
           </View>
         </ScrollView>

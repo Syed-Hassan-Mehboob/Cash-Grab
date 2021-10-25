@@ -76,7 +76,7 @@ export default class QuickJobDetail extends React.Component {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       //   this.viewJob();
-      console.log('priops======>>>> ', this.props.route.params.orderItem);
+      console.log('priops======>>>> ', this.props.route.params.orderItem.id);
     });
   };
 
@@ -129,9 +129,30 @@ export default class QuickJobDetail extends React.Component {
   //     .catch(onFailure);
   // };
 
-  render() {
-    ``;
+  handleServiceCompleteClick = () => {
+    const formData = new FormData();
+    formData.append('order_id', this.props.route.params.orderItem.id);
+    formData.append('status', 'completed');
 
+    const onSuccess = ({data}) => {
+      console.log('data service completed=====>>>>', data);
+      this.setState({isLoading: false});
+      this.props.navigation.navigate(Constants.UserHome);
+    };
+    const onFailure = (error) => {
+      console.log('error service completed=====>>>>', error);
+    };
+    this.setState({isLoading: true});
+    Axios.post(Constants.orderStatus, formData, {
+      headers: {
+        Authorization: `${this.state.accessToken}`,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  render() {
     return (
       <View style={STYLES.container}>
         <NormalHeader name="Quick Job Detail" />
@@ -145,20 +166,16 @@ export default class QuickJobDetail extends React.Component {
                   alignItems: 'center',
                 }}>
                 <View style={styles.circleCard}>
-                  {this.state.userImage !== '' &&
-                  this.state.userImage !== undefined ? (
-                    <Image
-                      source={{uri: Constants.imageURL + this.state.userImage}}
-                      style={styles.iconUser}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <Image
-                      source={Images.emp2}
-                      style={styles.iconUser}
-                      resizeMode="cover"
-                    />
-                  )}
+                  <Image
+                    source={{
+                      uri:
+                        Constants.imageURL +
+                        this.props.route.params.orderItem.user.user_profiles
+                          .image,
+                    }}
+                    style={styles.iconUser}
+                    resizeMode="cover"
+                  />
                 </View>
                 <View style={{marginStart: SIZES.ten}}>
                   <RegularTextCB
@@ -166,10 +183,7 @@ export default class QuickJobDetail extends React.Component {
                       color: Colors.black,
                       fontSize: 16,
                     }}>
-                    {this.state.username !== '' &&
-                    this.state.username !== undefined
-                      ? this.state.username
-                      : 'John Doe'}
+                    {this.props.route.params.orderItem.user.name}
                   </RegularTextCB>
                   <View
                     style={{
@@ -204,7 +218,7 @@ export default class QuickJobDetail extends React.Component {
                     color: Colors.sickGreen,
                     fontSize: 16,
                   }}>
-                  {this.state.title} AutoMobile
+                  {this.props.route.params.orderItem.category.name}
                 </RegularTextCB>
                 <LightTextCB
                   style={[
@@ -214,7 +228,7 @@ export default class QuickJobDetail extends React.Component {
                       fontSize: 12,
                     },
                   ]}>
-                  ${500}
+                  ${this.props.route.params.orderItem.grandTotal}
                 </LightTextCB>
               </View>
 
@@ -223,7 +237,7 @@ export default class QuickJobDetail extends React.Component {
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
-                {this.state.jobService[0]?.categories.name}
+                {/* {this.state.jobService[0]?.categories.name}dsadas */}
               </RegularTextCB>
 
               <RegularTextCB
@@ -231,11 +245,12 @@ export default class QuickJobDetail extends React.Component {
                   color: Colors.coolGrey,
                   marginVertical: SIZES.ten * 0.5,
                 }}>
-                {this.state.description}Lorem Ipsum is simply dummy text of the
-                printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy text ever since the 1500s, when an
-                unknown printer took a galley of type and scrambled it to make a
-                type specimen book.
+                {this.props.route.params.orderItem.description}
+                {/* Lorem Ipsum is
+                simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever
+                since the 1500s, when an unknown printer took a galley of type
+                and scrambled it to make a type specimen book. */}
               </RegularTextCB>
 
               <View
@@ -254,7 +269,7 @@ export default class QuickJobDetail extends React.Component {
                     marginStart: SIZES.five,
                   }}>
                   {/* {this.state.location} */}
-                  111,NY Street, NY 1121
+                  {this.props.route.params.orderItem.location}
                 </RegularTextCB>
               </View>
               <View
@@ -273,7 +288,7 @@ export default class QuickJobDetail extends React.Component {
                     marginStart: SIZES.five,
                   }}>
                   {/* {this.state.time} */}
-                  12:00 - 03:00
+                  {this.props.route.params.orderItem.start_time}
                 </RegularTextCB>
               </View>
               <View
@@ -297,7 +312,12 @@ export default class QuickJobDetail extends React.Component {
                   }}>
                   <View>
                     <Image
-                      source={Images.emp2}
+                      source={{
+                        uri:
+                          Constants.imageURL +
+                          this.props.route.params.orderItem.vendor.user_profiles
+                            .image,
+                      }}
                       style={{
                         height: 50,
                         width: 50,
@@ -309,7 +329,7 @@ export default class QuickJobDetail extends React.Component {
                   </View>
                   <View style={{marginStart: 10}}>
                     <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                      {'Ray Hammond'}
+                      {this.props.route.params.orderItem.vendor.name}
                     </BoldTextCB>
                     <View
                       style={{
@@ -322,7 +342,7 @@ export default class QuickJobDetail extends React.Component {
                           color: Colors.coolGrey,
                           fontSize: 13.5,
                         }}>
-                        {'Need Car Macanic'}
+                        {/* {'Need Car Macanic'} */}
                       </RegularTextCB>
                     </View>
                   </View>
@@ -349,7 +369,7 @@ export default class QuickJobDetail extends React.Component {
                     fullStar={Images.starFull}
                     emptyStar={Images.starHalf}
                     starSize={SIZES.fifteen}
-                    rating={4}
+                    rating={this.props.route.params.orderItem.vendor.ratings}
                     starStyle={{
                       width: SIZES.twenty,
                       height: SIZES.twenty,
@@ -365,7 +385,7 @@ export default class QuickJobDetail extends React.Component {
                       marginStart: SIZES.twenty * 1.8,
                       marginTop: SIZES.five / 2,
                     }}>
-                    4.4 Ratings
+                    {this.props.route.params.orderItem.vendor.ratings} Ratings
                   </RegularTextCB>
                 </View>
               </View>
@@ -385,8 +405,8 @@ export default class QuickJobDetail extends React.Component {
             <MapView
               provider={PROVIDER_GOOGLE}
               initialRegion={{
-                latitude: 24.90628280557342,
-                longitude: 67.07237028142383,
+                latitude: Number(this.props.route.params.orderItem.lat),
+                longitude: Number(this.props.route.params.orderItem.lng),
                 latitudeDelta: 0.04864195044303443,
                 longitudeDelta: 0.04014281769006,
               }}
@@ -397,8 +417,8 @@ export default class QuickJobDetail extends React.Component {
               style={styles.mapStyle}>
               <Marker
                 coordinate={{
-                  latitude: Number(this.state.latitude),
-                  longitude: Number(this.state.longitude),
+                  latitude: Number(this.props.route.params.orderItem.lat),
+                  longitude: Number(this.props.route.params.orderItem.lng),
                 }}
               />
             </MapView>
@@ -407,77 +427,24 @@ export default class QuickJobDetail extends React.Component {
                 marginVertical: SIZES.ten * 1.8,
                 marginHorizontal: SIZES.twenty,
               }}>
+              {/* {this.props.route.params.orderItem.orderStatus === 'progress' ? ( */}
               <ButtonRadius10
                 label="SERVICE COMPLETED"
                 bgColor={Colors.sickGreen}
                 onPress={() => {
-                  this.setState({thankYouModal: true});
+                  this.handleServiceCompleteClick();
+                  // this.setState({thankYouModal: true});
                 }}
               />
+              {/* // ) : null} */}
             </View>
           </View>
         </ScrollView>
-        {/* <Spinner
+        <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
           textStyle={{color: '#FFF', fontFamily: Constants.fontRegular}}
-        /> */}
-
-        <Modal
-          isVisible={this.state.thankYouModal}
-          animationIn="zoomInDown"
-          animationOut="zoomOutUp"
-          animationInTiming={600}
-          animationOutTiming={600}
-          backdropTransitionInTiming={600}
-          backdropTransitionOutTiming={600}>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              padding: SIZES.fifteen,
-              alignItems: 'center',
-              borderRadius: 10,
-            }}>
-            <Image
-              source={Images.greenTick}
-              resizeMode="contain"
-              style={{
-                height: SIZES.fifteen * 5,
-                width: SIZES.fifteen * 5,
-                marginBottom: 15,
-              }}
-            />
-            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-              Thank You
-            </BoldTextCB>
-            <RegularTextCB
-              style={{
-                marginVertical: SIZES.ten,
-                fontSize: 16,
-                color: Colors.coolGrey,
-              }}>
-              For your great service
-            </RegularTextCB>
-            <View
-              style={{
-                marginVertical: SIZES.ten * 3,
-                width: '100%',
-              }}>
-              <ButtonRadius10
-                label="JOB COMPLETED"
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  //   setThankYouModal();
-                  this.setState({thankYouModal: false}, () => {
-                    setTimeout(() => {
-                      this.props.navigation.replace(Constants.UserHome);
-                    }, 500);
-                  });
-                }}
-              />
-            </View>
-          </View>
-        </Modal>
+        />
       </View>
     );
   }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import {
   FlatList,
   Image,
@@ -13,7 +14,12 @@ import {
 } from 'react-native';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import EditText from '../../components/EditText';
-import Constants, {FONTS, SIZES, STYLES} from '../../common/Constants';
+import Constants, {
+  FIREBASECONSTANTS,
+  FONTS,
+  SIZES,
+  STYLES,
+} from '../../common/Constants';
 import Images from '../../common/Images';
 import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
@@ -46,6 +52,7 @@ export default class VendorHome extends Component {
       permissionModalVisibility: false,
       scheduleBookings: [],
       ordrStatus: '',
+      isVendor: false,
       quickOrder: [],
     };
   }
@@ -53,12 +60,23 @@ export default class VendorHome extends Component {
   componentDidMount() {
     // console.log('Vendor Home ===== ');
     this.getUserAccessToken();
+    this.getUserType();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     this.props.navigation.addListener('focus', () => {
       // this.checkLocationPermission();
       this.getUserAccessToken();
+      this.getUserType();
     });
   }
+
+  getUserType = async () => {
+    const user = await AsyncStorage.getItem('user');
+    var userData = JSON.parse(user);
+    this.setState({isVendor: userData.type === 'vendor'}, () => {
+      console.log('userType: ', this.state.isVendor),
+        this.setState({gotUser: true});
+    });
+  };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
@@ -138,6 +156,7 @@ export default class VendorHome extends Component {
       .then(onSuccess)
       .catch(onFailure);
   };
+
   getQuickOrder = async () => {
     const onSuccess = ({data}) => {
       // console.log(' Quick Jobs for You =====', data.data.records);
@@ -200,9 +219,28 @@ export default class VendorHome extends Component {
       .catch(onFailure);
   };
 
-  // toggleIsLoading = () => {
-  //   this.setState({isLoading: !this.state.isLoading});
-  // };
+  getQuickJobDetails = (id) => {
+    const onSuccess = ({data}) => {
+      console.log('ssssssss>>>>>>>>>>', data.data.id);
+      this.setState({currentOrder: data.data});
+      this.props.navigation.navigate(Constants.ViewQuickJob, {item: id});
+    };
+
+    const onFailure = (error) => {
+      console.log('ssssssss>>>>>>>>>>', error);
+    };
+    let params = {
+      orderId: id,
+    };
+    Axios.get(Constants.orderDetail, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   checkLocationPermission = async () => {
     try {
@@ -363,6 +401,7 @@ export default class VendorHome extends Component {
       </TouchableOpacity>
     );
   };
+
   renderQuickJob = ({item}) => {
     // //console.log('Job Around data ======',item)
     return (
@@ -376,8 +415,9 @@ export default class VendorHome extends Component {
             marginVertical: SIZES.five * 1.5,
           },
         ]}
-        // onPress={() => this.props.navigation.navigate(Constants.JobInProgress)}
-      >
+        onPress={() => {
+          this.getQuickJobDetails(item.id);
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -493,6 +533,7 @@ export default class VendorHome extends Component {
       </TouchableOpacity>
     );
   };
+
   renderBookings = ({item}) => {
     // console.log('...................', item.order_status);
     return (
@@ -687,21 +728,6 @@ export default class VendorHome extends Component {
                   {this.state.name}
                 </RegularTextCB>
               </TouchableOpacity>
-
-              {/* <TouchableOpacity
-                onPress={() => {
-                  this.checkLocationPermission();
-                }}
-                style={{position: 'absolute', right: SIZES.twenty}}>
-                <Image
-                  source={Images.iconHamburger}
-                  style={{
-                    height: SIZES.twenty,
-                    width: SIZES.twenty,
-                    resizeMode: 'contain',
-                  }}
-                />
-              </TouchableOpacity> */}
             </View>
 
             <TouchableOpacity
@@ -721,51 +747,6 @@ export default class VendorHome extends Component {
                 style={{height: SIZES.fifty, width: SIZES.fifty}}
               />
             </TouchableOpacity>
-            {/* <View
-              style={{
-                paddingHorizontal: SIZES.twenty,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <RegularTextCB
-                style={{
-                  fontSize: SIZES.twenty,
-                  color: Colors.black,
-                }}>
-                Browse categories
-              </RegularTextCB>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate(Constants.vendorAllCategories)
-                }>
-                <RegularTextCB
-                  style={{
-                    color: Colors.black,
-                    textDecorationLine: 'underline',
-                  }}>
-                  See All
-                </RegularTextCB>
-              </TouchableOpacity>
-            </View>
-            <FlatList
-              horizontal
-              data={this.state.categories}
-              keyExtractor={(item) => item.id}
-              renderItem={this.renderCategoryItem}
-              showsHorizontalScrollIndicator={false}
-              contentInset={{
-                // for ios
-                top: 0,
-                bottom: 0,
-                left: SIZES.ten,
-                right: SIZES.ten,
-              }}
-              contentContainerStyle={{
-                // for android
-                paddingHorizontal: Platform.OS === 'android' ? SIZES.ten : 0,
-              }}
-            /> */}
             <View
               style={{
                 paddingHorizontal: SIZES.twenty,
@@ -973,11 +954,6 @@ const styles = StyleSheet.create({
     height: SIZES.fifty + SIZES.ten,
     width: SIZES.fifty + SIZES.ten,
     borderRadius: SIZES.twenty + SIZES.ten,
-    // shadowColor: '#c5c5c5',
-    // shadowOffset: {width: SIZES.five, height: SIZES.five},
-    // shadowOpacity: 0.15,
-    // shadowRadius: SIZES.five,
-    // elevation: SIZES.five,
   },
   card: {
     backgroundColor: '#fff',

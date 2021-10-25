@@ -16,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends ReactActivity {
 
- private static final String TAG = "CashGrab";
+ private static final String TAG = "MyCashGrab";
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule

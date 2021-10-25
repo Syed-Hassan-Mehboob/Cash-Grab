@@ -1,10 +1,10 @@
+import React, {Component} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CommonActions} from '@react-navigation/native';
-import React, {Component} from 'react';
 import {StyleSheet, ImageBackground, Image, StatusBar} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FIREBASECONSTANTS, SIZES} from '../common/Constants';
 import Images from '../common/Images';
 
 const Auth = CommonActions.reset({

@@ -32,8 +32,19 @@ export default class ConfirmPayment extends Component {
   }
 
   componentDidMount() {
-    if (this.props.route.params.from === 'notification') {
+    if (
+      this.props.route.params.from === 'notification' ||
+      this.props.route.params.from === 'quick'
+    ) {
       this.getUserAccessToken();
+    }
+    if (this.props.route.params.from === 'scheduled') {
+      // this.getUserAccessToken();
+      alert('from scheduled flow');
+    }
+    if (this.props.route.params?.from === 'posted') {
+      // this.getUserAccessToken();
+      alert('from posted flow');
     }
   }
 
@@ -214,7 +225,10 @@ export default class ConfirmPayment extends Component {
           }}>
           <ButtonRadius10
             onPress={() => {
-              if (this.props.route.params.from === 'notification') {
+              if (
+                this.props.route.params.from === 'notification' ||
+                this.props.route.params.from === 'quick'
+              ) {
                 this.props.navigation.navigate(Constants.QuickJobDetail, {
                   orderItem: this.state.currentOrder,
                 });

@@ -15,6 +15,8 @@ import Constants, {
   STYLES,
   width,
 } from '../../common/Constants';
+import BoldTextCB from '../../components/BoldTextCB';
+import RegularTextCB from '../../components/RegularTextCB';
 import Colors from '../../common/Colors';
 import Images from '../../common/Images';
 import Modal from 'react-native-modal';
@@ -30,6 +32,8 @@ import messaging from '@react-native-firebase/messaging';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import moment from 'moment';
+import ButtonRadius10 from '../../components/ButtonRadius10';
+import Firebase from '../../FireBaseConfig';
 
 const Drawer = createDrawerNavigator();
 
@@ -50,6 +54,8 @@ export default class DrawerNavigator extends React.Component {
     QuickJobAddress: '',
     QuickJobTime: '',
     accessToken: '',
+    vendorThankyoumodal: false,
+    customerJobAcceptedModal: false,
   };
 
   componentDidMount() {
@@ -86,20 +92,53 @@ export default class DrawerNavigator extends React.Component {
   /*  ************************** FIREBASE NOTIFICATIION ************************ */
   /*  ###################################   ###################################* */
   notificationListener = async () => {
+    // await Firebase();
+
     console.log('notificationListener started');
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Your message was handled in background', remoteMessage);
+    });
+
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
-    messaging().onNotificationOpenedApp((remoteMessage) => {
+    messaging().onNotificationOpenedApp((rm) => {
       console.log(
         'Notification caused app to open from background state:',
-        remoteMessage.notification,
+        rm.notification,
       );
       console.warn(
         'Notification caused app to open from background state:',
-        remoteMessage.notification,
+        rm.notification,
       );
+
+      if (rm.data.trigger_type === 'quick_notify') {
+        this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        this.getQuickOrderRequestData(rm.data.trigger_id);
+      }
+      if (rm.data.trigger_type === 'no_vendor_found') {
+        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        // this.getQuickOrderRequestData(rm.data.trigger_id);
+        alert('no vendor available in your area');
+      }
+      if (rm.data.trigger_type === 'quick_order_accepted') {
+        // this.getQuickOrderRequestData(rm.data.trigger_id);
+        // alert('Your quick job has been accepted.');
+        this.setState({customerJobAcceptedModal: true}, () => {
+          console.log(
+            'ttttttttttttttt========>>>>>>>>',
+            this.state.customerJobAcceptedModal,
+          );
+        });
+      }
+      if (
+        rm.data.trigger_type === 'order' &&
+        rm.data.body === 'your order has completed successfully'
+      ) {
+        this.setState({vendorThankyoumodal: true});
+      }
     });
 
-    // Check forGround
+    // Check foreGround
     messaging().onMessage(async (rm) => {
       console.log('recived in forground', rm);
 
@@ -113,17 +152,28 @@ export default class DrawerNavigator extends React.Component {
         alert('no vendor available in your area');
       }
       if (rm.data.trigger_type === 'quick_order_accepted') {
-        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
         // this.getQuickOrderRequestData(rm.data.trigger_id);
-        alert('Your quick job has been accepted.');
+        // alert('Your quick job has been accepted.');
+        this.setState({customerJobAcceptedModal: true}, () => {
+          console.log(
+            'ttttttttttttttt========>>>>>>>>',
+            this.state.customerJobAcceptedModal,
+          );
+        });
+      }
+      if (
+        rm.data.trigger_type === 'order' &&
+        rm.data.body === 'your order has completed successfully'
+      ) {
+        this.setState({vendorThankyoumodal: true});
       }
     });
 
     // Check whether an initial notification is available
     messaging()
       .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
+      .then((rm) => {
+        if (rm) {
           console.log(
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
@@ -133,6 +183,32 @@ export default class DrawerNavigator extends React.Component {
             remoteMessage.notification,
           );
         }
+
+        // if (rm.data.trigger_type === 'quick_notify') {
+        //   this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        //   this.getQuickOrderRequestData(rm.data.trigger_id);
+        // }
+        // if (rm.data.trigger_type === 'no_vendor_found') {
+        //   // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        //   // this.getQuickOrderRequestData(rm.data.trigger_id);
+        //   alert('no vendor available in your area');
+        // }
+        // if (rm.data.trigger_type === 'quick_order_accepted') {
+        //   // this.getQuickOrderRequestData(rm.data.trigger_id);
+        //   // alert('Your quick job has been accepted.');
+        //   this.setState({customerJobAcceptedModal: true}, () => {
+        //     console.log(
+        //       'ttttttttttttttt========>>>>>>>>',
+        //       this.state.customerJobAcceptedModal,
+        //     );
+        //   });
+        // }
+        // if (
+        //   rm.data.trigger_type === 'order' &&
+        //   rm.data.body === 'your order has completed successfully'
+        // ) {
+        //   this.setState({vendorThankyoumodal: true});
+        // }
       })
       .catch((error) => {
         console.log('getInitialNotification ======> ', error);
@@ -381,7 +457,6 @@ export default class DrawerNavigator extends React.Component {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
-                    // this.setState({isVisible: false});
                     this.Accept_DeclineQuickJob('accepted');
                   }}
                   style={{
@@ -397,7 +472,6 @@ export default class DrawerNavigator extends React.Component {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
-                    // this.setState({isVisible: false});
                     this.Accept_DeclineQuickJob('cancelled');
                   }}
                   style={{
@@ -417,6 +491,116 @@ export default class DrawerNavigator extends React.Component {
           </Modal>
         </View>
         {/* ) : null} */}
+
+        <Modal
+          isVisible={this.state.customerJobAcceptedModal}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View
+            style={{
+              backgroundColor: Colors.white,
+              padding: SIZES.fifteen,
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+            <Image
+              source={Images.greenTick}
+              resizeMode="contain"
+              style={{
+                height: SIZES.fifteen * 5,
+                width: SIZES.fifteen * 5,
+                marginBottom: 15,
+              }}
+            />
+            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+              Job Accepted
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.coolGrey,
+              }}>
+              Your Job has been Accepted by one of our vendors.
+            </RegularTextCB>
+            <View
+              style={{
+                marginVertical: SIZES.ten * 3,
+                width: '100%',
+              }}>
+              <ButtonRadius10
+                label="OKAY"
+                bgColor={Colors.sickGreen}
+                onPress={() => {
+                  this.setState({customerJobAcceptedModal: false}, () => {
+                    // setTimeout(() => {
+                    //   this.props.navigation.replace(Constants.vendorHome);
+                    // }, 500);
+                  });
+                }}
+              />
+            </View>
+          </View>
+        </Modal>
+
+        <Modal
+          isVisible={this.state.vendorThankyoumodal}
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={600}
+          animationOutTiming={600}
+          backdropTransitionInTiming={600}
+          backdropTransitionOutTiming={600}>
+          <View
+            style={{
+              backgroundColor: Colors.white,
+              padding: SIZES.fifteen,
+              alignItems: 'center',
+              borderRadius: 10,
+            }}>
+            <Image
+              source={Images.greenTick}
+              resizeMode="contain"
+              style={{
+                height: SIZES.fifteen * 5,
+                width: SIZES.fifteen * 5,
+                marginBottom: 15,
+              }}
+            />
+            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+              Thank You
+            </BoldTextCB>
+            <RegularTextCB
+              style={{
+                marginVertical: SIZES.ten,
+                fontSize: 16,
+                color: Colors.coolGrey,
+              }}>
+              For your great service
+            </RegularTextCB>
+            <View
+              style={{
+                marginVertical: SIZES.ten * 3,
+                width: '100%',
+              }}>
+              <ButtonRadius10
+                label="JOB COMPLETED"
+                bgColor={Colors.sickGreen}
+                onPress={() => {
+                  this.setState({vendorThankyoumodal: false}, () => {
+                    // setTimeout(() => {
+                    //   this.props.navigation.replace(Constants.vendorHome);
+                    // }, 500);
+                  });
+                }}
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   };

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "409712438268",
+    "firebase_url": "https://cashgrab-db612-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "cashgrab-db612",
     "storage_bucket": "cashgrab-db612.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "409712438268-o68bip04al4j2d08qtfd7n21oqcqsev1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cashgrab",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "409712438268-63i64gvt82q9dr4k914ha3lpaqhr5r24.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +38,13 @@
             {
               "client_id": "409712438268-63i64gvt82q9dr4k914ha3lpaqhr5r24.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "409712438268-5cg3jr8kojbt7b0po40s5auf69n5j4pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.demo.cashgrab"
+              }
             }
           ]
         }

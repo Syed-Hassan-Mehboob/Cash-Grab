@@ -245,7 +245,31 @@ export default function ScheduleJobDetails(props) {
       .then(onSuccess)
       .catch(onFailure);
   };
-  console.log('.....', props.route.params);
+  // console.log('.....', props.route.params);
+
+  const handleServiceCompleteClick = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsloading(true);
+    const formData = new FormData();
+    formData.append('order_id', orderId);
+    formData.append('status', 'completed');
+
+    const onSuccess = ({data}) => {
+      console.log('data service completed=====>>>>', data);
+      setIsloading(false);
+    };
+    const onFailure = (error) => {
+      console.log('error service completed=====>>>>', `Bearer ${token}`);
+      setIsloading(false);
+    };
+    Axios.post(Constants.orderStatus, formData, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
   return (
     <ScrollView
       style={styles.container}
@@ -522,7 +546,7 @@ export default function ScheduleJobDetails(props) {
             label="SERVICE COMPLETED"
             bgColor={Colors.sickGreen}
             onPress={() => {
-              props.navigation.navigate(Constants.confirmPayment);
+              handleServiceCompleteClick();
             }}
           />
         </View>

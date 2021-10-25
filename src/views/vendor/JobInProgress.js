@@ -76,7 +76,7 @@ export default class JobInProgress extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      // console.log(' Schedule Bookings Detail  =====', data.data);
+      console.log(' Schedule Bookings Detail  =====', data.data);
       this.setState({
         userData: data.data,
       });
@@ -312,24 +312,39 @@ export default class JobInProgress extends React.Component {
                 marginVertical: SIZES.ten * 1.8,
                 marginHorizontal: SIZES.twenty,
               }}>
-              {this.state.userData?.orderStatus ? (
-                <ButtonRadius10
-                  label={
-                    this.state.userData?.orderStatus === 'accepted'
-                      ? 'START NOW'
-                      : 'WORK STARTED'
-                  }
-                  disabled={
-                    this.state.userData?.orderStatus !== 'accepted'
-                      ? true
-                      : false
-                  }
-                  bgColor={Colors.sickGreen}
-                  onPress={() => {
-                    this.progressOrder();
-                  }}
-                />
-              ) : null}
+              {/* {this.state.userData?.orderStatus ? ( */}
+              {/* {this.state.userData?.orderStatus === 'accepted' ? ( */}
+              <ButtonRadius10
+                label={
+                  this.state.userData?.orderStatus === 'accepted'
+                    ? 'START NOW'
+                    : this.state.userData?.orderStatus === 'progress'
+                    ? 'WORK STARTED'
+                    : this.state.userData?.orderStatus === 'completed'
+                    ? 'COMPLETED'
+                    : null
+                }
+                disabled={
+                  this.state.userData?.orderStatus !== 'accepted' ||
+                  this.state.userData?.orderStatus === 'completed'
+                    ? true
+                    : false
+                }
+                bgColor={Colors.sickGreen}
+                onPress={() => {
+                  this.progressOrder();
+                }}
+              />
+              {/* ) : (
+              <LightTextCB
+                style={{
+                  marginTop: SIZES.ten,
+                  alignSelf: 'center',
+                  color: Colors.coolGrey,
+                }}>
+                *This order has been completed{' '}
+              </LightTextCB> */}
+              {/* )} */}
             </View>
           </View>
         </ScrollView>

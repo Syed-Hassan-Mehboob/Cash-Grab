@@ -436,7 +436,7 @@ export default function BookingAcceptance(props) {
               alignSelf: 'center',
               color: Colors.coolGrey,
             }}>
-            * you Have canceled this order{' '}
+            *you Have canceled this order{' '}
           </LightTextCB>
         )}
       </View>
