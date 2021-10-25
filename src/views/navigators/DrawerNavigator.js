@@ -131,8 +131,9 @@ export default class DrawerNavigator extends React.Component {
         });
       }
       if (
-        rm.data.trigger_type === 'order' &&
-        rm.data.body === 'your order has completed successfully'
+        (rm.data.trigger_type === 'order' &&
+          rm.data.body === 'your order has completed successfully') ||
+        rm.notification.body === 'your quick order has accepted successfully'
       ) {
         this.setState({vendorThankyoumodal: true});
       }
@@ -491,116 +492,120 @@ export default class DrawerNavigator extends React.Component {
           </Modal>
         </View>
         {/* ) : null} */}
-
-        <Modal
-          isVisible={this.state.customerJobAcceptedModal}
-          animationIn="zoomInDown"
-          animationOut="zoomOutUp"
-          animationInTiming={600}
-          animationOutTiming={600}
-          backdropTransitionInTiming={600}
-          backdropTransitionOutTiming={600}>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              padding: SIZES.fifteen,
-              alignItems: 'center',
-              borderRadius: 10,
-            }}>
-            <Image
-              source={Images.greenTick}
-              resizeMode="contain"
-              style={{
-                height: SIZES.fifteen * 5,
-                width: SIZES.fifteen * 5,
-                marginBottom: 15,
-              }}
-            />
-            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-              Job Accepted
-            </BoldTextCB>
-            <RegularTextCB
-              style={{
-                marginVertical: SIZES.ten,
-                fontSize: 16,
-                color: Colors.coolGrey,
-              }}>
-              Your Job has been Accepted by one of our vendors.
-            </RegularTextCB>
+        <View>
+          <Modal
+            isVisible={true}
+            // isVisible={this.state.customerJobAcceptedModal}
+            animationIn="zoomInDown"
+            animationOut="zoomOutUp"
+            animationInTiming={600}
+            animationOutTiming={600}
+            backdropTransitionInTiming={600}
+            backdropTransitionOutTiming={600}>
             <View
               style={{
-                marginVertical: SIZES.ten * 3,
-                width: '100%',
+                backgroundColor: Colors.white,
+                padding: SIZES.fifteen,
+                alignItems: 'center',
+                borderRadius: 10,
               }}>
-              <ButtonRadius10
-                label="OKAY"
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  this.setState({customerJobAcceptedModal: false}, () => {
-                    // setTimeout(() => {
-                    //   this.props.navigation.replace(Constants.vendorHome);
-                    // }, 500);
-                  });
+              <Image
+                source={Images.greenTick}
+                resizeMode="contain"
+                style={{
+                  height: SIZES.fifteen * 5,
+                  width: SIZES.fifteen * 5,
+                  marginBottom: 15,
                 }}
               />
+              <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+                Job Accepted
+              </BoldTextCB>
+              <RegularTextCB
+                style={{
+                  marginVertical: SIZES.ten,
+                  fontSize: 16,
+                  color: Colors.coolGrey,
+                }}>
+                Your Job has been Accepted by one of our vendors.
+              </RegularTextCB>
+              <View
+                style={{
+                  marginVertical: SIZES.ten * 3,
+                  width: '100%',
+                }}>
+                <ButtonRadius10
+                  label="OKAY"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.setState({customerJobAcceptedModal: false}, () => {
+                      // setTimeout(() => {
+                      //   this.props.navigation.replace(Constants.vendorHome);
+                      // }, 500);
+                    });
+                  }}
+                />
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        </View>
 
-        <Modal
-          isVisible={this.state.vendorThankyoumodal}
-          animationIn="zoomInDown"
-          animationOut="zoomOutUp"
-          animationInTiming={600}
-          animationOutTiming={600}
-          backdropTransitionInTiming={600}
-          backdropTransitionOutTiming={600}>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              padding: SIZES.fifteen,
-              alignItems: 'center',
-              borderRadius: 10,
-            }}>
-            <Image
-              source={Images.greenTick}
-              resizeMode="contain"
-              style={{
-                height: SIZES.fifteen * 5,
-                width: SIZES.fifteen * 5,
-                marginBottom: 15,
-              }}
-            />
-            <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-              Thank You
-            </BoldTextCB>
-            <RegularTextCB
-              style={{
-                marginVertical: SIZES.ten,
-                fontSize: 16,
-                color: Colors.coolGrey,
-              }}>
-              For your great service
-            </RegularTextCB>
+        <View>
+          <Modal
+            isVisible={this.state.vendorThankyoumodal}
+            animationIn="zoomInDown"
+            animationOut="zoomOutUp"
+            animationInTiming={600}
+            animationOutTiming={600}
+            backdropTransitionInTiming={600}
+            backdropTransitionOutTiming={600}>
             <View
               style={{
-                marginVertical: SIZES.ten * 3,
-                width: '100%',
+                backgroundColor: Colors.white,
+                padding: SIZES.fifteen,
+                alignItems: 'center',
+                borderRadius: 10,
               }}>
-              <ButtonRadius10
-                label="JOB COMPLETED"
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  this.setState({vendorThankyoumodal: false}, () => {
-                    // setTimeout(() => {
-                    //   this.props.navigation.replace(Constants.vendorHome);
-                    // }, 500);
-                  });
+              <Image
+                source={Images.greenTick}
+                resizeMode="contain"
+                style={{
+                  height: SIZES.fifteen * 5,
+                  width: SIZES.fifteen * 5,
+                  marginBottom: 15,
                 }}
               />
+              <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+                Thank You
+              </BoldTextCB>
+              <RegularTextCB
+                style={{
+                  marginVertical: SIZES.ten,
+                  fontSize: 16,
+                  color: Colors.coolGrey,
+                }}>
+                For your great service
+              </RegularTextCB>
+              <View
+                style={{
+                  marginVertical: SIZES.ten * 3,
+                  width: '100%',
+                }}>
+                <ButtonRadius10
+                  label="JOB COMPLETED"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.setState({vendorThankyoumodal: false}, () => {
+                      // setTimeout(() => {
+                      //   this.props.navigation.replace(Constants.vendorHome);
+                      // }, 500);
+                    });
+                  }}
+                />
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        </View>
       </View>
     );
   };
