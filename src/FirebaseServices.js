@@ -2,8 +2,9 @@ import messaging from '@react-native-firebase/messaging';
 import Constants, {FIREBASECONSTANTS} from './common/Constants';
 import Axios from './network/APIKit';
 import database from '@react-native-firebase/database';
-export async function requestUserPermission(userToken) {
-  // console.log('method start');
+
+export async function requestUserPermission(userToken, userId) {
+  console.log('permission method start', userId);
 
   const authStatus = await messaging().requestPermission();
   const enabled =
@@ -11,13 +12,16 @@ export async function requestUserPermission(userToken) {
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
   if (enabled) {
-    // console.log('Authorization status:', authStatus);
-    getFcmToken(userToken);
+    console.log('Authorization status:', userToken);
+    getFcmToken(userToken, userId);
   }
 }
 
 export const getFcmToken = async (userToken, userId) => {
   // console.log('get fcm token', userId);
+  console.log('permission enabled');
+  console.log('getFCM Token method start');
+
   try {
     messaging()
       .getToken()
@@ -35,8 +39,10 @@ export const getFcmToken = async (userToken, userId) => {
 };
 
 export const SetFcmToken = async (token, userToken, userId) => {
+  console.log('setFCM Token method start');
+
   // const Token = useSelector(state => state.Auth.AccessToken);
-  // console.log('set fcm token ==========>', userToken);
+  console.log('set fcm token ==========>', token);
   // console.log('set fcm token', userId);
 
   // console.log('database========>>>>>>>', database());

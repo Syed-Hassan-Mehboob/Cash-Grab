@@ -135,7 +135,7 @@ const HomeNavigator = () => {
       />
       <HomeStack.Screen name={Constants.settings} component={Settings} />
       <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
-      <HomeStack.Screen name={Constants.chat} component={Chat} />
+      {/* <HomeStack.Screen name={Constants.chat} component={Chat} /> */}
       <HomeStack.Screen name={Constants.editProfile} component={EditProfile} />
       <HomeStack.Screen
         name={Constants.changePassword}

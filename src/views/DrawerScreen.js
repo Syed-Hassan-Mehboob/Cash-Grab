@@ -1,5 +1,7 @@
 /* @flow */
 import React, {Component} from 'react';
+import database from '@react-native-firebase/database';
+
 import {
   View,
   TouchableOpacity,
@@ -12,7 +14,7 @@ import {CommonActions} from '@react-navigation/native';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FIREBASECONSTANTS, SIZES} from '../common/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import utils from '../utils';
@@ -89,10 +91,22 @@ export default class DrawerScreen extends Component {
       .catch(onFailure);
   };
 
-  logout() {
-    const onSuccess = ({data}) => {
+  logout = async () => {
+    let user = await AsyncStorage.getItem('user');
+    let parsedUserId = JSON.parse(user);
+    console.log('userid drawer screeen =====>>>>>>>', parsedUserId.id);
+
+    const onSuccess = async ({data}) => {
       this.setState({isLoading: false});
 
+      await database()
+        .ref(FIREBASECONSTANTS.FIREBASE_TOKEN)
+        .child(parsedUserId.id.toString())
+        .set('')
+        .then(() => console.log('HHHHAAAAMMMMZZZZAAAAA FCM Data Upload.'))
+        .catch((error) =>
+          console.log('HHHHAAAAMMMMZZZZAAAAA error ====>', error),
+        );
       AsyncStorage.removeItem('user');
       this.props.navigation.dispatch(resetAction);
     };
@@ -111,7 +125,7 @@ export default class DrawerScreen extends Component {
 
     this.setState({isLoading: true});
     Axios.get(Constants.logoutURL, options).then(onSuccess).catch(onFailure);
-  }
+  };
 
   toggleModal = () => {
     this.setState({

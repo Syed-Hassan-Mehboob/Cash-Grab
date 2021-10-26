@@ -80,7 +80,15 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    enableHermes: true,  // clean and rebuild if changing
+    enableHermes: false,  // clean and rebuild if changing
+//      root           : "../../../",
+//        entryFile      : "index.js",
+//        bundleAssetName: "index.bundle",
+//        enableHermes   : true,
+//        bundleInAlpha  : true,
+//        bundleInBeta   : true,
+//        hermesFlagsDebug:['-Xes6-proxy'],
+//        hermesFlagsRelease:['-Xes6-proxy']
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -154,6 +162,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+//        mRelease {
+//            storeFile file('/Users/hackintosh3/Desktop/ReactNative/cashgrab-react-native/android/cashgrab.jks')
+//            keyAlias '123456'
+//            storePassword '123456'
+//            keyPassword '123456'
+//        }
     }
     buildTypes {
         debug {
@@ -162,8 +176,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
-            minifyEnabled enableProguardInReleaseBuilds
+//            signingConfig signingConfigs.mRelease
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }

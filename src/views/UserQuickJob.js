@@ -78,8 +78,9 @@ export default function UserQuickJobs(props) {
           },
         ]}
         onPress={() =>
-          props.navigation.navigate(Constants.QuickJobDetail, {
-            orderItem: item,
+          props.navigation.navigate(Constants.confirmPayment, {
+            orderId: item.id,
+            from: 'quick',
           })
         }>
         <View

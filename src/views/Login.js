@@ -21,7 +21,7 @@ import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
-import {getFcmToken} from '../FirebaseServices';
+import {requestUserPermission} from '../FirebaseServices';
 
 export default class Login extends Component {
   constructor(props) {
@@ -93,8 +93,9 @@ export default class Login extends Component {
         utils.showToast('Please verify to continue!\nOTP: ' + data.data.otp);
         this.props.navigation.navigate(Constants.otp, {email: email});
       } else {
+        console.log('=========LOGIN-LOGS=======>>>>>>>>>>>>>', data.data.id);
         this.saveUser(data.data);
-        getFcmToken(data.data.token, data.data.id);
+        requestUserPermission(data.data.token, data.data.id);
       }
     };
 

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  Linking,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Colors from '../common/Colors';
@@ -30,6 +31,7 @@ import Modal from 'react-native-modal';
 import BoldTextCB from '../components/BoldTextCB';
 import NormalHeader from '../components/NormalHeader';
 import StarRating from 'react-native-star-rating';
+import {Icon} from 'native-base';
 
 export default class QuickJobDetail extends React.Component {
   initialMapState = {
@@ -76,58 +78,23 @@ export default class QuickJobDetail extends React.Component {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       //   this.viewJob();
-      console.log('priops======>>>> ', this.props.route.params.orderItem.id);
+      console.log(
+        'priops======>>>> ',
+        this.props.route.params.orderItem.vendor.phone,
+      );
     });
   };
 
-  // viewJob = () => {
-  //   this.setState({isLoading: true});
-  //   const onSuccess = ({data}) => {
-  //     console.log(
-  //       'View Job Data ==== ==== ',
-  //       JSON.stringify(data.data.records),
-  //     );
+  dialCall = (number) => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${number}`;
+    } else {
+      phoneNumber = `telprompt:${number}`;
+    }
 
-  //     this.setState({isLoading: false});
-  //     this.setState({
-  //       userImage: data.data.records.user.user_profiles.image,
-  //       title: data.data.records.title,
-  //       location: data.data.records.location,
-  //       time: data.data.records.time,
-  //       images: data.data.records.images,
-  //       username: data.data.records.user.name,
-  //       lat: data.data.records.user.user_profiles.latitude,
-  //       lng: data.data.records.user.user_profiles.longitude,
-  //       price: data.data.records.price,
-  //       description: data.data.records.description,
-  //       latitude: data.data.records.user.user_profiles.latitude,
-  //       longitude: data.data.records.user.user_profiles.longitude,
-  //       jobService: data.data.records.job_service,
-  //     });
-
-  //     // utils.showToast(data.message)
-
-  //     this.setState({isLoading: false});
-  //   };
-
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //     utils.showResponseError(error);
-  //   };
-
-  //   this.setState({isLoading: true});
-  //   let params = {
-  //     jobId: this.props.route.params.item,
-  //   };
-  //   Axios.get(Constants.viewJob, {
-  //     params,
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
+    Linking.openURL(phoneNumber);
+  };
 
   handleServiceCompleteClick = () => {
     const formData = new FormData();
@@ -153,6 +120,10 @@ export default class QuickJobDetail extends React.Component {
   };
 
   render() {
+    console.log(
+      'quick job detail',
+      this.props.route.params.orderItem.orderStatus,
+    );
     return (
       <View style={STYLES.container}>
         <NormalHeader name="Quick Job Detail" />
@@ -246,11 +217,6 @@ export default class QuickJobDetail extends React.Component {
                   marginVertical: SIZES.ten * 0.5,
                 }}>
                 {this.props.route.params.orderItem.description}
-                {/* Lorem Ipsum is
-                simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever
-                since the 1500s, when an unknown printer took a galley of type
-                and scrambled it to make a type specimen book. */}
               </RegularTextCB>
 
               <View
@@ -309,14 +275,19 @@ export default class QuickJobDetail extends React.Component {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
+                    // backgroundColor: 'red',
                   }}>
-                  <View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
                     <Image
                       source={{
                         uri:
                           Constants.imageURL +
-                          this.props.route.params.orderItem.vendor.user_profiles
-                            .image,
+                          this.props.route.params.orderItem?.vendor
+                            ?.user_profiles?.image,
                       }}
                       style={{
                         height: 50,
@@ -329,7 +300,7 @@ export default class QuickJobDetail extends React.Component {
                   </View>
                   <View style={{marginStart: 10}}>
                     <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                      {this.props.route.params.orderItem.vendor.name}
+                      {this.props.route.params.orderItem?.vendor?.name}
                     </BoldTextCB>
                     <View
                       style={{
@@ -347,6 +318,61 @@ export default class QuickJobDetail extends React.Component {
                     </View>
                   </View>
                 </View>
+
+                {this.props.route.params.orderItem?.orderStatus !==
+                'completed' ? (
+                  <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate(Constants.chat, {
+                          payload: this.props.route.params.orderItem,
+                        });
+                      }}
+                      activeOpacity={0.7}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: Colors.sickGreen,
+                        height: SIZES.ten * 4.5,
+                        width: SIZES.ten * 4.5,
+                        borderRadius: SIZES.ten * 5,
+                        marginRight: SIZES.ten,
+                      }}>
+                      <Icon
+                        type={'MaterialCommunityIcons'}
+                        name={'chat-processing-outline'}
+                        style={{
+                          color: Colors.white,
+                          fontSize: SIZES.fifteen * 1.82,
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.dialCall(
+                          this.props.route.params.orderItem?.vendor?.phone,
+                        );
+                      }}
+                      activeOpacity={0.7}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: Colors.sickGreen,
+                        height: SIZES.ten * 4.5,
+                        width: SIZES.ten * 4.5,
+                        borderRadius: SIZES.ten * 5,
+                      }}>
+                      <Icon
+                        type={'MaterialIcons'}
+                        name={'call'}
+                        style={{
+                          color: Colors.white,
+                          fontSize: SIZES.fifteen * 1.82,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
               </View>
 
               <View
@@ -369,7 +395,7 @@ export default class QuickJobDetail extends React.Component {
                     fullStar={Images.starFull}
                     emptyStar={Images.starHalf}
                     starSize={SIZES.fifteen}
-                    rating={this.props.route.params.orderItem.vendor.ratings}
+                    rating={this.props.route.params.orderItem?.vendor?.ratings}
                     starStyle={{
                       width: SIZES.twenty,
                       height: SIZES.twenty,
@@ -405,20 +431,20 @@ export default class QuickJobDetail extends React.Component {
             <MapView
               provider={PROVIDER_GOOGLE}
               initialRegion={{
-                latitude: Number(this.props.route.params.orderItem.lat),
-                longitude: Number(this.props.route.params.orderItem.lng),
+                latitude: Number(this.props.route.params?.orderItem?.lat),
+                longitude: Number(this.props.route.params?.orderItem?.lng),
                 latitudeDelta: 0.04864195044303443,
                 longitudeDelta: 0.04014281769006,
               }}
               scrollEnabled={false}
-              showsUserLocation={true}
+              showsUserLocation={false}
               showsMyLocationButton={false}
               zoomEnabled={false}
               style={styles.mapStyle}>
               <Marker
                 coordinate={{
-                  latitude: Number(this.props.route.params.orderItem.lat),
-                  longitude: Number(this.props.route.params.orderItem.lng),
+                  latitude: Number(this.props.route.params?.orderItem?.lat),
+                  longitude: Number(this.props.route.params?.orderItem?.lng),
                 }}
               />
             </MapView>
@@ -427,16 +453,15 @@ export default class QuickJobDetail extends React.Component {
                 marginVertical: SIZES.ten * 1.8,
                 marginHorizontal: SIZES.twenty,
               }}>
-              {/* {this.props.route.params.orderItem.orderStatus === 'progress' ? ( */}
-              <ButtonRadius10
-                label="SERVICE COMPLETED"
-                bgColor={Colors.sickGreen}
-                onPress={() => {
-                  this.handleServiceCompleteClick();
-                  // this.setState({thankYouModal: true});
-                }}
-              />
-              {/* // ) : null} */}
+              {this.props.route.params.orderItem?.orderStatus === 'progress' ? (
+                <ButtonRadius10
+                  label="SERVICE COMPLETED"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.handleServiceCompleteClick();
+                  }}
+                />
+              ) : null}
             </View>
           </View>
         </ScrollView>

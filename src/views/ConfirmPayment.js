@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
 import Constants, {SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
@@ -23,7 +24,7 @@ const resetAction = CommonActions.reset({
 export default class ConfirmPayment extends Component {
   constructor(props) {
     super(props);
-    this.state = {accessToken: '', currentOrder: ''};
+    this.state = {accessToken: '', currentOrder: '', isLoading: true};
   }
 
   navigateToHome() {
@@ -32,6 +33,22 @@ export default class ConfirmPayment extends Component {
   }
 
   componentDidMount() {
+    this.props.navigation.addListener('focus', () => {
+      if (
+        this.props.route.params.from === 'notification' ||
+        this.props.route.params.from === 'quick'
+      ) {
+        this.getUserAccessToken();
+      }
+      if (this.props.route.params.from === 'scheduled') {
+        // this.getUserAccessToken();
+        alert('from scheduled flow');
+      }
+      if (this.props.route.params?.from === 'posted') {
+        // this.getUserAccessToken();
+        alert('from posted flow');
+      }
+    });
     if (
       this.props.route.params.from === 'notification' ||
       this.props.route.params.from === 'quick'
@@ -58,16 +75,20 @@ export default class ConfirmPayment extends Component {
 
   getOrderDetials = () => {
     const onSuccess = ({data}) => {
-      console.log('ssssssss>>>>>>>>>>', data.data.payment_status);
-      this.setState({currentOrder: data.data});
+      console.log(
+        'confirm payment get order detail success ===============================>>>>>>>>>>',
+        data.data.orderStatus,
+      );
+      this.setState({currentOrder: data.data, isLoading: false});
       if (data.data.payment_status === 'paid') {
         this.props.navigation.navigate(Constants.QuickJobDetail, {
-          orderItem: this.state.currentOrder,
+          orderItem: data.data,
         });
       }
     };
     const onFailure = (error) => {
-      console.log('ssssssss>>>>>>>>>>', error);
+      console.log('confirm payment get order detail error >>>>>>>>>>', error);
+      this.setState({isLoading: false});
     };
     let params = {
       orderId: this.props.route.params.orderId,
@@ -113,7 +134,14 @@ export default class ConfirmPayment extends Component {
             marginTop: SIZES.fifteen,
           }}>
           <View style={styles.circleCard}>
-            <Image source={Images.emp1} style={styles.iconUser} />
+            <Image
+              source={{
+                uri:
+                  Constants.imageURL +
+                  this.state.currentOrder?.vendor?.user_profiles?.image,
+              }}
+              style={styles.iconUser}
+            />
           </View>
           <RegularTextCB
             style={{
@@ -122,7 +150,7 @@ export default class ConfirmPayment extends Component {
               flex: 1,
               marginHorizontal: SIZES.ten,
             }}>
-            Damian Santosa
+            {this.state.currentOrder?.vendor?.name}
           </RegularTextCB>
           <TouchableOpacity>
             <Image
@@ -185,7 +213,7 @@ export default class ConfirmPayment extends Component {
               Amount
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              $ 1,770.00
+              ${this.state.currentOrder.grandTotal}
             </RegularTextCB>
           </View>
           <View
@@ -198,7 +226,7 @@ export default class ConfirmPayment extends Component {
               Phone No.
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              +1(239) 555-01089
+              {this.state.currentOrder?.vendor?.phone}
             </RegularTextCB>
           </View>
           <View
@@ -211,7 +239,7 @@ export default class ConfirmPayment extends Component {
               Address
             </RegularTextCB>
             <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              New York, USA
+              {this.state.currentOrder?.address}
             </RegularTextCB>
           </View>
         </View>
@@ -240,6 +268,12 @@ export default class ConfirmPayment extends Component {
             bgColor={Colors.sickGreen}
           />
         </View>
+
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
       </View>
     );
   }
@@ -297,5 +331,9 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.ten,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
+    fontFamily: Constants.fontRegular,
   },
 });

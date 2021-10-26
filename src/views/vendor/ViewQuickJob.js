@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Image,
   LogBox,
@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  Linking,
 } from 'react-native';
+import {Icon} from 'native-base';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Colors from '../../common/Colors';
 import Constants, {height, SIZES, STYLES, FONTS} from '../../common/Constants';
@@ -110,7 +112,7 @@ export default class ViewQuickJob extends React.Component {
             () => {
               console.log(
                 'marker coordinates =======>>>>>> ',
-                this.state.initialRegion,
+                this.state.currentOrder.orderStatus,
               );
             },
           );
@@ -165,10 +167,21 @@ export default class ViewQuickJob extends React.Component {
       .catch(onFailure);
   };
 
+  dialCall = (number) => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${number}`;
+    } else {
+      phoneNumber = `telprompt:${number}`;
+    }
+
+    Linking.openURL(phoneNumber);
+  };
+
   render() {
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="View Job" />
+        <NormalHeader name="View Quick Job" />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -179,46 +192,105 @@ export default class ViewQuickJob extends React.Component {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}>
-                <View style={styles.circleCard}>
-                  <Image
-                    source={{
-                      uri:
-                        Constants.imageURL +
-                        this.state.currentOrder?.user?.user_profiles?.image,
-                    }}
-                    style={styles.iconUser}
-                    resizeMode="cover"
-                  />
-                </View>
-                <View style={{marginStart: SIZES.ten}}>
-                  <RegularTextCB
-                    style={{
-                      color: Colors.black,
-                      fontSize: 16,
-                    }}>
-                    {this.state.currentOrder?.user?.name}
-                  </RegularTextCB>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop: SIZES.five,
-                      alignItems: 'center',
-                    }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <View style={styles.circleCard}>
                     <Image
-                      source={Images.iconVerified}
-                      style={{height: 15, width: 15, resizeMode: 'contain'}}
+                      source={{
+                        uri:
+                          Constants.imageURL +
+                          this.state.currentOrder?.user?.user_profiles?.image,
+                      }}
+                      style={styles.iconUser}
+                      resizeMode="cover"
                     />
+                  </View>
+                  <View style={{marginStart: SIZES.ten}}>
                     <RegularTextCB
                       style={{
-                        color: Colors.turqoiseGreen,
-                        fontSize: 12,
-                        marginStart: SIZES.five,
+                        color: Colors.black,
+                        fontSize: 16,
                       }}>
-                      Verified
+                      {this.state.currentOrder?.user?.name}
                     </RegularTextCB>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginTop: SIZES.five,
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={Images.iconVerified}
+                        style={{height: 15, width: 15, resizeMode: 'contain'}}
+                      />
+                      <RegularTextCB
+                        style={{
+                          color: Colors.turqoiseGreen,
+                          fontSize: 12,
+                          marginStart: SIZES.five,
+                        }}>
+                        Verified
+                      </RegularTextCB>
+                    </View>
                   </View>
                 </View>
+
+                {this.state.currentOrder?.orderStatus !== 'completed' ? (
+                  <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate(Constants.chat, {
+                          payload: this.state.currentOrder,
+                        });
+                      }}
+                      activeOpacity={0.7}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: Colors.sickGreen,
+                        height: SIZES.ten * 4.5,
+                        width: SIZES.ten * 4.5,
+                        borderRadius: SIZES.ten * 5,
+                        marginRight: SIZES.ten,
+                      }}>
+                      <Icon
+                        type={'MaterialCommunityIcons'}
+                        name={'chat-processing-outline'}
+                        style={{
+                          color: Colors.white,
+                          fontSize: SIZES.fifteen * 1.82,
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.dialCall(this.state.currentOrder.user.phone);
+                      }}
+                      activeOpacity={0.7}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: Colors.sickGreen,
+                        height: SIZES.ten * 4.5,
+                        width: SIZES.ten * 4.5,
+                        borderRadius: SIZES.ten * 5,
+                      }}>
+                      <Icon
+                        type={'MaterialIcons'}
+                        name={'call'}
+                        style={{
+                          color: Colors.white,
+                          fontSize: SIZES.fifteen * 1.82,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
               </View>
               <View
                 style={{
@@ -315,7 +387,7 @@ export default class ViewQuickJob extends React.Component {
               <MapView
                 provider={PROVIDER_GOOGLE}
                 initialRegion={this.state.initialRegion}
-                showsUserLocation={true}
+                showsUserLocation={false}
                 showsMyLocationButton={false}
                 zoomEnabled={false}
                 scrollEnabled={false}
@@ -343,11 +415,14 @@ export default class ViewQuickJob extends React.Component {
                       ? 'WORK STARTED'
                       : this.state.currentOrder.orderStatus === 'completed'
                       ? 'completed'
+                      : this.state.currentOrder.orderStatus === 'pending'
+                      ? 'PENDING'
                       : null
                   }
                   disabled={
                     this.state.currentOrder.orderStatus === 'progress' ||
-                    this.state.currentOrder.orderStatus === 'completed'
+                    this.state.currentOrder.orderStatus === 'completed' ||
+                    this.state.currentOrder.orderStatus === 'pending'
                       ? true
                       : false
                   }

@@ -72,9 +72,9 @@ export default class DrawerNavigator extends React.Component {
     this.getUserType();
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
   getUserType = async () => {
     const user = await AsyncStorage.getItem('user');
@@ -108,8 +108,14 @@ export default class DrawerNavigator extends React.Component {
       );
       console.warn(
         'Notification caused app to open from background state:',
-        rm.notification,
+        rm,
       );
+      if (rm.data.trigger_type === 'message') {
+        this.props.navigation.navigate(Constants.chat, {
+          trigger: 'notification',
+          data: rm.data,
+        });
+      }
 
       if (rm.data.trigger_type === 'quick_notify') {
         this.setState({quickNotifyOrderId: rm.data.trigger_id});
@@ -124,8 +130,6 @@ export default class DrawerNavigator extends React.Component {
         rm.data.trigger_type === 'quick_order_accepted' ||
         rm.notification.body === 'your quick order has accepted successfully'
       ) {
-        // this.getQuickOrderRequestData(rm.data.trigger_id);
-        // alert('Your quick job has been accepted.');
         this.setState({customerJobAcceptedModal: true}, () => {
           console.log(
             'ttttttttttttttt========>>>>>>>>',
@@ -144,6 +148,12 @@ export default class DrawerNavigator extends React.Component {
     // Check foreGround
     messaging().onMessage(async (rm) => {
       console.log('recived in forground', rm);
+      if (rm.data.trigger_type === 'message') {
+        // this.props.navigation.navigate(Constants.chat, {
+        //   trigger: 'notification',
+        //   data: rm.data,
+        // });
+      }
 
       if (rm.data.trigger_type === 'quick_notify') {
         this.setState({quickNotifyOrderId: rm.data.trigger_id});
@@ -155,8 +165,6 @@ export default class DrawerNavigator extends React.Component {
         alert('no vendor available in your area');
       }
       if (rm.data.trigger_type === 'quick_order_accepted') {
-        // this.getQuickOrderRequestData(rm.data.trigger_id);
-        // alert('Your quick job has been accepted.');
         this.setState({customerJobAcceptedModal: true}, () => {
           console.log(
             'ttttttttttttttt========>>>>>>>>',
@@ -220,12 +228,13 @@ export default class DrawerNavigator extends React.Component {
   };
 
   getQuickOrderRequestData = (orderId) => {
+    // console.log(`Bearer ${this.state.accessToken}`);
     const onSuccess = ({data}) => {
       console.log(
         'get quick job pop up success ======>>>>>>> ',
-        this.state.accessToken,
+        // this.state.accessToken,
       );
-      console.log(data.data.address);
+      // console.log(data.data.address);
       this.setState(
         {
           quickNotifyOrderItem: data.data,
@@ -303,25 +312,84 @@ export default class DrawerNavigator extends React.Component {
         }}
       />
     ) : !this.state.isVendor ? (
-      <Drawer.Navigator
-        drawerType="slide"
-        drawerStyle={{width: '70%'}}
-        drawerContentOptions={{
-          activeTintColor: '#e91e63',
-          itemStyle: {marginVertical: 5},
-        }}
-        initialRouteName={Constants.home}
-        drawerContent={(props) => <DrawerScreen {...props} />}>
-        <Drawer.Screen name="Tab" component={UserTabNavigator} />
-        <Drawer.Screen
-          name={Constants.confirmPayment}
-          component={ConfirmPayment}
-        />
-        <Drawer.Screen
-          name={Constants.bookingConfirmed}
-          component={BookingConfirmed}
-        />
-      </Drawer.Navigator>
+      <View style={{flex: 1}}>
+        <Drawer.Navigator
+          drawerType="slide"
+          drawerStyle={{width: '70%'}}
+          drawerContentOptions={{
+            activeTintColor: '#e91e63',
+            itemStyle: {marginVertical: 5},
+          }}
+          initialRouteName={Constants.home}
+          drawerContent={(props) => <DrawerScreen {...props} />}>
+          <Drawer.Screen name="Tab" component={UserTabNavigator} />
+          <Drawer.Screen
+            name={Constants.confirmPayment}
+            component={ConfirmPayment}
+          />
+          <Drawer.Screen
+            name={Constants.bookingConfirmed}
+            component={BookingConfirmed}
+          />
+        </Drawer.Navigator>
+
+        <View>
+          <Modal
+            isVisible={this.state.customerJobAcceptedModal}
+            animationIn="zoomInDown"
+            animationOut="zoomOutUp"
+            animationInTiming={600}
+            animationOutTiming={600}
+            backdropTransitionInTiming={600}
+            backdropTransitionOutTiming={600}>
+            <View
+              style={{
+                backgroundColor: Colors.white,
+                padding: SIZES.fifteen,
+                alignItems: 'center',
+                borderRadius: 10,
+              }}>
+              <Image
+                source={Images.greenTick}
+                resizeMode="contain"
+                style={{
+                  height: SIZES.fifteen * 5,
+                  width: SIZES.fifteen * 5,
+                  marginBottom: 15,
+                }}
+              />
+              <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
+                Job Accepted
+              </BoldTextCB>
+              <RegularTextCB
+                style={{
+                  marginVertical: SIZES.ten,
+                  fontSize: 16,
+                  color: Colors.coolGrey,
+                }}>
+                Your Job has been Accepted by one of our vendors.
+              </RegularTextCB>
+              <View
+                style={{
+                  marginVertical: SIZES.ten * 3,
+                  width: '100%',
+                }}>
+                <ButtonRadius10
+                  label="OKAY"
+                  bgColor={Colors.sickGreen}
+                  onPress={() => {
+                    this.setState({customerJobAcceptedModal: false}, () => {
+                      // setTimeout(() => {
+                      //   this.props.navigation.replace(Constants.vendorHome);
+                      // }, 500);
+                    });
+                  }}
+                />
+              </View>
+            </View>
+          </Modal>
+        </View>
+      </View>
     ) : (
       <View style={{flex: 1}}>
         <Drawer.Navigator
@@ -423,7 +491,7 @@ export default class DrawerNavigator extends React.Component {
                       {borderWidth: 1, borderColor: Colors.sickGreen},
                     ]}>
                     <Text style={FONTS.mediumFont16}>
-                      {this.state.QuickJobLocation}
+                      {this.state.QuickJobAddress}
                     </Text>
                   </View>
                 </View>
@@ -494,63 +562,6 @@ export default class DrawerNavigator extends React.Component {
           </Modal>
         </View>
         {/* ) : null} */}
-        <View>
-          <Modal
-            isVisible={true}
-            // isVisible={this.state.customerJobAcceptedModal}
-            animationIn="zoomInDown"
-            animationOut="zoomOutUp"
-            animationInTiming={600}
-            animationOutTiming={600}
-            backdropTransitionInTiming={600}
-            backdropTransitionOutTiming={600}>
-            <View
-              style={{
-                backgroundColor: Colors.white,
-                padding: SIZES.fifteen,
-                alignItems: 'center',
-                borderRadius: 10,
-              }}>
-              <Image
-                source={Images.greenTick}
-                resizeMode="contain"
-                style={{
-                  height: SIZES.fifteen * 5,
-                  width: SIZES.fifteen * 5,
-                  marginBottom: 15,
-                }}
-              />
-              <BoldTextCB style={[{color: Colors.black, fontSize: 22}]}>
-                Job Accepted
-              </BoldTextCB>
-              <RegularTextCB
-                style={{
-                  marginVertical: SIZES.ten,
-                  fontSize: 16,
-                  color: Colors.coolGrey,
-                }}>
-                Your Job has been Accepted by one of our vendors.
-              </RegularTextCB>
-              <View
-                style={{
-                  marginVertical: SIZES.ten * 3,
-                  width: '100%',
-                }}>
-                <ButtonRadius10
-                  label="OKAY"
-                  bgColor={Colors.sickGreen}
-                  onPress={() => {
-                    this.setState({customerJobAcceptedModal: false}, () => {
-                      // setTimeout(() => {
-                      //   this.props.navigation.replace(Constants.vendorHome);
-                      // }, 500);
-                    });
-                  }}
-                />
-              </View>
-            </View>
-          </Modal>
-        </View>
 
         <View>
           <Modal

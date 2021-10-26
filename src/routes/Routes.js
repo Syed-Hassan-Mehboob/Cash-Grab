@@ -39,6 +39,7 @@ import Colors from '../common/Colors';
 import EditText from '../components/EditText';
 import {TouchableOpacity} from 'react-native';
 import ResetPassword from '../views/ResetPassword';
+import Chat from '../views/Chat';
 
 const Stack = createStackNavigator();
 
@@ -126,6 +127,7 @@ export default function Routes(props) {
           />
           <Stack.Screen name="ConfirmBooking" component={ConfirmBooking} />
           <Stack.Screen name="AddServices" component={AddServices} />
+          <Stack.Screen name={Constants.chat} component={Chat} />
         </Stack.Navigator>
 
         {/* {isVendor ? (

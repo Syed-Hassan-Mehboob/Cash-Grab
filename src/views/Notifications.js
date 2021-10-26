@@ -24,7 +24,7 @@ export default class Notifications extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       notifications: [],
       accessToken: '',
     };
@@ -52,13 +52,8 @@ export default class Notifications extends Component {
   };
 
   renderNotificationsItem = ({item}) => {
-    console.log('Notification Item ==== =====', item);
-    // console.log(
-    //   'Item  ===============>',
-    //   item.notifications.map((item) => {
-    //     console.log(item);
-    //   }),
-    // );
+    // console.log('Notification Item ==== =====', item);
+
     return (
       <View style={{marginHorizontal: SIZES.fifteen}}>
         <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
@@ -119,7 +114,7 @@ export default class Notifications extends Component {
                           : null}
                       </RegularTextCB>
                       <RegularTextCB style={{fontSize: SIZES.ten * 1.4}}>
-                        {moment(notification.created_at).format('hh:mm')}
+                        {moment(notification.created_at).format('hh:mm A')}
                       </RegularTextCB>
                     </View>
                     <RegularTextCB
@@ -160,10 +155,6 @@ export default class Notifications extends Component {
     );
   };
 
-  toggleIsLoading = () => {
-    this.setState({isLoading: !this.state.isLoading});
-  };
-
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => this.getNotifications());
@@ -171,16 +162,16 @@ export default class Notifications extends Component {
 
   getNotifications = () => {
     const onSuccess = ({data}) => {
-      this.toggleIsLoading();
+      this.setState({isLoading: false});
       this.setState({notifications: data.data});
     };
 
     const onFailure = (error) => {
-      this.toggleIsLoading();
+      this.setState({isLoading: false});
       utils.showResponseError(error);
     };
 
-    this.toggleIsLoading();
+    this.setState({isLoading: true});
     Axios.get(Constants.notificationsURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -215,10 +206,13 @@ export default class Notifications extends Component {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={[FONTS.boldFont18, {}]}>No Notification(s)!</Text>
+              <Text style={[FONTS.boldFont18, {}]}>
+                {!this.state.isLoading ? 'No Notification(s)!' : null}
+              </Text>
             </View>
           )}
         />
+        {/* {this.state.} */}
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
