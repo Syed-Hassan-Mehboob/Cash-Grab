@@ -28,108 +28,12 @@ import {ScrollView} from 'react-native';
 const {width, height} = Dimensions.get('window');
 
 export default class Chat extends React.Component {
-  messages = [
-    {
-      user: {
-        image: Images.emp1,
-      },
-      message: {
-        text: "Hi Ankur! What's up?",
-        date: 'Yesterday 14:26 PM',
-      },
-    },
-    {
-      user: {
-        image: Images.emp1,
-      },
-      message: {
-        text: "How's your day?",
-        date: 'Today 12:54 PM',
-      },
-    },
-  ];
-
   FlatListRef = null;
   chatList = React.createRef();
 
   constructor(props) {
     super(props);
   }
-
-  // this.props.route.params.data.
-
-  //  if(this.props.route.params.trigger === 'notification'){
-
-  //  }
-
-  VendorId =
-    this.props.route.params.data?.receiver_type === 'vendor' &&
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.receiver_id
-      : this.props.route.params.data?.sender_type === 'vendor' &&
-        this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.sender_id
-      : this.props.route.params.payload?.vendor.id.toString(); // Vendor ID
-
-  VendorName =
-    this.props.route.params.data?.receiver_type === 'vendor' &&
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.receiver_id
-      : this.props.route.params.data?.sender_type === 'vendor' &&
-        this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.sender_name
-      : this.props.route.params.payload?.vendor.name.toString(); // Vendor Name
-
-  VendorType =
-    this.props.route.params.data?.receiver_type === 'vendor' &&
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.receiver_type
-      : this.props.route.params.data?.sender_type === 'vendor' &&
-        this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.sender_type
-      : this.props.route.params.payload?.vendor.type.toString(); // Vendor type
-
-  customerId =
-    this.props.route.params.data?.receiver_type === 'customer' &&
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.receiver_id
-      : this.props.route.params.data?.sender_type === 'customer' &&
-        this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.sender_id
-      : this.props.route.params.payload?.user.id.toString(); // Customer Id
-
-  customerName =
-    this.props.route.params.data?.receiver_type === 'customer' &&
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.receiver_name
-      : this.props.route.params.data?.sender_type === 'customer' &&
-        this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.sender_name
-      : this.props.route.params.payload?.user.name.toString(); // Customer Name
-
-  customerType =
-    this.props.route.params.data?.receiver_type === 'customer' &&
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.receiver_type
-      : this.props.route.params.data?.sender_type === 'customer' &&
-        this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.sender_type
-      : this.props.route.params.payload?.user.type.toString(); // Customer Type
-
-  orderId =
-    this.props.route.params.data?.order_id !== null ||
-    this.props.route.params.data?.order_id !== undefined ||
-    this.props.route.params.trigger === 'notification'
-      ? this.props.route.params.data?.order_id
-      : this.props.route.params.payload?.id.toString(); // Order ID
-
-  // user id
-  // user name
-  // user type
-
-  // other user id
-  // other user name
-  // other user type
 
   state = {
     accessToken: '',
@@ -140,6 +44,65 @@ export default class Chat extends React.Component {
     isVendor: '',
     gotUser: '',
   };
+
+  VendorId =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.receiver_type === 'vendor'
+        ? this.props.route.params.data?.receiver_id
+        : this.props.route.params.data?.sender_type === 'vendor'
+        ? this.props.route.params.data?.sender_id
+        : null
+      : this.props.route.params.payload?.vendor.id.toString(); // Vendor ID
+
+  VendorName =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.receiver_type === 'vendor'
+        ? this.props.route.params.data?.receiver_id
+        : this.props.route.params.data?.sender_type === 'vendor'
+        ? this.props.route.params.data?.sender_name
+        : null
+      : this.props.route.params.payload?.vendor.name.toString(); // Vendor Name
+
+  VendorType =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.receiver_type === 'vendor'
+        ? this.props.route.params.data?.receiver_type
+        : this.props.route.params.data?.sender_type === 'vendor'
+        ? this.props.route.params.data?.sender_type
+        : null
+      : this.props.route.params.payload?.vendor.type.toString(); // Vendor type
+
+  customerId =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.receiver_type === 'customer'
+        ? this.props.route.params.data?.receiver_id
+        : this.props.route.params.data?.sender_type === 'customer'
+        ? this.props.route.params.data?.sender_id
+        : null
+      : this.props.route.params.payload?.user.id.toString(); // Customer Id
+
+  customerName =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.receiver_type === 'customer'
+        ? this.props.route.params.data?.receiver_name
+        : this.props.route.params.data?.sender_type === 'customer'
+        ? this.props.route.params.data?.sender_name
+        : null
+      : this.props.route.params.payload?.user.name.toString(); // Customer Name
+
+  customerType =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.receiver_type === 'customer'
+        ? this.props.route.params.data?.receiver_type
+        : this.props.route.params.data?.sender_type === 'customer'
+        ? this.props.route.params.data?.sender_type
+        : null
+      : this.props.route.params.payload?.user.type.toString(); // Customer Type
+
+  orderId =
+    this.props.route.params.trigger === 'notification'
+      ? this.props.route.params.data?.order_id
+      : this.props.route.params.payload?.id.toString(); // Order ID
 
   componentDidMount() {
     this.getUserType();
@@ -152,7 +115,6 @@ export default class Chat extends React.Component {
 
     this.setState({accessToken: userData.token});
     this.setState({isVendor: userData.type === 'vendor'}, () => {
-      // console.log('userType: ', this.state.isVendor);
       if (this.state.isVendor) {
         this.getChatForVendor();
       } else {
@@ -179,9 +141,31 @@ export default class Chat extends React.Component {
     try {
       database()
         .ref(FIREBASECONSTANTS.FIREBASE_CHAT)
-        .child(this.customerId)
-        .child(this.VendorId)
-        .child(this.orderId) // order Id
+        .child(
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.user.id.toString(),
+        )
+        .child(
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.vendor.id.toString(),
+        )
+        .child(
+          this.props.route.params.trigger === 'notification'
+            ? // this.props.route.params.data?.order_id !== null ||
+              // this.props.route.params.data?.order_id !== undefined
+              this.props.route.params.data?.order_id
+            : this.props.route.params.payload?.id.toString(),
+        ) // order Id
         .child(FIREBASECONSTANTS.FIREBASE_MESSAGES)
         .on('value', (dataSnapshot) => {
           let msgs = [];
@@ -219,9 +203,31 @@ export default class Chat extends React.Component {
     try {
       database()
         .ref(FIREBASECONSTANTS.FIREBASE_CHAT)
-        .child(this.VendorId)
-        .child(this.customerId)
-        .child(this.orderId) // order Id
+        .child(
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.vendor.id.toString(),
+        )
+        .child(
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.user.id.toString(),
+        )
+        .child(
+          this.props.route.params.trigger === 'notification'
+            ? // this.props.route.params.data?.order_id !== null ||
+              // this.props.route.params.data?.order_id !== undefined
+              this.props.route.params.data?.order_id
+            : this.props.route.params.payload?.id.toString(),
+        ) // order Id
         .child(FIREBASECONSTANTS.FIREBASE_MESSAGES)
         .on('value', (dataSnapshot) => {
           let msgs = [];
@@ -272,20 +278,84 @@ export default class Chat extends React.Component {
     // current user k liye msg banaya
     database()
       .ref(FIREBASECONSTANTS.FIREBASE_CHAT)
-      .child(this.customerId) // cusmtomer Id
-      .child(this.VendorId) // Vendor Id
-      .child(this.orderId) // order Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'customer'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'customer'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.user.id.toString(),
+      ) // cusmtomer Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'vendor'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'vendor'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.vendor.id.toString(),
+      ) // Vendor Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? // this.props.route.params.data?.order_id !== null ||
+            // this.props.route.params.data?.order_id !== undefined
+            this.props.route.params.data?.order_id
+          : this.props.route.params.payload?.id.toString(),
+      ) // order Id
       .child(FIREBASECONSTANTS.FIREBASE_MESSAGES)
       .push({
         message: this.state.message,
 
-        senderId: this.customerId, // cusmtomer id
-        senderName: this.customerName,
-        senderType: this.customerType,
+        senderId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.user.id.toString(), // cusmtomer id
+        senderName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_name
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.user.name.toString(),
+        senderType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.user.type.toString(),
 
-        receiverId: this.VendorId, // Vendor Id
-        receiverName: this.VendorName,
-        receiverType: this.VendorType,
+        receiverId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.vendor.id.toString(), // Vendor Id
+        receiverName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.vendor.name.toString(),
+        receiverType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.vendor.type.toString(),
 
         time: moment(new Date()).format('YYYY/MM/DD HH:mm:ss'),
         type: 1,
@@ -294,20 +364,84 @@ export default class Chat extends React.Component {
     // other user k liye msg banaya
     database()
       .ref(FIREBASECONSTANTS.FIREBASE_CHAT)
-      .child(this.VendorId) //Vendor id
-      .child(this.customerId) // cusmtomer id
-      .child(this.orderId) // order Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'vendor'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'vendor'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.vendor.id.toString(),
+      ) //Vendor id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'customer'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'customer'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.user.id.toString(),
+      ) // cusmtomer id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? // this.props.route.params.data?.order_id !== null ||
+            // this.props.route.params.data?.order_id !== undefined
+            this.props.route.params.data?.order_id
+          : this.props.route.params.payload?.id.toString(),
+      ) // order Id
       .child(FIREBASECONSTANTS.FIREBASE_MESSAGES)
       .push({
         message: this.state.message,
 
-        senderId: this.customerId, // cusmtomer id
-        senderName: this.customerName,
-        senderType: this.customerType,
+        senderId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.user.id.toString(), // cusmtomer id
+        senderName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_name
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.user.name.toString(),
+        senderType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.user.type.toString(),
 
-        receiverId: this.VendorId, // Vendor Id
-        receiverName: this.VendorName,
-        receiverType: this.VendorType,
+        receiverId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.vendor.id.toString(), // Vendor Id
+        receiverName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.vendor.name.toString(),
+        receiverType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.vendor.type.toString(),
 
         time: moment(new Date()).format('YYYY/MM/DD HH:mm:ss'),
         type: 1,
@@ -322,19 +456,83 @@ export default class Chat extends React.Component {
     // current user k liye msg banaya
     database()
       .ref(FIREBASECONSTANTS.FIREBASE_CHAT)
-      .child(this.VendorId) // Vendor Id
-      .child(this.customerId) // cusmtomer Id
-      .child(this.orderId) // order Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'vendor'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'vendor'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.vendor.id.toString(),
+      ) // Vendor Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'customer'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'customer'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.user.id.toString(),
+      ) // cusmtomer Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? // this.props.route.params.data?.order_id !== null ||
+            // this.props.route.params.data?.order_id !== undefined
+            this.props.route.params.data?.order_id
+          : this.props.route.params.payload?.id.toString(),
+      ) // order Id
       .child(FIREBASECONSTANTS.FIREBASE_MESSAGES)
       .push({
         message: this.state.message,
-        senderId: this.VendorId, // Vendor id
-        senderName: this.VendorName,
-        senderType: this.VendorType,
+        senderId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.vendor.id.toString(), // Vendor id
+        senderName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.vendor.name.toString(),
+        senderType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.vendor.type.toString(),
 
-        receiverId: this.customerId, // cusmtomer Id
-        receiverName: this.customerName,
-        receiverType: this.customerType,
+        receiverId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.user.id.toString(), // cusmtomer Id
+        receiverName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_name
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.user.name.toString(),
+        receiverType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.user.type.toString(),
 
         time: moment(new Date()).format('YYYY/MM/DD HH:mm:ss'),
         type: 1,
@@ -343,19 +541,83 @@ export default class Chat extends React.Component {
     // other user k liye msg banaya
     database()
       .ref(FIREBASECONSTANTS.FIREBASE_CHAT)
-      .child(this.customerId) // cusmtomer Id
-      .child(this.VendorId) // Vendor Id
-      .child(this.orderId) // order Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'customer'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'customer'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.user.id.toString(),
+      ) // cusmtomer Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? this.props.route.params.data?.receiver_type === 'vendor'
+            ? this.props.route.params.data?.receiver_id
+            : this.props.route.params.data?.sender_type === 'vendor'
+            ? this.props.route.params.data?.sender_id
+            : null
+          : this.props.route.params.payload?.vendor.id.toString(),
+      ) // Vendor Id
+      .child(
+        this.props.route.params.trigger === 'notification'
+          ? // this.props.route.params.data?.order_id !== null ||
+            // this.props.route.params.data?.order_id !== undefined
+            this.props.route.params.data?.order_id
+          : this.props.route.params.payload?.id.toString(),
+      ) // order Id
       .child(FIREBASECONSTANTS.FIREBASE_MESSAGES)
       .push({
         message: this.state.message,
-        senderId: this.VendorId, // Vendor id
-        senderName: this.VendorName,
-        senderType: this.VendorType,
+        senderId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.vendor.id.toString(), // Vendor id
+        senderName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.vendor.name.toString(),
+        senderType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'vendor'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'vendor'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.vendor.type.toString(),
 
-        receiverId: this.customerId, // cusmtomer Id
-        receiverName: this.customerName,
-        receiverType: this.customerType,
+        receiverId:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_id
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_id
+              : null
+            : this.props.route.params.payload?.user.id.toString(), // cusmtomer Id
+        receiverName:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_name
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_name
+              : null
+            : this.props.route.params.payload?.user.name.toString(),
+        receiverType:
+          this.props.route.params.trigger === 'notification'
+            ? this.props.route.params.data?.receiver_type === 'customer'
+              ? this.props.route.params.data?.receiver_type
+              : this.props.route.params.data?.sender_type === 'customer'
+              ? this.props.route.params.data?.sender_type
+              : null
+            : this.props.route.params.payload?.user.type.toString(),
 
         time: moment(new Date()).format('YYYY/MM/DD HH:mm:ss'),
         type: 1,
@@ -432,123 +694,105 @@ export default class Chat extends React.Component {
     });
   };
 
-  renderSupportItem = ({item}) => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          marginVertical: SIZES.five,
-          marginHorizontal: SIZES.fifteenWidth,
-        }}>
-        <View style={styles.circleCard}>
-          <Image
-            source={item.user.image}
-            style={styles.iconUser}
-            resizeMode="cover"
-          />
-        </View>
-        <View>
-          <View style={{marginStart: SIZES.ten}}>
-            <View style={[styles.chatContainer]}>
-              <RegularTextCB>{item.message.text}</RegularTextCB>
-            </View>
-            <RegularTextCB style={{fontSize: 12, color: Colors.coolGrey}}>
-              {item.message.date}
-            </RegularTextCB>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
+  /*
+   * Creating message layout for current and other user as vendor
+   */
   renderChatItemForVendor = (item, index) => {
-    // console.log(
-    //   item,
-    //   'msg item=====>>>> ',
-    //   // typeof item.senderId,
-    //   '========>>>>',
-    //   // typeof this.VendorId,
-    // );
     return (
       <View
         key={index}
         style={{
           alignItems:
-            item?.senderId !== this.VendorId ? 'baseline' : 'flex-end',
+            this.props.route.params.trigger === 'notification'
+              ? this.props.route.params.data?.receiver_type === 'vendor'
+                ? item?.senderId !== this.props.route.params.data?.receiver_id
+                  ? 'baseline'
+                  : 'flex-end'
+                : this.props.route.params.data?.sender_type === 'vendor'
+                ? item?.senderId !== this.props.route.params.data?.sender_id
+                  ? 'baseline'
+                  : 'flex-end'
+                : null
+              : item?.senderId !==
+                this.props.route.params.payload?.vendor.id.toString()
+              ? 'baseline'
+              : 'flex-end',
+
           paddingHorizontal: SIZES.ten,
           marginVertical: SIZES.five,
         }}>
         <View
           style={{
             backgroundColor:
-              item?.senderId === this.VendorId
+              this.props.route.params.trigger === 'notification'
+                ? this.props.route.params.data?.receiver_type === 'vendor'
+                  ? item?.senderId !== this.props.route.params.data?.receiver_id
+                    ? Colors.paleGrey
+                    : Colors.sickGreen
+                  : this.props.route.params.data?.sender_type === 'vendor'
+                  ? item?.senderId !== this.props.route.params.data?.sender_id
+                    ? Colors.paleGrey
+                    : Colors.sickGreen
+                  : null
+                : item?.senderId !==
+                  this.props.route.params.payload?.vendor.id.toString()
                 ? Colors.paleGrey
                 : Colors.sickGreen,
+
             paddingHorizontal: SIZES.twenty,
             paddingVertical: SIZES.ten * 1.3,
 
             borderTopRightRadius: SIZES.fifteen,
             borderTopLeftRadius: SIZES.fifteen,
             borderBottomRightRadius:
-              item?.senderId !== this.VendorId ? SIZES.fifteen : 0,
+              this.props.route.params.trigger === 'notification'
+                ? this.props.route.params.data?.receiver_type === 'vendor'
+                  ? item?.senderId !== this.props.route.params.data?.receiver_id
+                    ? SIZES.fifteen
+                    : 0
+                  : this.props.route.params.data?.sender_type === 'vendor'
+                  ? item?.senderId !== this.props.route.params.data?.sender_id
+                    ? SIZES.fifteen
+                    : 0
+                  : null
+                : item?.senderId !==
+                  this.props.route.params.payload?.vendor.id.toString()
+                ? SIZES.fifteen
+                : 0,
+
             borderBottomLeftRadius:
-              item?.senderId === this.VendorId ? SIZES.fifteen : 0,
+              this.props.route.params.trigger === 'notification'
+                ? this.props.route.params.data?.receiver_type === 'vendor'
+                  ? item?.senderId === this.props.route.params.data?.receiver_id
+                    ? SIZES.fifteen
+                    : 0
+                  : this.props.route.params.data?.sender_type === 'vendor'
+                  ? item?.senderId === this.props.route.params.data?.sender_id
+                    ? SIZES.fifteen
+                    : 0
+                  : null
+                : item?.senderId ===
+                  this.props.route.params.payload?.vendor.id.toString()
+                ? SIZES.fifteen
+                : 0,
           }}>
           <RegularTextCB
             numberOfLines={3}
             style={{
               color:
-                item?.senderId === this.VendorId ? Colors.black : Colors.white,
-              alignSelf: 'baseline',
-              marginLeft: SIZES.five,
-              fontSize: SIZES.h18,
-              borderRadius: SIZES.ten,
-            }}>
-            {item?.message}
-          </RegularTextCB>
-        </View>
-      </View>
-    );
-  };
-
-  renderChatItemForUser = (item, index) => {
-    // console.log(
-    //   item,
-    //   'msg item=====>>>> ',
-    //   // typeof item?.senderId,
-    //   '========>>>>',
-    //   // typeof this.customerId,
-    // );
-    return (
-      <View
-        key={index}
-        style={{
-          alignItems:
-            item?.senderId !== this.customerId ? 'baseline' : 'flex-end',
-          paddingHorizontal: SIZES.ten,
-          marginVertical: SIZES.five,
-        }}>
-        <View
-          style={{
-            backgroundColor:
-              item?.senderId === this.customerId
-                ? Colors.paleGrey
-                : Colors.sickGreen,
-            paddingHorizontal: SIZES.twenty,
-            paddingVertical: SIZES.ten * 1.3,
-
-            borderTopRightRadius: SIZES.fifteen,
-            borderTopLeftRadius: SIZES.fifteen,
-            borderBottomRightRadius:
-              item?.senderId !== this.customerId ? SIZES.fifteen : 0,
-            borderBottomLeftRadius:
-              item?.senderId === this.customerId ? SIZES.fifteen : 0,
-          }}>
-          <RegularTextCB
-            numberOfLines={3}
-            style={{
-              color:
-                item?.senderId === this.customerId
+                this.props.route.params.trigger === 'notification'
+                  ? this.props.route.params.data?.receiver_type === 'vendor'
+                    ? item?.senderId !==
+                      this.props.route.params.data?.receiver_id
+                      ? Colors.black
+                      : Colors.white
+                    : this.props.route.params.data?.sender_type === 'vendor'
+                    ? item?.senderId !== this.props.route.params.data?.sender_id
+                      ? Colors.black
+                      : Colors.white
+                    : null
+                  : item?.senderId !==
+                    this.props.route.params.payload?.user.id.toString()
                   ? Colors.black
                   : Colors.white,
               alignSelf: 'baseline',
@@ -563,12 +807,123 @@ export default class Chat extends React.Component {
     );
   };
 
+  /*
+   * Creating message layout for current and other user as customer
+   */
+  renderChatItemForUser = (item, index) => {
+    return (
+      <View
+        key={index}
+        style={{
+          alignItems:
+            this.props.route.params.trigger === 'notification'
+              ? this.props.route.params.data?.receiver_type === 'customer'
+                ? item?.senderId !== this.props.route.params.data?.receiver_id
+                  ? 'baseline'
+                  : 'flex-end'
+                : this.props.route.params.data?.sender_type === 'customer'
+                ? item?.senderId !== this.props.route.params.data?.sender_id
+                  ? 'baseline'
+                  : 'flex-end'
+                : null
+              : item?.senderId !==
+                this.props.route.params.payload?.vendor.id.toString()
+              ? 'baseline'
+              : 'flex-end',
+
+          paddingHorizontal: SIZES.ten,
+          marginVertical: SIZES.five,
+        }}>
+        <View
+          style={{
+            backgroundColor:
+              this.props.route.params.trigger === 'notification'
+                ? this.props.route.params.data?.receiver_type === 'customer'
+                  ? item?.senderId !== this.props.route.params.data?.receiver_id
+                    ? Colors.paleGrey
+                    : Colors.sickGreen
+                  : this.props.route.params.data?.sender_type === 'customer'
+                  ? item?.senderId !== this.props.route.params.data?.sender_id
+                    ? Colors.paleGrey
+                    : Colors.sickGreen
+                  : null
+                : item?.senderId !==
+                  this.props.route.params.payload?.user.id.toString()
+                ? Colors.paleGrey
+                : Colors.sickGreen,
+
+            paddingHorizontal: SIZES.twenty,
+            paddingVertical: SIZES.ten * 1.3,
+
+            borderTopRightRadius: SIZES.fifteen,
+            borderTopLeftRadius: SIZES.fifteen,
+            borderBottomRightRadius:
+              this.props.route.params.trigger === 'notification'
+                ? this.props.route.params.data?.receiver_type === 'customer'
+                  ? item?.senderId !== this.props.route.params.data?.receiver_id
+                    ? SIZES.fifteen
+                    : 0
+                  : this.props.route.params.data?.sender_type === 'customer'
+                  ? item?.senderId !== this.props.route.params.data?.sender_id
+                    ? SIZES.fifteen
+                    : 0
+                  : null
+                : item?.senderId !==
+                  this.props.route.params.payload?.user.id.toString()
+                ? SIZES.fifteen
+                : 0,
+
+            borderBottomLeftRadius:
+              this.props.route.params.trigger === 'notification'
+                ? this.props.route.params.data?.receiver_type === 'customer'
+                  ? item?.senderId === this.props.route.params.data?.receiver_id
+                    ? SIZES.fifteen
+                    : 0
+                  : this.props.route.params.data?.sender_type === 'customer'
+                  ? item?.senderId === this.props.route.params.data?.sender_id
+                    ? SIZES.fifteen
+                    : 0
+                  : null
+                : item?.senderId ===
+                  this.props.route.params.payload?.user.id.toString()
+                ? SIZES.fifteen
+                : 0,
+          }}>
+          <RegularTextCB
+            numberOfLines={3}
+            style={{
+              color:
+                this.props.route.params.trigger === 'notification'
+                  ? this.props.route.params.data?.receiver_type === 'customer'
+                    ? item?.senderId !==
+                      this.props.route.params.data?.receiver_id
+                      ? Colors.black
+                      : Colors.white
+                    : this.props.route.params.data?.sender_type === 'customer'
+                    ? item?.senderId !== this.props.route.params.data?.sender_id
+                      ? Colors.black
+                      : Colors.white
+                    : null
+                  : item?.senderId !==
+                    this.props.route.params.payload?.user.id.toString()
+                  ? Colors.black
+                  : Colors.white,
+              alignSelf: 'baseline',
+              marginLeft: SIZES.five,
+              fontSize: SIZES.h18,
+              borderRadius: SIZES.ten,
+            }}>
+            {item?.message}
+          </RegularTextCB>
+        </View>
+      </View>
+    );
+  };
+
+  /*
+   * render and return for chat screen
+   */
   render() {
-    // console.log(
-    //   'chat props=========>>>>>>',
-    //   this.props.route.params?.payload.user.phone,
-    // );
-    console.log('vendor ==========================?', this.props.route.params);
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={Colors.navy} />
@@ -604,7 +959,7 @@ export default class Chat extends React.Component {
                 alignItems: 'center',
                 marginStart: SIZES.five,
               }}>
-              <View style={styles.circleCard}>
+              {/* <View style={styles.circleCard}>
                 <Image
                   source={{
                     uri: this.state.isVendor
@@ -618,12 +973,18 @@ export default class Chat extends React.Component {
                   style={[styles.iconUser, {borderRadius: SIZES.fifteen * 5}]}
                   resizeMode="contain"
                 />
-              </View>
+              </View> */}
               <View style={{marginStart: SIZES.twenty}}>
                 <RegularTextCB style={{fontSize: 18, color: Colors.sickGreen}}>
-                  {this.state.isVendor
-                    ? this.props.route.params?.payload.user.name
-                    : this.props.route.params?.payload.vendor.name}
+                  {this.props.route.params.trigger !== null &&
+                  this.props.route.params.trigger !== undefined &&
+                  this.props.route.params.trigger === 'notification'
+                    ? this.state.isVendor
+                      ? this.customerName
+                      : this.VendorName
+                    : this.state.isVendor
+                    ? this.customerName
+                    : this.VendorName}
                 </RegularTextCB>
               </View>
             </View>
@@ -633,7 +994,7 @@ export default class Chat extends React.Component {
                 right: SIZES.ten,
                 flexDirection: 'row',
               }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
                   if (this.state.isVendor) {
@@ -651,7 +1012,7 @@ export default class Chat extends React.Component {
                     width: SIZES.fifty,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </View>
@@ -672,23 +1033,6 @@ export default class Chat extends React.Component {
               )
             : null}
         </ScrollView>
-        {/* <FlatList
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          ref={(scrollView) => (this._scrollView = scrollView)}
-          data={this.state.chatList}
-          keyExtractor={(item, index) => index}
-          renderItem={
-            this.state.isVendor
-              ? this.renderChatItemForVendor
-              : this.renderChatItemForUser
-          }
-          contentContainerStyle={{
-            paddingTop: SIZES.twenty,
-            paddingBottom: 150,
-            flexDirection: 'column',
-          }}
-        /> */}
         <View
           style={[
             styles.card,
@@ -732,6 +1076,9 @@ export default class Chat extends React.Component {
   }
 }
 
+/*
+ * Styles for chat screen
+ */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
