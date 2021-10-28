@@ -17,6 +17,7 @@ import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
 import utils from '../utils';
+
 const {height, width} = Dimensions.get('window');
 const CARD_HEIGHT = SIZES.ten * 20;
 const CARD_WIDTH = width * 0.4;
