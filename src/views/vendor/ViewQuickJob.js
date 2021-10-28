@@ -57,6 +57,7 @@ export default class ViewQuickJob extends React.Component {
       jobStatus: '',
       orderStatus: undefined,
       myRequestAceepted: undefined,
+      isMessageForOrderVisited: false,
       initialRegion: {
         latitude: 24.90628280557342,
         longitude: 67.07237028142383,
@@ -80,23 +81,33 @@ export default class ViewQuickJob extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
-      this.viewJob();
-    });
+
+    this.setState(
+      {
+        accessToken: token,
+      },
+      () => {
+        this.viewJob();
+      },
+    );
   };
 
   viewJob = () => {
     this.setState({isLoading: true});
-    const onSuccess = ({data}) => {
+    const onSuccess = async ({data}) => {
       console.log(
         'View Quick jjob detail vendor side Data ==== ==== ',
         data.data,
+      );
+      const messageVisited = await AsyncStorage.getItem(
+        `isMessageForOrderVisited${data.data.id}`,
       );
       this.setState(
         {
           currentOrder: data.data,
           latitude: Number(data.data.lat),
           longitude: Number(data.data.lng),
+          isMessageForOrderVisited: JSON.parse(messageVisited),
           initialRegion: {
             latitude: Number(data.data.lat),
             longitude: Number(data.data.lng),
@@ -110,6 +121,10 @@ export default class ViewQuickJob extends React.Component {
               isLoading: false,
             },
             () => {
+              // console.log(
+              //   'this.state.isMessageForOrderVisited======>>>>>>',
+              //   this.state.isMessageForOrderVisited,
+              // );
               console.log(
                 'marker coordinates =======>>>>>> ',
                 this.state.currentOrder.orderStatus,
@@ -253,11 +268,33 @@ export default class ViewQuickJob extends React.Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                         backgroundColor: Colors.sickGreen,
-                        height: SIZES.ten * 4.5,
-                        width: SIZES.ten * 4.5,
+                        height: SIZES.ten * 4.75,
+                        width: SIZES.ten * 4.75,
                         borderRadius: SIZES.ten * 5,
                         marginRight: SIZES.ten,
                       }}>
+                      {this.state.isMessageForOrderVisited !== null ? (
+                        Number(this.state.isMessageForOrderVisited.orderID) ===
+                          this.state.currentOrder.id &&
+                        this.state.isMessageForOrderVisited.isRead === false ? (
+                          <View
+                            style={{
+                              height: 10,
+                              width: 10,
+                              borderRadius: 10,
+                              backgroundColor: 'red',
+                              position: 'absolute',
+                              zIndex: 1,
+                              right: 0,
+                              top: 0,
+                            }}
+                          />
+                        ) : // console.log(
+                        //   'this.state.isMessageForOrderVisited======>>>>>>',
+                        //   this.state.isMessageForOrderVisited,
+                        // )
+                        null
+                      ) : null}
                       <Icon
                         type={'MaterialCommunityIcons'}
                         name={'chat-processing-outline'}
@@ -276,8 +313,8 @@ export default class ViewQuickJob extends React.Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                         backgroundColor: Colors.sickGreen,
-                        height: SIZES.ten * 4.5,
-                        width: SIZES.ten * 4.5,
+                        height: SIZES.ten * 4.75,
+                        width: SIZES.ten * 4.75,
                         borderRadius: SIZES.ten * 5,
                       }}>
                       <Icon

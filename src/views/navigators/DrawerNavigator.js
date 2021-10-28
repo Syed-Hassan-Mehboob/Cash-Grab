@@ -34,6 +34,7 @@ import utils from '../../utils';
 import moment from 'moment';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import Firebase from '../../FireBaseConfig';
+import Geolocation from '@react-native-community/geolocation';
 
 const Drawer = createDrawerNavigator();
 
@@ -84,6 +85,9 @@ export default class DrawerNavigator extends React.Component {
     this.setState({isVendor: userData.type === 'vendor'}, () => {
       console.log('userType: ', this.state.isVendor),
         this.setState({gotUser: true});
+      if (!this.state.isVendor) {
+        // Geolocation.requestAuthorization();
+      }
       this.notificationListener();
     });
   };
@@ -111,10 +115,53 @@ export default class DrawerNavigator extends React.Component {
         rm,
       );
       if (rm.data.trigger_type === 'message') {
+        AsyncStorage.setItem(
+          `isMessageForOrderVisited${rm.data.order_id}`,
+          JSON.stringify({orderID: rm.data.order_id, isRead: false}),
+        );
+
         this.props.navigation.navigate(Constants.chat, {
           trigger: 'notification',
           data: rm.data,
         });
+      }
+
+      if (rm.data.trigger_type === 'quick_notify') {
+        this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        this.getQuickOrderRequestData(rm.data.trigger_id);
+      }
+      if (rm.data.trigger_type === 'no_vendor_found') {
+        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+        // this.getQuickOrderRequestData(rm.data.trigger_id);
+        alert('no vendor available in your area');
+      }
+      if (
+        rm.data.trigger_type === 'quick_order_accepted' ||
+        rm.notification.body === 'your quick order has accepted successfully'
+      ) {
+        this.setState({customerJobAcceptedModal: true}, () => {
+          console.log(
+            'ttttttttttttttt========>>>>>>>>',
+            this.state.customerJobAcceptedModal,
+          );
+        });
+      }
+      if (
+        rm.data.trigger_type === 'order' &&
+        rm.data.body === 'your order has completed successfully'
+      ) {
+        this.setState({vendorThankyoumodal: true});
+      }
+    });
+
+    // Register background handler
+    messaging().setBackgroundMessageHandler(async (rm) => {
+      console.log('Message handled in the background! ', rm);
+      if (rm.data.trigger_type === 'message') {
+        AsyncStorage.setItem(
+          `isMessageForOrderVisited${rm.data.order_id}`,
+          JSON.stringify({orderID: rm.data.order_id, isRead: false}),
+        );
       }
 
       if (rm.data.trigger_type === 'quick_notify') {
@@ -153,6 +200,11 @@ export default class DrawerNavigator extends React.Component {
         //   trigger: 'notification',
         //   data: rm.data,
         // });
+
+        AsyncStorage.setItem(
+          `isMessageForOrderVisited${rm.data.order_id}`,
+          JSON.stringify({orderID: rm.data.order_id, isRead: false}),
+        );
       }
 
       if (rm.data.trigger_type === 'quick_notify') {
@@ -187,39 +239,39 @@ export default class DrawerNavigator extends React.Component {
         if (rm) {
           console.log(
             'Notification caused app to open from quit state:',
-            remoteMessage.notification,
+            rm.notification,
           );
           console.warn(
             'Notification caused app to open from quit state:',
-            remoteMessage.notification,
+            rm.notification,
           );
         }
 
-        // if (rm.data.trigger_type === 'quick_notify') {
-        //   this.setState({quickNotifyOrderId: rm.data.trigger_id});
-        //   this.getQuickOrderRequestData(rm.data.trigger_id);
-        // }
-        // if (rm.data.trigger_type === 'no_vendor_found') {
-        //   // this.setState({quickNotifyOrderId: rm.data.trigger_id});
-        //   // this.getQuickOrderRequestData(rm.data.trigger_id);
-        //   alert('no vendor available in your area');
-        // }
-        // if (rm.data.trigger_type === 'quick_order_accepted') {
-        //   // this.getQuickOrderRequestData(rm.data.trigger_id);
-        //   // alert('Your quick job has been accepted.');
-        //   this.setState({customerJobAcceptedModal: true}, () => {
-        //     console.log(
-        //       'ttttttttttttttt========>>>>>>>>',
-        //       this.state.customerJobAcceptedModal,
-        //     );
-        //   });
-        // }
-        // if (
-        //   rm.data.trigger_type === 'order' &&
-        //   rm.data.body === 'your order has completed successfully'
-        // ) {
-        //   this.setState({vendorThankyoumodal: true});
-        // }
+        if (rm.data.trigger_type === 'quick_notify') {
+          this.setState({quickNotifyOrderId: rm.data.trigger_id});
+          this.getQuickOrderRequestData(rm.data.trigger_id);
+        }
+        if (rm.data.trigger_type === 'no_vendor_found') {
+          // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+          // this.getQuickOrderRequestData(rm.data.trigger_id);
+          alert('no vendor available in your area');
+        }
+        if (rm.data.trigger_type === 'quick_order_accepted') {
+          // this.getQuickOrderRequestData(rm.data.trigger_id);
+          // alert('Your quick job has been accepted.');
+          this.setState({customerJobAcceptedModal: true}, () => {
+            console.log(
+              'ttttttttttttttt========>>>>>>>>',
+              this.state.customerJobAcceptedModal,
+            );
+          });
+        }
+        if (
+          rm.data.trigger_type === 'order' &&
+          rm.data.body === 'your order has completed successfully'
+        ) {
+          this.setState({vendorThankyoumodal: true});
+        }
       })
       .catch((error) => {
         console.log('getInitialNotification ======> ', error);

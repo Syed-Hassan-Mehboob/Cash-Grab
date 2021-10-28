@@ -43,6 +43,8 @@
 	<string>CashGrab requires user location to reach the destination</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>CashGrab requires your current location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>CashGrab requires your current location.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>CashGrab requires access to the photo library.</string>
 	<key>UIAppFonts</key>

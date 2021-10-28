@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
-import RegularTextCB from '../components/RegularTextCB';
-import Images from '../common/Images';
-import Colors from '../common/Colors';
+import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Modal from 'react-native-modal';
+
+import {
+  check,
+  openSettings,
+  PERMISSIONS,
+  request,
+  RESULTS,
+} from 'react-native-permissions';
+
 import {
   FlatList,
   Image,
@@ -14,8 +24,7 @@ import {
   PermissionsAndroid,
   Text,
 } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import Modal from 'react-native-modal';
+
 import Constants, {
   FONTS,
   height,
@@ -23,11 +32,12 @@ import Constants, {
   STYLES,
   width,
 } from '../common/Constants';
+
 import Axios from '../network/APIKit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import RegularTextCB from '../components/RegularTextCB';
+import Images from '../common/Images';
+import Colors from '../common/Colors';
 import BoldTextCB from '../components/BoldTextCB';
-import Geolocation from '@react-native-community/geolocation';
-import NormalHeader from '../components/NormalHeader';
 
 export default class Home extends Component {
   constructor(props) {
@@ -75,21 +85,138 @@ export default class Home extends Component {
   checkLocationPermission = async () => {
     try {
       if (Platform.OS === 'ios') {
-        Geolocation.requestAuthorization();
-        this.getLocation();
-        if (this.state.seeAllClicked) {
-          // this.getLocation();
-          // this.getUserAccessToken();
-          this.openNearbyScreen();
-        }
+        check(PERMISSIONS.IOS.LOCATION_ALWAYS).then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log(
+                'This feature is not available (on this device / in this context)',
+              );
+              this.setState({isLoading: false});
+              break;
+            case RESULTS.DENIED:
+              // console.log('The permission has not been requested / is denied but requestable');
+              request(PERMISSIONS.IOS.LOCATION_ALWAYS).then((result) => {
+                switch (result) {
+                  case RESULTS.UNAVAILABLE:
+                    console.log(
+                      'This feature is not available (on this device / in this context)',
+                    );
+                    this.setState({isLoading: false});
+                    break;
+                  case RESULTS.DENIED:
+                    // console.log('The permission has not been requested / is denied but requestable');
+                    request(PERMISSIONS.IOS.LOCATION_ALWAYS).then((result) => {
+                      // …
+                      console.log(
+                        'The permission has not been requested / is denied but requestable after this request=======>>>>>',
+                        result,
+                      );
+                    });
+                    break;
+                  case RESULTS.LIMITED:
+                    console.log(
+                      'The permission is limited: some actions are possible',
+                    );
+                    this.getLocation();
+                    if (this.state.seeAllClicked) {
+                      // this.getLocation();
+                      // this.getUserAccessToken();
+                      this.openNearbyScreen();
+                    }
+                    break;
+                  case RESULTS.GRANTED:
+                    console.log('The permission is granted');
+                    this.getLocation();
+                    if (this.state.seeAllClicked) {
+                      // this.getLocation();
+                      // this.getUserAccessToken();
+                      this.openNearbyScreen();
+                    }
+                    break;
+                  case RESULTS.BLOCKED:
+                    /*
+                     *if allowed once then check in blocked if the permission is granted
+                     */
+                    check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then(
+                      (resultt) => {
+                        console.log(
+                          'if allowed once and checking status one more time =====>>>>> ',
+                          resultt,
+                        );
+                        switch (resultt) {
+                          case RESULTS.GRANTED:
+                            console.log('The permission is granted but once');
+                            this.getLocation();
+                            if (this.state.seeAllClicked) {
+                              // this.getLocation();
+                              // this.getUserAccessToken();
+                              this.openNearbyScreen();
+                            }
+                            break;
+
+                          case RESULTS.BLOCKED:
+                            this.setState({isLoading: false});
+                            this.setState({permissionModalVisibility: true});
+                            break;
+                        }
+                      },
+                    );
+
+                    break;
+                }
+              });
+              break;
+            case RESULTS.LIMITED:
+              console.log(
+                'The permission is limited: some actions are possible',
+              );
+              this.getLocation();
+              if (this.state.seeAllClicked) {
+                this.openNearbyScreen();
+              }
+              break;
+            case RESULTS.GRANTED:
+              console.log('The permission is granted');
+              this.getLocation();
+              if (this.state.seeAllClicked) {
+                this.openNearbyScreen();
+              }
+              break;
+            case RESULTS.BLOCKED:
+              /*
+               *if allowed once then check in blocked if the permission is granted
+               */
+              check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((resultt) => {
+                console.log(
+                  'if allowed once and checking status one more time =====>>>>> ',
+                  resultt,
+                );
+
+                switch (resultt) {
+                  case RESULTS.GRANTED:
+                    console.log('The permission is granted but once');
+                    this.getLocation();
+                    if (this.state.seeAllClicked) {
+                      this.openNearbyScreen();
+                    }
+                    break;
+
+                  case RESULTS.BLOCKED:
+                    this.setState({isLoading: false});
+                    this.setState({permissionModalVisibility: true});
+                    break;
+                }
+              });
+
+              break;
+          }
+        });
       } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           if (this.state.seeAllClicked) {
-            // this.getLocation();
-            // this.getUserAccessToken();
             this.openNearbyScreen();
           } else {
             this.getLocation();
@@ -100,7 +227,7 @@ export default class Home extends Component {
         }
       }
     } catch (err) {
-      // console.log('getLocation catch: ==================> ', err);
+      console.log('get Location permission  catch: ==================> ', err);
     }
   };
 
@@ -117,24 +244,23 @@ export default class Home extends Component {
       },
       (error) => {
         // console.log('Home Screen Get Location error ', error);
-        this.getUserAccessToken();
-        if (Platform.OS === 'ios') {
-          if (error.PERMISSION_DENIED === 1) {
-            // console.log('Humzaaaaaaa ', 'permission denied ask again');
-
-            Geolocation.requestAuthorization();
-            Geolocation.getCurrentPosition(
-              (position) => {
-                console.log(position);
-              },
-              (error) => {
-                // console.log('map error: ', error);
-                // console.log(error.code, error.message);
-              },
-              {enableHighAccuracy: false, timeout: 15000, maximumAge: 10000},
-            );
-          }
-        }
+        // this.getUserAccessToken();
+        // if (Platform.OS === 'ios') {
+        //   if (error.PERMISSION_DENIED === 1) {
+        //     // console.log('Humzaaaaaaa ', 'permission denied ask again');
+        //     Geolocation.requestAuthorization();
+        //     Geolocation.getCurrentPosition(
+        //       (position) => {
+        //         console.log(position);
+        //       },
+        //       (error) => {
+        //         // console.log('map error: ', error);
+        //         // console.log(error.code, error.message);
+        //       },
+        //       {enableHighAccuracy: false, timeout: 15000, maximumAge: 10000},
+        //     );
+        //   }
+        // }
       },
     );
   };
@@ -196,6 +322,7 @@ export default class Home extends Component {
       .catch(onFailure);
   };
 
+  // method to navigate to nearby / vendors around you screen
   openNearbyScreen = () => {
     this.setState({seeAllClicked: false}, () => {
       this.props.navigation.navigate(Constants.nearby, {
@@ -203,57 +330,6 @@ export default class Home extends Component {
       });
     });
   };
-
-  // getUserProfile = () => {
-  //   this.setState({isLoading: true});
-  //   const onSuccess = ({data}) => {
-  //     this.setState({
-  //       isLoading: false,
-  //       avatar: data.data.records.user_profiles.image,
-  //       name: data.data.records.name,
-  //     });
-  //     let latitude = data.data.records.user_profiles.latitude;
-  //     let longitude = data.data.records.user_profiles.longitude;
-  //     // this.getVendorAroundYou(latitude, longitude);
-  //   };
-
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //   };
-
-  //   Axios.get(Constants.getProfileURL, {
-  //     headers: {
-  //       Authorization: this.state.accessToken,
-  //     },
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
-
-  // getTopServices = () => {
-  //   const onSuccess = ({data}) => {
-  //     this.setState({
-  //       isLoading: false,
-  //       topServices: data.data.records,
-  //     });
-  //   };
-
-  //   const onFailure = (error) => {
-  //     this.setState({isLoading: false});
-  //   };
-
-  //   // this.setState({isLoading: true});
-
-  //   let params = {
-  //     limit: SIZES.ten,
-  //   };
-  //   Axios.get(Constants.getTopSerVices, {
-  //     params,
-  //     headers: {Authorization: this.state.accessToken},
-  //   })
-  //     .then(onSuccess)
-  //     .catch(onFailure);
-  // };
 
   renderCategoryItem = ({item}) => {
     return (
@@ -407,7 +483,6 @@ export default class Home extends Component {
 
   render() {
     return (
-      // <View style={styles.container}>
       <>
         <ScrollView
           style={STYLES.container}
@@ -421,16 +496,8 @@ export default class Home extends Component {
                 justifyContent: 'space-between',
                 paddingHorizontal: SIZES.fifteen,
                 marginBottom: SIZES.twenty,
-
-                // marginTop:
-                //   Platform.OS === 'android' ? SIZES.twenty : SIZES.ten * 3.5,
               }}>
               <TouchableOpacity
-                style={
-                  {
-                    // padding: 20,
-                  }
-                }
                 onPress={() => {
                   this.props.navigation.goBack();
                 }}>
@@ -445,14 +512,8 @@ export default class Home extends Component {
               </TouchableOpacity>
 
               <RegularTextCB style={[{fontSize: 22}]}>Explore</RegularTextCB>
-              {/* <NormalHeader name="Explore" /> */}
 
               <TouchableOpacity
-                style={
-                  {
-                    // padding: 12,
-                  }
-                }
                 onPress={() => {
                   this.props.navigation.navigate(Constants.filter);
                 }}>
@@ -466,20 +527,6 @@ export default class Home extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate(Constants.filter);
-              }}
-              style={{}}>
-              <Image
-                source={Images.iconHamburger}
-                style={{
-                  height: SIZES.twenty,
-                  width: SIZES.twenty,
-                  resizeMode: 'contain',
-                }}
-              />
-            </TouchableOpacity> */}
 
             <View
               style={{
@@ -493,7 +540,6 @@ export default class Home extends Component {
                   FONTS.mediumFont16,
                   {
                     color: Colors.black,
-                    // textDecorationLine: 'underline',
                   },
                 ]}>
                 Browse Categories
@@ -566,7 +612,6 @@ export default class Home extends Component {
 
             <FlatList
               numColumns={2}
-              // horizontal
               data={this.formatData(this.state.vendorAround, 2)}
               keyExtractor={(index) => index}
               renderItem={this.renderVendorsAroundYouItem}
@@ -613,7 +658,8 @@ export default class Home extends Component {
                 fontSize: 16,
                 color: Colors.white,
               }}>
-              Please enable your location to see nearby vendors...
+              Please enable your location in settings and {'\n'}"Allow Location
+              while using the App"{'\n'} to see nearby vendors...
             </RegularTextCB>
             <View
               style={{
@@ -622,7 +668,15 @@ export default class Home extends Component {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({permissionModalVisibility: false});
+                  this.setState({permissionModalVisibility: false}, () => {
+                    if (Platform.OS === 'ios') {
+                      setTimeout(() => {
+                        openSettings().catch(() =>
+                          console.warn('cannot open settings'),
+                        );
+                      }, 500);
+                    }
+                  });
                 }}
                 style={{
                   padding: SIZES.ten,
@@ -637,7 +691,6 @@ export default class Home extends Component {
             </View>
           </View>
         </Modal>
-        {/* // </View> */}
       </>
     );
   }
@@ -660,7 +713,6 @@ const styles = StyleSheet.create({
   iconUser: {
     height: '100%',
     width: '100%',
-    // borderRadius: SIZES.ten*6 / 2,
   },
   circle: {
     height: SIZES.ten * 8,
@@ -726,7 +778,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     margin: 1,
-    // height: Dimensions.get('window').width / 2, // approximate a square
   },
   itemInvisible: {
     backgroundColor: 'transparent',

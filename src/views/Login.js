@@ -28,8 +28,11 @@ export default class Login extends Component {
     super(props);
     this.state = {
       isLoading: false,
-      email: 'user99@cashgrab.com',
-      password: '12345678',
+      email:
+        Platform.OS === 'android'
+          ? 'user99@cashgrab.com'
+          : 'user45@cashgrab.com',
+      password: Platform.OS === 'android' ? '12345678' : '123456789',
       isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,

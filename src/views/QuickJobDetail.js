@@ -63,6 +63,7 @@ export default class QuickJobDetail extends React.Component {
       description: '',
       jobService: [],
       thankYouModal: false,
+      isMessageForOrderVisited: false,
     };
   }
 
@@ -76,13 +77,22 @@ export default class QuickJobDetail extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
-      //   this.viewJob();
-      console.log(
-        'priops======>>>> ',
-        this.props.route.params.orderItem.vendor.phone,
-      );
-    });
+    const messageVisited = await AsyncStorage.getItem(
+      `isMessageForOrderVisited${this.props.route.params.orderItem.id}`,
+    );
+    this.setState(
+      {
+        accessToken: token,
+        isMessageForOrderVisited: JSON.parse(messageVisited),
+      },
+      () => {
+        //   this.viewJob();
+        // console.log(
+        //   'priops======>>>> ',
+        //   this.props.route.params.orderItem.vendor.phone,
+        // );
+      },
+    );
   };
 
   dialCall = (number) => {
@@ -338,6 +348,37 @@ export default class QuickJobDetail extends React.Component {
                         borderRadius: SIZES.ten * 5,
                         marginRight: SIZES.ten,
                       }}>
+                      {/* {this.state.isMessageForOrderVisited !== null
+                        ? console.log(
+                            'this.state.isMessageForOrderVisited======>>>>>>',
+                            this.state.isMessageForOrderVisited.orderID,
+                            '==========screeen order id',
+                            this.props.route.params.orderItem.id,
+                          )
+                        : null} */}
+                      {this.state.isMessageForOrderVisited !== null ? (
+                        //  Number(
+                        Number(this.state.isMessageForOrderVisited.orderID) ===
+                          this.props.route.params.orderItem.id &&
+                        this.state.isMessageForOrderVisited.isRead === false ? (
+                          <View
+                            style={{
+                              height: 10,
+                              width: 10,
+                              borderRadius: 10,
+                              backgroundColor: 'red',
+                              position: 'absolute',
+                              zIndex: 1,
+                              right: 0,
+                              top: 0,
+                            }}
+                          />
+                        ) : // console.log(
+                        //   'this.state.isMessageForOrderVisited222222======>>>>>>',
+                        //   this.state.isMessageForOrderVisited,
+                        // )
+                        null
+                      ) : null}
                       <Icon
                         type={'MaterialCommunityIcons'}
                         name={'chat-processing-outline'}

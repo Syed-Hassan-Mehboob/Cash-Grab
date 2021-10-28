@@ -56,10 +56,10 @@ const Nearby = (props) => {
         //   {
         //     longitude: Number(position.coords.latitude),
         //     latitude: Number(position.coords.longitude),
-        //     latitudeDelta: 0.002,
-        //     longitudeDelta: 0.002,
+        //     latitudeDelta: 0.0004,
+        //     longitudeDelta: 0.0005,
         //   },
-        //   1500,
+        //   500,
         // );
 
         getVendorAroundYou(position.coords.latitude, position.coords.longitude);
@@ -67,11 +67,9 @@ const Nearby = (props) => {
         setRegion({
           latitude: Number(position.coords.latitude),
           longitude: Number(position.coords.longitude),
-          latitudeDelta: 0.002,
-          longitudeDelta: 0.002,
+          latitudeDelta: 0.0304,
+          longitudeDelta: 0.0305,
         });
-
-        // console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       },
       (error) => {
         // console.log(
@@ -80,18 +78,11 @@ const Nearby = (props) => {
         // );
       },
     );
-
-    // watchID = Geolocation.watchPosition((position) => {
-    //   const lastPosition = JSON.stringify(position);
-    //   console.log('humzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    // });
   };
 
-  // console.log("response =============>", vendorAround)
   const getVendorAroundYou = (latatide, longitude) => {
     setisLoading(true);
     const onSuccess = ({data}) => {
-      // console.log('Around Data ============== > ', data);
       setvendorAround(data.data);
       setisLoading(false);
     };
@@ -291,10 +282,6 @@ const Nearby = (props) => {
             latitudeDelta: 0.04,
             longitudeDelta: 0.04,
           }}
-          // zoomEnabled
-          showsUserLocation
-          // maxZoomLevel={15}
-          // minZoomLevel={2}
           customMapStyle={mapStyle}
           style={[styles.container]}>
           {/* <Marker
