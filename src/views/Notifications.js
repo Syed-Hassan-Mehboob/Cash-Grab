@@ -61,6 +61,7 @@ export default class Notifications extends Component {
         </RegularTextCB>
 
         {item.notifications.map((notification) => {
+          console.log('notification================>>>>', notification);
           return (
             <View
               key={notification.id}
@@ -72,13 +73,36 @@ export default class Notifications extends Component {
                 },
               ]}>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.7}
                 style={styles.itemContainer}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.confirmPayment, {
-                    orderId: notification.trigger_id,
-                    from: 'notification',
-                  });
+                  // For posted job
+                  if (notification.trigger_type === 'job_request_sent') {
+                    // this.props.navigation.navigate(Constants.confirmPayment, {
+                    //   orderId: notification.trigger_id,
+                    //   from: 'notification',
+                    // });
+
+                    props.navigation.navigate(Constants.JobAcceptance, {
+                      jobId: item.id,
+                    });
+                    // alert('posteb job notification');
+                  }
+                  if (
+                    (notification.trigger_type === 'quick_notify' &&
+                      notification.message ===
+                        'one quick job available in your location.') ||
+                    notification.trigger_type === 'quick_order_accepted'
+                  ) {
+                    this.props.navigation.navigate(Constants.confirmPayment, {
+                      orderId: notification.trigger_id,
+                      from: 'notification',
+                    });
+                  }
+
+                  // this.props.navigation.navigate(Constants.SchechuleJobDetail, {
+                  //   catName: item.category_name,
+                  //   joid: item.id,})
                 }}>
                 <View
                   style={{
@@ -187,6 +211,7 @@ export default class Notifications extends Component {
       <View style={[STYLES.container]}>
         <NormalHeader name="Notifications" />
         <SwipeListView
+          showsVerticalScrollIndicator={false}
           style={{marginTop: SIZES.ten}}
           data={this.state.notifications}
           renderItem={this.renderNotificationsItem}

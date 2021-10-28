@@ -25,6 +25,7 @@ export default function BookingAcceptance(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetail, setBookingDetail] = useState();
   const [orderId, setOrderId] = useState();
+  console.log('sdsadsadsadasdasasdasda=======>>>>>', props);
   useEffect(() => {
     const getToken = async () => {
       getBookingDetail();
@@ -151,7 +152,7 @@ export default function BookingAcceptance(props) {
               alignItems: 'center',
               marginVertical: SIZES.fifteen,
             }}>
-            <View style={styles.circleCard}>
+            {/* <View style={styles.circleCard}>
               <Image
                 source={{
                   uri:
@@ -164,18 +165,18 @@ export default function BookingAcceptance(props) {
                 style={styles.iconUser}
                 resizeMode="cover"
               />
-            </View>
+            </View> */}
             <View style={{marginStart: 10}}>
-              <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
+              {/* <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
                 {bookingDetail?.user.name}
-              </BoldTextCB>
+              </BoldTextCB> */}
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  // marginTop: 5,
                   alignItems: 'center',
                 }}>
-                <Image
+                {/* <Image
                   source={Images.iconVerified}
                   style={{
                     height: 20,
@@ -196,7 +197,7 @@ export default function BookingAcceptance(props) {
                   {bookingDetail?.email_verified_at !== null
                     ? 'Verified'
                     : 'Unverified'}
-                </RegularTextCB>
+                </RegularTextCB> */}
               </View>
             </View>
           </View>
@@ -216,13 +217,13 @@ export default function BookingAcceptance(props) {
               </RegularTextCB>
             </View>
 
-            <LightTextCB style={{color: Colors.black, fontSize: 14}}>
+            <BoldTextCB style={{color: Colors.black, fontSize: 14}}>
               $
               {bookingDetail?.grandTotal !== null &&
               bookingDetail?.grandTotal !== undefined
                 ? bookingDetail?.grandTotal
                 : ''}
-            </LightTextCB>
+            </BoldTextCB>
           </View>
           <View style={{marginVertical: SIZES.ten}}>
             <RegularTextCB style={{color: Colors.coolGrey}}>
@@ -314,23 +315,21 @@ export default function BookingAcceptance(props) {
                 <Image
                   source={{
                     uri:
-                      Constants.imageURL +
-                      bookingDetail?.vendor.user_profiles.image,
+                      bookingDetail?.user?.user_profiles?.image !== null &&
+                      bookingDetail?.user?.user_profiles?.image !== undefined
+                        ? Constants.imageURL +
+                          bookingDetail?.user.user_profiles.image
+                        : '',
                   }}
-                  style={{
-                    height: 50,
-                    width: 50,
-                    borderRadius: 60 / 2,
-                    resizeMode: 'contain',
-                  }}
+                  style={styles.iconUser}
                   resizeMode="cover"
                 />
               </View>
               <View style={{marginStart: 10}}>
                 <BoldTextCB style={{color: Colors.black, fontSize: 16}}>
-                  {bookingDetail?.vendor.name !== null &&
-                  bookingDetail?.vendor.name !== undefined
-                    ? bookingDetail?.vendor.name
+                  {bookingDetail?.user?.name !== null &&
+                  bookingDetail?.user?.name !== undefined
+                    ? bookingDetail?.user?.name
                     : ''}
                 </BoldTextCB>
                 <View
@@ -374,7 +373,7 @@ export default function BookingAcceptance(props) {
                 paddingHorizontal: SIZES.ten,
                 paddingBottom: SIZES.twenty,
               }}>
-              <StarRating
+              {/* <StarRating
                 disabled={true}
                 maxStars={5}
                 fullStar={Images.starFull}
@@ -392,9 +391,9 @@ export default function BookingAcceptance(props) {
                   marginRight: SIZES.five,
                 }}
                 containerStyle={{width: SIZES.fifty * 1.5}}
-              />
+              /> */}
 
-              <RegularTextCB
+              {/* <RegularTextCB
                 style={{
                   color: Colors.sunflowerYellow,
                   fontSize: 13.5,
@@ -406,7 +405,7 @@ export default function BookingAcceptance(props) {
                   ? bookingDetail?.vendor.ratings
                   : ''}{' '}
                 Ratings
-              </RegularTextCB>
+              </RegularTextCB> */}
             </View>
 
             {bookingDetail?.orderStatus === 'pending' ? (

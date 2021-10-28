@@ -46,8 +46,36 @@ export default class JobInProgress extends React.Component {
       longitude: '',
       jobService: [],
       thankYouModal: false,
+      initialRegion: {
+        latitude: 0.0,
+        longitude: 0.0,
+        latitudeDelta: 1,
+        longitudeDelta: 1,
+      },
     };
   }
+
+  onMapLoad = (latitude, longitude) => {
+    console.log({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    });
+    // console.log(this.mapRef);
+
+    setTimeout(() => {
+      this.mapRef.animateToRegion(
+        {
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          // latitude: 40.7586517327205,
+          // longitude: -73.98583396826172,
+          latitudeDelta: 0.0004,
+          longitudeDelta: 0.003,
+        },
+        1200,
+      );
+    }, 700);
+  };
 
   componentDidMount() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -56,13 +84,6 @@ export default class JobInProgress extends React.Component {
       this.getUserAccessToken();
     });
   }
-  // componentWillMount() {
-  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  //   this.getUserAccessToken();
-  //   this.props.navigation.addListener('focus', () => {
-  //     this.getUserAccessToken();
-  //   });
-  // }
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
@@ -77,12 +98,28 @@ export default class JobInProgress extends React.Component {
     });
     const onSuccess = ({data}) => {
       console.log(' Schedule Bookings Detail  =====', data.data);
-      this.setState({
-        userData: data.data,
-      });
-      this.setState({
-        isLoading: false,
-      });
+      this.setState(
+        {
+          userData: data.data,
+          initialRegion: {
+            latitude: Number(data.data.lat),
+            longitude: Number(data.data.lng),
+            latitudeDelta: 0.0004,
+            longitudeDelta: 0.0005,
+          },
+          latitude: data.data.lat,
+          longitude: data.data.lng,
+        },
+        () => {
+          console.log(
+            'marker cooordinates Schedule Bookings Detail=======>>>>>>',
+            this.state.latitude,
+          );
+          this.setState({
+            isLoading: false,
+          });
+        },
+      );
     };
 
     const onFailure = (error) => {
@@ -144,11 +181,11 @@ export default class JobInProgress extends React.Component {
   };
 
   render() {
-    // console.log('>>>>>>>>>>>>', this.props.route.params.orderId);
+    console.log('>>>>>>>>>>>>', this.props.route.params.orderId);
 
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="Job Details" />
+        <NormalHeader name="Schedule Job Details" />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: SIZES.five}}>
@@ -288,17 +325,19 @@ export default class JobInProgress extends React.Component {
             />
 
             <MapView
+              ref={(ref) => (this.mapRef = ref)}
+              onMapReady={() =>
+                this.onMapLoad(
+                  this.state.initialRegion.latitude,
+                  this.state.initialRegion.longitude,
+                )
+              }
               provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: 24.90628280557342,
-                longitude: 67.07237028142383,
-                latitudeDelta: 0.04864195044303443,
-                longitudeDelta: 0.04014281769006,
-              }}
-              scrollEnabled={false}
-              showsUserLocation={true}
+              initialRegion={this.state.initialRegion}
+              showsUserLocation={false}
               showsMyLocationButton={false}
               zoomEnabled={false}
+              scrollEnabled={false}
               style={styles.mapStyle}>
               <Marker
                 coordinate={{

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {SIZES, STYLES, width} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import RegularTextCB from '../components/RegularTextCB';
@@ -123,157 +123,181 @@ export default class ConfirmPayment extends Component {
             <Image source={Images.arrowBack} style={[styles.iconBack]} />
           </TouchableOpacity>
           <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
-            Confirm Payment
+            {!this.state.isLoading &&
+            this.state.currentOrder.orderStatus !== 'pending'
+              ? 'Confirm Payment'
+              : null}
           </RegularTextCB>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: SIZES.fifteen,
-            marginTop: SIZES.fifteen,
-          }}>
-          <View style={styles.circleCard}>
-            <Image
-              source={{
-                uri:
-                  Constants.imageURL +
-                  this.state.currentOrder?.vendor?.user_profiles?.image,
-              }}
-              style={styles.iconUser}
-            />
-          </View>
-          <RegularTextCB
-            style={{
-              fontSize: 16,
-              color: Colors.sickGreen,
-              flex: 1,
-              marginHorizontal: SIZES.ten,
-            }}>
-            {this.state.currentOrder?.vendor?.name}
-          </RegularTextCB>
-          <TouchableOpacity>
-            <Image
-              source={Images.moreDots}
-              style={{height: 25, width: 25, resizeMode: 'contain'}}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: SIZES.fifteen,
-            marginTop: SIZES.fifteen,
-          }}>
-          <Image
-            source={Images.iconRepairing}
-            style={{
-              height: SIZES.ten * 3,
-              width: SIZES.ten * 3,
-              resizeMode: 'contain',
-            }}
+        {!this.state.isLoading ? (
+          this.state.currentOrder.orderStatus !== 'pending' ? (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingHorizontal: SIZES.fifteen,
+                  marginTop: SIZES.fifteen,
+                }}>
+                <View style={styles.circleCard}>
+                  <Image
+                    source={{
+                      uri:
+                        Constants.imageURL +
+                        this.state.currentOrder?.vendor?.user_profiles?.image,
+                    }}
+                    style={styles.iconUser}
+                  />
+                </View>
+                <RegularTextCB
+                  style={{
+                    fontSize: 16,
+                    color: Colors.sickGreen,
+                    flex: 1,
+                    marginHorizontal: SIZES.ten,
+                  }}>
+                  {this.state.currentOrder?.vendor?.name}
+                </RegularTextCB>
+                <TouchableOpacity>
+                  <Image
+                    source={Images.moreDots}
+                    style={{height: 25, width: 25, resizeMode: 'contain'}}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingHorizontal: SIZES.fifteen,
+                  marginTop: SIZES.fifteen,
+                }}>
+                <Image
+                  source={Images.iconRepairing}
+                  style={{
+                    height: SIZES.ten * 3,
+                    width: SIZES.ten * 3,
+                    resizeMode: 'contain',
+                  }}
+                />
+                <View style={{marginStart: SIZES.ten}}>
+                  <RegularTextCB style={{fontSize: 16}}>
+                    Repairing
+                  </RegularTextCB>
+                  <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
+                    3 AC split units maintenace
+                  </RegularTextCB>
+                </View>
+              </View>
+              <View style={{padding: SIZES.fifteen}}>
+                <RegularTextCB
+                  style={{
+                    color: Colors.black,
+                    fontSize: 18,
+                    marginTop: SIZES.twenty,
+                  }}>
+                  Payment Details
+                </RegularTextCB>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: SIZES.twenty,
+                  }}>
+                  <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
+                    Credit Card Number
+                  </RegularTextCB>
+                  <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
+                    **** **** **** 0123
+                  </RegularTextCB>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: SIZES.fifteen,
+                  }}>
+                  <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
+                    Amount
+                  </RegularTextCB>
+                  <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
+                    ${this.state.currentOrder.grandTotal}
+                  </RegularTextCB>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: SIZES.fifteen,
+                  }}>
+                  <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
+                    Phone No.
+                  </RegularTextCB>
+                  <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
+                    {this.state.currentOrder?.vendor?.phone}
+                  </RegularTextCB>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginTop: SIZES.fifteen,
+                  }}>
+                  <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
+                    Address
+                  </RegularTextCB>
+                  <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
+                    {this.state.currentOrder?.address}
+                  </RegularTextCB>
+                </View>
+              </View>
+              <View
+                style={{
+                  padding: SIZES.fifteen,
+                  position: 'absolute',
+                  bottom: 0,
+                  start: 0,
+                  end: 0,
+                }}>
+                <ButtonRadius10
+                  onPress={() => {
+                    if (
+                      this.props.route.params.from === 'notification' ||
+                      this.props.route.params.from === 'quick'
+                    ) {
+                      this.props.navigation.navigate(Constants.QuickJobDetail, {
+                        orderItem: this.state.currentOrder,
+                      });
+                    } else {
+                      this.navigateToHome();
+                    }
+                  }}
+                  label="PAY NOW"
+                  bgColor={Colors.sickGreen}
+                />
+              </View>
+            </>
+          ) : (
+            <RegularTextCB
+              style={{
+                marginTop: SIZES.five,
+                alignSelf: 'center',
+                color: Colors.coolGrey,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                position: 'absolute',
+                top: width * 0.7,
+              }}>
+              *Your job hasn't been accepted aceepted yet{' '}
+            </RegularTextCB>
+          )
+        ) : (
+          <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
           />
-          <View style={{marginStart: SIZES.ten}}>
-            <RegularTextCB style={{fontSize: 16}}>Repairing</RegularTextCB>
-            <RegularTextCB style={{fontSize: 14, color: Colors.coolGrey}}>
-              3 AC split units maintenace
-            </RegularTextCB>
-          </View>
-        </View>
-        <View style={{padding: SIZES.fifteen}}>
-          <RegularTextCB
-            style={{
-              color: Colors.black,
-              fontSize: 18,
-              marginTop: SIZES.twenty,
-            }}>
-            Payment Details
-          </RegularTextCB>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: SIZES.twenty,
-            }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
-              Credit Card Number
-            </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              **** **** **** 0123
-            </RegularTextCB>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: SIZES.fifteen,
-            }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
-              Amount
-            </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              ${this.state.currentOrder.grandTotal}
-            </RegularTextCB>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: SIZES.fifteen,
-            }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
-              Phone No.
-            </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              {this.state.currentOrder?.vendor?.phone}
-            </RegularTextCB>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: SIZES.fifteen,
-            }}>
-            <RegularTextCB style={{color: Colors.coolGrey, fontSize: 14}}>
-              Address
-            </RegularTextCB>
-            <RegularTextCB style={{color: Colors.black, fontSize: 14}}>
-              {this.state.currentOrder?.address}
-            </RegularTextCB>
-          </View>
-        </View>
-        <View
-          style={{
-            padding: SIZES.fifteen,
-            position: 'absolute',
-            bottom: 0,
-            start: 0,
-            end: 0,
-          }}>
-          <ButtonRadius10
-            onPress={() => {
-              if (
-                this.props.route.params.from === 'notification' ||
-                this.props.route.params.from === 'quick'
-              ) {
-                this.props.navigation.navigate(Constants.QuickJobDetail, {
-                  orderItem: this.state.currentOrder,
-                });
-              } else {
-                this.navigateToHome();
-              }
-            }}
-            label="PAY NOW"
-            bgColor={Colors.sickGreen}
-          />
-        </View>
-
-        <Spinner
-          visible={this.state.isLoading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
+        )}
       </View>
     );
   }

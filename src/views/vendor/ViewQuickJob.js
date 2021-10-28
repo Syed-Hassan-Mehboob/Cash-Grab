@@ -28,8 +28,8 @@ export default class ViewQuickJob extends React.Component {
     region: {
       latitude: 24.9050562,
       longitude: 67.0785654,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068,
+      latitudeDelta: 0.0004,
+      longitudeDelta: 0.0005,
     },
   };
 
@@ -59,10 +59,10 @@ export default class ViewQuickJob extends React.Component {
       myRequestAceepted: undefined,
       isMessageForOrderVisited: false,
       initialRegion: {
-        latitude: 24.90628280557342,
-        longitude: 67.07237028142383,
-        latitudeDelta: 0.04864195044303443,
-        longitudeDelta: 0.04014281769006,
+        latitude: 0.0,
+        longitude: 0.0,
+        latitudeDelta: 1,
+        longitudeDelta: 1,
       },
     };
   }
@@ -78,6 +78,25 @@ export default class ViewQuickJob extends React.Component {
       this.getUserAccessToken();
     });
   }
+
+  onMapLoad = (latitude, longitude) => {
+    console.log({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    });
+
+    setTimeout(() => {
+      this.mapRef.animateToRegion(
+        {
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          latitudeDelta: 0.0000000004,
+          longitudeDelta: 0.0000000003,
+        },
+        1200,
+      );
+    }, 700);
+  };
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
@@ -95,10 +114,10 @@ export default class ViewQuickJob extends React.Component {
   viewJob = () => {
     this.setState({isLoading: true});
     const onSuccess = async ({data}) => {
-      console.log(
-        'View Quick jjob detail vendor side Data ==== ==== ',
-        data.data,
-      );
+      // console.log(
+      //   'View Quick jjob detail vendor side Data ==== ==== ',
+      //   data.data,
+      // );
       const messageVisited = await AsyncStorage.getItem(
         `isMessageForOrderVisited${data.data.id}`,
       );
@@ -111,26 +130,14 @@ export default class ViewQuickJob extends React.Component {
           initialRegion: {
             latitude: Number(data.data.lat),
             longitude: Number(data.data.lng),
-            latitudeDelta: 0.04864195044303443,
-            longitudeDelta: 0.04014281769006,
+            latitudeDelta: 0.0004,
+            longitudeDelta: 0.0005,
           },
         },
         () => {
-          this.setState(
-            {
-              isLoading: false,
-            },
-            () => {
-              // console.log(
-              //   'this.state.isMessageForOrderVisited======>>>>>>',
-              //   this.state.isMessageForOrderVisited,
-              // );
-              console.log(
-                'marker coordinates =======>>>>>> ',
-                this.state.currentOrder.orderStatus,
-              );
-            },
-          );
+          this.setState({
+            isLoading: false,
+          });
         },
       );
 
@@ -255,7 +262,8 @@ export default class ViewQuickJob extends React.Component {
                   </View>
                 </View>
 
-                {this.state.currentOrder?.orderStatus !== 'completed' ? (
+                {this.state.currentOrder?.orderStatus !== 'completed' &&
+                this.state.currentOrder.orderStatus !== 'pending' ? (
                   <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity
                       onPress={() => {
@@ -422,6 +430,13 @@ export default class ViewQuickJob extends React.Component {
 
             {!this.state.isLoading ? (
               <MapView
+                ref={(ref) => (this.mapRef = ref)}
+                onMapReady={() =>
+                  this.onMapLoad(
+                    this.state.initialRegion.latitude,
+                    this.state.initialRegion.longitude,
+                  )
+                }
                 provider={PROVIDER_GOOGLE}
                 initialRegion={this.state.initialRegion}
                 showsUserLocation={false}
@@ -443,7 +458,8 @@ export default class ViewQuickJob extends React.Component {
                 marginHorizontal: SIZES.twenty,
               }}>
               {this.state.isLoading ? null : this.state.currentOrder
-                  .orderStatus !== 'completed' ? (
+                  .orderStatus !== 'completed' &&
+                this.state.currentOrder.orderStatus !== 'pending' ? (
                 <ButtonRadius10
                   label={
                     this.state.currentOrder.orderStatus === 'accepted'
@@ -475,6 +491,15 @@ export default class ViewQuickJob extends React.Component {
                     }
                   }}
                 />
+              ) : this.state.currentOrder.orderStatus === 'pending' ? (
+                <LightTextCB
+                  style={{
+                    marginTop: SIZES.five,
+                    alignSelf: 'center',
+                    color: Colors.coolGrey,
+                  }}>
+                  *You have declined this job{' '}
+                </LightTextCB>
               ) : (
                 <LightTextCB
                   style={{

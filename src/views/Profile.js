@@ -199,7 +199,9 @@ export default class Profile extends React.Component {
           },
         ]}
         onPress={() => {
-          this.props.navigation.navigate(Constants.JobAcceptance);
+          this.props.navigation.navigate(Constants.JobAcceptance, {
+            jobId: item.id,
+          });
         }}>
         <View
           style={{
@@ -211,7 +213,7 @@ export default class Profile extends React.Component {
           <LightTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
             {item.category_name !== null && item.category_name !== undefined
               ? item.category_name
-              : ''}
+              : console.log('===================', item)}
           </LightTextCB>
 
           <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
@@ -225,13 +227,24 @@ export default class Profile extends React.Component {
             width: width * 0.75,
           }}
           numberOfLines={3}>
-          {item.description !== null && item.description !== undefined
-            ? item.description
+          {item.location !== null && item.location !== undefined
+            ? item.location
             : ''}
         </RegularTextCB>
+        {/* <RegularTextCB
+            style={{
+              color: Colors.coolGrey,
+              // width: width * 0.75,
+            }}
+            numberOfLines={3}>
+            {item.description !== null && item.description !== undefined
+              ? item.description
+              : ''}
+          </RegularTextCB> */}
       </TouchableOpacity>
     );
   };
+
   renderScheduleJob = ({item}) => {
     // console.log('Schedule job ====>>>>>>>>>>', item);
     return (
@@ -643,8 +656,9 @@ export default class Profile extends React.Component {
               fontSize: 16,
               textAlign: 'center',
               marginTop: SIZES.five,
+              maxWidth: width * 0.98,
             }}
-            numberOfLines={2}>
+            numberOfLines={10}>
             {this.state.abouteMe != null
               ? this.state.abouteMe
               : 'Aboute Me is Not Define '}

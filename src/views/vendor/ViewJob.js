@@ -26,8 +26,8 @@ export default class ViewJob extends React.Component {
     region: {
       latitude: 24.9050562,
       longitude: 67.0785654,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068,
+      latitudeDelta: 0.0004,
+      longitudeDelta: 0.0005,
     },
   };
 
@@ -55,8 +55,36 @@ export default class ViewJob extends React.Component {
       jobStatus: '',
       orderStatus: undefined,
       myRequestAceepted: undefined,
+      initialRegion: {
+        latitude: 0.0,
+        longitude: 0.0,
+        latitudeDelta: 1,
+        longitudeDelta: 1,
+      },
     };
   }
+
+  onMapLoad = (latitude, longitude) => {
+    console.log({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    });
+    // console.log(this.mapRef);
+
+    setTimeout(() => {
+      this.mapRef.animateToRegion(
+        {
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          // latitude: 40.7586517327205,
+          // longitude: -73.98583396826172,
+          latitudeDelta: 0.0004,
+          longitudeDelta: 0.003,
+        },
+        1200,
+      );
+    }, 700);
+  };
 
   componentDidMount() {
     // console.log(
@@ -80,29 +108,40 @@ export default class ViewJob extends React.Component {
   viewJob = () => {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log(
-      //   'View Job Data ==== ==== ',
-      //   JSON.stringify(data.data.records.status),
-      // );
+      console
+        .log
+        // 'View Job Data ==== ==== ',
+        // JSON.stringify(data.data.records.status),
+        ();
 
-      this.setState({isLoading: false});
-      this.setState({
-        userImage: data.data.records.user.userProfile.image,
-        title: data.data.records.title,
-        location: data.data.records.location,
-        time: data.data.records.time,
-        images: data.data.records.images,
-        username: data.data.records.user.name,
-        latitude: data.data.records.user.userProfile.latitude,
-        longitude: data.data.records.user.userProfile.longitude,
-        price: data.data.records.price,
-        description: data.data.records.description,
-        jobId: data.data.records.id,
-        buttonlabel:
-          data.data.records.status === ''
-            ? 'REQUEST FOR ACCEPTANCE'
-            : 'PENDING',
-      });
+      this.setState(
+        {
+          userImage: data.data.records.user.userProfile.image,
+          title: data.data.records.title,
+          location: data.data.records.location,
+          time: data.data.records.time,
+          images: data.data.records.images,
+          username: data.data.records.user.name,
+          latitude: data.data.records.user.userProfile.latitude,
+          longitude: data.data.records.user.userProfile.longitude,
+          price: data.data.records.price,
+          description: data.data.records.description,
+          jobId: data.data.records.id,
+          initialRegion: {
+            latitude: Number(data.data.records.user.userProfile.latitude),
+            longitude: Number(data.data.records.user.userProfile.longitude),
+            latitudeDelta: 0.0004,
+            longitudeDelta: 0.0005,
+          },
+          // buttonlabel:
+          //   data.data.records.status === ''
+          //     ? 'REQUEST FOR ACCEPTANCE'
+          //     : 'PENDING',
+        },
+        () => {
+          this.checkJobRequest();
+        },
+      );
 
       // utils.showToast(data.message)
 
@@ -136,8 +175,8 @@ export default class ViewJob extends React.Component {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
       this.viewJob();
-      // console.log('Request job Data ========', data);
-      // utils.showToast(data.message);
+      console.log('Request job Data ========', data);
+      utils.showToast(data.message);
       this.setState({isLoading: false});
     };
     const onFailure = (error) => {
@@ -159,10 +198,50 @@ export default class ViewJob extends React.Component {
       .catch(onFailure);
   };
 
+  checkJobRequest = () => {
+    const postData = {
+      job_id: this.state.jobId,
+    };
+
+    this.setState({isLoading: true});
+    const onSuccess = ({data}) => {
+      // this.viewJob();
+      // console.log('Request job Data ========', data);
+      // utils.showToast(data.message);
+      this.setState({
+        buttonlabel:
+          data.data.status === ''
+            ? 'REQUEST FOR ACCEPTANCE'
+            : data.data.status === 'pending'
+            ? 'PENDING'
+            : null,
+      });
+    };
+    const onFailure = (error) => {
+      console.log(
+        'error =====================================================================>',
+        error,
+      );
+      // utils.showResponseError(error.massage);
+    };
+    const options = {
+      params: {
+        job_id: this.state.jobId,
+      },
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    };
+    Axios.get(Constants.checkPostedJobStatusURL, options)
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   render() {
+    // console.log('=============>>>>>>>', this.props.route);
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="View Job" />
+        <NormalHeader name="View Jobb" />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -303,22 +382,24 @@ export default class ViewJob extends React.Component {
             />
 
             <MapView
+              ref={(ref) => (this.mapRef = ref)}
+              onMapReady={() =>
+                this.onMapLoad(
+                  this.state.initialRegion.latitude,
+                  this.state.initialRegion.longitude,
+                )
+              }
               provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: 24.90628280557342,
-                longitude: 67.07237028142383,
-                latitudeDelta: 0.04864195044303443,
-                longitudeDelta: 0.04014281769006,
-              }}
-              showsUserLocation={true}
+              initialRegion={this.state.initialRegion}
+              showsUserLocation={false}
               showsMyLocationButton={false}
               zoomEnabled={false}
               scrollEnabled={false}
               style={styles.mapStyle}>
               <Marker
                 coordinate={{
-                  latitude: Number(this.state.latitude),
-                  longitude: Number(this.state.longitude),
+                  latitude: Number(this.state.initialRegion.latitude),
+                  longitude: Number(this.state.initialRegion.longitude),
                 }}
               />
             </MapView>

@@ -297,7 +297,8 @@ export default function ScheduleJobDetails(props) {
           />
         </TouchableOpacity>
         <RegularTextCB style={{fontSize: SIZES.ten * 3}}>
-          {props.route.params.catName}
+          {/* {props.route.params.catName} */}
+          Scheduled Job Detail
         </RegularTextCB>
       </View>
 

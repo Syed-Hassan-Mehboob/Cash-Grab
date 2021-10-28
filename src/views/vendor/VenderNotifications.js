@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {
@@ -31,6 +32,29 @@ export default class VenderNotifications extends Component {
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
 
+  getQuickJobDetails = (id) => {
+    const onSuccess = ({data}) => {
+      console.log('ssssssss>>>>>>>>>>', data.data.id);
+      this.setState({currentOrder: data.data});
+      this.props.navigation.navigate(Constants.ViewQuickJob, {item: id});
+    };
+
+    const onFailure = (error) => {
+      console.log('ssssssss>>>>>>>>>>', error);
+    };
+    let params = {
+      orderId: id,
+    };
+    Axios.get(Constants.orderDetail, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   renderHiddenItem = (data, rowMap) => {
     const rowActionAnimatedValue = new Animated.Value(75);
     const rowHeightAnimatedValue = new Animated.Value(60);
@@ -47,13 +71,88 @@ export default class VenderNotifications extends Component {
     );
   };
 
+  // // METHOD for build
+  // renderNotificationsItem = ({item}) => {
+  //   // console.log(
+  //   //   'Item  ===============>',
+  //   //   item.notifications.map((item) => {
+  //   //     console.log(item.content);
+  //   //   }),
+  //   // );
+  //   return (
+  //     <View style={{marginHorizontal: SIZES.fifteen}}>
+  //       <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
+  //         {item.date}
+  //       </RegularTextCB>
+
+  //       {item.notifications.map((notification) => {
+  //         return (
+  //           <View
+  //             key={notification.id}
+  //             style={[
+  //               styles.card,
+  //               {
+  //                 marginVertical: SIZES.ten,
+  //                 borderWidth: item.date === 'Latest' ? 1 : 0,
+  //               },
+  //             ]}>
+  //             <TouchableOpacity
+  //               activeOpacity={0.5}
+  //               style={styles.itemContainer}
+  //               onPress={() => {}}>
+  //               <View
+  //                 style={{
+  //                   flexDirection: 'row',
+  //                   alignItems: 'center',
+  //                 }}>
+  //                 <View style={styles.circleCard}>
+  //                   <Image
+  //                     source={{uri: Constants.imageURL + notification.image}}
+  //                     style={styles.iconUser}
+  //                     resizeMode="cover"
+  //                   />
+  //                 </View>
+  //                 <View
+  //                   style={{
+  //                     marginStart: SIZES.ten,
+  //                     flex: 1,
+  //                     flexShrink: 1,
+  //                   }}>
+  //                   <View
+  //                     style={{
+  //                       flexDirection: 'row',
+  //                       justifyContent: 'space-between',
+  //                     }}>
+  //                     <RegularTextCB
+  //                       style={{fontSize: 16, color: Colors.black}}>
+  //                       {notification.title}
+  //                     </RegularTextCB>
+  //                     <RegularTextCB>{item.time}</RegularTextCB>
+  //                   </View>
+  //                   <RegularTextCB
+  //                     numberOfLines={1}
+  //                     style={{
+  //                       fontSize: 14,
+  //                       color: Colors.coolGrey,
+  //                       marginTop: SIZES.five,
+  //                     }}>
+  //                     {notification.content}
+  //                   </RegularTextCB>
+  //                 </View>
+  //               </View>
+  //             </TouchableOpacity>
+  //           </View>
+  //         );
+  //       })}
+  //     </View>
+  //   );
+  // };
+
+  // VALID METHOD
+
   renderNotificationsItem = ({item}) => {
-    // console.log(
-    //   'Item  ===============>',
-    //   item.notifications.map((item) => {
-    //     console.log(item.content);
-    //   }),
-    // );
+    // console.log('Notification Item ==== =====', item);
+
     return (
       <View style={{marginHorizontal: SIZES.fifteen}}>
         <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
@@ -61,6 +160,7 @@ export default class VenderNotifications extends Component {
         </RegularTextCB>
 
         {item.notifications.map((notification) => {
+          console.log('notification================>>>>', notification);
           return (
             <View
               key={notification.id}
@@ -74,7 +174,44 @@ export default class VenderNotifications extends Component {
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.itemContainer}
-                onPress={() => {}}>
+                onPress={() => {
+                  // For posted job
+                  if (
+                    notification.trigger_type === 'job_request_sent' ||
+                    notification.trigger_type === 'order_accepted' ||
+                    notification.trigger_type === 'order_accepted' ||
+                    notification.trigger_type === 'order_started' ||
+                    notification.trigger_type === 'order_completed' ||
+                    notification.trigger_type === 'order_cancelled'
+                  ) {
+                    // this.props.navigation.navigate(Constants.confirmPayment, {
+                    //   orderId: notification.trigger_id,
+                    //   from: 'notification',
+                    // });
+
+                    // this.props.navigation.navigate(Constants.JobInProgress, {
+                    //   orderId: item.id,
+                    // });
+                    alert('posted job notification or scheduled');
+                  }
+                  if (
+                    notification.trigger_type === 'quick_notify' ||
+                    notification.trigger_type === 'quick_order_accepted'
+                  ) {
+                    //For quick job
+
+                    // this.props.navigation.navigate(Constants.confirmPayment, {
+                    //   orderId: notification.trigger_id,
+                    //   from: 'notification',
+                    // });
+                    this.getQuickJobDetails(notification.trigger_id);
+                    // alert('quick job notification');
+                  }
+
+                  // this.props.navigation.navigate(Constants.SchechuleJobDetail, {
+                  //   catName: item.category_name,
+                  //   joid: item.id,})
+                }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -82,7 +219,11 @@ export default class VenderNotifications extends Component {
                   }}>
                   <View style={styles.circleCard}>
                     <Image
-                      source={{uri: Constants.imageURL + notification.image}}
+                      source={{
+                        uri:
+                          Constants.imageURL +
+                          notification.sender?.user_profiles?.image,
+                      }}
                       style={styles.iconUser}
                       resizeMode="cover"
                     />
@@ -100,9 +241,13 @@ export default class VenderNotifications extends Component {
                       }}>
                       <RegularTextCB
                         style={{fontSize: 16, color: Colors.black}}>
-                        {notification.title}
+                        {notification.sender !== null
+                          ? notification.sender.name
+                          : null}
                       </RegularTextCB>
-                      <RegularTextCB>{item.time}</RegularTextCB>
+                      <RegularTextCB style={{fontSize: SIZES.ten * 1.4}}>
+                        {moment(notification.created_at).format('hh:mm A')}
+                      </RegularTextCB>
                     </View>
                     <RegularTextCB
                       numberOfLines={1}
@@ -111,7 +256,7 @@ export default class VenderNotifications extends Component {
                         color: Colors.coolGrey,
                         marginTop: SIZES.five,
                       }}>
-                      {notification.content}
+                      {notification.message}
                     </RegularTextCB>
                   </View>
                 </View>
@@ -205,6 +350,7 @@ export default class VenderNotifications extends Component {
         </View>
 
         <SwipeListView
+          showsVerticalScrollIndicator={false}
           style={{marginTop: SIZES.ten}}
           data={this.state.notifications}
           renderItem={this.renderNotificationsItem}

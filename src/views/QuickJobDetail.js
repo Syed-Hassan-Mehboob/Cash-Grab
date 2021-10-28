@@ -348,14 +348,6 @@ export default class QuickJobDetail extends React.Component {
                         borderRadius: SIZES.ten * 5,
                         marginRight: SIZES.ten,
                       }}>
-                      {/* {this.state.isMessageForOrderVisited !== null
-                        ? console.log(
-                            'this.state.isMessageForOrderVisited======>>>>>>',
-                            this.state.isMessageForOrderVisited.orderID,
-                            '==========screeen order id',
-                            this.props.route.params.orderItem.id,
-                          )
-                        : null} */}
                       {this.state.isMessageForOrderVisited !== null ? (
                         //  Number(
                         Number(this.state.isMessageForOrderVisited.orderID) ===

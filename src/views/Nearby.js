@@ -50,26 +50,39 @@ const Nearby = (props) => {
     getTokenAndlocation();
   }, [props.navigation]);
 
+  const onMapLoad = (latitude, longitude) => {
+    console.log({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    });
+    console.log(_map);
+
+    setTimeout(() => {
+      _map.current.animateToRegion(
+        {
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          // latitude: 40.7586517327205,
+          // longitude: -73.98583396826172,
+          // latitudeDelta: 0.001,
+          // longitudeDelta: 0.0032,
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.02,
+        },
+        3000,
+      );
+    }, 500);
+  };
   const getLocation = async () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        // _map.current.animateToRegion(
-        //   {
-        //     longitude: Number(position.coords.latitude),
-        //     latitude: Number(position.coords.longitude),
-        //     latitudeDelta: 0.0004,
-        //     longitudeDelta: 0.0005,
-        //   },
-        //   500,
-        // );
-
         getVendorAroundYou(position.coords.latitude, position.coords.longitude);
 
         setRegion({
           latitude: Number(position.coords.latitude),
           longitude: Number(position.coords.longitude),
-          latitudeDelta: 0.0304,
-          longitudeDelta: 0.0305,
+          latitudeDelta: 0.0004,
+          longitudeDelta: 0.0004,
         });
       },
       (error) => {
@@ -280,25 +293,22 @@ const Nearby = (props) => {
           initialRegion={{
             latitude: Region.latitude,
             longitude: Region.longitude,
-            latitudeDelta: 0.04,
-            longitudeDelta: 0.04,
+            latitudeDelta: 0.002,
+            longitudeDelta: 0.0004,
           }}
+          showsMyLocationButton={true}
+          showsUserLocation={true}
+          showsBuildings={true}
+          rotateEnabled={false}
+          onMapReady={() => onMapLoad(Region.latitude, Region.longitude)}
           customMapStyle={mapStyle}
           style={[styles.container]}>
           {/* <Marker
-          coordinate={{
-            latitude: Region.latitude,
-            longitude: Region.longitude,
-          }}>
-          <Image
-            source={{uri: Constants.imageURL + userImage}}
-            style={{
-              height: SIZES.ten * 5,
-              width: SIZES.ten * 5,
-              borderRadius: SIZES.ten * 5,
+            coordinate={{
+              latitude: Region.latitude,
+              longitude: Region.longitude,
             }}
-          />
-        </Marker> */}
+          /> */}
           {vendorAround && vendorAround.length
             ? vendorAround.map((marker, index) => {
                 return (

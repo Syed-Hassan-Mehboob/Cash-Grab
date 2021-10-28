@@ -17,10 +17,9 @@ export default function NormalHeader(props) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        // paddingHorizontal: SIZES.ten * 2,
       }}>
       <TouchableOpacity
-        style={{position: 'absolute', left: SIZES.fifteen}}
+        style={{position: 'absolute', left: SIZES.ten, padding: SIZES.ten}}
         onPress={() => {
           navigation.goBack();
         }}>

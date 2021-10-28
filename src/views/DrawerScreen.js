@@ -179,8 +179,8 @@ export default class DrawerScreen extends Component {
             <View style={styles.circleCard}>
               <Image
                 source={{uri: this.state.avatar}}
-                style={styles.iconUser}
-                resizeMode="cover"
+                style={[styles.iconUser, {borderRadius: 50}]}
+                resizeMode="contain"
               />
             </View>
             <View style={{flex: 1, paddingHorizontal: SIZES.ten}}>
@@ -458,14 +458,13 @@ const styles = StyleSheet.create({
     height: SIZES.ten * 6,
     width: SIZES.ten * 6,
     borderRadius: (SIZES.ten * 6) / 2,
-    resizeMode: 'contain',
-    borderColor: Colors.sickGreen,
-    borderWidth: 1,
   },
   circleCard: {
-    height: SIZES.ten * 6,
-    width: SIZES.ten * 6,
-    borderRadius: SIZES.ten * 3,
+    height: SIZES.ten * 6.5,
+    width: SIZES.ten * 6.5,
+    // borderColor: Colors.sickGreen,
+    // borderWidth: 1,
+    borderRadius: (SIZES.ten * 6.5) / 2,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,

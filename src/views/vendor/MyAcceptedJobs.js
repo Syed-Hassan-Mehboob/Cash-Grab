@@ -65,6 +65,7 @@ export default function MyAcceptedJobs(props) {
           styles.card,
           {
             padding: SIZES.fifteen,
+            marginVertical: SIZES.ten,
             // marginHorizontal: SIZES.five * 10,
             // marginTop: SIZES.twenty,
           },

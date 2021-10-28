@@ -76,7 +76,9 @@ export default function PostedJob(props) {
           },
         ]}
         onPress={() => {
-          props.navigation.navigate(Constants.JobAcceptance);
+          props.navigation.navigate(Constants.JobAcceptance, {
+            jobId: item.id,
+          });
         }}>
         <View
           style={{

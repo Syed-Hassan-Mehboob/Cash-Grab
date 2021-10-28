@@ -30,6 +30,11 @@ export default function JobAcceptance(props) {
 
   const navigation = useNavigation();
 
+  console.log(
+    'job acceptance props=================>>>>>>>>>>>>',
+    props.route.params,
+  );
+
   useEffect(() => {
     getUserAccessToken();
   }, []);
@@ -48,7 +53,7 @@ export default function JobAcceptance(props) {
     const value = await AsyncStorage.getItem(Constants.accessToken);
     let config = {
       params: {
-        jobId: '1',
+        jobId: props.route.params.jobId,
       },
       headers: {
         Authorization: value,
@@ -58,7 +63,10 @@ export default function JobAcceptance(props) {
     // //console.log('tokennnnn', token);
 
     const onSuccess = ({data}) => {
-      // //console.log("Job Acceptanceeeeeeeee ======================>", data.data);
+      console.log(
+        'Job Acceptanceeeeeeeee ======================>',
+        JSON.stringify(data.data),
+      );
       setJobAccept(data.data.records);
       setJobAcceptList(data.data.records.requests);
       setIsloading(false);
@@ -81,11 +89,12 @@ export default function JobAcceptance(props) {
     Axios.get(Constants.jobAcceptance, config).then(onSuccess).catch(onFailure);
   };
 
-  const updateJobs = async (statuses) => {
+  const updateJobs = async (requestID, statuses) => {
     const value2 = await AsyncStorage.getItem(Constants.accessToken);
+    console.log('Job Requesttttt requestID ======================>', requestID);
 
     const onSuccess = ({data}) => {
-      // console.log('Job Requesttttt ======================>', data.data);
+      console.log('Job Requesttttt ======================>', data.data);
       // setJobRequest(data);
       setIsloading(false);
 
@@ -105,7 +114,7 @@ export default function JobAcceptance(props) {
     Axios.post(
       Constants.jobRequest,
       {
-        request_id: '1',
+        request_id: requestID,
         status: statuses,
       },
       {
@@ -120,7 +129,7 @@ export default function JobAcceptance(props) {
   };
 
   const renderJobRequest = ({item, index}) => {
-    //console.log("==================>>>>>>> ", item);
+    console.log('==================>>>>>>> ', item);
 
     return (
       <View>
@@ -186,7 +195,7 @@ export default function JobAcceptance(props) {
                 activeOpacity={0.6}
                 onPress={() => {
                   // props.navigation.navigate(Constants.confirmPayment);
-                  updateJobs('accepted');
+                  updateJobs(item.id, 'accepted');
                   setTimeout(() => {
                     navigation.goBack();
                   }, 500);
@@ -245,7 +254,7 @@ export default function JobAcceptance(props) {
                 }}
                 onPress={() => {
                   // props.navigation.replace(Constants.PostedJob);
-                  updateJobs('cancelled');
+                  updateJobs(item.id, 'cancelled');
                 }}
                 activeOpacity={0.6}>
                 <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>

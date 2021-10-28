@@ -73,32 +73,57 @@ export default class MyAcceptedJobDetails extends React.Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
+    // console.log('============================', token);
     this.setState({accessToken: token}, () => {
       this.getMyAcceptedJobDetails();
     });
   };
 
   getMyAcceptedJobDetails = () => {
-    this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      // console.log('View Job Data ==== ==== ', JSON.stringify(data));
+      // console.log(
+      //   'View my accepted Job Data ==== ==== ',
+      //   JSON.stringify(data.data),
+      // );
 
-      this.setState({isLoading: false});
       this.setState({
         userImage: data.data.user.user_profiles.image,
-        title: data.data.category.name,
-        location: data.data.address,
         time: data.data.start_time,
-        // images: data.data.records.images,
+        location: data.data.address,
         username: data.data.name,
         latitude: data.data.lat !== null ? data.data.lat : '',
         longitude: data.data.lng !== null ? data.data.lng : '',
-        price: data.data.grandTotal,
-        description: data.data.description,
         buttonlabel:
           data.data.orderStatus === 'accepted' ? 'START NOW' : 'WORK STARTED',
         orderId: data.data.id,
+        price: data.data.grandTotal,
+        description: data.data.description,
       });
+      this.setState({});
+
+      // this.setState(
+      //   {
+      //     userImage: data.data.user.user_profiles.image,
+      //     title: data.data.category.name,
+      //     location: data.data.address,
+      //     time: data.data.start_time,
+      //     // images: data.data.records.images,
+      //     username: data.data.name,
+      //     latitude: data.data.lat !== null ? data.data.lat : '',
+      //     longitude: data.data.lng !== null ? data.data.lng : '',
+      //     price: data.data.grandTotal,
+      //     description: data.data.description,
+      //     buttonlabel:
+      //       data.data.orderStatus === 'accepted' ? 'START NOW' : 'WORK STARTED',
+      //     orderId: data.data.id,
+      //   },
+      //   () => {
+      //     console.log(
+      //       '=========================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',
+      //       this.state.userImage,
+      //     );
+      //   },
+      // );
 
       // utils.showToast(data.message)
 
@@ -129,7 +154,7 @@ export default class MyAcceptedJobDetails extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      // console.log('>>>>>>>> ', data);
+      console.log('>>>>>>>> ', data);
       this.getUserAccessToken();
       this.setState({
         isLoading: false,
@@ -164,6 +189,7 @@ export default class MyAcceptedJobDetails extends React.Component {
   };
 
   render() {
+    console.log(this.props.route.params.orderId);
     return (
       <View style={STYLES.container}>
         <NormalHeader name="My Job Details" />
@@ -304,12 +330,14 @@ export default class MyAcceptedJobDetails extends React.Component {
             <MapView
               provider={PROVIDER_GOOGLE}
               initialRegion={{
-                latitude: 24.90628280557342,
-                longitude: 67.07237028142383,
-                latitudeDelta: 0.04864195044303443,
-                longitudeDelta: 0.04014281769006,
+                // latitude: 24.90628280557342,
+                // longitude: 67.07237028142383,
+
+                latitude: Number(this.state.latitude),
+                longitude: Number(this.state.longitude),
+                latitudeDelta: 0.0004,
+                longitudeDelta: 0.00046,
               }}
-              showsUserLocation={true}
               showsMyLocationButton={false}
               zoomEnabled={false}
               scrollEnabled={false}
