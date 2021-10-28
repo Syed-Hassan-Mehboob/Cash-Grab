@@ -24,12 +24,12 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+*.hprof
 build/
 .idea
 .gradle
 local.properties
 *.iml
-*.hprof
 
 # node.js
 #
