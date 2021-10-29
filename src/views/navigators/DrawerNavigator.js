@@ -173,6 +173,7 @@ export default class DrawerNavigator extends React.Component {
           jobId: rm.data.job_id,
         });
       }
+      // FOR POSTED JOB Vendor Side
       if (this.state.isVendor && rm.data.source === 'Job') {
         if (
           rm.data.trigger_type === 'order' &&
@@ -215,6 +216,12 @@ export default class DrawerNavigator extends React.Component {
             orderId: rm.data.trigger_id,
             from: 'notification',
           });
+        }
+        if (
+          rm.data.trigger_type === 'order_completed' &&
+          rm.data.body === 'your order has completed successfully'
+        ) {
+          this.setState({vendorThankyoumodal: true});
         }
       } else {
         if (
@@ -310,6 +317,9 @@ export default class DrawerNavigator extends React.Component {
             this.state.customerJobAcceptedModal,
           );
         });
+      }
+      if (rm.data.trigger_type === 'order_completed') {
+        this.setState({vendorThankyoumodal: true});
       }
       if (
         rm.data.trigger_type === 'order' &&
