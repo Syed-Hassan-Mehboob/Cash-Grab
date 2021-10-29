@@ -1,7 +1,8 @@
 /* @flow */
 import React, {Component} from 'react';
 import database from '@react-native-firebase/database';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from 'react-native-modal';
 import {
   View,
   TouchableOpacity,
@@ -9,13 +10,11 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-import Modal from 'react-native-modal';
 import {CommonActions} from '@react-navigation/native';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Constants, {FIREBASECONSTANTS, SIZES} from '../common/Constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import BoldTextCB from '../components/BoldTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
@@ -192,7 +191,11 @@ export default class DrawerScreen extends Component {
               </RegularTextCB>
             </View>
           </TouchableOpacity>
-          <View style={[styles.formContainer2, {top: SIZES.ten * 2}]}>
+          <View
+            style={[
+              styles.formContainer2,
+              {top: SIZES.ten * 2, justifyContent: 'space-between'},
+            ]}>
             <View style={{flex: 1}}>
               <TouchableOpacity
                 style={{
@@ -248,7 +251,7 @@ export default class DrawerScreen extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   flexDirection: 'row',
                   width: '100%',
@@ -262,7 +265,7 @@ export default class DrawerScreen extends Component {
                   style={styles.iconDrawer}
                 />
                 <RegularTextCB style={styles.drawerSubText}>Chat</RegularTextCB>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',

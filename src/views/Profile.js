@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 import React from 'react';
 import {FlatList, ScrollViewBase, StatusBar, Text, Image} from 'react-native';
 import {
@@ -13,6 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Colors from '../common/Colors';
 import Constants, {FONTS, SIZES} from '../common/Constants';
 import Images from '../common/Images';
+import BoldTextCB from '../components/BoldTextCB';
 import ListComponent from '../components/ListComponent';
 import RegularTextCB from '../components/RegularTextCB';
 import Axios from '../network/APIKit';
@@ -123,6 +125,38 @@ export default class Profile extends React.Component {
       .catch(onFailure);
   };
 
+  getQuickJobDetails = (id) => {
+    const onSuccess = ({data}) => {
+      console.log('ssssssss>>>>>>>>>>', data.data.id);
+      this.setState({currentOrder: data.data});
+      if (data.data.payment_status === 'paid') {
+        this.props.navigation.navigate(Constants.QuickJobDetail, {
+          orderItem: this.state.currentOrder,
+        });
+      } else {
+        this.props.navigation.navigate(Constants.confirmPayment, {
+          orderId: data.data.id,
+          from: 'quick',
+        });
+      }
+    };
+
+    const onFailure = (error) => {
+      console.log('ssssssss>>>>>>>>>>', error);
+    };
+    let params = {
+      orderId: id,
+    };
+    Axios.get(Constants.orderDetail, {
+      params,
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
   getScheduleJob = () => {
     const onSuccess = ({data}) => {
       // console.log('Schedule Job Data  ====>>>>>>>>>> ', data.data.records);
@@ -187,6 +221,7 @@ export default class Profile extends React.Component {
         activeOpacity={0.5}
         style={[
           {
+            maxWidth: width * 0.98,
             backgroundColor: '#fff',
             padding: SIZES.twenty,
             marginHorizontal: SIZES.ten,
@@ -199,6 +234,7 @@ export default class Profile extends React.Component {
           },
         ]}
         onPress={() => {
+          console.log('posted Job Item ====== ======>>>>>>>>', item);
           this.props.navigation.navigate(Constants.JobAcceptance, {
             jobId: item.id,
           });
@@ -210,27 +246,67 @@ export default class Profile extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <LightTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
-            {item.category_name !== null && item.category_name !== undefined
-              ? item.category_name
-              : console.log('===================', item)}
-          </LightTextCB>
+          <View style={{justifyContent: 'space-between'}}>
+            <BoldTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+              {item.description !== null && item.description !== undefined
+                ? item.description
+                : null}
+            </BoldTextCB>
+            <LightTextCB
+              style={[
+                FONTS.mediumFont14,
+                {color: Colors.black, maxWidth: width * 0.3},
+              ]}>
+              Description:{'\n'}
+              <LightTextCB>
+                {item.title !== null && item.title !== undefined
+                  ? item.title
+                  : null}
+              </LightTextCB>
+            </LightTextCB>
+          </View>
 
           <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
             ${item.price !== null && item.price !== undefined ? item.price : ''}
           </LightTextCB>
         </View>
 
-        <RegularTextCB
-          style={{
-            color: Colors.coolGrey,
-            width: width * 0.75,
-          }}
-          numberOfLines={3}>
-          {item.location !== null && item.location !== undefined
-            ? item.location
-            : ''}
-        </RegularTextCB>
+        <View
+          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          <View
+            style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+            <Image
+              source={Images.iconLocationPin}
+              style={{
+                height: 17,
+                width: 17,
+                resizeMode: 'contain',
+                marginRight: SIZES.five,
+              }}
+            />
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                maxWidth: width * 0.75,
+                width: width * 0.48,
+              }}
+              numberOfLines={1}>
+              {item.location !== null && item.location !== undefined
+                ? item.location
+                : ''}
+            </RegularTextCB>
+          </View>
+          <RegularTextCB
+            style={{
+              color: Colors.lightGrey,
+              // width: width * 0.3,
+            }}
+            numberOfLines={3}>
+            {item.created_at !== null && item.created_at !== undefined
+              ? moment(item.created_at).format('MMMM Do YYYY')
+              : ''}
+          </RegularTextCB>
+        </View>
         {/* <RegularTextCB
             style={{
               color: Colors.coolGrey,
@@ -246,7 +322,6 @@ export default class Profile extends React.Component {
   };
 
   renderScheduleJob = ({item}) => {
-    // console.log('Schedule job ====>>>>>>>>>>', item);
     return (
       <TouchableOpacity
         activeOpacity={0.5}
@@ -263,12 +338,14 @@ export default class Profile extends React.Component {
             marginTop: SIZES.ten,
           },
         ]}
-        onPress={() =>
+        onPress={() => {
+          console.log('Schedule job ====>>>>>>>>>>', item);
+
           this.props.navigation.navigate(Constants.SchechuleJobDetail, {
             catName: item.category_name,
             joid: item.id,
-          })
-        }>
+          });
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.circleCard}>
             <Image
@@ -279,7 +356,7 @@ export default class Profile extends React.Component {
                     : '',
               }}
               style={styles.iconUser}
-              resizeMode="cover"
+              resizeMode="contain"
             />
           </View>
           <View style={{marginStart: 10}}>
@@ -320,18 +397,14 @@ export default class Profile extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          {/* <RegularTextCB style={{color: Colors.black, fontSize: 16}}>
-            {item.title}
-          </RegularTextCB> */}
           <LightTextCB style={[FONTS.boldFont16, {color: Colors.sickGreen}]}>
             {item.category_name !== null && item.category_name !== undefined
               ? item.category_name
               : ''}
           </LightTextCB>
           <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
-            $
-            {item.grandTotal !== null && item.grandTotal !== undefined
-              ? item.grandTotal
+            {item.grand_total !== null && item.grand_total !== undefined
+              ? item.grand_total
               : ''}
           </LightTextCB>
         </View>
@@ -525,37 +598,6 @@ export default class Profile extends React.Component {
     );
   };
 
-  getQuickJobDetails = (id) => {
-    const onSuccess = ({data}) => {
-      console.log('ssssssss>>>>>>>>>>', data.data.id);
-      this.setState({currentOrder: data.data});
-      if (data.data.payment_status === 'paid') {
-        this.props.navigation.navigate(Constants.QuickJobDetail, {
-          orderItem: this.state.currentOrder,
-        });
-      } else {
-        this.props.navigation.navigate(Constants.confirmPayment, {
-          orderId: data.data.id,
-          from: 'quick',
-        });
-      }
-    };
-
-    const onFailure = (error) => {
-      console.log('ssssssss>>>>>>>>>>', error);
-    };
-    let params = {
-      orderId: id,
-    };
-    Axios.get(Constants.orderDetail, {
-      params,
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
   render() {
     return (
       <ScrollView
@@ -616,10 +658,25 @@ export default class Profile extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.circleCard}>
+          <View
+            style={{
+              height: SIZES.ten * 9,
+              width: SIZES.ten * 9,
+              borderRadius: 45,
+              shadowColor: '#c5c5c5',
+              shadowOffset: {width: SIZES.five, height: SIZES.five},
+              shadowOpacity: 0.15,
+              shadowRadius: SIZES.five,
+              elevation: SIZES.five,
+              marginBottom: SIZES.five,
+            }}>
             <Image
               source={{uri: Constants.imageURL + this.state.avatar}}
-              style={styles.iconUser}
+              style={{
+                height: SIZES.ten * 9,
+                width: SIZES.ten * 9,
+                borderRadius: 45,
+              }}
               resizeMode="cover"
             />
           </View>
@@ -656,9 +713,10 @@ export default class Profile extends React.Component {
               fontSize: 16,
               textAlign: 'center',
               marginTop: SIZES.five,
-              maxWidth: width * 0.98,
+              marginBottom: SIZES.five,
+              maxWidth: width * 0.95,
             }}
-            numberOfLines={10}>
+            numberOfLines={2}>
             {this.state.abouteMe != null
               ? this.state.abouteMe
               : 'Aboute Me is Not Define '}
@@ -815,7 +873,7 @@ export default class Profile extends React.Component {
           contentContainerStyle={{
             flex: 1,
             paddingHorizontal: SIZES.twenty,
-            paddingBottom: SIZES.ten,
+            paddingBottom: SIZES.fifteen * 1.3,
           }}
           ListEmptyComponent={
             !this.state.isLoading ? (
@@ -892,14 +950,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconUser: {
-    height: SIZES.ten * 9,
-    width: SIZES.ten * 9,
+    height: SIZES.ten * 4.35,
+    width: SIZES.ten * 4.35,
     borderRadius: 45,
-    resizeMode: 'contain',
   },
   circleCard: {
-    height: SIZES.ten * 9,
-    width: SIZES.ten * 9,
+    height: SIZES.ten * 4.35,
+    width: SIZES.ten * 4.35,
     borderRadius: 45,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},

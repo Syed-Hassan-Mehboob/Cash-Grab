@@ -23,6 +23,9 @@ export default function MyAcceptedJobs(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    props.navigation.addListener('focus', () => {
+      getUserAccessToken();
+    });
     getUserAccessToken();
   }, []);
 
@@ -58,6 +61,9 @@ export default function MyAcceptedJobs(props) {
   };
 
   const renderMyAcceptedJob = ({item}) => {
+    console.log('======================== >>>>>>>> =============== ', {
+      orderId: item.id,
+    });
     return (
       <TouchableOpacity
         activeOpacity={0.5}

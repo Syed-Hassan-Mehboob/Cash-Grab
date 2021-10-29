@@ -25,6 +25,8 @@ target 'CashGrab' do
   
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
   
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
   target 'CashGrabTests' do
     inherit! :complete
     # Pods for testing

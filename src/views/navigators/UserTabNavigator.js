@@ -134,7 +134,7 @@ const HomeNavigator = () => {
         component={Notifications}
       />
       <HomeStack.Screen name={Constants.settings} component={Settings} />
-      <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
+      {/* <HomeStack.Screen name={Constants.chatListing} component={ChatListing} /> */}
       {/* <HomeStack.Screen name={Constants.chat} component={Chat} /> */}
       <HomeStack.Screen name={Constants.editProfile} component={EditProfile} />
       <HomeStack.Screen
@@ -198,10 +198,10 @@ const SettingsNavigator = () => {
         name={Constants.notifications}
         component={Notifications}
       />
-      <SettingsStack.Screen
+      {/* <SettingsStack.Screen
         name={Constants.chatListing}
         component={ChatListing}
-      />
+      /> */}
       <SettingsStack.Screen name={Constants.chat} component={Chat} />
     </SettingsStack.Navigator>
   );

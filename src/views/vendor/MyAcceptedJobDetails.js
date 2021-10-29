@@ -56,6 +56,7 @@ export default class MyAcceptedJobDetails extends React.Component {
       orderStatus: undefined,
       myRequestAceepted: undefined,
       orderId: '',
+      isCompleted: '',
     };
   }
 
@@ -81,10 +82,11 @@ export default class MyAcceptedJobDetails extends React.Component {
 
   getMyAcceptedJobDetails = () => {
     const onSuccess = ({data}) => {
-      // console.log(
-      //   'View my accepted Job Data ==== ==== ',
-      //   JSON.stringify(data.data),
-      // );
+      console.log(
+        'View my accepted Job Data ==== ==== ',
+        JSON.stringify(data.data.orderStatus),
+        this.props.route.params.orderId,
+      );
 
       this.setState({
         userImage: data.data.user.user_profiles.image,
@@ -98,6 +100,7 @@ export default class MyAcceptedJobDetails extends React.Component {
         orderId: data.data.id,
         price: data.data.grandTotal,
         description: data.data.description,
+        isCompleted: data.data.orderStatus === 'completed' ? true : false,
       });
       this.setState({});
 
@@ -385,7 +388,7 @@ export default class MyAcceptedJobDetails extends React.Component {
                 />
               ) : null} */}
 
-              {!this.state.isLoading ? (
+              {!this.state.isLoading && !this.state.isCompleted ? (
                 <ButtonRadius10
                   label={this.state.buttonlabel}
                   bgColor={Colors.sickGreen}
@@ -398,6 +401,17 @@ export default class MyAcceptedJobDetails extends React.Component {
                   }}
                 />
               ) : null}
+
+              {/* {this.state.isCompleted ? (
+                <LightTextCB
+                  style={{
+                    marginBottom: SIZES.fifty * 3,
+                    alignSelf: 'center',
+                    color: Colors.coolGrey,
+                  }}>
+                  *This job has been completed{' '}
+                </LightTextCB>
+              ) : null} */}
             </View>
           </View>
         </ScrollView>

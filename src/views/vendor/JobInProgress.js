@@ -67,14 +67,12 @@ export default class JobInProgress extends React.Component {
         {
           latitude: Number(latitude),
           longitude: Number(longitude),
-          // latitude: 40.7586517327205,
-          // longitude: -73.98583396826172,
           latitudeDelta: 0.0004,
           longitudeDelta: 0.003,
         },
         1200,
       );
-    }, 700);
+    }, 1500);
   };
 
   componentDidMount() {
@@ -97,7 +95,7 @@ export default class JobInProgress extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      console.log(' Schedule Bookings Detail  =====', data.data);
+      console.log(' Schedule Bookings Detail  =====', data.data.orderStatus);
       this.setState(
         {
           userData: data.data,
@@ -313,27 +311,28 @@ export default class JobInProgress extends React.Component {
               </View>
             </View>
 
-            <FlatList
+            {/* <FlatList
               horizontal
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                // console.log('images===', item.images);
                 return <Image source={Images.car1} style={styles.carImage} />;
               }}
               showsHorizontalScrollIndicator={false}
-            />
+            /> */}
 
             <MapView
               ref={(ref) => (this.mapRef = ref)}
               onMapReady={() =>
-                this.onMapLoad(
-                  this.state.initialRegion.latitude,
-                  this.state.initialRegion.longitude,
-                )
+                this.onMapLoad(this.state.latitude, this.state.longitude)
               }
               provider={PROVIDER_GOOGLE}
-              initialRegion={this.state.initialRegion}
+              initialRegion={{
+                latitude: Number(this.state.latitude),
+                longitude: Number(this.state.longitude),
+                latitudeDelta: 0.0004,
+                longitudeDelta: 0.0005,
+              }}
               showsUserLocation={false}
               showsMyLocationButton={false}
               zoomEnabled={false}

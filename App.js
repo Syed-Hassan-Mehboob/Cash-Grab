@@ -1,21 +1,20 @@
-import {Root} from 'native-base';
 import React, {useEffect} from 'react';
-import {Alert} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+import {Root} from 'native-base';
 import Routes from './src/routes/Routes';
 import FireBaseConfig from './src/FireBaseConfig';
-import Geolocation from '@react-native-community/geolocation';
+import InternetConnectionAlert from 'react-native-internet-connection-alert';
 
 const App = () => {
   useEffect(() => {
     FireBaseConfig();
-    // let auth = Geolocation.requestAuthorization(() => {});
   }, []);
 
   return (
-    <Root>
-      <Routes />
-    </Root>
+    <InternetConnectionAlert>
+      <Root>
+        <Routes />
+      </Root>
+    </InternetConnectionAlert>
   );
 };
 export default App;

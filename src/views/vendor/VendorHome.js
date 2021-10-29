@@ -32,6 +32,7 @@ import ListComponent from '../../components/ListComponent';
 import Geolocation from '@react-native-community/geolocation';
 import BoldTextCB from '../../components/BoldTextCB';
 import Modal from 'react-native-modal';
+import {StatusBar} from 'react-native';
 
 export default class VendorHome extends Component {
   openDrawer = () => {
@@ -699,6 +700,7 @@ export default class VendorHome extends Component {
         <ScrollView
           style={STYLES.container}
           showsVerticalScrollIndicator={false}>
+          <StatusBar barStyle="dark-content" />
           <View>
             <View
               style={{

@@ -25,7 +25,7 @@ export default function BookingAcceptance(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetail, setBookingDetail] = useState();
   const [orderId, setOrderId] = useState();
-  console.log('sdsadsadsadasdasasdasda=======>>>>>', props);
+  console.log('sdsadsadsadasdasasdasda=======>>>>>', JSON.stringify(props));
   useEffect(() => {
     const getToken = async () => {
       getBookingDetail();
@@ -43,10 +43,19 @@ export default function BookingAcceptance(props) {
     let token = await AsyncStorage.getItem(Constants.accessToken);
     setIsLoading(true);
     const onSuccess = ({data}) => {
-      // console.log(' Schedule Bookings Detail  =====', data.data.id);
+      console.log(' Schedule Bookings Detail  =====', data.data);
       setOrderId(data.data.id);
       setBookingDetail(data.data);
-      // setscheduleBookings(data.data.records);
+
+      // if (
+      //   data.data.orderStatus !== 'pending' &&
+      //   data.data.orderStatus !== 'cancelled'
+      // ) {
+      //   setIsLoading(false);
+      //   props.navigation.jumpTo(Constants.JobInProgress, {
+      //     orderId: props.route.params.orderId,
+      //   });
+      // }
       setIsLoading(false);
     };
 

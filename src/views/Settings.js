@@ -139,7 +139,7 @@ export default class Settings extends React.Component {
               Notifications
             </RegularTextCB>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               styles.card,
               {
@@ -153,7 +153,7 @@ export default class Settings extends React.Component {
             <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
               Chat
             </RegularTextCB>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     );

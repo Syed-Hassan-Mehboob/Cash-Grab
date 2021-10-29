@@ -21,6 +21,8 @@ import NormalHeader from '../components/NormalHeader';
 import utils from '../utils';
 import Axios from '../network/APIKit';
 import Spinner from 'react-native-loading-spinner-overlay';
+import ButtonRadius10 from '../components/ButtonRadius10';
+import LightTextCB from '../components/LightTextCB';
 
 export default function JobAcceptance(props) {
   const [isLoading, setIsloading] = useState(true);
@@ -47,6 +49,31 @@ export default function JobAcceptance(props) {
       getJobAcceptance(accessToken.token);
       // updateJobs(accessToken.token);
     }
+  };
+
+  const handleServiceCompleteClick = async () => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    setIsloading(true);
+    const formData = new FormData();
+    formData.append('order_id', jobAccept.order.id);
+    formData.append('status', 'completed');
+
+    const onSuccess = ({data}) => {
+      console.log('data service completed=====>>>>', data);
+      getJobAcceptance();
+      setIsloading(false);
+    };
+    const onFailure = (error) => {
+      console.log('error service completed=====>>>>', `Bearer ${token}`);
+      setIsloading(false);
+    };
+    Axios.post(Constants.orderStatus, formData, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   const getJobAcceptance = async () => {
@@ -321,7 +348,7 @@ export default function JobAcceptance(props) {
                   <Image
                     source={{
                       uri:
-                        Constants.imageURL + jobAccept.user.userProfile.image,
+                        Constants.imageURL + jobAccept?.user.userProfile.image,
                     }}
                     style={styles.iconUser}
                     resizeMode="cover"
@@ -547,6 +574,33 @@ export default function JobAcceptance(props) {
               paddingHorizontal: SIZES.fifteen,
             }}
           />
+
+          {jobAccept.order.order_status === 'progress' ? (
+            <View
+              style={{
+                marginVertical: SIZES.ten * 5,
+                marginHorizontal: SIZES.ten,
+              }}>
+              <ButtonRadius10
+                label="SERVICE COMPLETED"
+                bgColor={Colors.sickGreen}
+                onPress={() => {
+                  handleServiceCompleteClick();
+                }}
+              />
+            </View>
+          ) : null}
+
+          {jobAccept.order.order_status === 'completed' ? (
+            <LightTextCB
+              style={{
+                marginBottom: SIZES.fifty * 3,
+                alignSelf: 'center',
+                color: Colors.coolGrey,
+              }}>
+              *This job has been completed{' '}
+            </LightTextCB>
+          ) : null}
         </View>
       )}
     </>

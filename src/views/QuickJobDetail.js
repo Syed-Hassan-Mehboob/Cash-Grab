@@ -75,6 +75,25 @@ export default class QuickJobDetail extends React.Component {
     });
   }
 
+  onMapLoad = (latitude, longitude) => {
+    console.log({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+    });
+
+    setTimeout(() => {
+      this.mapRef.animateToRegion(
+        {
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          latitudeDelta: 0.0004,
+          longitudeDelta: 0.003,
+        },
+        1200,
+      );
+    }, 1500);
+  };
+
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     const messageVisited = await AsyncStorage.getItem(
@@ -462,12 +481,19 @@ export default class QuickJobDetail extends React.Component {
             />
 
             <MapView
+              ref={(ref) => (this.mapRef = ref)}
               provider={PROVIDER_GOOGLE}
+              onMapReady={() => {
+                this.onMapLoad(
+                  this.props.route.params?.orderItem?.lat,
+                  this.props.route.params?.orderItem?.lng,
+                );
+              }}
               initialRegion={{
                 latitude: Number(this.props.route.params?.orderItem?.lat),
                 longitude: Number(this.props.route.params?.orderItem?.lng),
-                latitudeDelta: 0.04864195044303443,
-                longitudeDelta: 0.04014281769006,
+                latitudeDelta: 0.0000000000000003,
+                longitudeDelta: 0.00000006,
               }}
               scrollEnabled={false}
               showsUserLocation={false}
@@ -481,6 +507,17 @@ export default class QuickJobDetail extends React.Component {
                 }}
               />
             </MapView>
+
+            {this.props.route.params.orderItem?.orderStatus === 'completed' ? (
+              <LightTextCB
+                style={{
+                  marginTop: SIZES.five * 1.3,
+                  alignSelf: 'center',
+                  color: Colors.coolGrey,
+                }}>
+                *This job has been completed{' '}
+              </LightTextCB>
+            ) : null}
             <View
               style={{
                 marginVertical: SIZES.ten * 1.8,

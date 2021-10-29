@@ -46,8 +46,6 @@ export default class ViewJob extends React.Component {
       location: '',
       time: '',
       region: this.initialMapState.region,
-      latitude: '',
-      longitude: '',
       description: '',
       jobService: [],
       buttonlabel: '',
@@ -61,6 +59,8 @@ export default class ViewJob extends React.Component {
         latitudeDelta: 1,
         longitudeDelta: 1,
       },
+      latitude: 0.0,
+      longitude: 0.0,
     };
   }
 
@@ -74,10 +74,10 @@ export default class ViewJob extends React.Component {
     setTimeout(() => {
       this.mapRef.animateToRegion(
         {
-          latitude: Number(latitude),
-          longitude: Number(longitude),
-          // latitude: 40.7586517327205,
-          // longitude: -73.98583396826172,
+          // latitude: Number(latitude),
+          // longitude: Number(longitude),
+          latitude: 40.7586517327205,
+          longitude: -73.98583396826172,
           latitudeDelta: 0.0004,
           longitudeDelta: 0.003,
         },
@@ -108,12 +108,6 @@ export default class ViewJob extends React.Component {
   viewJob = () => {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
-      console
-        .log
-        // 'View Job Data ==== ==== ',
-        // JSON.stringify(data.data.records.status),
-        ();
-
       this.setState(
         {
           userImage: data.data.records.user.userProfile.image,
@@ -122,28 +116,45 @@ export default class ViewJob extends React.Component {
           time: data.data.records.time,
           images: data.data.records.images,
           username: data.data.records.user.name,
-          latitude: data.data.records.user.userProfile.latitude,
-          longitude: data.data.records.user.userProfile.longitude,
           price: data.data.records.price,
           description: data.data.records.description,
           jobId: data.data.records.id,
           initialRegion: {
-            latitude: Number(data.data.records.user.userProfile.latitude),
-            longitude: Number(data.data.records.user.userProfile.longitude),
+            latitude: Number(data.data.records.latitude),
+            longitude: Number(data.data.records.longitude),
             latitudeDelta: 0.0004,
-            longitudeDelta: 0.0005,
+            longitudeDelta: 0.05,
           },
-          // buttonlabel:
-          //   data.data.records.status === ''
-          //     ? 'REQUEST FOR ACCEPTANCE'
-          //     : 'PENDING',
         },
         () => {
+          this.setState(
+            {
+              latitude: data.data.records.latitude,
+              longitude: data.data.records.longitude,
+            },
+            () => {
+              console.log(
+                '========================================= >>>>>>>>>>>>>>>>>>>>',
+
+                this.state.latitude,
+                this.state.longitude,
+              );
+            },
+          );
+          setTimeout(() => {
+            this.mapRef.animateToRegion(
+              {
+                latitude: Number(this.state.latitude),
+                longitude: Number(this.state.longitude),
+                latitudeDelta: 0.0004,
+                longitudeDelta: 0.003,
+              },
+              1200,
+            );
+          }, 700);
           this.checkJobRequest();
         },
       );
-
-      // utils.showToast(data.message)
 
       this.setState({isLoading: false});
     };
@@ -206,7 +217,12 @@ export default class ViewJob extends React.Component {
     this.setState({isLoading: true});
     const onSuccess = ({data}) => {
       // this.viewJob();
-      // console.log('Request job Data ========', data);
+      console.log(
+        'Request job Data ========',
+        data,
+        '==========',
+        this.state.jobId,
+      );
       // utils.showToast(data.message);
       this.setState({
         buttonlabel:
@@ -370,7 +386,6 @@ export default class ViewJob extends React.Component {
               data={this.state.images}
               keyExtractor={(item) => item.id}
               renderItem={({item}) => {
-                // console.log('images===', item.images);
                 return (
                   <Image
                     source={{uri: Constants.imageURL + item.images}}
@@ -383,14 +398,17 @@ export default class ViewJob extends React.Component {
 
             <MapView
               ref={(ref) => (this.mapRef = ref)}
-              onMapReady={() =>
-                this.onMapLoad(
-                  this.state.initialRegion.latitude,
-                  this.state.initialRegion.longitude,
-                )
-              }
+              onMapReady={() => {
+                this.onMapLoad(this.state.latitude, this.state.longitude);
+              }}
               provider={PROVIDER_GOOGLE}
-              initialRegion={this.state.initialRegion}
+              initialRegion={{
+                latitude: Number(this.state.latitude),
+                longitude: Number(this.state.longitude),
+                latitudeDelta: 0.0004,
+                longitudeDelta: 0.0005,
+              }}
+              showsBuildings
               showsUserLocation={false}
               showsMyLocationButton={false}
               zoomEnabled={false}
@@ -398,8 +416,8 @@ export default class ViewJob extends React.Component {
               style={styles.mapStyle}>
               <Marker
                 coordinate={{
-                  latitude: Number(this.state.initialRegion.latitude),
-                  longitude: Number(this.state.initialRegion.longitude),
+                  latitude: Number(this.state.latitude),
+                  longitude: Number(this.state.longitude),
                 }}
               />
             </MapView>

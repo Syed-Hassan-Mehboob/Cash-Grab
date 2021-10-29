@@ -12,7 +12,7 @@ import Colors from '../common/Colors';
 import Images from '../common/Images';
 import RegularTextCB from '../components/RegularTextCB';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Constants, { SIZES } from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Axios from '../network/APIKit';
 
 export default class Faq extends Component {
@@ -67,13 +67,14 @@ export default class Faq extends Component {
         activeOpacity={0.8}
         style={[
           styles.card,
-          {padding: SIZES.fifteen-1, borderWidth: item.isExpanded ? 2 : 0},
+          {padding: SIZES.fifteen - 1, borderWidth: item.isExpanded ? 2 : 0},
         ]}
         onPress={() => {
           this.onChangeLayout(item.title);
           this.state.faqs.map((childItem) => {
             childItem.isExpanded = false;
           });
+
           item.isExpanded = true;
         }}>
         <View
@@ -91,7 +92,11 @@ export default class Faq extends Component {
           </RegularTextCB>
           <Image
             source={item.isExpanded ? Images.iconDash : Images.iconArrowDown}
-            style={{height: SIZES.fifteen-1, width: SIZES.fifteen-1, resizeMode: 'contain'}}
+            style={{
+              height: SIZES.fifteen - 1,
+              width: SIZES.fifteen - 1,
+              resizeMode: 'contain',
+            }}
           />
         </View>
         {item.isExpanded && (
@@ -114,11 +119,11 @@ export default class Faq extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            padding: SIZES.fifteen-1,
+            padding: SIZES.fifteen - 1,
             marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
           }}>
           <TouchableOpacity
-            style={{position: 'absolute', left:  SIZES.ten}}
+            style={{position: 'absolute', left: SIZES.ten}}
             onPress={() => {
               this.props.navigation.goBack();
             }}>
@@ -155,16 +160,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   card: {
-    backgroundColor: Colors.white, 
-    borderRadius:  SIZES.ten,
+    backgroundColor: Colors.white,
+    borderRadius: SIZES.ten,
     padding: SIZES.twenty,
-    margin:  SIZES.ten,
+    margin: SIZES.ten,
     borderColor: Colors.sickGreen,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height:SIZES.five},
+    shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 1.0,
-    shadowRadius:  SIZES.ten,
-    elevation:  SIZES.ten,
+    shadowRadius: SIZES.ten,
+    elevation: SIZES.ten,
   },
   spinnerTextStyle: {
     color: '#FFF',

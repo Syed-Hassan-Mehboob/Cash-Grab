@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import {requestUserPermission} from '../FirebaseServices';
+import {CommonActions} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -9,9 +13,6 @@ import {
   ImageBackground,
   Platform,
 } from 'react-native';
-import {CommonActions} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Spinner from 'react-native-loading-spinner-overlay';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
 import Constants, {SIZES} from '../common/Constants';
@@ -21,7 +22,6 @@ import BoldTextCB from '../components/BoldTextCB';
 import RegularTextCB from '../components/RegularTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
-import {requestUserPermission} from '../FirebaseServices';
 
 export default class Login extends Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class Login extends Component {
         Platform.OS === 'android'
           ? 'user99@cashgrab.com'
           : 'user45@cashgrab.com',
-      password: Platform.OS === 'android' ? '12345678' : '123456789',
+      password: Platform.OS === 'android' ? '123456789' : '123456789',
       isSwitchEnabled: false,
       tickIcon: 'cross',
       secureText: true,
@@ -122,7 +122,7 @@ export default class Login extends Component {
       <ImageBackground
         source={Images.loginBgWeb}
         style={[styles.container, {width: '100%'}]}>
-        <KeyboardAvoidingView style={{flex: 1}}>
+        <KeyboardAvoidingView enabled style={{flex: 1}}>
           <View style={{alignItems: 'center'}}>
             <Image
               source={Images.cashGrabLogoNew2}

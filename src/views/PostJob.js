@@ -71,10 +71,15 @@ export default class postJob extends Component {
         keyboardKeyType={'search'}
         fetchDetails={true}
         onPress={(data, details = null) => {
-          // console.log("response===========================================>", details.formatted_address);
+          console.log(
+            'response===========================================>',
+            details.geometry.location.lat,
+          );
           this.setState(
             {
               location: details.formatted_address,
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
             },
             () => {
               setTimeout(() => {
@@ -216,6 +221,8 @@ export default class postJob extends Component {
       location: this.state.location,
       image: this.state.jobImages,
       services: this.state.services,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude,
     };
 
     // console.log('Post data ==== === ==== ',this.state.jobImages)

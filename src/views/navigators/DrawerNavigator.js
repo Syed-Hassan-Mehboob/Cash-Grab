@@ -60,22 +60,50 @@ export default class DrawerNavigator extends React.Component {
   };
 
   componentDidMount() {
-    // this.notificationListener();
-
-    // this.interval = setInterval(() => {
-    //   this.setState({isVisible: true}, () => {
-    //     console.log(
-    //       'after two seconds pop is visible========>>>>>',
-    //       this.state.isVisible,
-    //     );
-    //   });
-    // }, 10000);
     this.getUserType();
   }
 
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
+  getBookingDetail = async (orderId) => {
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    this.toggleIsLoading();
+
+    const onSuccess = ({data}) => {
+      console.log(' Schedule Bookings Detail  =====', data.data);
+
+      if (
+        data.data.orderStatus === 'pending' &&
+        data.data.orderStatus === 'cancelled'
+      ) {
+        this.toggleIsLoading();
+        this.props.navigation.navigate(Constants.BookingAcceptance, {
+          orderId: orderId,
+        });
+      } else {
+        this.toggleIsLoading();
+        this.props.navigation.navigate(Constants.JobInProgress, {
+          orderId: orderId,
+        });
+      }
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+
+      utils.showResponseError(error);
+      console.log('==================Error', error);
+    };
+    let params = {
+      orderId: orderId,
+    };
+    Axios.get(Constants.orderDetail, {
+      params: params,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   getUserType = async () => {
     const user = await AsyncStorage.getItem('user');
@@ -114,6 +142,89 @@ export default class DrawerNavigator extends React.Component {
         'Notification caused app to open from background state:',
         rm,
       );
+
+      // FOR SCHEDULEBOOKING
+      if (this.state.isVendor && rm.data.source === 'Booking') {
+        if (
+          rm.data.trigger_type === 'order' &&
+          rm.data.body === 'your order has completed successfully'
+        ) {
+          this.setState({vendorThankyoumodal: true});
+        } else {
+          this.getBookingDetail(rm.data.trigger_id);
+        }
+      }
+      if (!this.state.isVendor && rm.data.source === 'Booking') {
+        if (
+          rm.data.trigger_type === 'order' ||
+          rm.data.body === 'your order has completed successfully'
+        ) {
+          // this.setState({vendorThankyoumodal: true});
+        } else {
+          this.props.navigation.navigate(Constants.SchechuleJobDetail, {
+            joid: rm.data.trigger_id,
+          });
+        }
+      }
+
+      // FOR POSTED JOB
+      if (!this.state.isVendor && rm.data.source === 'Job') {
+        this.props.navigation.navigate(Constants.JobAcceptance, {
+          jobId: rm.data.job_id,
+        });
+      }
+      if (this.state.isVendor && rm.data.source === 'Job') {
+        if (
+          rm.data.trigger_type === 'order' &&
+          rm.data.body === 'your order has completed successfully'
+        ) {
+          this.setState({vendorThankyoumodal: true});
+        } else {
+          this.props.navigation.navigate(Constants.viewJob, {
+            item: rm.data.job_id,
+          });
+        }
+      }
+
+      // FOR Quick JOB
+      if (rm.data.source === 'Quick Notify') {
+        if (rm.data.trigger_type === 'quick_notify') {
+          this.setState({quickNotifyOrderId: rm.data.trigger_id});
+          this.getQuickOrderRequestData(rm.data.trigger_id);
+        }
+
+        if (rm.data.trigger_type === 'no_vendor_found') {
+          alert('no vendor available in your area');
+        }
+        if (
+          rm.data.trigger_type === 'quick_order_accepted' ||
+          rm.notification.body === 'your quick order has accepted successfully'
+        ) {
+          this.setState({customerJobAcceptedModal: true}, () => {
+            console.log(
+              'ttttttttttttttt========>>>>>>>>',
+              this.state.customerJobAcceptedModal,
+            );
+          });
+        }
+        if (
+          rm.data.trigger_type === 'order_started' ||
+          rm.notification.body === 'your order has started successfully'
+        ) {
+          this.props.navigation.navigate(Constants.confirmPayment, {
+            orderId: rm.data.trigger_id,
+            from: 'notification',
+          });
+        }
+      } else {
+        if (
+          rm.data.trigger_type === 'order_completed' &&
+          rm.data.body === 'your order has completed successfully'
+        ) {
+          this.setState({vendorThankyoumodal: true});
+        }
+      }
+
       if (rm.data.trigger_type === 'message') {
         AsyncStorage.setItem(
           `isMessageForOrderVisited${rm.data.order_id}`,
@@ -124,33 +235,6 @@ export default class DrawerNavigator extends React.Component {
           trigger: 'notification',
           data: rm.data,
         });
-      }
-
-      if (rm.data.trigger_type === 'quick_notify') {
-        this.setState({quickNotifyOrderId: rm.data.trigger_id});
-        this.getQuickOrderRequestData(rm.data.trigger_id);
-      }
-      if (rm.data.trigger_type === 'no_vendor_found') {
-        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
-        // this.getQuickOrderRequestData(rm.data.trigger_id);
-        alert('no vendor available in your area');
-      }
-      if (
-        rm.data.trigger_type === 'quick_order_accepted' ||
-        rm.notification.body === 'your quick order has accepted successfully'
-      ) {
-        this.setState({customerJobAcceptedModal: true}, () => {
-          console.log(
-            'ttttttttttttttt========>>>>>>>>',
-            this.state.customerJobAcceptedModal,
-          );
-        });
-      }
-      if (
-        rm.data.trigger_type === 'order' &&
-        rm.data.body === 'your order has completed successfully'
-      ) {
-        this.setState({vendorThankyoumodal: true});
       }
     });
 
@@ -164,32 +248,35 @@ export default class DrawerNavigator extends React.Component {
         );
       }
 
-      if (rm.data.trigger_type === 'quick_notify') {
-        this.setState({quickNotifyOrderId: rm.data.trigger_id});
-        this.getQuickOrderRequestData(rm.data.trigger_id);
-      }
-      if (rm.data.trigger_type === 'no_vendor_found') {
-        // this.setState({quickNotifyOrderId: rm.data.trigger_id});
-        // this.getQuickOrderRequestData(rm.data.trigger_id);
-        alert('no vendor available in your area');
-      }
-      if (
-        rm.data.trigger_type === 'quick_order_accepted' ||
-        rm.notification.body === 'your quick order has accepted successfully'
-      ) {
-        this.setState({customerJobAcceptedModal: true}, () => {
-          console.log(
-            'ttttttttttttttt========>>>>>>>>',
-            this.state.customerJobAcceptedModal,
-          );
-        });
-      }
-      if (
-        rm.data.trigger_type === 'order' &&
-        rm.data.body === 'your order has completed successfully'
-      ) {
-        this.setState({vendorThankyoumodal: true});
-      }
+      // if (rm.data.trigger_type === 'quick_notify') {
+      //   this.setState({quickNotifyOrderId: rm.data.trigger_id});
+      //   this.getQuickOrderRequestData(rm.data.trigger_id);
+      // }
+
+      // if (rm.data.trigger_type === 'no_vendor_found') {
+      //   // this.setState({quickNotifyOrderId: rm.data.trigger_id});
+      //   // this.getQuickOrderRequestData(rm.data.trigger_id);
+      //   alert('no vendor available in your area');
+      // }
+
+      // if (
+      //   rm.data.trigger_type === 'quick_order_accepted' ||
+      //   rm.notification.body === 'your quick order has accepted successfully'
+      // ) {
+      //   this.setState({customerJobAcceptedModal: true}, () => {
+      //     console.log(
+      //       'ttttttttttttttt========>>>>>>>>',
+      //       this.state.customerJobAcceptedModal,
+      //     );
+      //   });
+      // }
+
+      // if (
+      //   rm.data.trigger_type === 'order' &&
+      //   rm.data.body === 'your order has completed successfully'
+      // ) {
+      //   this.setState({vendorThankyoumodal: true});
+      // }
     });
 
     // Check foreGround

@@ -273,7 +273,7 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    if (Number(hrFrom) < 1 || Number(hrFrom) > 23) {
+    if (Number(hrFrom) < 1 || Number(hrFrom) > 24) {
       utils.showToast('From Hour should be in between 1 and 23');
       return;
     }
@@ -283,8 +283,8 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    if (Number(minFrom) < 1 || Number(minFrom) > 59) {
-      utils.showToast('From Minute should be in between 1 and 59');
+    if (Number(minFrom) < 0 || Number(minFrom) > 59) {
+      utils.showToast('From Minute should be in between 00 and 59');
       return;
     }
 
@@ -293,7 +293,7 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    if (Number(hrTo) < 1 || Number(hrTo) > 23) {
+    if (Number(hrTo) < 1 || Number(hrTo) > 24) {
       utils.showToast('To Hour should be in between 1 and 23');
       return;
     }
@@ -302,8 +302,8 @@ export default class DateTimeSlots extends Component {
       utils.showToast('To Minutes should not be empty');
       return;
     }
-    if (Number(minTo) < 1 || Number(minTo) > 59) {
-      utils.showToast('To Minute should be in between 1 and 59');
+    if (Number(minTo) < 0 || Number(minTo) > 59) {
+      utils.showToast('To Minute should be in between 00 and 59');
       return;
     }
 
@@ -531,7 +531,7 @@ export default class DateTimeSlots extends Component {
               }}
             />
           </View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               width: '100%',
@@ -566,7 +566,7 @@ export default class DateTimeSlots extends Component {
                 }}
               />
             </View>
-          </View>
+          </View> */}
           <Text
             style={[
               FONTS.mediumFont16,

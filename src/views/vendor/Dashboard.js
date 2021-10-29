@@ -152,15 +152,17 @@ export default class Dashboard extends Component {
   };
 
   rendercompletedJobsItem = ({item}) => {
+    console.log(item);
     return (
       <TouchableOpacity
+        activeOpacity={0.7}
         style={[
           styles.card,
           {
-            padding: SIZES.fifteen,
+            padding: SIZES.twenty,
             marginHorizontal: SIZES.five * 2.3,
             marginBottom: SIZES.twenty,
-            marginTop: SIZES.five,
+            marginTop: SIZES.ten,
           },
         ]}
         onPress={() => {
@@ -224,9 +226,11 @@ export default class Dashboard extends Component {
             justifyContent: 'space-between',
           }}>
           <RegularTextCB
+            numberOfLines={1}
             style={{
               color: Colors.black,
               fontSize: 16,
+              maxWidth: width * 0.4,
             }}>
             {item.description !== null ? item.description : 'N/A'}
           </RegularTextCB>
@@ -235,7 +239,7 @@ export default class Dashboard extends Component {
               color: Colors.black,
               fontSize: 14,
             }}>
-            ${item.price}
+            ${item.grandTotal}
           </RegularTextCB>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

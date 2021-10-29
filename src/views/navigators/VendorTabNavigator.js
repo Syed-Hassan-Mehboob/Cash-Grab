@@ -57,6 +57,7 @@ import MyAcceptedJobs from '../vendor/MyAcceptedJobs';
 import MyAcceptedJobDetails from '../vendor/MyAcceptedJobDetails';
 import ViewQuickJob from '../vendor/ViewQuickJob';
 // import EditText from '../components/EditText';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
@@ -142,7 +143,7 @@ const HomeNavigator = () => {
         component={VenderNotifications}
       />
       <HomeStack.Screen name={Constants.settings} component={Settings} />
-      <HomeStack.Screen name={Constants.chatListing} component={ChatListing} />
+      {/* <HomeStack.Screen name={Constants.chatListing} component={ChatListing} /> */}
       {/* <HomeStack.Screen name={Constants.chat} component={Chat} /> */}
       <HomeStack.Screen
         name={Constants.bookingConfirmed}
@@ -222,10 +223,10 @@ const SettingsNavigator = () => {
         name={Constants.notifications}
         component={VenderNotifications}
       />
-      <SettingsStack.Screen
+      {/* <SettingsStack.Screen
         name={Constants.chatListing}
         component={ChatListing}
-      />
+      /> */}
       <SettingsStack.Screen name={Constants.chat} component={Chat} />
     </SettingsStack.Navigator>
   );
@@ -362,172 +363,7 @@ const styles = StyleSheet.create({
 });
 
 const VendorTabNavigator = () => {
-  // const [isVendor, setIsVendor] = useState(true);
-  // const [gotUser, setGotUser] = useState(false);
-  // const [isVisible, setIsVisible] = useState(true);
-
-  // useEffect(() => {
-  //   // const user = AsyncStorage.getItem('user');
-  //   // var userData = JSON.parse(user);
-  //   // if (userData.type === 'vendor') {
-  //   //   setIsVendor(true);
-  //   // }
-  //   console.log('=====', user);
-  // }, []);
-
-  return (
-    // <View style={{flex: 1}}>
-    //   {isVendor ? (
-    //     <View>
-    //       <Modal isVisible={isVisible} style={styles.modal}>
-    //         <View
-    //           style={{
-    //             backgroundColor: Colors.white,
-    //             paddingHorizontal: SIZES.fifteen,
-    //             borderTopRightRadius: SIZES.fifteen,
-    //             borderTopLeftRadius: SIZES.fifteen,
-    //             paddingVertical: SIZES.ten,
-    //             paddingBottom: SIZES.twenty * 1.5,
-    //           }}>
-    //           <Text
-    //             style={[
-    //               FONTS.boldFont18,
-    //               {color: Colors.sickGreen, marginVertical: SIZES.ten},
-    //             ]}>
-    //             Do you wish to accept this order?
-    //           </Text>
-    //           <View>
-    //             <View style={{marginVertical: SIZES.five}}>
-    //               <Text
-    //                 style={[
-    //                   FONTS.mediumFont14,
-    //                   {color: Colors.black, marginVertical: SIZES.five},
-    //                 ]}>
-    //                 Service
-    //               </Text>
-    //               <View
-    //                 style={[
-    //                   STYLES.card,
-    //                   {borderWidth: 1, borderColor: Colors.sickGreen},
-    //                 ]}>
-    //                 <Text style={FONTS.mediumFont16}>Service</Text>
-    //               </View>
-    //             </View>
-    //             <View style={{marginVertical: SIZES.five}}>
-    //               <Text
-    //                 style={[
-    //                   FONTS.mediumFont14,
-    //                   {color: Colors.black, marginVertical: SIZES.five},
-    //                 ]}>
-    //                 $Price
-    //               </Text>
-    //               <View
-    //                 style={[
-    //                   STYLES.card,
-    //                   {borderWidth: 1, borderColor: Colors.sickGreen},
-    //                 ]}>
-    //                 <Text style={FONTS.mediumFont16}>$100.00</Text>
-    //               </View>
-    //             </View>
-    //             <View style={{marginVertical: SIZES.five}}>
-    //               <Text
-    //                 style={[
-    //                   FONTS.mediumFont14,
-    //                   {color: Colors.black, marginVertical: SIZES.five},
-    //                 ]}>
-    //                 Location
-    //               </Text>
-    //               <View
-    //                 style={[
-    //                   STYLES.card,
-    //                   {borderWidth: 1, borderColor: Colors.sickGreen},
-    //                 ]}>
-    //                 <Text style={FONTS.mediumFont16}>New York, USA</Text>
-    //               </View>
-    //             </View>
-    //             <View style={{marginVertical: SIZES.five}}>
-    //               <Text
-    //                 style={[
-    //                   FONTS.mediumFont14,
-    //                   {color: Colors.black, marginVertical: SIZES.five},
-    //                 ]}>
-    //                 Address
-    //               </Text>
-    //               <View
-    //                 style={[
-    //                   STYLES.card,
-    //                   {borderWidth: 1, borderColor: Colors.sickGreen},
-    //                 ]}>
-    //                 <Text style={FONTS.mediumFont16}>
-    //                   111,NYC Street, NY 1121
-    //                 </Text>
-    //               </View>
-    //             </View>
-    //             <View style={{marginVertical: SIZES.five}}>
-    //               <Text
-    //                 style={[
-    //                   FONTS.mediumFont14,
-    //                   {color: Colors.black, marginVertical: SIZES.five},
-    //                 ]}>
-    //                 Exact Time
-    //               </Text>
-    //               <View
-    //                 style={[
-    //                   STYLES.card,
-    //                   {borderWidth: 1, borderColor: Colors.sickGreen},
-    //                 ]}>
-    //                 <Text style={FONTS.mediumFont16}>12:00 PM</Text>
-    //               </View>
-    //             </View>
-    //           </View>
-
-    //           <View
-    //             style={{
-    //               flexDirection: 'row',
-    //               justifyContent: 'space-between',
-    //               alignItems: 'center',
-    //               marginVertical: SIZES.ten * 1.5,
-    //             }}>
-    //             <TouchableOpacity
-    //               activeOpacity={0.7}
-    //               onPress={() => {
-    //                 setIsVisible(false);
-    //               }}
-    //               style={{
-    //                 padding: SIZES.fifteen,
-    //                 backgroundColor: Colors.sickGreen,
-    //                 paddingHorizontal: SIZES.twentyFive * 1.5,
-    //                 borderRadius: SIZES.ten,
-    //                 width: width / 2.5,
-    //                 alignItems: 'center',
-    //               }}>
-    //               <Text style={FONTS.mediumFont18}>Accept</Text>
-    //             </TouchableOpacity>
-    //             <TouchableOpacity
-    //               activeOpacity={0.7}
-    //               onPress={() => {
-    //                 setIsVisible(false);
-    //               }}
-    //               style={{
-    //                 padding: SIZES.fifteen,
-    //                 backgroundColor: Colors.coolGrey,
-    //                 paddingHorizontal: SIZES.twentyFive * 1.5,
-    //                 borderRadius: SIZES.ten,
-    //                 width: width / 2.5,
-    //                 alignItems: 'center',
-    //               }}>
-    //               <Text style={[FONTS.mediumFont18, {color: Colors.white}]}>
-    //                 Decline
-    //               </Text>
-    //             </TouchableOpacity>
-    //           </View>
-    //         </View>
-    //       </Modal>
-    //     </View>
-    //   ) : null}
-    <Tabs />
-    // </View>
-  );
+  return <Tabs />;
 };
 
 export default VendorTabNavigator;

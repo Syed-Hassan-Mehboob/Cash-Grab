@@ -90,12 +90,12 @@ export default class ViewQuickJob extends React.Component {
         {
           latitude: Number(latitude),
           longitude: Number(longitude),
-          latitudeDelta: 0.0000000004,
-          longitudeDelta: 0.0000000003,
+          latitudeDelta: 0.00064,
+          longitudeDelta: 0.0005,
         },
         1200,
       );
-    }, 700);
+    }, 1500);
   };
 
   getUserAccessToken = async () => {

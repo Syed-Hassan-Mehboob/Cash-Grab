@@ -24,6 +24,8 @@ import NormalHeader from '../components/NormalHeader';
 export default function Search(props) {
   const [allVender, setAllVender] = useState(null);
   const [isLoading, setIsloading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
   const renderBestEmployeesItem = ({item}) => {
     // console.log("sdsadsadsadsa==============",item)
 
@@ -134,10 +136,6 @@ export default function Search(props) {
     );
   };
 
-  // console.log('All Venders======',allVender.data.records.name);
-
-  const [searchText, setSearchText] = useState('');
-
   const getData = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     // console.log('=======',token);
@@ -180,6 +178,8 @@ export default function Search(props) {
           keyboardType="default"
           returnKeyType="search"
           placeholder={'Search Here'}
+          placeholderTextColor={Colors.coolGrey}
+          selectionColor={Colors.sickGreen}
           value={searchText}
           onChange={(txt) => {
             setSearchText(txt);

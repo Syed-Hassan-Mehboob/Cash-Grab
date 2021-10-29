@@ -31,7 +31,6 @@ export default function WriteReviews() {
     <ScrollView
       style={[STYLES.container]}
       contentContainerStyle={{
-        // paddingHorizontal: SIZES.twenty,
         paddingBottom: SIZES.twenty,
       }}
       showsVerticalScrollIndicator={false}>

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import React, {Component} from 'react';
 import {Text} from 'react-native';
+import {StatusBar} from 'react-native';
 import {
   View,
   StyleSheet,
@@ -29,8 +30,78 @@ export default class VenderNotifications extends Component {
   }
 
   componentDidMount() {
+    this.getUserAccessToken();
     this.props.navigation.addListener('focus', () => this.getUserAccessToken());
   }
+
+  getUserAccessToken = async () => {
+    const token = await AsyncStorage.getItem(Constants.accessToken);
+    this.setState({accessToken: token}, () => this.getNotifications());
+  };
+
+  getBookingDetail = async (orderId) => {
+    // alert('booking');
+    let token = await AsyncStorage.getItem(Constants.accessToken);
+    this.toggleIsLoading();
+
+    const onSuccess = ({data}) => {
+      console.log(' Schedule Bookings Detail  =====', data.data);
+
+      if (
+        data.data.orderStatus === 'pending' ||
+        data.data.orderStatus === 'cancelled'
+      ) {
+        this.toggleIsLoading();
+        this.props.navigation.navigate(Constants.BookingAcceptance, {
+          orderId: orderId,
+        });
+      } else {
+        this.toggleIsLoading();
+        this.props.navigation.navigate(Constants.JobInProgress, {
+          orderId: orderId,
+        });
+      }
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+
+      utils.showResponseError(error);
+      console.log('==================Error', error);
+    };
+    let params = {
+      orderId: orderId,
+    };
+    Axios.get(Constants.orderDetail, {
+      params: params,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getNotifications = () => {
+    const onSuccess = ({data}) => {
+      this.toggleIsLoading();
+      this.setState({notifications: data.data});
+    };
+
+    const onFailure = (error) => {
+      this.toggleIsLoading();
+      utils.showResponseError(error);
+    };
+
+    this.toggleIsLoading();
+    Axios.get(Constants.notificationsURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
+  };
 
   getQuickJobDetails = (id) => {
     const onSuccess = ({data}) => {
@@ -71,84 +142,7 @@ export default class VenderNotifications extends Component {
     );
   };
 
-  // // METHOD for build
-  // renderNotificationsItem = ({item}) => {
-  //   // console.log(
-  //   //   'Item  ===============>',
-  //   //   item.notifications.map((item) => {
-  //   //     console.log(item.content);
-  //   //   }),
-  //   // );
-  //   return (
-  //     <View style={{marginHorizontal: SIZES.fifteen}}>
-  //       <RegularTextCB style={{color: Colors.black, fontSize: 18}}>
-  //         {item.date}
-  //       </RegularTextCB>
-
-  //       {item.notifications.map((notification) => {
-  //         return (
-  //           <View
-  //             key={notification.id}
-  //             style={[
-  //               styles.card,
-  //               {
-  //                 marginVertical: SIZES.ten,
-  //                 borderWidth: item.date === 'Latest' ? 1 : 0,
-  //               },
-  //             ]}>
-  //             <TouchableOpacity
-  //               activeOpacity={0.5}
-  //               style={styles.itemContainer}
-  //               onPress={() => {}}>
-  //               <View
-  //                 style={{
-  //                   flexDirection: 'row',
-  //                   alignItems: 'center',
-  //                 }}>
-  //                 <View style={styles.circleCard}>
-  //                   <Image
-  //                     source={{uri: Constants.imageURL + notification.image}}
-  //                     style={styles.iconUser}
-  //                     resizeMode="cover"
-  //                   />
-  //                 </View>
-  //                 <View
-  //                   style={{
-  //                     marginStart: SIZES.ten,
-  //                     flex: 1,
-  //                     flexShrink: 1,
-  //                   }}>
-  //                   <View
-  //                     style={{
-  //                       flexDirection: 'row',
-  //                       justifyContent: 'space-between',
-  //                     }}>
-  //                     <RegularTextCB
-  //                       style={{fontSize: 16, color: Colors.black}}>
-  //                       {notification.title}
-  //                     </RegularTextCB>
-  //                     <RegularTextCB>{item.time}</RegularTextCB>
-  //                   </View>
-  //                   <RegularTextCB
-  //                     numberOfLines={1}
-  //                     style={{
-  //                       fontSize: 14,
-  //                       color: Colors.coolGrey,
-  //                       marginTop: SIZES.five,
-  //                     }}>
-  //                     {notification.content}
-  //                   </RegularTextCB>
-  //                 </View>
-  //               </View>
-  //             </TouchableOpacity>
-  //           </View>
-  //         );
-  //       })}
-  //     </View>
-  //   );
-  // };
-
-  // VALID METHOD
+  // VALID render notification METHOD
 
   renderNotificationsItem = ({item}) => {
     // console.log('Notification Item ==== =====', item);
@@ -175,37 +169,37 @@ export default class VenderNotifications extends Component {
                 activeOpacity={0.5}
                 style={styles.itemContainer}
                 onPress={() => {
+                  console.log('=========>>>>>>>>', notification);
                   // For posted job
                   if (
-                    notification.trigger_type === 'job_request_sent' ||
-                    notification.trigger_type === 'order_accepted' ||
-                    notification.trigger_type === 'order_accepted' ||
-                    notification.trigger_type === 'order_started' ||
-                    notification.trigger_type === 'order_completed' ||
-                    notification.trigger_type === 'order_cancelled'
+                    notification.message ===
+                    'your job request successfully accepted'
                   ) {
-                    // this.props.navigation.navigate(Constants.confirmPayment, {
-                    //   orderId: notification.trigger_id,
-                    //   from: 'notification',
-                    // });
+                    this.props.navigation.navigate(
+                      Constants.MyAcceptedJobDetails,
+                      {
+                        orderId: notification.trigger_id,
+                      },
+                    );
+                  } else {
+                    if (notification.source === 'Booking') {
+                      this.getBookingDetail(notification.trigger_id);
+                    }
 
-                    // this.props.navigation.navigate(Constants.JobInProgress, {
-                    //   orderId: item.id,
-                    // });
-                    alert('posted job notification or scheduled');
-                  }
-                  if (
-                    notification.trigger_type === 'quick_notify' ||
-                    notification.trigger_type === 'quick_order_accepted'
-                  ) {
-                    //For quick job
+                    if (
+                      notification.trigger_type === 'quick_notify' ||
+                      notification.trigger_type === 'quick_order_accepted'
+                    ) {
+                      //For quick job
 
-                    // this.props.navigation.navigate(Constants.confirmPayment, {
-                    //   orderId: notification.trigger_id,
-                    //   from: 'notification',
-                    // });
-                    this.getQuickJobDetails(notification.trigger_id);
-                    // alert('quick job notification');
+                      this.getQuickJobDetails(notification.trigger_id);
+                      // alert('quick job notification');
+                    } else {
+                      // this.props.navigation.navigate(Constants.viewJob, {
+                      //   item: notification.job_id,
+                      // });
+                    }
+                    // alert('posteb job notification');
                   }
 
                   // this.props.navigation.navigate(Constants.SchechuleJobDetail, {
@@ -291,36 +285,11 @@ export default class VenderNotifications extends Component {
     this.setState({isLoading: !this.state.isLoading});
   };
 
-  getUserAccessToken = async () => {
-    const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => this.getNotifications());
-  };
-
-  getNotifications = () => {
-    const onSuccess = ({data}) => {
-      this.toggleIsLoading();
-      this.setState({notifications: data.data});
-    };
-
-    const onFailure = (error) => {
-      this.toggleIsLoading();
-      utils.showResponseError(error);
-    };
-
-    this.toggleIsLoading();
-    Axios.get(Constants.notificationsURL, {
-      headers: {
-        Authorization: this.state.accessToken,
-      },
-    })
-      .then(onSuccess)
-      .catch(onFailure);
-  };
-
   render() {
     // console.log('Notifications======',this.state.notifications)
     return (
       <View style={[STYLES.container]}>
+        <StatusBar barStyle="dark-content" />
         <View
           style={{
             flexDirection: 'row',
@@ -364,7 +333,7 @@ export default class VenderNotifications extends Component {
           }}
           ListEmptyComponent={() => (
             <Text style={[FONTS.boldFont18, {flex: 1, alignSelf: 'center'}]}>
-              No Notification(s)!
+              {!this.state.isLoading && 'No Notification(s)!'}
             </Text>
           )}
         />

@@ -73,6 +73,7 @@ const Nearby = (props) => {
       );
     }, 500);
   };
+
   const getLocation = async () => {
     Geolocation.getCurrentPosition(
       (position) => {

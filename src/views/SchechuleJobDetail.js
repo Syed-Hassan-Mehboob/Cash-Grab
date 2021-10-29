@@ -60,7 +60,10 @@ export default function ScheduleJobDetails(props) {
     setIsloading(true);
 
     const onSuccess = ({data}) => {
-      // console.log('Order Job Data  ====>>>>>>>>>> ', data.data.orderStatus);
+      console.log(
+        'customer Order Job Data  ====>>>>>>>>>> ',
+        data.data.orderStatus,
+      );
       setOrderStatus(data.data.orderStatus);
       setOrderId(data.data.id);
       setAllScheduleJobDetail(data.data);
@@ -270,6 +273,7 @@ export default function ScheduleJobDetails(props) {
       .then(onSuccess)
       .catch(onFailure);
   };
+
   return (
     <ScrollView
       style={styles.container}
@@ -551,6 +555,17 @@ export default function ScheduleJobDetails(props) {
             }}
           />
         </View>
+      ) : null}
+
+      {orderStatus === 'completed' ? (
+        <LightTextCB
+          style={{
+            marginVertical: SIZES.fifty,
+            alignSelf: 'center',
+            color: Colors.coolGrey,
+          }}>
+          *This job has been completed{' '}
+        </LightTextCB>
       ) : null}
 
       <Modal
