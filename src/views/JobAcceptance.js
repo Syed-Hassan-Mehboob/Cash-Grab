@@ -179,7 +179,7 @@ export default function JobAcceptance(props) {
                   alignItems: 'center',
                 }}>
                 <View>
-                  <Image
+                  {/* <Image
                     source={Images.emp2}
                     style={{
                       height: 50,
@@ -188,7 +188,7 @@ export default function JobAcceptance(props) {
                       resizeMode: 'contain',
                     }}
                     resizeMode="cover"
-                  />
+                  /> */}
                 </View>
                 <View style={{marginStart: 10}}>
                   <BoldTextCB style={{color: Colors.black, fontSize: 16}}>

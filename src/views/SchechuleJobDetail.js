@@ -97,7 +97,7 @@ export default function ScheduleJobDetails(props) {
 
     const onSuccess = ({data}) => {
       // console.log('>>>>>>>> ', data);
-
+      this.getScheduleJob();
       setIsloading(false);
     };
 
@@ -259,6 +259,7 @@ export default function ScheduleJobDetails(props) {
 
     const onSuccess = ({data}) => {
       console.log('data service completed=====>>>>', data);
+      this.getScheduleJob();
       setIsloading(false);
     };
     const onFailure = (error) => {

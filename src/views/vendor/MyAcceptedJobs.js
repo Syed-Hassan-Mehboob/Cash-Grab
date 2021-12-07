@@ -62,7 +62,7 @@ export default function MyAcceptedJobs(props) {
 
   const renderMyAcceptedJob = ({item}) => {
     console.log('======================== >>>>>>>> =============== ', {
-      orderId: item.id,
+      orderId: item,
     });
     return (
       <TouchableOpacity

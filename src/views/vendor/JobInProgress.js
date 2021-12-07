@@ -95,7 +95,7 @@ export default class JobInProgress extends React.Component {
       isLoading: true,
     });
     const onSuccess = ({data}) => {
-      console.log(' Schedule Bookings Detail  =====', data.data.orderStatus);
+      console.log(' Schedule Bookings Detail  =====', data.data.lng);
       this.setState(
         {
           userData: data.data,
