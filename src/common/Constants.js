@@ -266,7 +266,7 @@ export const STYLES = StyleSheet.create({
     paddingTop:
       Platform.OS === 'android'
         ? SIZES.ten
-        : getStatusBarHeight(true) + SIZES.five,
+        : getStatusBarHeight() *1.15,
     backgroundColor: COLORS.white,
   },
   shadow: {

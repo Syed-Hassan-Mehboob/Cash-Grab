@@ -22,7 +22,7 @@ export default function AddProfileServices(props) {
   console.log(props.route.params.categoryName);
 
   const [service, setService] = useState('');
-  const [servicePrice, setServicePrice] = useState('');
+  const [servicePrice, setServicePrice] = useState(0);
   const [accessToken, setAccessToken] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -105,7 +105,7 @@ export default function AddProfileServices(props) {
             />
           </View>
 
-          <View style={{marginTop: SIZES.five, marginBottom: SIZES.fifteen}}>
+          {/* <View style={{marginTop: SIZES.five, marginBottom: SIZES.fifteen}}>
             <Text style={[FONTS.mediumFont16, {marginTop: SIZES.ten}]}>
               Price
             </Text>
@@ -122,7 +122,7 @@ export default function AddProfileServices(props) {
                 setServicePrice(text);
               }}
             />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
 

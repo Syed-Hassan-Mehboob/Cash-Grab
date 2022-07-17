@@ -12,6 +12,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import moment from "moment"
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
 import Constants, {FONTS, SIZES, width} from '../common/Constants';
@@ -33,7 +34,7 @@ export default function ScheduleJobDetails(props) {
   const [scheduleJobdetail, setAllScheduleJobDetail] = useState();
   const [isLoading, setIsloading] = useState(false);
   const [RescheduleJobModal, setRescheduleJobModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
   const [hrfrom, sethrfrom] = useState();
   const [minfrom, setminfrom] = useState();
   const [hrto, sethrto] = useState();
@@ -680,7 +681,7 @@ export default function ScheduleJobDetails(props) {
             onDayPress={onDayPress}
             markingType={'custom'}
             markedDates={{
-              [selectedDate]: {
+              [moment(selectedDate).format("YYYY-MM-DD")]: {
                 customStyles: {
                   container: styles.selectedDateBG,
                   text: {
@@ -697,6 +698,7 @@ export default function ScheduleJobDetails(props) {
               textDayHeaderFontFamily: Constants.fontRegular,
               color: Colors.black,
               dayTextColor: Colors.navy,
+              todayTextColor: 'yellow',
               monthTextColor: Colors.navy,
             }}
           />

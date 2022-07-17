@@ -98,96 +98,117 @@ export default class SignUp extends Component {
   };
 
   sendDataToVerifyVia = () => {
-    this.props.navigation.navigate(Constants.verifyVia);
+    // this.props.navigation.navigate(Constants.verifyVia);
 
-    // let name = this.state.fullName;
-    // let services = this.state.services;
-    // let country_code = this.state.countryCode;
-    // let country_flag = this.state.countryFlag;
-    // let phone = this.state.phone;
-    // let email = this.state.email;
-    // let password = this.state.password;
-    // let password_confirmation = this.state.confirmPassword;
+    let name = this.state.firstName+" "+this.state.lastName;
+    let services = this.state.services;
+    let country_code = this.state.countryCode;
+    let country_flag = this.state.countryFlag;
+    let phone = this.state.phone;
+    let email = this.state.email;
+    let password = this.state.password;
+    let password_confirmation = this.state.confirmPassword;
 
-    // if (name === '' || name === undefined) {
-    //   utils.showToast('Invalid Name');
-    //   return;
-    // }
+    if (this.state.firstName === '' || this.state.firstName === undefined) {
+      utils.showToast('Invalid First Name');
+      return;
+    }
 
-    // if (name.length < 3) {
-    //   utils.showToast('Name Should Not Be Less Than 3 Characters');
-    //   return;
-    // }
+    if (this.state.firstName.length < 3) {
+      utils.showToast('First Name Should Not Be Less Than 3 Characters');
+      return;
+    }
 
-    // if (name.length > 55) {
-    //   utils.showToast('Name Should Not Be Greater Than 55 Characters');
-    //   return;
-    // }
+    if (this.state.firstName.length > 15) {
+      utils.showToast('First Name Should Not Be Greater Than 15 Characters');
+      return;
+    }
 
-    // if (!utils.validateEmail(email)) {
-    //   utils.showToast('Invalid Email');
-    //   return;
-    // }
 
-    // if (this.state.isVendor && services.length === 0) {
-    //   utils.showToast('Please Select Any Service');
-    //   return;
-    // }
 
-    // if (utils.isEmpty(phone)) {
-    //   utils.showToast('Invalid Phone Number');
-    //   return;
-    // }
 
-    // if (phone.length < 9) {
-    //   utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
-    //   return;
-    // }
 
-    // if (phone.length > 14) {
-    //   utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
-    //   return;
-    // }
 
-    // if (utils.isEmpty(password)) {
-    //   utils.showToast('Invalid Password');
-    //   return;
-    // }
 
-    // if (password.length < 8) {
-    //   utils.showToast('Password Should Not Be Less Than 8 Digits');
-    //   return;
-    // }
+    if (this.state.lastName === '' || this.state.lastName === undefined) {
+      utils.showToast('Invalid Last Name');
+      return;
+    }
 
-    // if (password_confirmation !== password) {
-    //   utils.showToast('Passwords Did Not Match');
-    //   return;
-    // }
+    if (this.state.lastName.length < 3) {
+      utils.showToast('Last Name Should Not Be Less Than 3 Characters');
+      return;
+    }
 
-    // const payload = this.state.isVendor
-    //   ? {
-    //     name,
-    //     services,
-    //     email,
-    //     password,
-    //     password_confirmation,
-    //     type: 'vendor',
-    //     country_code,
-    //     country_flag,
-    //     phone,
-    //   }
-    //   : {
-    //     name,
-    //     email,
-    //     password,
-    //     password_confirmation,
-    //     type: 'customer',
-    //     country_code,
-    //     country_flag,
-    //     phone,
-    //   };
+    if (this.state.lastName.length > 15) {
+      utils.showToast('Last Name Should Not Be Greater Than 15 Characters');
+      return;
+    }
 
-    // this.props.navigation.navigate(Constants.verifyVia, { payload });
+    if (!utils.validateEmail(email)) {
+      utils.showToast('Invalid Email');
+      return;
+    }
+
+    if (this.state.isVendor && services.length === 0) {
+      utils.showToast('Please Select Any Service');
+      return;
+    }
+
+    if (utils.isEmpty(phone)) {
+      utils.showToast('Invalid Phone Number');
+      return;
+    }
+
+    if (phone.length < 9) {
+      utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+      return;
+    }
+
+    if (phone.length > 14) {
+      utils.showToast('Phone Number Should Not Be Greater Than 14 Characters');
+      return;
+    }
+
+    if (utils.isEmpty(password)) {
+      utils.showToast('Invalid Password');
+      return;
+    }
+
+    if (password.length < 8) {
+      utils.showToast('Password Should Not Be Less Than 8 Digits');
+      return;
+    }
+
+    if (password_confirmation !== password) {
+      utils.showToast('Passwords Did Not Match');
+      return;
+    }
+
+    const payload = this.state.isVendor
+      ? {
+        name,
+        services,
+        email,
+        password,
+        password_confirmation,
+        type: 'vendor',
+        country_code,
+        country_flag,
+        phone,
+      }
+      : {
+        name,
+        email,
+        password,
+        password_confirmation,
+        type: 'customer',
+        country_code,
+        country_flag,
+        phone,
+      };
+
+    this.props.navigation.navigate(Constants.verifyVia, { payload });
   };
 
   render() {

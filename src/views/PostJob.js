@@ -9,6 +9,7 @@ import {
   View,
   Dimensions,
 } from 'react-native';
+import moment from "moment"
 import Modal from 'react-native-modal';
 import Colors from '../common/Colors';
 import Constants, {SIZES, STYLES} from '../common/Constants';
@@ -48,7 +49,7 @@ export default class postJob extends Component {
     accessToken: '',
     showImages: false,
     isLoading: false,
-    expirydate: '',
+    expirydate: new Date().toDateString(),
     selections: [],
     latitude: '',
     longitude: '',
@@ -350,7 +351,7 @@ export default class postJob extends Component {
               )
             }
             markedDates={{
-              [this.state.expirydate]: {
+              [moment(this.state.expirydate).format("YYYY-MM-DD")]: {
                 customStyles: {
                   container: styles.selectedDateBG,
                   text: {
@@ -366,6 +367,7 @@ export default class postJob extends Component {
               textDayHeaderFontFamily: Constants.fontRegular,
               dayTextColor: Colors.navy,
               monthTextColor: Colors.navy,
+              todayTextColor: 'yellow',
             }}
             style={{width: width / 1.15, height: height / 2}}
           />
@@ -450,9 +452,14 @@ export default class postJob extends Component {
             </View>
 
             <View style={[{marginTop: SIZES.twenty}]}>
+              <View style={{flexDirection:'row',alignItems:'center'}}> 
               <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
                 Rate Requested
               </RegularTextCB>
+              <RegularTextCB style={{fontSize: 10, color: Colors.coolGrey,marginStart:SIZES.five}}>
+                (for complete job)
+              </RegularTextCB>
+              </View>
               <EditText
                 ref={'rate'}
                 placeholder={'Enter Rate'}

@@ -12,6 +12,7 @@ import {
   Platform,
   Text,
 } from 'react-native';
+import moment from "moment"
 import {Calendar} from 'react-native-calendars';
 import Slider from '@react-native-community/slider';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
@@ -91,7 +92,7 @@ export default class DateTimeSlots extends Component {
       lat: '',
       lng: '',
       description: '',
-      selected: '',
+      selected: new Date().toDateString(),
       selectedTimeSlot: '',
       sliderValue: 0,
       isSwitchEnabled: false,
@@ -449,13 +450,13 @@ export default class DateTimeSlots extends Component {
             }}>
             <Image
               source={{
-                uri: Constants.imageURL + this.props.route.params.item.image,
+                // uri: Constants.imageURL + this.props.route.params.item.image,
               }}
               style={{height: 35, width: 35, resizeMode: 'contain'}}
             />
             <View style={{marginStart: SIZES.ten}}>
               <RegularTextCB style={{fontSize: 16, color: Colors.black}}>
-                {this.props.route.params.item.name}
+                {/* {this.props.route.params.item?.name } */}
               </RegularTextCB>
             </View>
           </View>
@@ -475,6 +476,7 @@ export default class DateTimeSlots extends Component {
               }}
             />
             <Calendar
+            date={this.state.selected}
               firstDay={1}
               minDate={new Date()}
               monthFormat={'MMM yyyy'}
@@ -505,7 +507,7 @@ export default class DateTimeSlots extends Component {
                 )
               }
               markedDates={{
-                [this.state.selected]: {
+                [moment(this.state.selected).format("YYYY-MM-DD")]: {
                   customStyles: {
                     container: styles.selectedDateBG,
                     text: {
@@ -656,7 +658,6 @@ export default class DateTimeSlots extends Component {
                   <TextInput
                     placeholderTextColor={Colors.black}
                     placeholder={'Hr'}
-                    placeholderTextColor={Colors.black}
                     style={[styles.textInput, {alignItems: 'center'}]}
                     maxLength={2}
                     value={this.state.hrTo}

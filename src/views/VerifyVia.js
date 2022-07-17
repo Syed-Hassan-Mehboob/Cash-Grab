@@ -45,60 +45,60 @@ export default class VerifyVia extends Component {
   }
 
   signUp = () => {
-    this.props.navigation.dispatch(this.resetAction);
-    // let verifyVia = this.state.verifyVia;
-    // if (utils.isEmpty(verifyVia)) {
-    //   utils.showToast('Please Select Any Option To Continue');
-    //   return;
-    // }
+    // this.props.navigation.dispatch(this.resetAction);
+    let verifyVia = this.state.verifyVia;
+    if (utils.isEmpty(verifyVia)) {
+      utils.showToast('Please Select Any Option To Continue');
+      return;
+    }
 
-    // const onSuccess = ({data}) => {
-    //   console.log('data', data);
-    //   this.props.navigation.navigate(Constants.otp, {
-    //     email: this.payload.email,
-    //   });
-    //   this.setState({isLoading: false});
-    // };
+    const onSuccess = ({data}) => {
+      console.log('data', data);
+      this.props.navigation.navigate(Constants.otp, {
+        email: this.payload.email,
+      });
+      this.setState({isLoading: false});
+    };
 
-    // const onFailure = (error) => {
-    //   console.log('eeeeeeeeeeeeeeeeeeeeeeeee', error);
-    //   utils.showResponseError(error);
+    const onFailure = (error) => {
+      console.log('eeeeeeeeeeeeeeeeeeeeeeeee', error);
+      utils.showResponseError(error);
 
-    //   this.setState({isLoading: false});
-    // };
-    // console.log('user type', this.payload.type);
-    // // Show spinner when call is made
-    // this.setState({isLoading: true});
-    // var postData = null;
+      this.setState({isLoading: false});
+    };
+    console.log('user type', this.payload.type);
+    // Show spinner when call is made
+    this.setState({isLoading: true});
+    var postData = null;
 
-    // if (this.payload.type === 'vendor') {
-    //   postData = {
-    //     name: this.payload.name,
-    //     email: this.payload.email,
-    //     type: this.payload.type,
-    //     country_code: this.payload.country_code,
-    //     country_flag: this.payload.country_flag,
-    //     phone: this.payload.phone,
-    //     password: this.payload.password,
-    //     password_confirmation: this.payload.password_confirmation,
-    //     verified_by: verifyVia,
-    //     services: this.payload.services,
-    //   };
-    // } else {
-    //   postData = {
-    //     name: this.payload.name,
-    //     email: this.payload.email,
-    //     country_flag: this.payload.country_flag,
-    //     country_code: this.payload.country_code,
-    //     phone: this.payload.phone,
-    //     type: this.payload.type,
-    //     password: this.payload.password,
-    //     password_confirmation: this.payload.password_confirmation,
-    //     verified_by: verifyVia,
-    //   };
-    // }
-    // console.log('postData=============>', postData);
-    // Axios.post(Constants.signUpURL, postData).then(onSuccess).catch(onFailure);
+    if (this.payload.type === 'vendor') {
+      postData = {
+        name: this.payload.name,
+        email: this.payload.email,
+        type: this.payload.type,
+        country_code: this.payload.country_code,
+        country_flag: this.payload.country_flag,
+        phone: this.payload.phone,
+        password: this.payload.password,
+        password_confirmation: this.payload.password_confirmation,
+        verified_by: verifyVia,
+        services: this.payload.services,
+      };
+    } else {
+      postData = {
+        name: this.payload.name,
+        email: this.payload.email,
+        country_flag: this.payload.country_flag,
+        country_code: this.payload.country_code,
+        phone: this.payload.phone,
+        type: this.payload.type,
+        password: this.payload.password,
+        password_confirmation: this.payload.password_confirmation,
+        verified_by: verifyVia,
+      };
+    }
+    console.log('postData=============>', postData);
+    Axios.post(Constants.signUpURL, postData).then(onSuccess).catch(onFailure);
   };
 
   render() {
@@ -170,6 +170,14 @@ export default class VerifyVia extends Component {
                   Email
                 </RegularTextCB>
               </TouchableOpacity>
+              <BoldTextCB
+                  style={{
+                    fontSize: 16,
+                    color: Colors.black,
+                    marginVertical:SIZES.fifteen
+                  }}>
+                  OR
+                </BoldTextCB>
               <TouchableOpacity
                 activeOpacity={0.85}
                 style={[

@@ -16,18 +16,18 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
-import Constants, {SIZES, FONTS, STYLES, height} from '../common/Constants';
+import Constants, { SIZES, FONTS, STYLES, height } from '../common/Constants';
 import Axios from '../network/APIKit';
 import utils from '../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TimePicker from '../components/TimePicker';
 import Moment from 'moment';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {Component} from 'react';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Component } from 'react';
 import RegularTextCB from '../components/RegularTextCB';
 import Colors from '../common/Colors';
 import Images from '../common/Images';
-import {MultiDropdownPicker} from '../components/quickNotifyServeses';
+import { MultiDropdownPicker } from '../components/quickNotifyServeses';
 import MesageEditText from '../components/MessageEditText';
 export default class UserHome extends Component {
   constructor(props) {
@@ -63,7 +63,7 @@ export default class UserHome extends Component {
   }
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token}, () => {
+    this.setState({ accessToken: token }, () => {
       this.getAllCategories();
     });
   };
@@ -84,7 +84,7 @@ export default class UserHome extends Component {
             },
             () => {
               setTimeout(() => {
-                this.setState({showModal: false});
+                this.setState({ showModal: false });
               }, 400);
             },
           );
@@ -125,10 +125,10 @@ export default class UserHome extends Component {
             overflow: 'hidden',
             backgroundColor: '#fff',
           },
-          row: {borderRadius: 8},
+          row: { borderRadius: 8 },
         }}
-        GooglePlacesSearchQuery={{rankby: 'distance'}}
-        GooglePlacesDetailsQuery={{fields: ['formatted_address', 'geometry']}}
+        GooglePlacesSearchQuery={{ rankby: 'distance' }}
+        GooglePlacesDetailsQuery={{ fields: ['formatted_address', 'geometry'] }}
         renderDescription={(row) => row.description}
         currentLocation={true}
         currentLocationLabel="Current location"
@@ -141,16 +141,16 @@ export default class UserHome extends Component {
   };
   handleConfirm = (date) => {
     const newTime = Moment(date).format('h:mm').toString();
-    this.setState({startTime: newTime});
+    this.setState({ startTime: newTime });
     this.hideDatePicker();
   };
 
   showDatePicker = () => {
-    this.setState({isDatePickerVisible: true});
+    this.setState({ isDatePickerVisible: true });
   };
 
   hideDatePicker = () => {
-    this.setState({isDatePickerVisible: false});
+    this.setState({ isDatePickerVisible: false });
   };
 
   postQuickOrder = () => {
@@ -179,29 +179,29 @@ export default class UserHome extends Component {
     }
     if (!postData.price) {
       utils.showToast("Rate field can't be empty");
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       return;
     }
     if (utils.isEmpty(postData.location)) {
       utils.showToast("Location field can't be empty");
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       return;
     }
     if (utils.isEmpty(postData.address)) {
       utils.showToast("Address field can't be empty");
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       return;
     }
     if (utils.isEmpty(postData.from_time)) {
       utils.showToast("time field can't be empty");
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       return;
     } else if (utils.isEmpty(postData.description)) {
       utils.showToast("Description field can't be empty");
       return;
     }
 
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       this.setState({
         isLoading: false,
         address: '',
@@ -221,7 +221,7 @@ export default class UserHome extends Component {
       //   'error =====================================================================>',
       //   error,
       // );
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       utils.showResponseError(error);
     };
     const options = {
@@ -229,7 +229,7 @@ export default class UserHome extends Component {
         Authorization: this.state.accessToken,
       },
     };
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
 
     Axios.post(Constants.quickOrder2, postData, options)
       .then(onSuccess)
@@ -237,18 +237,18 @@ export default class UserHome extends Component {
   };
 
   getAllCategories = () => {
-    const onSuccess = ({data}) => {
+    const onSuccess = ({ data }) => {
       // console.log('All Categoryyyyy ==========> ', data.data.records);
-      this.setState({isLoading: false, getAllCategories: data.data.records});
+      this.setState({ isLoading: false, getAllCategories: data.data.records });
     };
 
     const onFailure = (error) => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       // console.log('=================', error);
       utils.showResponseError(error);
     };
 
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
 
     Axios.get(Constants.getCategories, {
       headers: {
@@ -266,7 +266,7 @@ export default class UserHome extends Component {
         keyboardShouldPersistTaps={'always'}
         style={STYLES.container}
         contentContainerStyle={[
-          {paddingHorizontal: SIZES.ten * 2, paddingBottom: 120},
+          { paddingHorizontal: SIZES.ten * 2, paddingBottom: 120 },
         ]}>
         <StatusBar backgroundColor={Colors.white} barStyle="dark-content" />
         <View
@@ -303,7 +303,7 @@ export default class UserHome extends Component {
             backgroundColor: Colors.white,
             borderRadius: height * 0.01,
             shadowColor: '#c5c5c5',
-            shadowOffset: {width: SIZES.five, height: SIZES.five},
+            shadowOffset: { width: SIZES.five, height: SIZES.five },
             shadowOpacity: 1.0,
             shadowRadius: 10,
             justifyContent: 'center',
@@ -314,7 +314,7 @@ export default class UserHome extends Component {
             value={this.state.services}
             data={this.state.getAllCategories}
             onChangeValue={(val) => {
-              this.setState({selectedCategory: val}, () => {
+              this.setState({ selectedCategory: val }, () => {
                 // console.log(
                 //   'multidropdown picker ',
                 //   typeof this.state.servicesid,
@@ -326,10 +326,15 @@ export default class UserHome extends Component {
           />
         </View>
 
-        <RegularTextCB
-          style={{fontSize: 18, color: Colors.black, marginTop: SIZES.twenty}}>
-          Rate Requested
-        </RegularTextCB>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: SIZES.twenty }}>
+          <RegularTextCB
+            style={{ fontSize: 18, color: Colors.black, }}>
+            Rate Requested
+          </RegularTextCB>
+          <RegularTextCB style={{ fontSize: 12, color: Colors.coolGrey, marginStart: SIZES.five }}>
+            (for complete job)
+          </RegularTextCB>
+        </View>
         <EditText
           ref={'rate'}
           placeholder={'Enter Rate'}
@@ -345,10 +350,10 @@ export default class UserHome extends Component {
               rateRequested: text,
             });
           }}
-          style={{marginTop: SIZES.ten}}
+          style={{ marginTop: SIZES.ten }}
         />
-        <View style={[{marginTop: SIZES.twenty}]}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={[{ marginTop: SIZES.twenty }]}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Location
           </RegularTextCB>
           <View
@@ -358,7 +363,7 @@ export default class UserHome extends Component {
                 backgroundColor: Colors.white,
                 borderRadius: height * 0.01,
                 shadowColor: '#c5c5c5',
-                shadowOffset: {width: SIZES.five, height: SIZES.five},
+                shadowOffset: { width: SIZES.five, height: SIZES.five },
                 shadowOpacity: 1.0,
                 shadowRadius: SIZES.ten,
                 elevation: SIZES.ten,
@@ -373,7 +378,7 @@ export default class UserHome extends Component {
                   showModal: true,
                 });
               }}>
-              <RegularTextCB style={{fontSize: 16}}>
+              <RegularTextCB style={{ fontSize: 16 }}>
                 {this.state.location ? this.state.location : 'Search Location'}
               </RegularTextCB>
             </TouchableOpacity>
@@ -385,7 +390,7 @@ export default class UserHome extends Component {
           transparent={true}
           visible={this.state.showModal}
           onRequestClose={() => {
-            this.setState({showModal: false});
+            this.setState({ showModal: false });
           }}>
           <View
             style={{
@@ -402,9 +407,9 @@ export default class UserHome extends Component {
               }}>
               {this.GooglePlacesInput()}
               <TouchableOpacity
-                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                style={{ marginTop: SIZES.fifteen, marginLeft: SIZES.five }}
                 onPress={() => {
-                  this.setState({showModal: false});
+                  this.setState({ showModal: false });
                 }}>
                 <Image
                   style={{
@@ -420,8 +425,8 @@ export default class UserHome extends Component {
           </View>
         </Modal>
 
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={{ marginTop: SIZES.twenty }}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Address
           </RegularTextCB>
           <EditText
@@ -439,9 +444,9 @@ export default class UserHome extends Component {
           />
         </View>
 
-        <View style={[{marginTop: SIZES.twenty}]}>
+        <View style={[{ marginTop: SIZES.twenty }]}>
           <RegularTextCB
-            style={{fontSize: 18, color: '#000', marginBottom: SIZES.ten}}>
+            style={{ fontSize: 18, color: '#000', marginBottom: SIZES.ten }}>
             Exact Time
           </RegularTextCB>
 
@@ -457,8 +462,8 @@ export default class UserHome extends Component {
           />
         </View>
 
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+        <View style={{ marginTop: SIZES.twenty }}>
+          <RegularTextCB style={{ fontSize: 18, color: Colors.black }}>
             Job Description
           </RegularTextCB>
 
@@ -467,7 +472,7 @@ export default class UserHome extends Component {
             height={SIZES.twentyFive * 4.5}
             value={this.state.description}
             onChangeText={(text) => {
-              this.setState({description: text});
+              this.setState({ description: text });
             }}
           />
         </View>
@@ -490,10 +495,10 @@ export default class UserHome extends Component {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => this.props.navigation.navigate(Constants.home)}
-          style={{alignSelf: 'flex-end'}}>
+          style={{ alignSelf: 'flex-end' }}>
           <Image
             source={Images.iconSearch}
-            style={{height: SIZES.fifty * 1.5, width: SIZES.fifty * 1.5}}
+            style={{ height: SIZES.fifty * 1.5, width: SIZES.fifty * 1.5 }}
           />
         </TouchableOpacity>
 
@@ -523,7 +528,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.twenty,
     flex: 1,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
+    shadowOffset: { width: SIZES.five, height: SIZES.five },
     shadowOpacity: 1.0,
     shadowRadius: SIZES.ten,
     elevation: SIZES.ten,
@@ -549,7 +554,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',
-    shadowOffset: {width: 5, height: 5},
+    shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 1.0,
     shadowRadius: 10,
     elevation: 10,

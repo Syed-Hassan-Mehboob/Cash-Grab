@@ -40,6 +40,7 @@ import EditText from '../components/EditText';
 import {TouchableOpacity} from 'react-native';
 import ResetPassword from '../views/ResetPassword';
 import Chat from '../views/Chat';
+import Notifications from '../views/Notifications';
 
 const Stack = createStackNavigator();
 
@@ -89,7 +90,7 @@ export default function Routes(props) {
           }}>
           <Stack.Screen name={Constants.splash} component={Splash} />
           <Stack.Screen name={Constants.loginOrJoin} component={LoginOrJoin} />
-          <Stack.Screen name={Constants.login} component={EditProfile} />
+          <Stack.Screen name={Constants.login} component={Login} />
           <Stack.Screen
             name={Constants.createAccount}
             component={CreateAccount}

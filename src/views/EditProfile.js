@@ -9,6 +9,7 @@ import {
   Platform,
   TextInput,
   Text,
+  Modal as RnModal
 } from 'react-native';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal';
@@ -41,10 +42,10 @@ export default class EditProfile extends Component {
       avatar: '',
       firstName: '',
       lastName: '',
-      email: 'a@b.com',
+      email: '',
       countryCode: '',
       countryFlag: 'US',
-      phoneNumber: '132465789',
+      phoneNumber: '',
       location: '',
       oldPassword: '',
       newPassword: '',
@@ -130,6 +131,9 @@ export default class EditProfile extends Component {
   GooglePlacesInput = () => {
     return (
       <GooglePlacesAutocomplete
+      textInputProps={{
+        clearButtonMode:'always'
+      }}
         placeholder={'Search'}
         //   renderLeftButton={() => }
         minLength={2}
@@ -683,18 +687,21 @@ export default class EditProfile extends Component {
             /> */}
           </View>
 
-          <Modal
+          <RnModal
             animationType="fade"
             transparent={true}
             visible={this.state.showModal}
             onRequestClose={() => {
               this.setState({showModal: false});
             }}>
+              <View style={{ flex:1,backgroundColor: '#00000085',}}>
+
             <View
               style={{
                 flex: 1,
                 padding: SIZES.twenty,
-                backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
+                
+               
               }}>
               <View style={{flex: 1, flexDirection: 'row'}}>
                 {this.GooglePlacesInput()}
@@ -719,7 +726,8 @@ export default class EditProfile extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal>
+              </View>
+          </RnModal>
 
           {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
