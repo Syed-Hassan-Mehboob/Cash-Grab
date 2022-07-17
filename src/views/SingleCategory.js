@@ -118,7 +118,7 @@ export default class SingleCategory extends Component {
         //       item: item.id,
         //     })
         //   }
-        //   activeOpacity={0.6}
+        //   activeOpacity={0.85}
       >
         <TouchableOpacity
           onPress={() =>
@@ -127,7 +127,7 @@ export default class SingleCategory extends Component {
               item: this.props.route.params.item,
             })
           }
-          activeOpacity={0.6}
+          activeOpacity={0.85}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -196,7 +196,7 @@ export default class SingleCategory extends Component {
               vendorid: item.id,
             })
           }
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Icon
             type="AntDesign"
             name="right"

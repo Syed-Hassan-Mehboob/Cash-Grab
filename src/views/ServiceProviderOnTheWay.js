@@ -408,7 +408,7 @@ const ServiceProviderOnTheWay = (props) => {
             // padding: SIZES.ten * 7,
           },
         ]}
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         onPress={() => {
           props.navigation.navigate(Constants.QuickJobDetail);
         }}>

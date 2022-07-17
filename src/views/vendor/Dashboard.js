@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Easing as Eased
 } from 'react-native';
 import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
 import Colors from '../../common/Colors';
@@ -22,7 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Axios from '../../network/APIKit';
 import utils from '../../utils';
-import {Easing} from 'react-native-reanimated';
+// import {Easing} from 'react-native-reanimated';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -155,7 +156,7 @@ export default class Dashboard extends Component {
     console.log(item);
     return (
       <TouchableOpacity
-        activeOpacity={0.7}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {
@@ -504,8 +505,8 @@ export default class Dashboard extends Component {
                   : SIZES.fifteen * 4.1
               }
               hideRules={true}
-              activeOpacity={0.7}
-              animationEasing={Easing.cubic}
+              activeOpacity={0.85}
+              animationEasing={Eased.cubic}
               showYAxisIndices={false}
               hideYAxisText
               yAxisIndicesColor={'transparent'}
@@ -537,7 +538,7 @@ export default class Dashboard extends Component {
                 Completed Order
               </RegularTextCB>
               <TouchableOpacity
-                activeOpacity={0.6}
+                activeOpacity={0.85}
                 onPress={() => {
                   this.props.navigation.navigate(Constants.History);
                 }}>

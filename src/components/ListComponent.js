@@ -13,7 +13,7 @@ const ListComponent = (props) => {
   // console.log('List Componant=======',item.user.userProfile);
   return (
     <TouchableOpacity
-      activeOpacity={0.5}
+      activeOpacity={0.85}
       style={[
         styles.card,
         {

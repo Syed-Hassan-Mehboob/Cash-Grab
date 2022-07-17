@@ -263,7 +263,7 @@ export default class VendorHome extends Component {
     // //console.log('Job Around data ======',item)
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {
@@ -407,7 +407,7 @@ export default class VendorHome extends Component {
     // //console.log('Job Around data ======',item)
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {
@@ -539,7 +539,7 @@ export default class VendorHome extends Component {
     // console.log('...................', item.order_status);
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {
@@ -710,7 +710,7 @@ export default class VendorHome extends Component {
                 paddingHorizontal: SIZES.twenty,
               }}>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.85}
                 style={{flexDirection: 'row', alignItems: 'center'}}
                 onPress={() =>
                   this.props.navigation.navigate(Constants.vendorProfile)

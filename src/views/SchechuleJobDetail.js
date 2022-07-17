@@ -521,7 +521,7 @@ export default function ScheduleJobDetails(props) {
               width: SIZES.fifty * 2.5,
               alignItems: 'center',
             }}
-            activeOpacity={0.6}
+            activeOpacity={0.85}
             onPress={() => {
               setRescheduleJobModal(true);
             }}>
@@ -540,7 +540,7 @@ export default function ScheduleJobDetails(props) {
             onPress={() => {
               setCancelJobModal(true);
             }}
-            activeOpacity={0.6}>
+            activeOpacity={0.85}>
             <RegularTextCB style={{color: Colors.white}}>CANCEL</RegularTextCB>
           </TouchableOpacity>
         </View>
@@ -621,7 +621,7 @@ export default function ScheduleJobDetails(props) {
                 width: SIZES.fifty * 2.5,
                 alignItems: 'center',
               }}
-              activeOpacity={0.6}
+              activeOpacity={0.85}
               onPress={cancelOrder}>
               <RegularTextCB style={{fontSize: 16}}>YES</RegularTextCB>
             </TouchableOpacity>
@@ -638,7 +638,7 @@ export default function ScheduleJobDetails(props) {
               onPress={() => {
                 setCancelJobModal(false);
               }}
-              activeOpacity={0.6}>
+              activeOpacity={0.85}>
               <RegularTextCB style={{color: Colors.white, fontSize: 16}}>
                 NO
               </RegularTextCB>
@@ -814,7 +814,7 @@ export default function ScheduleJobDetails(props) {
             marginTop: SIZES.twenty * 2,
           }}
           onPress={handelReschedule}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Text style={[FONTS.boldFont16, {}]}>RESCHEDULE</Text>
         </TouchableOpacity> */}
         </View>

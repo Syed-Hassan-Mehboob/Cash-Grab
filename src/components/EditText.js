@@ -78,7 +78,7 @@ export default class EditText extends Component {
         {secureTextEntry && (
           <TouchableOpacity
             style={{padding: SIZES.ten}}
-            activeOpacity={0.7}
+            activeOpacity={0.85}
             onPress={() => {
               this.changePasswordState(secureTextEntry);
             }}>

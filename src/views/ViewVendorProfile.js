@@ -198,7 +198,7 @@ export default class ViewVendorProfile extends React.Component {
   renderServicesItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         onPress={() => {
           let temp = this.state.categories;
           temp.map((tItem) => {
@@ -274,7 +274,7 @@ export default class ViewVendorProfile extends React.Component {
             elevation: 5,
           },
         ]}
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         onPress={() => {
           // this.onInterestPress(item.id, !item.isSlected)
         }}>
@@ -801,7 +801,7 @@ export default class ViewVendorProfile extends React.Component {
                     Services We Offer
                   </RegularTextCB>
                   {/* <TouchableOpacity
-                    activeOpacity={0.6}
+                    activeOpacity={0.85}
                     onPress={() =>
                       // console.log(
                       //   'Category Data === ',

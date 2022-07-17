@@ -166,7 +166,7 @@ export default class VenderNotifications extends Component {
                 },
               ]}>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.85}
                 style={styles.itemContainer}
                 onPress={() => {
                   console.log('=========>>>>>>>>', notification);

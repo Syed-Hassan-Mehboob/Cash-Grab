@@ -218,7 +218,7 @@ export default class Profile extends React.Component {
     // console.log('posted Job Item ====== ======>>>>>>>>', item);
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           {
             maxWidth: width * 0.98,
@@ -324,7 +324,7 @@ export default class Profile extends React.Component {
   renderScheduleJob = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           {
             padding: SIZES.twenty,
@@ -491,7 +491,7 @@ export default class Profile extends React.Component {
     // console.log('Quick Job Item =====>>>>', item);
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           {
             backgroundColor: '#ffff',
@@ -814,7 +814,7 @@ export default class Profile extends React.Component {
           <Text style={[FONTS.boldFont20, ,]}>Posted Jobs</Text>
 
           <TouchableOpacity
-            activeOpacity={0.6}
+            activeOpacity={0.85}
             onPress={() => {
               this.props.navigation.navigate(Constants.PostedJob);
             }}>
@@ -854,7 +854,7 @@ export default class Profile extends React.Component {
           <Text style={[FONTS.boldFont20]}>Schedule Jobs</Text>
 
           <TouchableOpacity
-            activeOpacity={0.6}
+            activeOpacity={0.85}
             onPress={() => {
               this.props.navigation.navigate(Constants.ScheduleJobs);
             }}>
@@ -895,7 +895,7 @@ export default class Profile extends React.Component {
           <Text style={[FONTS.boldFont20, ,]}>Quick Jobs</Text>
 
           <TouchableOpacity
-            activeOpacity={0.6}
+            activeOpacity={0.85}
             onPress={() => {
               this.props.navigation.navigate(Constants.UserQuickJobs);
             }}>

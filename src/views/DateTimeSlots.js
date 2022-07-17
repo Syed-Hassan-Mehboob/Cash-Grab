@@ -391,7 +391,7 @@ export default class DateTimeSlots extends Component {
   renderTimeSlotItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={
           this.state.selectedTimeSlot === item.time
             ? styles.selectedTimeBG
@@ -694,7 +694,7 @@ export default class DateTimeSlots extends Component {
             </RegularTextCB>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.85}
                 onPress={() => this.toggleIsCountryCodePickerVisible()}
                 style={[
                   styles.card,

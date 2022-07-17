@@ -416,7 +416,7 @@ export default class VendorEditProfile extends Component {
         onPress={() => {
           this.props.navigation.navigate(Constants.AddTeamMember);
         }}
-        activeOpacity={0.6}>
+        activeOpacity={0.85}>
         <Icon
           type="AntDesign"
           name="plus"
@@ -507,7 +507,7 @@ export default class VendorEditProfile extends Component {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            activeOpacity={0.5}
+            activeOpacity={0.85}
             style={[
               styles.circleCard,
               {justifyContent: 'center', alignItems: 'center'},

@@ -753,7 +753,7 @@ export default class Chat extends React.Component {
                 flexDirection: 'row',
               }}>
               {/* <TouchableOpacity
-                activeOpacity={0.7}
+                activeOpacity={0.85}
                 onPress={() => {
                   if (this.state.isVendor) {
                     this.dialCall(this.props.route.params?.payload.user.phone);

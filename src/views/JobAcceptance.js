@@ -219,7 +219,7 @@ export default function JobAcceptance(props) {
                   width: SIZES.fifty * 1.7,
                   alignItems: 'center',
                 }}
-                activeOpacity={0.6}
+                activeOpacity={0.85}
                 onPress={() => {
                   // props.navigation.navigate(Constants.confirmPayment);
                   updateJobs(item.id, 'accepted');
@@ -283,7 +283,7 @@ export default function JobAcceptance(props) {
                   // props.navigation.replace(Constants.PostedJob);
                   updateJobs(item.id, 'cancelled');
                 }}
-                activeOpacity={0.6}>
+                activeOpacity={0.85}>
                 <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
               </TouchableOpacity>
             </View>

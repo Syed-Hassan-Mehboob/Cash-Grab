@@ -431,7 +431,7 @@ export default class VendorSignUp extends Component {
               <View
                 style={[styles.textInputContainer, {marginTop: SIZES.fifteen}]}>
                 <TouchableOpacity
-                  activeOpacity={0.5}
+                  activeOpacity={0.85}
                   onPress={() => this.toggleIsCountryCodePickerVisible()}
                   style={[
                     styles.card,

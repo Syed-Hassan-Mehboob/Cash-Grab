@@ -390,7 +390,7 @@ export default class Home extends Component {
             flexDirection: 'row',
             alignItems: 'center',
           }}
-          activeOpacity={0.6}
+          activeOpacity={0.85}
           onPress={() => {
             this.props.navigation.navigate(Constants.viewVendorProfile, {
               vendorid: item.id,

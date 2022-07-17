@@ -135,7 +135,7 @@ export default function WriteReviews() {
 
         <TouchableOpacity
           style={{alignSelf: 'center', marginVertical: SIZES.twentyFive * 1.5}}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Text style={[FONTS.mediumFont12]}>I'll do It Later</Text>
         </TouchableOpacity>
 

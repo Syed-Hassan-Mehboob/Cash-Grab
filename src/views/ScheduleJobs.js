@@ -64,7 +64,7 @@ export default function ScheduleJobs(props) {
     // console.log('=========Schedule item ', item);
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {

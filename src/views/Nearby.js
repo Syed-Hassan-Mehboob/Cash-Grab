@@ -363,7 +363,7 @@ const Nearby = (props) => {
           onPress={() => {
             props.navigation.goBack();
           }}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Image
             source={Images.arrowBack}
             style={[styles.iconBack, {tintColor: Colors.black}]}

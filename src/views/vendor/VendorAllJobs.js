@@ -78,7 +78,7 @@ export default class VendorAllJobs extends Component {
   renderSingleCategoriesItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {

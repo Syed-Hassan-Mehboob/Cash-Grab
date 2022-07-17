@@ -357,7 +357,7 @@ export default class QuickJobDetail extends React.Component {
                           payload: this.props.route.params.orderItem,
                         });
                       }}
-                      activeOpacity={0.7}
+                      activeOpacity={0.85}
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -405,7 +405,7 @@ export default class QuickJobDetail extends React.Component {
                           this.props.route.params.orderItem?.vendor?.phone,
                         );
                       }}
-                      activeOpacity={0.7}
+                      activeOpacity={0.85}
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',

@@ -69,7 +69,7 @@ export default function UserQuickJobs(props) {
     console.log('sssssssssssss item ====>>>>', item);
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {

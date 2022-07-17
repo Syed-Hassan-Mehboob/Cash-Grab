@@ -193,7 +193,7 @@ export default function AddServices(props) {
                 onPress={() => {
                   removeInputFields(i);
                 }}
-                activeOpacity={0.6}
+                activeOpacity={0.85}
                 style={{
                   padding: 5,
                 }}>
@@ -255,7 +255,7 @@ export default function AddServices(props) {
           onPress={() => {
             props.navigation.goBack();
           }}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Icon
             type="AntDesign"
             name="left"
@@ -277,7 +277,7 @@ export default function AddServices(props) {
         </RegularTextCB>
 
         <TouchableOpacity
-          activeOpacity={0.7}
+          activeOpacity={0.85}
           onPress={() => {
             // props.navigation.navigate(Constants.SelectIndustry);
             saveCategoriesToStorage();

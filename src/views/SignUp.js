@@ -30,7 +30,8 @@ export default class SignUp extends Component {
       isSelectionModalVisible: false,
       isCountryCodePickerVisible: false,
       isVendor: false,
-      fullName: '',
+      firstName: '',
+      lastName: '',
       email: '',
       countryCode: '+1',
       countryFlag: 'US',
@@ -245,12 +246,29 @@ export default class SignUp extends Component {
                     {marginTop: SIZES.ten * 3},
                   ]}>
                   <EditText
-                    ref={'fullName'}
-                    placeholder={'Full Name'}
-                    value={this.state.fullName}
+                    ref={'FirstName'}
+                    placeholder={'First Name'}
+                    value={this.state.firstName}
                     onChangeText={(text) => {
                       this.setState({
-                        fullName: text,
+                        firstName: text,
+                      });
+                    }}
+                    style={[styles.textInput]}
+                  />
+                </View>
+                <View
+                  style={[
+                    styles.textInputContainer,
+                    {marginTop: SIZES.fifteen},
+                  ]}>
+                  <EditText
+                    ref={'LastName'}
+                    placeholder={'Last Name'}
+                    value={this.state.lastName}
+                    onChangeText={(text) => {
+                      this.setState({
+                        lastName: text,
                       });
                     }}
                     style={[styles.textInput]}
@@ -292,7 +310,7 @@ export default class SignUp extends Component {
                     {marginTop: SIZES.fifteen},
                   ]}>
                   <TouchableOpacity
-                    activeOpacity={0.5}
+                    activeOpacity={0.85}
                     onPress={() => this.toggleIsCountryCodePickerVisible()}
                     style={[
                       styles.card,

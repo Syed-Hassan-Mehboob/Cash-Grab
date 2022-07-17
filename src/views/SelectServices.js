@@ -134,7 +134,7 @@ export default function SelectServices(props) {
           borderColor: item.isSelected ? Colors.sickGreen : Colors.white,
         }}
         onPress={() => onPress(item.id, !item.isSelected)}
-        activeOpacity={0.6}>
+        activeOpacity={0.85}>
         <RegularTextCB>{item.name}</RegularTextCB>
         <RegularTextCB>$ {item.price}</RegularTextCB>
       </TouchableOpacity>
@@ -181,7 +181,7 @@ export default function SelectServices(props) {
           width: '100%',
           paddingHorizontal: SIZES.ten,
         }}
-        activeOpacity={0.6}>
+        activeOpacity={0.85}>
         <ButtonRadius10
           bgColor={Colors.sickGreen}
           label="Next"

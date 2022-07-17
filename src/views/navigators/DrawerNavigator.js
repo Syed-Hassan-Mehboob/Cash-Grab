@@ -20,6 +20,7 @@ import Axios from '../../network/APIKit';
 import utils from '../../utils';
 import ButtonRadius10 from '../../components/ButtonRadius10';
 import {Icon} from 'native-base';
+import Firebase from '@react-native-firebase/app';
 
 const Drawer = createDrawerNavigator();
 
@@ -125,9 +126,26 @@ export default class DrawerNavigator extends React.Component {
         rm.notification,
       );
       console.warn(
-        'Notification caused app to open from background state:',
+        'rm =======>>>>> Notification caused app to open from background state:',
         rm,
       );
+
+      // const channelId = await notifee.createChannel({
+      //   id: 'default',
+      //   name: 'Default Channel',
+      // });
+
+      // let notifications = {
+      //   title: rm.notification.title,
+      //   body:  rm.notification.body,
+      //   android: {
+      //     channelId,
+      //     // // pressAction is needed if you want the notification to open the app when pressed
+      //     // pressAction: {
+      //     //   id: 'default',
+      //     // },
+      //   },
+      
 
       /*
        *BOOKING JOB start
@@ -942,7 +960,7 @@ export default class DrawerNavigator extends React.Component {
                   marginVertical: SIZES.ten * 1.5,
                 }}>
                 <TouchableOpacity
-                  activeOpacity={0.7}
+                  activeOpacity={0.85}
                   onPress={() => {
                     this.Accept_DeclineQuickJob('accepted');
                   }}
@@ -957,7 +975,7 @@ export default class DrawerNavigator extends React.Component {
                   <Text style={FONTS.mediumFont18}>Accept</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  activeOpacity={0.7}
+                  activeOpacity={0.85}
                   onPress={() => {
                     this.Accept_DeclineQuickJob('cancelled');
                   }}

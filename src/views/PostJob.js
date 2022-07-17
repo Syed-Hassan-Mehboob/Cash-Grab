@@ -520,7 +520,7 @@ export default class postJob extends Component {
                 Expiry date
               </RegularTextCB>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.85}
                 onPress={() => {
                   this.setState({isModalVisible: true});
                 }}

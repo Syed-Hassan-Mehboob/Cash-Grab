@@ -170,7 +170,7 @@ export default class ChatListing extends Component {
   renderChatListingItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={{
           margin: SIZES.ten,
           flexDirection: 'row',

@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
@@ -80,7 +79,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 //      root           : "../../../",
 //        entryFile      : "index.js",
 //        bundleAssetName: "index.bundle",
@@ -202,7 +201,9 @@ dependencies {
     implementation project(':react-native-maps')
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-   implementation platform('com.google.firebase:firebase-bom:28.4.2')
+//    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     // compile project(':react-native-google-place-picker')
 

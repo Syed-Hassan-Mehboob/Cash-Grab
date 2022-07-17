@@ -180,7 +180,7 @@ export default function AddTeamMember(props) {
           onPress={() => {
             props.navigation.goBack();
           }}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Icon
             type="AntDesign"
             name="left"
@@ -205,7 +205,7 @@ export default function AddTeamMember(props) {
           onPress={() => {
             setIsModalVisible(true);
           }}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Icon
             type="AntDesign"
             name="plus"

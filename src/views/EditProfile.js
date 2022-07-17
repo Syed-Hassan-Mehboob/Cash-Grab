@@ -39,11 +39,12 @@ export default class EditProfile extends Component {
       isCountryCodePickerVisible: false,
       accessToken: '',
       avatar: '',
-      fullName: '',
-      email: '',
+      firstName: '',
+      lastName: '',
+      email: 'a@b.com',
       countryCode: '',
-      countryFlag: '',
-      phoneNumber: '',
+      countryFlag: 'US',
+      phoneNumber: '132465789',
       location: '',
       oldPassword: '',
       newPassword: '',
@@ -87,7 +88,8 @@ export default class EditProfile extends Component {
       console.log('User Profile Data ===== === =', data);
       this.setState({
         avatar: Constants.imageURL + data.data.records.user_profiles.image,
-        fullName: data.data.records.name,
+        firstName: data.data.records.name.split(" ")[0],
+        lastName: data.data.records.name.split(" ")[1],
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag:
@@ -210,6 +212,7 @@ export default class EditProfile extends Component {
             Upload Photo
           </LightTextCB>
           <TouchableOpacity
+          activeOpacity={0.85}
             onPress={() => {
               this.toggleIsModalVisible();
             }}>
@@ -224,9 +227,9 @@ export default class EditProfile extends Component {
             />
           </TouchableOpacity>
         </View>
-        <LightTextCB style={{fontSize: 16, color: Colors.grey}}>
-          Upload a photo from
-        </LightTextCB>
+        {/* <LightTextCB style={{fontSize: 16, color: Colors.grey+85, paddingHorizontal: SIZES.ten,}}>
+          using
+        </LightTextCB> */}
         <View style={{marginTop: SIZES.ten * 3}}>
           <ButtonRadius10
             label="CAMERA"
@@ -276,7 +279,7 @@ export default class EditProfile extends Component {
   };
 
   editUserProfile = () => {
-    let name = this.state.fullName;
+    let name = this.state.firstName + " "+ this.state.lastName;
     let email = this.state.email;
     let countryCode = this.state.countryCode;
     let countryFlag = this.state.countryFlag;
@@ -286,18 +289,31 @@ export default class EditProfile extends Component {
     let lat = this.state.lat;
     let lng = this.state.lng;
 
-    if (utils.isEmpty(name)) {
-      utils.showToast('Invalid Name');
+    if (utils.isEmpty(this.state.firstName)) {
+      utils.showToast('Invalid First Name');
+      return;
+    }
+    if (utils.isEmpty(this.state.lastName)) {
+      utils.showToast('Invalid Last Name');
       return;
     }
 
-    if (name.length < 3) {
-      utils.showToast('Name Should Not Be Less Than 3 Characters');
+    if (this.state.firstName.length < 3) {
+      utils.showToast('First Name Should Not Be Less Than 3 Characters');
       return;
     }
 
-    if (name.length > 55) {
-      utils.showToast('Name Should Not Be Greater Than 55 Characters');
+    if (this.state.firstName.length > 15) {
+      utils.showToast('First Name Should Not Be Greater Than 15 Characters');
+      return;
+    }
+    if (this.state.lastName.length < 3) {
+      utils.showToast('Last Name Should Not Be Less Than 3 Characters');
+      return;
+    }
+
+    if (this.state.lastName.length > 15) {
+      utils.showToast('Last Name Should Not Be Greater Than 15 Characters');
       return;
     }
 
@@ -367,7 +383,7 @@ export default class EditProfile extends Component {
     formData.append('lat', lat);
     formData.append('lng', lng);
 
-    // console.log('Form data ==== ', formData);
+    console.log('Form data ==== ', formData._parts);
     const options = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -408,6 +424,7 @@ export default class EditProfile extends Component {
               // paddingVertical: SIZES.ten,
             }}>
             <TouchableOpacity
+            activeOpacity={0.85}
               style={{position: 'absolute', left: SIZES.ten}}
               onPress={() => {
                 this.props.navigation.goBack();
@@ -422,6 +439,7 @@ export default class EditProfile extends Component {
               Profile
             </RegularTextCB>
             <TouchableOpacity
+            activeOpacity={0.85}
               style={{
                 position: 'absolute',
                 right: SIZES.ten,
@@ -437,7 +455,7 @@ export default class EditProfile extends Component {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            activeOpacity={0.5}
+            activeOpacity={0.85}
             style={[
               styles.circleCard,
               {justifyContent: 'center', alignItems: 'center'},
@@ -462,7 +480,7 @@ export default class EditProfile extends Component {
           </TouchableOpacity>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 16, marginTop: SIZES.ten}}>
-            {this.state.fullName}
+            {this.state.firstName+" "+this.state.lastName}
           </RegularTextCB>
           <View
             style={{
@@ -500,14 +518,34 @@ export default class EditProfile extends Component {
                 marginStart: SIZES.five,
                 flex: 0.5,
               }}>
-              Name
+              First Name
             </RegularTextCB>
             <EditText
               ref={'name'}
-              placeholder={'Name'}
-              value={this.state.fullName}
+              placeholder={'First Name'}
+              value={this.state.firstName}
               onChangeText={(text) => {
-                this.setState({fullName: text});
+                this.setState({firstName: text});
+              }}
+              style={[styles.textInput]}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <RegularTextCB
+              style={{
+                color: Colors.coolGrey,
+                fontSize: 16,
+                marginStart: SIZES.five,
+                flex: 0.5,
+              }}>
+              Last Name
+            </RegularTextCB>
+            <EditText
+              ref={'Lastname'}
+              placeholder={'Last Name'}
+              value={this.state.lastName}
+              onChangeText={(text) => {
+                this.setState({lastName: text});
               }}
               style={[styles.textInput]}
             />
@@ -556,6 +594,9 @@ export default class EditProfile extends Component {
                 countryCode={this.state.countryFlag}
                 visible={this.state.isCountryCodePickerVisible}
                 withCallingCode
+                withAlphaFilter
+                withFilter
+                withFlagButton
                 theme={{
                   fontFamily: Constants.fontRegular,
                   resizeMode: 'contain',
@@ -588,6 +629,7 @@ export default class EditProfile extends Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
+              paddingBottom:SIZES.ten
             }}>
             <RegularTextCB
               style={{
@@ -616,6 +658,7 @@ export default class EditProfile extends Component {
                 },
               ]}>
               <TouchableOpacity
+              activeOpacity={0.85}
                 onPress={() => {
                   this.setState({
                     showModal: true,
@@ -656,6 +699,7 @@ export default class EditProfile extends Component {
               <View style={{flex: 1, flexDirection: 'row'}}>
                 {this.GooglePlacesInput()}
                 <TouchableOpacity
+                activeOpacity={0.85}
                   style={{
                     marginTop: SIZES.fifteen,
                     marginLeft: SIZES.five * 1.3,
@@ -677,7 +721,7 @@ export default class EditProfile extends Component {
             </View>
           </Modal>
 
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -718,7 +762,7 @@ export default class EditProfile extends Component {
               }}
               style={[styles.textInput, {marginBottom: SIZES.fifteen}]}
             />
-          </View>
+          </View> */}
         </ScrollView>
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>
           {this.renderBottomSheetContent()}

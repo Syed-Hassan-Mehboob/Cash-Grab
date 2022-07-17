@@ -39,7 +39,7 @@ export default function QuickJobs(props) {
   const renderQuickJob = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.5}
+        activeOpacity={0.85}
         style={[
           styles.card,
           {

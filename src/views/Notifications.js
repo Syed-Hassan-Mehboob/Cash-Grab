@@ -72,7 +72,7 @@ export default class Notifications extends Component {
                 },
               ]}>
               <TouchableOpacity
-                activeOpacity={0.7}
+                activeOpacity={0.85}
                 style={styles.itemContainer}
                 onPress={() => {
                   console.log(

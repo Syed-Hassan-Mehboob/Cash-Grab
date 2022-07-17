@@ -262,7 +262,7 @@ export default class VendorProfile extends React.Component {
   renderServicesItem = ({item}) => {
     return (
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         onPress={() => {
           let temp = this.state.categories;
           temp.map((tItem) => {
@@ -440,7 +440,7 @@ export default class VendorProfile extends React.Component {
             elevation: 5,
           },
         ]}
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         onPress={() => {
           // this.onInterestPress(item.id, !item.isSlected)
         }}>

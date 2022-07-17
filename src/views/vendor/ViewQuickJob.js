@@ -271,7 +271,7 @@ export default class ViewQuickJob extends React.Component {
                           payload: this.state.currentOrder,
                         });
                       }}
-                      activeOpacity={0.7}
+                      activeOpacity={0.85}
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -316,7 +316,7 @@ export default class ViewQuickJob extends React.Component {
                       onPress={() => {
                         this.dialCall(this.state.currentOrder.user.phone);
                       }}
-                      activeOpacity={0.7}
+                      activeOpacity={0.85}
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',

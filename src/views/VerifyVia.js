@@ -149,7 +149,7 @@ export default class VerifyVia extends Component {
           <View style={{paddingHorizontal: SIZES.five}}>
             <View style={{marginHorizontal: SIZES.twenty}}>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.85}
                 style={[
                   styles.card,
                   {
@@ -171,7 +171,7 @@ export default class VerifyVia extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
               <TouchableOpacity
-                activeOpacity={0.5}
+                activeOpacity={0.85}
                 style={[
                   styles.card,
                   {

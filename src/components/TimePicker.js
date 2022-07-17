@@ -37,7 +37,7 @@ export default function DateTimePickerComponent(props) {
   return (
     <TouchableOpacity
       onPress={() => {}}
-      activeOpacity={0.6}
+      activeOpacity={0.85}
       style={styles.contaner}>
       <TouchableOpacity style={styles.containerView} onPress={props.onPress}>
         <Icon

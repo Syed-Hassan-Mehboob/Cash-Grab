@@ -359,7 +359,7 @@ export default function BookingAcceptance(props) {
                   width: SIZES.fifty * 1.7,
                   alignItems: 'center',
                 }}
-                activeOpacity={0.6}
+                activeOpacity={0.85}
                 onPress={() => {
                   acceptOrder();
                 }}>
@@ -430,7 +430,7 @@ export default function BookingAcceptance(props) {
                 onPress={() => {
                   cancelOrder();
                 }}
-                activeOpacity={0.6}>
+                activeOpacity={0.85}>
                 <BoldTextCB style={{color: Colors.white}}>Decline</BoldTextCB>
               </TouchableOpacity>
             ) : null}

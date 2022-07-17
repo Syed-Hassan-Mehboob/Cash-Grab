@@ -113,7 +113,7 @@ export default class SelectIndustry extends Component {
               name: item.name,
             });
           }}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Image
             source={{
               uri: Constants.imageURL + item.image,

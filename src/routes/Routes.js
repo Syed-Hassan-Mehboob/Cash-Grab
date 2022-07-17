@@ -89,7 +89,7 @@ export default function Routes(props) {
           }}>
           <Stack.Screen name={Constants.splash} component={Splash} />
           <Stack.Screen name={Constants.loginOrJoin} component={LoginOrJoin} />
-          <Stack.Screen name={Constants.login} component={Login} />
+          <Stack.Screen name={Constants.login} component={EditProfile} />
           <Stack.Screen
             name={Constants.createAccount}
             component={CreateAccount}
@@ -243,7 +243,7 @@ export default function Routes(props) {
                     marginVertical: SIZES.ten * 1.5,
                   }}>
                   <TouchableOpacity
-                    activeOpacity={0.7}
+                    activeOpacity={0.85}
                     onPress={() => {
                       setIsVisible(false);
                     }}
@@ -258,7 +258,7 @@ export default function Routes(props) {
                     <Text style={FONTS.mediumFont18}>Accept</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    activeOpacity={0.7}
+                    activeOpacity={0.85}
                     onPress={() => {
                       setIsVisible(false);
                     }}

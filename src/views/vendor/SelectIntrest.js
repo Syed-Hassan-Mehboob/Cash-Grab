@@ -109,7 +109,7 @@ export default function SelectIntrest(props) {
             borderColor: item.isSlected ? Colors.sickGreen : Colors.white,
           },
         ]}
-        activeOpacity={0.6}
+        activeOpacity={0.85}
         onPress={() => onPress(item.id, !item.isSlected)}>
         <Text
           style={[
@@ -139,7 +139,7 @@ export default function SelectIntrest(props) {
           onPress={() => {
             props.navigation.goBack();
           }}
-          activeOpacity={0.6}>
+          activeOpacity={0.85}>
           <Icon
             type="AntDesign"
             name="left"
