@@ -12,7 +12,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import moment from "moment"
+import moment from 'moment';
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
 import Constants, {FONTS, SIZES, width} from '../common/Constants';
@@ -584,7 +584,7 @@ export default function ScheduleJobDetails(props) {
             backgroundColor: Colors.white,
             padding: SIZES.fifteen,
             alignItems: 'center',
-            borderRadius: 10,
+            borderRadius: SIZES.ten,
           }}>
           <Icon
             type={'MaterialCommunityIcons'}
@@ -681,7 +681,7 @@ export default function ScheduleJobDetails(props) {
             onDayPress={onDayPress}
             markingType={'custom'}
             markedDates={{
-              [moment(selectedDate).format("YYYY-MM-DD")]: {
+              [moment(selectedDate).format('YYYY-MM-DD')]: {
                 customStyles: {
                   container: styles.selectedDateBG,
                   text: {
@@ -843,7 +843,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

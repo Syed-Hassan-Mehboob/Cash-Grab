@@ -102,7 +102,7 @@ export default class ForgetPassword extends Component {
             />
             <BoldTextCB
               style={{
-                fontSize: 28,
+                fontSize: SIZES.twenty * 1.35,
                 color: Colors.black,
                 marginTop: SIZES.ten * 3,
               }}>
@@ -110,7 +110,7 @@ export default class ForgetPassword extends Component {
             </BoldTextCB>
             <RegularTextCB
               style={{
-                fontSize: 18,
+                fontSize: SIZES.twenty,
                 color: Colors.coolGrey,
                 textAlign: 'center',
               }}>

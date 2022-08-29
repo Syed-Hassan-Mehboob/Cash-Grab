@@ -289,7 +289,7 @@ export default class VenderNotifications extends Component {
     // console.log('Notifications======',this.state.notifications)
     return (
       <View style={[STYLES.container]}>
-        <StatusBar barStyle="dark-content" />
+        {/* <StatusBar barStyle="dark-content" /> */}
         <View
           style={{
             flexDirection: 'row',
@@ -317,7 +317,6 @@ export default class VenderNotifications extends Component {
             Notifications
           </RegularTextCB>
         </View>
-
         <SwipeListView
           showsVerticalScrollIndicator={false}
           style={{marginTop: SIZES.ten}}

@@ -688,7 +688,7 @@ export default class Chat extends React.Component {
     // console.log('customer id========>>>>>>>>>>>', this.customerId);
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.navy} />
+        {/* <StatusBar barStyle="light-content" backgroundColor={Colors.navy} /> */}
         <View
           style={{
             borderBottomStartRadius: 30,
@@ -774,7 +774,6 @@ export default class Chat extends React.Component {
             </View>
           </View>
         </View>
-
         <ScrollView
           ref={(ref) => {
             this.scrollView = ref;

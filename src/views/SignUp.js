@@ -100,7 +100,7 @@ export default class SignUp extends Component {
   sendDataToVerifyVia = () => {
     // this.props.navigation.navigate(Constants.verifyVia);
 
-    let name = this.state.firstName+" "+this.state.lastName;
+    let name = this.state.firstName + ' ' + this.state.lastName;
     let services = this.state.services;
     let country_code = this.state.countryCode;
     let country_flag = this.state.countryFlag;
@@ -123,12 +123,6 @@ export default class SignUp extends Component {
       utils.showToast('First Name Should Not Be Greater Than 15 Characters');
       return;
     }
-
-
-
-
-
-
 
     if (this.state.lastName === '' || this.state.lastName === undefined) {
       utils.showToast('Invalid Last Name');
@@ -187,28 +181,28 @@ export default class SignUp extends Component {
 
     const payload = this.state.isVendor
       ? {
-        name,
-        services,
-        email,
-        password,
-        password_confirmation,
-        type: 'vendor',
-        country_code,
-        country_flag,
-        phone,
-      }
+          name,
+          services,
+          email,
+          password,
+          password_confirmation,
+          type: 'vendor',
+          country_code,
+          country_flag,
+          phone,
+        }
       : {
-        name,
-        email,
-        password,
-        password_confirmation,
-        type: 'customer',
-        country_code,
-        country_flag,
-        phone,
-      };
+          name,
+          email,
+          password,
+          password_confirmation,
+          type: 'customer',
+          country_code,
+          country_flag,
+          phone,
+        };
 
-    this.props.navigation.navigate(Constants.verifyVia, { payload });
+    this.props.navigation.navigate(Constants.verifyVia, {payload});
   };
 
   render() {
@@ -247,7 +241,7 @@ export default class SignUp extends Component {
                 />
                 <BoldTextCB
                   style={{
-                    fontSize: 28,
+                    fontSize: SIZES.twenty * 1.35,
                     color: Colors.black,
                     marginTop: SIZES.twenty,
                   }}>

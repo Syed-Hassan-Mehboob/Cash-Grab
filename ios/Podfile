@@ -2,6 +2,7 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, '12.0'
+use_modular_headers!
 
 target 'CashGrab' do
   config = use_native_modules!
@@ -26,6 +27,10 @@ target 'CashGrab' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
   
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+  
+  
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
+
 
   target 'CashGrabTests' do
     inherit! :complete

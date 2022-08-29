@@ -463,7 +463,7 @@ export default class VendorProfile extends React.Component {
         style={styles.container}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: SIZES.twenty}}>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.navy} />
+        {/* <StatusBar barStyle="light-content" backgroundColor={Colors.navy} /> */}
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,

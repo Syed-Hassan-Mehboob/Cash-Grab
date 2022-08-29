@@ -2,7 +2,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, {height, SIZES} from '../common/Constants';
 
 const ButtonRadius10 = ({
   label,
@@ -24,10 +24,10 @@ const ButtonRadius10 = ({
 
 const styles = StyleSheet.create({
   loginBtnBg: {
-    height: 55,
+    height: SIZES.fifty,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     shadowColor: '#878787',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.4,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   buttonLoginText: {
-    fontSize: 18,
+    fontSize: height * 0.025,
     fontFamily: Constants.fontBold,
   },
 });

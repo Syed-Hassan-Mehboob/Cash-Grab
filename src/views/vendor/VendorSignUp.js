@@ -345,7 +345,7 @@ export default class VendorSignUp extends Component {
                 />
                 <BoldTextCB
                   style={{
-                    fontSize: 28,
+                    fontSize: SIZES.twenty * 1.35,
                     color: Colors.black,
                     marginTop: SIZES.twenty,
                   }}>
@@ -492,7 +492,7 @@ export default class VendorSignUp extends Component {
                   onChangeText={(text) => {
                     this.setState({aboutMe: text});
                   }}
-                  placeholderTextColor={Colors.coolGrey}
+                  // placeholderTextColor={Colors.coolGrey}
                   numberOfLines={4}
                   multiline={true}
                   style={{height: SIZES.twentyFive * 5}}

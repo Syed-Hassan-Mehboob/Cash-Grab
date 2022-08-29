@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import {Icon} from 'native-base';
-import Constants from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import Colors from '../common/Colors';
 const {width, height} = Dimensions.get('window');
 const fontLight = Constants.fontLight;
@@ -25,7 +25,7 @@ export default class SearchBox extends Component {
             flexDirection: 'row',
             width: '100%',
             backgroundColor: '#eaeaea',
-            borderRadius: 10,
+            borderRadius: SIZES.ten,
             marginVertical: 10,
           },
         ]}

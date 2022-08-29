@@ -386,7 +386,7 @@ export default class ViewVendorProfile extends React.Component {
 
     return (
       <ScrollView style={STYLES.container} showsVerticalScrollIndicator={false}>
-        <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
+        {/* <StatusBar backgroundColor={Colors.navy} barStyle="light-content" /> */}
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,

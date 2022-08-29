@@ -72,10 +72,15 @@ export default class CreateAccount extends React.Component {
             }}
           />
           <BoldTextCB
-            style={{fontSize: 28, color: Colors.black, marginTop: SIZES.fifty}}>
+            style={{
+              fontSize: SIZES.twenty * 1.35,
+              color: Colors.black,
+              marginTop: SIZES.fifty,
+            }}>
             Create an account
           </BoldTextCB>
-          <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+          <RegularTextCB
+            style={{fontSize: SIZES.fifteen * 1.35, color: Colors.coolGrey}}>
             Which type of account would you like?
           </RegularTextCB>
           <TouchableOpacity
@@ -102,7 +107,8 @@ export default class CreateAccount extends React.Component {
               <RegularTextCB style={[FONTS.boldFont22, {color: Colors.black}]}>
                 Need Help
               </RegularTextCB>
-              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+              <RegularTextCB
+                style={{fontSize: SIZES.twenty * 1.05, color: Colors.coolGrey}}>
                 Lorem ipsum eluit fold sed, fludin gem
               </RegularTextCB>
             </View>
@@ -132,7 +138,8 @@ export default class CreateAccount extends React.Component {
               <RegularTextCB style={[FONTS.boldFont22, {color: Colors.black}]}>
                 Make Money
               </RegularTextCB>
-              <RegularTextCB style={{fontSize: 16, color: Colors.coolGrey}}>
+              <RegularTextCB
+                style={{fontSize: SIZES.twenty * 1.05, color: Colors.coolGrey}}>
                 Lorem ipsum eluit fold sed, fludin gem
               </RegularTextCB>
             </View>
@@ -171,6 +178,6 @@ const styles = StyleSheet.create({
   circularImage: {
     height: SIZES.ten * 9,
     width: SIZES.ten * 9,
-    borderRadius: 45,
+    borderRadius: SIZES.fifteen * 2.85,
   },
 });

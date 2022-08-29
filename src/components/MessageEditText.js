@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 import Colors from '../common/Colors';
-import Constants from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 
 export default function MessageEditText(props) {
   const [borderColor, setBorderColor] = React.useState('transparent');
@@ -19,7 +19,7 @@ export default function MessageEditText(props) {
           alignItems: 'center',
           borderColor: borderColor,
           borderWidth: 1,
-          borderRadius: 10,
+          borderRadius: SIZES.ten,
           paddingHorizontal: 10,
         },
       ]}>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     paddingHorizontal: 20,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',

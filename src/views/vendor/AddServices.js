@@ -242,7 +242,7 @@ export default function AddServices(props) {
 
   return (
     <View style={[STYLES.container, {paddingHorizontal: SIZES.fifteen}]}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+      {/* <StatusBar barStyle="dark-content" backgroundColor={Colors.white} /> */}
       <View
         style={{
           flexDirection: 'row',
@@ -291,7 +291,6 @@ export default function AddServices(props) {
           <Text style={[FONTS.mediumFont14, {color: Colors.white}]}>Save</Text>
         </TouchableOpacity>
       </View>
-
       <ScrollView
         ref={scrollViewRef}
         style={{marginBottom: 75}}
@@ -301,7 +300,6 @@ export default function AddServices(props) {
         showsVerticalScrollIndicator={false}>
         {inputs}
       </ScrollView>
-
       <View
         style={[
           STYLES.shadow,
@@ -331,7 +329,7 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: SIZES.ten,
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     marginVertical: SIZES.ten,
     // width: width - SIZES.fifteen,
     shadowColor: '#c5c5c5',

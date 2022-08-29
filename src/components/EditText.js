@@ -2,7 +2,7 @@ import {Icon} from 'native-base';
 import React, {Component} from 'react';
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FONTS, height, SIZES} from '../common/Constants';
 
 export default class EditText extends Component {
   constructor(props) {
@@ -62,10 +62,9 @@ export default class EditText extends Component {
           selectionColor={Colors.sickGreen}
           placeholder={placeholder}
           keyboardType={keyboardType}
-          placeholderTextColor={Colors.coolGrey}
+          // placeholderTextColor={Colors.coolGrey}
           value={value}
           onChangeText={onChangeText}
-          style={styles.textInput}
           multiline={multiline}
           numberOfLines={numberOfLines}
           editable={isEditable}
@@ -97,11 +96,12 @@ export default class EditText extends Component {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: SIZES.fifty,
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     paddingHorizontal: SIZES.twenty,
-    paddingVertical: 5,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,
@@ -109,13 +109,17 @@ const styles = StyleSheet.create({
     elevation: SIZES.ten,
     alignItems: 'center',
   },
-  textInput: {
-    fontSize: 16,
-    height: 60,
-    flex: 1,
-    fontFamily: Constants.fontRegular,
-    color: Colors.black,
-  },
+  textInput: [
+    FONTS.mediumFont14,
+    {
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
+      fontFamily: Constants.fontLight,
+      color: Colors.black,
+    },
+  ],
   iconPassword: {
     fontSize: 20,
     height: 20,

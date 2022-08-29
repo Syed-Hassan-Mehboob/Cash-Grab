@@ -1,5 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
-import Constants, {FIREBASECONSTANTS} from './common/Constants';
+import Constants, {FIREBASECONSTANTS, SIZES} from './common/Constants';
 import Axios from './network/APIKit';
 import database from '@react-native-firebase/database';
 

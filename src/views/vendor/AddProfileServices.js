@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: SIZES.ten,
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     marginVertical: SIZES.ten,
     // width: width - SIZES.fifteen,
     shadowColor: '#c5c5c5',

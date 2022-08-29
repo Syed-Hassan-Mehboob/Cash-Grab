@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   circleCard: {
     height: SIZES.ten * 9,
     width: SIZES.ten * 9,
-    borderRadius: 45,
+    borderRadius: SIZES.fifteen * 2.85,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   iconUser: {
     height: SIZES.ten * 9,
     width: SIZES.ten * 9,
-    borderRadius: 45,
+    borderRadius: SIZES.fifteen * 2.85,
     resizeMode: 'contain',
   },
   card: {

@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: SIZES.ten * 17,
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 1.0,

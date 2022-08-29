@@ -604,8 +604,7 @@ export default class Profile extends React.Component {
         style={styles.container}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: SIZES.twenty}}>
-        <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
-
+        {/* <StatusBar backgroundColor={Colors.navy} barStyle="light-content" /> */}
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -662,7 +661,7 @@ export default class Profile extends React.Component {
             style={{
               height: SIZES.ten * 9,
               width: SIZES.ten * 9,
-              borderRadius: 45,
+              borderRadius: SIZES.fifteen * 2.85,
               shadowColor: '#c5c5c5',
               shadowOffset: {width: SIZES.five, height: SIZES.five},
               shadowOpacity: 0.15,
@@ -675,7 +674,7 @@ export default class Profile extends React.Component {
               style={{
                 height: SIZES.ten * 9,
                 width: SIZES.ten * 9,
-                borderRadius: 45,
+                borderRadius: SIZES.fifteen * 2.85,
               }}
               resizeMode="cover"
             />
@@ -824,7 +823,6 @@ export default class Profile extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-
         <FlatList
           data={this.state.postedJob}
           horizontal
@@ -842,7 +840,6 @@ export default class Profile extends React.Component {
             ) : null
           }
         />
-
         <View
           style={{
             paddingVertical: SIZES.ten,
@@ -864,7 +861,6 @@ export default class Profile extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-
         <FlatList
           data={this.state.scheduleJobs}
           keyExtractor={(item) => item.id.toString()}
@@ -883,7 +879,6 @@ export default class Profile extends React.Component {
             ) : null
           }
         />
-
         <View
           style={{
             paddingVertical: SIZES.ten,
@@ -905,7 +900,6 @@ export default class Profile extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-
         <FlatList
           data={this.state.quickJobs}
           keyExtractor={(item) => item.id.toString()}
@@ -917,7 +911,6 @@ export default class Profile extends React.Component {
             paddingBottom: SIZES.ten,
           }}
         />
-
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
@@ -952,12 +945,12 @@ const styles = StyleSheet.create({
   iconUser: {
     height: SIZES.ten * 4.35,
     width: SIZES.ten * 4.35,
-    borderRadius: 45,
+    borderRadius: SIZES.fifteen * 2.85,
   },
   circleCard: {
     height: SIZES.ten * 4.35,
     width: SIZES.ten * 4.35,
-    borderRadius: 45,
+    borderRadius: SIZES.fifteen * 2.85,
     shadowColor: '#c5c5c5',
     shadowOffset: {width: SIZES.five, height: SIZES.five},
     shadowOpacity: 0.15,

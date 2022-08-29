@@ -264,9 +264,7 @@ export const STYLES = StyleSheet.create({
     //     : getStatusBarHeight(true) + SIZES.five,
 
     paddingTop:
-      Platform.OS === 'android'
-        ? SIZES.ten
-        : getStatusBarHeight() *1.15,
+      Platform.OS === 'android' ? SIZES.ten : getStatusBarHeight() * 1.15,
     backgroundColor: COLORS.white,
   },
   shadow: {
@@ -284,7 +282,7 @@ export const STYLES = StyleSheet.create({
     flexDirection: 'row',
     height: 60,
     backgroundColor: COLORS.white,
-    borderRadius: 10,
+    borderRadius: SIZES.ten,
     paddingHorizontal: 20,
     paddingVertical: 5,
     shadowColor: '#c5c5c5',

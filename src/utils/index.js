@@ -58,28 +58,28 @@ class utils {
     return str.join('&');
   }
 
-  _renderStatusBar(barStyle = 'light-content', barColor = 'transparent') {
-    if (Platform.OS === 'ios') {
-      return (
-        <StatusBar
-          animated
-          translucent
-          barStyle={barStyle}
-          StatusBarAnimation="fade"
-          backgroundColor={'transparent'}
-        />
-      );
-    } else {
-      return (
-        <StatusBar
-          animated
-          StatusBarAnimation="fade"
-          backgroundColor={barColor}
-          barStyle={barStyle}
-        />
-      );
-    }
-  }
+  // _renderStatusBar(barStyle = 'light-content', barColor = 'transparent') {
+  //   if (Platform.OS === 'ios') {
+  //     return (
+  //       <StatusBar
+  //         animated
+  //         translucent
+  //         barStyle={barStyle}
+  //         StatusBarAnimation="fade"
+  //         backgroundColor={'transparent'}
+  //       />
+  //     );
+  //   } else {
+  //     return (
+  //       <StatusBar
+  //         animated
+  //         StatusBarAnimation="fade"
+  //         backgroundColor={barColor}
+  //         barStyle={barStyle}
+  //       />
+  //     );
+  //   }
+  // }
 
   showToast(msg = '') {
     Toast.show({

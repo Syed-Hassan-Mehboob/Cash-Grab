@@ -405,7 +405,7 @@ export default class JobInProgress extends React.Component {
               backgroundColor: Colors.white,
               padding: SIZES.fifteen,
               alignItems: 'center',
-              borderRadius: 10,
+              borderRadius: SIZES.ten,
             }}>
             <Image
               source={Images.greenTick}

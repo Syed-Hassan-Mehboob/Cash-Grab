@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import Images from '../common/Images';
 import Colors from '../common/Colors';
-import Constants, {SIZES} from '../common/Constants';
+import Constants, {FONTS, height, SIZES} from '../common/Constants';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
 import BoldTextCB from '../components/BoldTextCB';
@@ -124,21 +124,24 @@ export default class Login extends Component {
             <Image
               source={Images.cashGrabLogoNew2}
               style={{
-                height: SIZES.ten * 7,
+                height: height * 0.05,
                 width: '60%',
                 resizeMode: 'contain',
-                marginTop: 85,
+                marginTop: height * 0.1,
               }}
             />
             <BoldTextCB
               style={{
-                fontSize: 28,
+                fontSize: SIZES.twenty * 1.35,
                 color: Colors.black,
                 marginTop: SIZES.twenty,
               }}>
               Welcome Back
             </BoldTextCB>
-            <RegularTextCB style={{fontSize: 18, color: Colors.coolGrey}}>
+            <RegularTextCB
+              style={[
+                {fontSize: SIZES.fifteen * 1.35, color: Colors.coolGrey},
+              ]}>
               Hello there, sign in to continue!
             </RegularTextCB>
           </View>
@@ -159,8 +162,7 @@ export default class Login extends Component {
                   style={[styles.textInput]}
                 />
               </View>
-              <View
-                style={[styles.textInputContainer, {marginTop: SIZES.ten * 3}]}>
+              <View style={[styles.textInputContainer, {marginTop: SIZES.ten}]}>
                 <EditText
                   ref={'password'}
                   placeholder={'Password'}
@@ -183,7 +185,7 @@ export default class Login extends Component {
                   marginTop: SIZES.ten * 3,
                 }}>
                 <RegularTextCB style={styles.noUnderlineText}>
-                  Rember Me
+                  Remember me
                 </RegularTextCB>
                 <TouchableOpacity
                   // style={{backgroundColor: 'red'}}
@@ -191,6 +193,7 @@ export default class Login extends Component {
                     // this.props.navigation.navigate(Constants.login);
                   }}>
                   <Switch
+                    // style={{height: 25, width: 40}}
                     trackColor={{
                       false: Colors.lightGrey,
                       true: Colors.lighNewGreen,
@@ -222,23 +225,28 @@ export default class Login extends Component {
                   Forgot Password?
                 </RegularTextCB>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  marginTop: SIZES.fifteen,
+                  // position: 'absolute',
+                  // bottom: SIZES.twenty,
+                }}
+                onPress={() => {
+                  this.props.navigation.navigate(Constants.createAccount);
+                }}>
+                <RegularTextCB style={styles.noUnderlineText}>
+                  Don't have any account?
+                </RegularTextCB>
+                <RegularTextCB style={styles.underlineText}>
+                  Sign Up
+                </RegularTextCB>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity
-            style={{
-              flexDirection: 'row',
-              alignSelf: 'center',
-              position: 'absolute',
-              bottom: SIZES.twenty,
-            }}
-            onPress={() => {
-              this.props.navigation.navigate(Constants.createAccount);
-            }}>
-            <RegularTextCB style={styles.noUnderlineText}>
-              Don't have any account?
-            </RegularTextCB>
-            <RegularTextCB style={styles.underlineText}>Sign Up</RegularTextCB>
-          </TouchableOpacity>
+
           <Spinner
             visible={this.state.isLoading}
             textContent={'Loading...'}

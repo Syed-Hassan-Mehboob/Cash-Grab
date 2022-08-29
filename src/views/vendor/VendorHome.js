@@ -700,7 +700,7 @@ export default class VendorHome extends Component {
         <ScrollView
           style={STYLES.container}
           showsVerticalScrollIndicator={false}>
-          <StatusBar barStyle="dark-content" />
+          {/* <StatusBar barStyle="dark-content" /> */}
           <View>
             <View
               style={{

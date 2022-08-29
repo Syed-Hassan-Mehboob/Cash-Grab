@@ -289,7 +289,7 @@ export default class ViewQuickJob extends React.Component {
                             style={{
                               height: 10,
                               width: 10,
-                              borderRadius: 10,
+                              borderRadius: SIZES.ten,
                               backgroundColor: 'red',
                               position: 'absolute',
                               zIndex: 1,

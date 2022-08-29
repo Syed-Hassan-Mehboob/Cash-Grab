@@ -9,7 +9,7 @@ import {
   Platform,
   TextInput,
   Text,
-  Modal as RnModal
+  Modal as RnModal,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import CountryPicker from 'react-native-country-picker-modal';
@@ -89,8 +89,8 @@ export default class EditProfile extends Component {
       console.log('User Profile Data ===== === =', data);
       this.setState({
         avatar: Constants.imageURL + data.data.records.user_profiles.image,
-        firstName: data.data.records.name.split(" ")[0],
-        lastName: data.data.records.name.split(" ")[1],
+        firstName: data.data.records.name.split(' ')[0],
+        lastName: data.data.records.name.split(' ')[1],
         email: data.data.records.email,
         countryCode: data.data.records.country_code,
         countryFlag:
@@ -131,9 +131,9 @@ export default class EditProfile extends Component {
   GooglePlacesInput = () => {
     return (
       <GooglePlacesAutocomplete
-      textInputProps={{
-        clearButtonMode:'always'
-      }}
+        textInputProps={{
+          clearButtonMode: 'always',
+        }}
         placeholder={'Search'}
         //   renderLeftButton={() => }
         minLength={2}
@@ -216,7 +216,7 @@ export default class EditProfile extends Component {
             Upload Photo
           </LightTextCB>
           <TouchableOpacity
-          activeOpacity={0.85}
+            activeOpacity={0.85}
             onPress={() => {
               this.toggleIsModalVisible();
             }}>
@@ -283,7 +283,7 @@ export default class EditProfile extends Component {
   };
 
   editUserProfile = () => {
-    let name = this.state.firstName + " "+ this.state.lastName;
+    let name = this.state.firstName + ' ' + this.state.lastName;
     let email = this.state.email;
     let countryCode = this.state.countryCode;
     let countryFlag = this.state.countryFlag;
@@ -404,7 +404,7 @@ export default class EditProfile extends Component {
   render() {
     return (
       <View style={[{flex: 1, backgroundColor: Colors.white}]}>
-        <StatusBar backgroundColor={Colors.navy} barStyle="light-content" />
+        {/*  <StatusBar backgroundColor={Colors.navy} barStyle="light-content" /> */}
         <View
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
@@ -428,7 +428,7 @@ export default class EditProfile extends Component {
               // paddingVertical: SIZES.ten,
             }}>
             <TouchableOpacity
-            activeOpacity={0.85}
+              activeOpacity={0.85}
               style={{position: 'absolute', left: SIZES.ten}}
               onPress={() => {
                 this.props.navigation.goBack();
@@ -443,7 +443,7 @@ export default class EditProfile extends Component {
               Profile
             </RegularTextCB>
             <TouchableOpacity
-            activeOpacity={0.85}
+              activeOpacity={0.85}
               style={{
                 position: 'absolute',
                 right: SIZES.ten,
@@ -484,7 +484,7 @@ export default class EditProfile extends Component {
           </TouchableOpacity>
           <RegularTextCB
             style={{color: Colors.white, fontSize: 16, marginTop: SIZES.ten}}>
-            {this.state.firstName+" "+this.state.lastName}
+            {this.state.firstName + ' ' + this.state.lastName}
           </RegularTextCB>
           <View
             style={{
@@ -633,7 +633,7 @@ export default class EditProfile extends Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              paddingBottom:SIZES.ten
+              paddingBottom: SIZES.ten,
             }}>
             <RegularTextCB
               style={{
@@ -662,7 +662,7 @@ export default class EditProfile extends Component {
                 },
               ]}>
               <TouchableOpacity
-              activeOpacity={0.85}
+                activeOpacity={0.85}
                 onPress={() => {
                   this.setState({
                     showModal: true,
@@ -694,39 +694,36 @@ export default class EditProfile extends Component {
             onRequestClose={() => {
               this.setState({showModal: false});
             }}>
-              <View style={{ flex:1,backgroundColor: '#00000085',}}>
-
-            <View
-              style={{
-                flex: 1,
-                padding: SIZES.twenty,
-                
-               
-              }}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                {this.GooglePlacesInput()}
-                <TouchableOpacity
-                activeOpacity={0.85}
-                  style={{
-                    marginTop: SIZES.fifteen,
-                    marginLeft: SIZES.five * 1.3,
-                  }}
-                  onPress={() => {
-                    this.setState({showModal: false});
-                  }}>
-                  <Image
+            <View style={{flex: 1, backgroundColor: '#00000085'}}>
+              <View
+                style={{
+                  flex: 1,
+                  padding: SIZES.twenty,
+                }}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  {this.GooglePlacesInput()}
+                  <TouchableOpacity
+                    activeOpacity={0.85}
                     style={{
-                      height: SIZES.fifteen,
-                      width: SIZES.fifteen,
-                      tintColor: '#fff',
+                      marginTop: SIZES.fifteen,
+                      marginLeft: SIZES.five * 1.3,
                     }}
-                    resizeMode="contain"
-                    source={Images.iconClose}
-                  />
-                </TouchableOpacity>
+                    onPress={() => {
+                      this.setState({showModal: false});
+                    }}>
+                    <Image
+                      style={{
+                        height: SIZES.fifteen,
+                        width: SIZES.fifteen,
+                        tintColor: '#fff',
+                      }}
+                      resizeMode="contain"
+                      source={Images.iconClose}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-              </View>
           </RnModal>
 
           {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>

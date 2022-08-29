@@ -145,7 +145,6 @@ export default class DrawerNavigator extends React.Component {
       //     //   id: 'default',
       //     // },
       //   },
-      
 
       /*
        *BOOKING JOB start
@@ -714,7 +713,7 @@ export default class DrawerNavigator extends React.Component {
                 backgroundColor: Colors.white,
                 padding: SIZES.fifteen,
                 alignItems: 'center',
-                borderRadius: 10,
+                borderRadius: SIZES.ten,
               }}>
               <Image
                 source={Images.greenTick}
@@ -772,7 +771,7 @@ export default class DrawerNavigator extends React.Component {
                 backgroundColor: Colors.white,
                 padding: SIZES.fifteen,
                 alignItems: 'center',
-                borderRadius: 10,
+                borderRadius: SIZES.ten,
               }}>
               {/* <Image
                 source={Images.c}
@@ -1011,7 +1010,7 @@ export default class DrawerNavigator extends React.Component {
                 backgroundColor: Colors.white,
                 padding: SIZES.fifteen,
                 alignItems: 'center',
-                borderRadius: 10,
+                borderRadius: SIZES.ten,
               }}>
               <Image
                 source={Images.greenTick}
