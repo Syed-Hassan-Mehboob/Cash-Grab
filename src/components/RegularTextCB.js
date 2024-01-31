@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text} from 'react-native';
-import Constants from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
+import Colors from '../common/Colors';
 
 export default class RegularTextCB extends Component {
   constructor(props) {
@@ -19,5 +20,6 @@ export default class RegularTextCB extends Component {
 const styles = StyleSheet.create({
   defaultStyle: {
     fontFamily: Constants.fontRegular,
+    color: Colors.grey,
   },
 });

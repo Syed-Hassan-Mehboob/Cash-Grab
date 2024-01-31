@@ -20,6 +20,7 @@ const {width, height} = Dimensions.get('window');
 
 export function MultiDropdownPicker(props) {
   const [name, setname] = useState(null);
+
   let val = [props.label];
   let ids = [];
   if (props.value != undefined && props.value != '') {
@@ -63,6 +64,7 @@ export function MultiDropdownPicker(props) {
   );
 
   const [multiVal, setMultiValue] = useState(val);
+
   const [multiIds, setMultiIds] = useState(ids);
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState(props.data ?? []);
@@ -77,7 +79,7 @@ export function MultiDropdownPicker(props) {
       setMultiIds([...multiIds, item.id]);
       setMultiValue([...multiVal, item[props.viewProperty]]);
       props.onChangeValue(item.id);
-      setname(item.name);
+      setname(item?.name || item?.cardholder_name);
     }
   };
   return (
@@ -136,7 +138,11 @@ export function MultiDropdownPicker(props) {
               }}></TouchableOpacity>
             <View style={{width: '100%', alignItems: 'center'}}>
               <RegularTextCB style={{fontSize: 18, color: Colors.sickGreen}}>
-                Select Services
+                {props.sample ? (
+                  <Text>{props.sample}</Text>
+                ) : (
+                  <Text>Select Services</Text>
+                )}
               </RegularTextCB>
               <TouchableOpacity
                 style={{position: 'absolute', right: 10, top: -5, padding: 10}}

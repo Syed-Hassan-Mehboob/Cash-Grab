@@ -139,6 +139,8 @@ export default class ViewJob extends React.Component {
                 this.state.latitude,
                 this.state.longitude,
               );
+
+              console.log('IMAGES', this.state.images);
             },
           );
           setTimeout(() => {
@@ -257,7 +259,7 @@ export default class ViewJob extends React.Component {
     // console.log('=============>>>>>>>', this.props.route);
     return (
       <View style={STYLES.container}>
-        <NormalHeader name="View Jobb" />
+        <NormalHeader name="View Job" />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -316,6 +318,7 @@ export default class ViewJob extends React.Component {
                   style={{
                     color: Colors.black,
                     fontSize: 16,
+                    marginVertical: SIZES.ten,
                   }}>
                   {this.state.title === null ? '' : this.state.title}
                 </RegularTextCB>
@@ -328,13 +331,13 @@ export default class ViewJob extends React.Component {
                 </LightTextCB>
               </View>
 
-              <RegularTextCB
+              {/* <RegularTextCB
                 style={{
                   color: Colors.sickGreen,
                   fontSize: 12,
                 }}>
                 {this.state.jobService[0]?.categories.name}
-              </RegularTextCB>
+              </RegularTextCB> */}
 
               <RegularTextCB
                 style={{
@@ -346,8 +349,9 @@ export default class ViewJob extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: SIZES.five,
+                  marginTop: SIZES.ten,
                   alignItems: 'center',
+                  marginBottom: SIZES.ten,
                 }}>
                 <Image
                   source={Images.iconLocationPin}
@@ -388,8 +392,9 @@ export default class ViewJob extends React.Component {
               renderItem={({item}) => {
                 return (
                   <Image
-                    source={{uri: Constants.imageURL + item.images}}
+                    source={{uri: Constants.imageURL + item?.images}}
                     style={styles.carImage}
+                    resizeMode="cover"
                   />
                 );
               }}
@@ -514,8 +519,12 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   carImage: {
+    flex: 1,
     height: SIZES.fifty * 2,
     width: SIZES.fifty * 2,
+    marginLeft: SIZES.ten,
+    borderRadius: SIZES.ten,
+    overflow: 'hidden',
   },
   carImageShadow: {
     height: SIZES.ten * 8,

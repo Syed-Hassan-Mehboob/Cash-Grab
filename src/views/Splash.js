@@ -44,7 +44,12 @@ export default class Splash extends Component {
       <LinearGradient
         colors={[Colors.sand, Colors.sickGreen]}
         style={{flex: 1, width: '100%'}}>
-        <StatusBar hidden />
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={Colors.sickGreen}
+          translucent={true}
+        />
+
         <ImageBackground source={Images.splashBgWeb} style={styles.splashBg}>
           <Image
             source={Images.cashGrabLogoNew}

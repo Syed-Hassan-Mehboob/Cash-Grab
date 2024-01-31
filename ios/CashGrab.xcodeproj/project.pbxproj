@@ -375,7 +375,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 2NN5AT2VND;
+						DevelopmentTeam = 7D4G5DCVBR;
 						LastSwiftMigration = 1120;
 						ProvisioningStyle = Manual;
 					};
@@ -792,6 +792,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2NN5AT2VND;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7D4G5DCVBR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CashGrab/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -801,9 +802,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rs.cashgrab;
+				PRODUCT_BUNDLE_IDENTIFIER = com.v8.cashgrab;
 				PRODUCT_NAME = CashGrab;
 				PROVISIONING_PROFILE_SPECIFIER = "Provisioning Development CashGrab";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Provisioning Development CashGrab";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -820,6 +822,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2NN5AT2VND;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7D4G5DCVBR;
 				INFOPLIST_FILE = CashGrab/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -828,9 +831,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rs.cashgrab;
+				PRODUCT_BUNDLE_IDENTIFIER = com.v8.cashgrab;
 				PRODUCT_NAME = CashGrab;
 				PROVISIONING_PROFILE_SPECIFIER = "Provisioning Development CashGrab";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Provisioning Development CashGrab";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -56,6 +56,8 @@ import SingleJobHistory from '../vendor/SingleJobHistory';
 import MyAcceptedJobs from '../vendor/MyAcceptedJobs';
 import MyAcceptedJobDetails from '../vendor/MyAcceptedJobDetails';
 import ViewQuickJob from '../vendor/ViewQuickJob';
+import MyWallet from '../vendor/MyWallet';
+import Redeem from '../vendor/Redeem';
 // import EditText from '../components/EditText';
 
 const Tab = createBottomTabNavigator();
@@ -142,7 +144,8 @@ const HomeNavigator = () => {
         name={Constants.notifications}
         component={VenderNotifications}
       />
-      <HomeStack.Screen name={Constants.settings} component={Settings} />
+      <HomeStack.Screen name={Constants.MyWallet} component={MyWallet} />
+      <HomeStack.Screen name={Constants.Redeem} component={Redeem} />
       {/* <HomeStack.Screen name={Constants.chatListing} component={ChatListing} /> */}
       {/* <HomeStack.Screen name={Constants.chat} component={Chat} /> */}
       <HomeStack.Screen

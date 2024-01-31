@@ -66,10 +66,8 @@ export default class Profile extends React.Component {
   };
 
   getUserProfile = () => {
-    this.toggleIsLoading();
     const onSuccess = ({data}) => {
       // console.log('Profile data ==== ', data.data.records);
-      this.toggleIsLoading();
       this.setState({
         avatar: data.data.records.user_profiles.image,
         name: data.data.records.name,
@@ -215,13 +213,13 @@ export default class Profile extends React.Component {
   };
 
   renderPostedJob = ({item}) => {
-    // console.log('posted Job Item ====== ======>>>>>>>>', item);
+    console.log('posted Job Item ====== ======>>>>>>>>', item);
     return (
       <TouchableOpacity
         activeOpacity={0.85}
         style={[
           {
-            maxWidth: width * 0.98,
+            maxWidth: width * 0.9,
             backgroundColor: '#fff',
             padding: SIZES.twenty,
             marginHorizontal: SIZES.ten,
@@ -241,40 +239,51 @@ export default class Profile extends React.Component {
         }}>
         <View
           style={{
-            flexDirection: 'row',
             marginTop: 5,
-            alignItems: 'center',
-            justifyContent: 'space-between',
           }}>
-          <View style={{justifyContent: 'space-between'}}>
-            <BoldTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
-              {item.description !== null && item.description !== undefined
-                ? item.description
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <LightTextCB style={[FONTS.mediumFont16, {}]}>
+              {item.title !== null && item.title !== undefined
+                ? item.title
                 : null}
-            </BoldTextCB>
-            <LightTextCB
-              style={[
-                FONTS.mediumFont14,
-                {color: Colors.black, maxWidth: width * 0.3},
-              ]}>
-              Description:{'\n'}
-              <LightTextCB>
-                {item.title !== null && item.title !== undefined
-                  ? item.title
-                  : null}
-              </LightTextCB>
+            </LightTextCB>
+
+            <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
+              $
+              {item.price !== null && item.price !== undefined
+                ? item.price
+                : ''}
             </LightTextCB>
           </View>
 
-          <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
-            ${item.price !== null && item.price !== undefined ? item.price : ''}
-          </LightTextCB>
+          <View>
+            <RegularTextCB
+              style={[{color: Colors.sickGreen, marginVertical: SIZES.five}]}>
+              {item.service !== null && item.service !== undefined
+                ? item.service
+                : 'Service'}
+            </RegularTextCB>
+
+            <RegularTextCB style={[{color: Colors.lightGrey}]}>
+              {item.description !== null && item.description !== undefined
+                ? item.description
+                : null}
+            </RegularTextCB>
+          </View>
         </View>
 
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-          <View
-            style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{
+            flexDirection: 'row',
+            marginTop: SIZES.ten,
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={Images.iconLocationPin}
               style={{
@@ -296,6 +305,7 @@ export default class Profile extends React.Component {
                 : ''}
             </RegularTextCB>
           </View>
+
           <RegularTextCB
             style={{
               color: Colors.lightGrey,
@@ -307,6 +317,7 @@ export default class Profile extends React.Component {
               : ''}
           </RegularTextCB>
         </View>
+
         {/* <RegularTextCB
             style={{
               color: Colors.coolGrey,
@@ -360,7 +371,7 @@ export default class Profile extends React.Component {
             />
           </View>
           <View style={{marginStart: 10}}>
-            <RegularTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+            <RegularTextCB style={[FONTS.mediumFont16, {color: Colors.black}]}>
               {item.name !== null && item.name !== undefined ? item.name : ''}
             </RegularTextCB>
             <View
@@ -397,19 +408,20 @@ export default class Profile extends React.Component {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <LightTextCB style={[FONTS.boldFont16, {color: Colors.sickGreen}]}>
+          <RegularTextCB style={[{color: Colors.sickGreen}]}>
             {item.category_name !== null && item.category_name !== undefined
               ? item.category_name
               : ''}
-          </LightTextCB>
+          </RegularTextCB>
+
           <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
             {item.grand_total !== null && item.grand_total !== undefined
-              ? item.grand_total
+              ? `$${item.grand_total}`
               : ''}
           </LightTextCB>
         </View>
 
-        <View style={{}}>
+        <View style={{marginBottom: SIZES.ten}}>
           <RegularTextCB style={{color: Colors.coolGrey}}>
             {item.description !== null && item.description !== undefined
               ? item.description
@@ -427,13 +439,17 @@ export default class Profile extends React.Component {
               color: Colors.coolGrey,
               marginStart: 5,
             }}>
-            {item.address !== null && item.address !== undefined
-              ? item.address
+            {item.location !== null && item.location !== undefined
+              ? item.location
               : ''}
           </RegularTextCB>
         </View>
         <View
-          style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+          style={{
+            flexDirection: 'row',
+            marginVertical: SIZES.ten,
+            alignItems: 'center',
+          }}>
           <Image
             source={Images.iconStopWatch}
             style={{height: 17, width: 17, resizeMode: 'contain'}}
@@ -445,17 +461,18 @@ export default class Profile extends React.Component {
               alignItems: 'center',
               flex: 1,
               justifyContent: 'space-between',
+              marginVertical: SIZES.five,
             }}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
               }}>
-              {item.start_time !== null && item.start_time !== undefined
-                ? item.start_time
+              {item.from_time !== null && item.from_time !== undefined
+                ? item.from_time
                 : ''}{' '}
               -{' '}
-              {item.end_time !== null && item.end_time !== undefined
-                ? item.end_time
+              {item.to_time !== null && item.to_time !== undefined
+                ? item.to_time
                 : ''}
             </RegularTextCB>
           </View>
@@ -525,11 +542,13 @@ export default class Profile extends React.Component {
             {item.title}
           </RegularTextCB> */}
 
-          <LightTextCB style={[FONTS.boldFont16, {color: Colors.black}]}>
+          <RegularTextCB
+            style={[{color: Colors.sickGreen, marginBottom: SIZES.five}]}>
             {item.category_name !== null && item.category_name !== undefined
               ? item.category_name
               : ''}
-          </LightTextCB>
+          </RegularTextCB>
+
           <LightTextCB style={[{color: Colors.black, fontSize: 14}]}>
             $
             {item.grand_total !== null && item.grand_total !== undefined
@@ -586,8 +605,7 @@ export default class Profile extends React.Component {
               style={[
                 {
                   color: Colors.black,
-                  textDecorationLine: 'underline',
-                  fontSize: 18,
+                  fontSize: 14,
                 },
               ]}>
               {'View Job'}
@@ -609,7 +627,7 @@ export default class Profile extends React.Component {
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
             borderBottomEndRadius: SIZES.ten * 3,
-            height: height / 2.15,
+            height: height / 2.6,
             backgroundColor: Colors.navy,
             alignItems: 'center',
           }}>
@@ -619,8 +637,8 @@ export default class Profile extends React.Component {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              padding: 15,
-              marginTop: Platform.OS === 'android' ? 0 : SIZES.twenty,
+              padding: SIZES.fifteen,
+              // marginTop: Platform.OS === 'android' ? 0 : SIZES.ten,
               marginBottom: Platform.OS === 'android' ? 0 : SIZES.twenty,
               //
             }}>
@@ -706,7 +724,7 @@ export default class Profile extends React.Component {
             style={{color: Colors.white, fontSize: 18, marginTop: SIZES.five}}>
             {this.state.name}
           </RegularTextCB>
-          <RegularTextCB
+          {/* <RegularTextCB
             style={{
               color: Colors.coolGrey,
               fontSize: 16,
@@ -719,7 +737,7 @@ export default class Profile extends React.Component {
             {this.state.abouteMe != null
               ? this.state.abouteMe
               : 'Aboute Me is Not Define '}
-          </RegularTextCB>
+          </RegularTextCB> */}
         </View>
         <View
           style={[
@@ -802,15 +820,16 @@ export default class Profile extends React.Component {
             </RegularTextCB>
           </View>
         </View>
+
         <View
           style={{
-            paddingVertical: SIZES.ten,
-            alignItems: 'center',
+            marginTop: SIZES.twenty,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingHorizontal: SIZES.twenty,
+            alignItems: 'center',
+            paddingHorizontal: SIZES.twentyFive,
           }}>
-          <Text style={[FONTS.boldFont20, ,]}>Posted Jobs</Text>
+          <Text style={[FONTS.mediumFont18, ,]}>Posted Jobs</Text>
 
           <TouchableOpacity
             activeOpacity={0.85}
@@ -819,10 +838,11 @@ export default class Profile extends React.Component {
             }}>
             <Text
               style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
-              see all
+              See all
             </Text>
           </TouchableOpacity>
         </View>
+
         <FlatList
           data={this.state.postedJob}
           horizontal
@@ -840,15 +860,16 @@ export default class Profile extends React.Component {
             ) : null
           }
         />
+
         <View
           style={{
-            paddingVertical: SIZES.ten,
-            alignItems: 'center',
+            marginVertical: SIZES.ten,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingHorizontal: SIZES.twenty,
+            alignItems: 'center',
+            paddingHorizontal: SIZES.twentyFive,
           }}>
-          <Text style={[FONTS.boldFont20]}>Schedule Jobs</Text>
+          <Text style={[FONTS.mediumFont18]}>Schedule Jobs</Text>
 
           <TouchableOpacity
             activeOpacity={0.85}
@@ -857,10 +878,11 @@ export default class Profile extends React.Component {
             }}>
             <Text
               style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
-              see all
+              See all
             </Text>
           </TouchableOpacity>
         </View>
+
         <FlatList
           data={this.state.scheduleJobs}
           keyExtractor={(item) => item.id.toString()}
@@ -879,15 +901,16 @@ export default class Profile extends React.Component {
             ) : null
           }
         />
+
         <View
           style={{
-            paddingVertical: SIZES.ten,
-            alignItems: 'center',
+            marginVertical: SIZES.ten,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingHorizontal: SIZES.twenty,
+            alignItems: 'center',
+            paddingHorizontal: SIZES.twentyFive,
           }}>
-          <Text style={[FONTS.boldFont20, ,]}>Quick Jobs</Text>
+          <Text style={[FONTS.mediumFont18, ,]}>Quick Jobs</Text>
 
           <TouchableOpacity
             activeOpacity={0.85}
@@ -896,10 +919,11 @@ export default class Profile extends React.Component {
             }}>
             <Text
               style={[FONTS.mediumFont16, {textDecorationLine: 'underline'}]}>
-              see all
+              See all
             </Text>
           </TouchableOpacity>
         </View>
+
         <FlatList
           data={this.state.quickJobs}
           keyExtractor={(item) => item.id.toString()}

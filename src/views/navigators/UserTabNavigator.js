@@ -42,6 +42,8 @@ import UserQuickJobs from '../UserQuickJob';
 import PostedJob from '../PostedJob';
 import JobAcceptance from '../JobAcceptance';
 import QuickJobDetail from './../QuickJobDetail';
+import Payment from '../payment';
+import AddCard from '../AddCard';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -123,10 +125,9 @@ const HomeNavigator = () => {
         name={Constants.termsAndConditionsScreen}
         component={TermsAndConditions}
       />
-      {/* <HomeStack.Screen
-        name={Constants.confirmPayment}
-        component={ConfirmPayment}
-      /> */}
+      <HomeStack.Screen name={Constants.payment} component={Payment} />
+      <HomeStack.Screen name={Constants.AddCard} component={AddCard} />
+
       <HomeStack.Screen name={Constants.support} component={Support} />
       <HomeStack.Screen name={Constants.faq} component={Faq} />
       <HomeStack.Screen

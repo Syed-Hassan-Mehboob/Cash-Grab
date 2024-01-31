@@ -200,15 +200,13 @@ export default class AllCategories extends Component {
               style={{color: Colors.black, fontSize: SIZES.ten * 3}}
             />
           </TouchableOpacity>
-          <RegularTextCB style={[, {fontSize: 22}]}>
+          <RegularTextCB style={[{color: Colors.black, fontSize: 22}]}>
             All Categories
           </RegularTextCB>
-          <TouchableOpacity
-            onPress={() => {
-              this.openNextScreen(Constants.filter);
-            }}>
+
+          <TouchableOpacity>
             <Image
-              source={Images.iconHamburger}
+              // source={Images.iconHamburger}
               style={{
                 height: SIZES.twenty,
                 width: SIZES.twenty,

@@ -105,7 +105,7 @@ export default function AddProfileServices(props) {
             />
           </View>
 
-          {/* <View style={{marginTop: SIZES.five, marginBottom: SIZES.fifteen}}>
+          <View style={{marginTop: SIZES.five, marginBottom: SIZES.fifteen}}>
             <Text style={[FONTS.mediumFont16, {marginTop: SIZES.ten}]}>
               Price
             </Text>
@@ -122,7 +122,7 @@ export default function AddProfileServices(props) {
                 setServicePrice(text);
               }}
             />
-          </View> */}
+          </View>
         </View>
       </ScrollView>
 

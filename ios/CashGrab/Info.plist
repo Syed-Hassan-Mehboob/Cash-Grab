@@ -39,11 +39,7 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>CashGrab requires access to the camera to change/update profile picture.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>CashGrab requires user location to update and show nearby vendors.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>CashGrab requires your current location to show nearby vendors..</string>
-	<key>NSLocationAlwaysUsageDescription</key>
 	<string>CashGrab requires your current location to show nearby vendors..</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>CashGrab requires access to the photo library to change/update profile picture.</string>

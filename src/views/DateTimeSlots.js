@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -12,8 +12,8 @@ import {
   Platform,
   Text,
 } from 'react-native';
-import moment from "moment"
-import {Calendar} from 'react-native-calendars';
+import moment from 'moment';
+import {Calendar, CalendarList} from 'react-native-calendars';
 import Slider from '@react-native-community/slider';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Modal from 'react-native-modal';
@@ -135,6 +135,7 @@ export default class DateTimeSlots extends Component {
     };
 
     this.toggleIsLoading();
+
     Axios.get(Constants.getProfileURL, {
       headers: {
         Authorization: this.state.accessToken,
@@ -250,6 +251,146 @@ export default class DateTimeSlots extends Component {
     this.setState({selectedTimeSlot: slot});
   };
 
+  // postScheduleJob = () => {
+
+  //   let phone = this.state.phone;
+  //   let countryCode = this.state.countryCode;
+  //   let address = this.state.address;
+  //   let location = this.state.location;
+  //   let description = this.state.description;
+  //   let lat = this.state.lat;
+  //   let lng = this.state.lng;
+  //   let hrFrom = this.state.hrFrom;
+  //   let minFrom = this.state.minFrom;
+  //   let hrTo = this.state.hrTo;
+  //   let minTo = this.state.minTo;
+  //   let selectedDate = this.state.selected;
+  //   if (selectedDate === '') {
+  //     utils.showToast('Date Should not be Empty');
+  //     return;
+  //   }
+
+  //   if (hrFrom === '') {
+  //     utils.showToast('From Hour should not be empty');
+  //     return;
+  //   }
+
+  //   if (Number(hrFrom) < 1 || Number(hrFrom) > 24) {
+  //     utils.showToast('From Hour should be in between 1 and 23');
+  //     return;
+  //   }
+
+  //   if (minFrom === '') {
+  //     utils.showToast('From Minutes should not be empty');
+  //     return;
+  //   }
+
+  //   if (Number(minFrom) < 0 || Number(minFrom) > 59) {
+  //     utils.showToast('From Minute should be in between 00 and 59');
+  //     return;
+  //   }
+
+  //   if (hrTo === '') {
+  //     utils.showToast('To Hour should not be empty');
+  //     return;
+  //   }
+
+  //   if (Number(hrTo) < 1 || Number(hrTo) > 24) {
+  //     utils.showToast('To Hour should be in between 1 and 23');
+  //     return;
+  //   }
+
+  //   if (minTo === '') {
+  //     utils.showToast('To Minutes should not be empty');
+  //     return;
+  //   }
+  //   if (Number(minTo) < 0 || Number(minTo) > 59) {
+  //     utils.showToast('To Minute should be in between 00 and 59');
+  //     return;
+  //   }
+
+  //   if (countryCode === '') {
+  //     utils.showToast('Select Country Code');
+  //     return;
+  //   }
+  //   if (phone === '') {
+  //     utils.showToast('Phone Number should not be empty');
+  //     return;
+  //   }
+
+  //   if (phone.length < 9) {
+  //     utils.showToast('Phone Number Should Not Be Less Than 9 Characters');
+  //     return;
+  //   }
+  //   if (phone.length > 9) {
+  //     utils.showToast('Phone Number Should Not Be Greator Than 9 Characters');
+  //     return;
+  //   }
+
+  //   if (location === '') {
+  //     utils.showToast('Location Should not be Empty');
+  //     return;
+  //   }
+  //   if (address === '') {
+  //     utils.showToast('Address Should not be Empty');
+  //     return;
+  //   }
+  //   if (description === '') {
+  //     utils.showToast('Description Should not be Empty');
+  //     return;
+  //   }
+
+  //   // console.log(this.props.route.params);
+
+  //   // console.log('Data======>>>>>>>>>>>>>>', params);
+
+  //   const onSuccess = ({data}) => {
+  //     // utils.showToast(data.message);
+  //     // console.log('order Data========', data);
+  //     this.toggleIsLoading();
+
+  //     setTimeout(() => {
+  //       this.props.navigation.navigate(Constants.bookingConfirmed, {
+  //         orderData: data.data,
+  //       });
+  //     }, 1000);
+  //   };
+
+  //   const onFailure = (error) => {
+  //     this.toggleIsLoading();
+  //     utils.showResponseError(error);
+  //   };
+
+  //   const params = {
+  //     phone: phone,
+  //     location: location,
+  //     lat: lat,
+  //     lng: lng,
+  //     services: this.props.route.params.serviceIds,
+  //     address: address,
+  //     vendor_id: this.props.route.params.vendorId,
+  //     date: selectedDate,
+  //     from_time: hrFrom + ':' + minFrom,
+  //     to_time: hrTo + ':' + minTo,
+  //     description: description,
+  //     country: countryCode,
+
+  //   };
+
+  //   const options = {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: this.state.accessToken,
+  //     },
+  //   };
+
+  //   this.toggleIsLoading();
+
+  //   Axios.post(Constants.orderProcess, params, options)
+  //     .then(onSuccess)
+  //     .catch(onFailure);
+  // };
+
   postScheduleJob = () => {
     let phone = this.state.phone;
     let countryCode = this.state.countryCode;
@@ -263,7 +404,6 @@ export default class DateTimeSlots extends Component {
     let hrTo = this.state.hrTo;
     let minTo = this.state.minTo;
     let selectedDate = this.state.selected;
-
     if (selectedDate === '') {
       utils.showToast('Date Should not be Empty');
       return;
@@ -339,27 +479,6 @@ export default class DateTimeSlots extends Component {
       return;
     }
 
-    // console.log(this.props.route.params);
-
-    // console.log('Data======>>>>>>>>>>>>>>', params);
-
-    const onSuccess = ({data}) => {
-      // utils.showToast(data.message);
-      // console.log('order Data========', data);
-      this.toggleIsLoading();
-
-      setTimeout(() => {
-        this.props.navigation.navigate(Constants.bookingConfirmed, {
-          orderData: data.data,
-        });
-      }, 1000);
-    };
-
-    const onFailure = (error) => {
-      this.toggleIsLoading();
-      utils.showResponseError(error);
-    };
-
     const params = {
       phone: phone,
       location: location,
@@ -375,18 +494,12 @@ export default class DateTimeSlots extends Component {
       country: countryCode,
     };
 
-    const options = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: this.state.accessToken,
-      },
-    };
-
-    this.toggleIsLoading();
-
-    Axios.post(Constants.orderProcess, params, options)
-      .then(onSuccess)
-      .catch(onFailure);
+    setTimeout(() => {
+      this.props.navigation.navigate(Constants.payment, {
+        data: params,
+        token: this.state.accessToken,
+      });
+    }, 1000);
   };
 
   renderTimeSlotItem = ({item}) => {
@@ -449,9 +562,11 @@ export default class DateTimeSlots extends Component {
               alignItems: 'center',
             }}>
             <Image
-              source={{
-                // uri: Constants.imageURL + this.props.route.params.item.image,
-              }}
+              source={
+                {
+                  // uri: Constants.imageURL + this.props.route.params.item.image,
+                }
+              }
               style={{height: 35, width: 35, resizeMode: 'contain'}}
             />
             <View style={{marginStart: SIZES.ten}}>
@@ -464,23 +579,39 @@ export default class DateTimeSlots extends Component {
             style={{
               flexDirection: 'row',
               width: '100%',
-              alignItems: 'center',
+              // alignItems: 'center',
               marginHorizontal: SIZES.fifteen,
             }}>
-            <Image
-              source={Images.iconCalendar}
+            <View
               style={{
-                width: SIZES.twentyFive,
-                height: SIZES.twentyFive,
-                resizeMode: 'contain',
-              }}
-            />
-            <Calendar
-            date={this.state.selected}
+                flex: 1,
+                flexDirection: 'column',
+              }}>
+              <View style={{marginTop: SIZES.fifteen}}>
+                {/* <Text>Month</Text> */}
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={Images.iconCalendar}
+                  style={{
+                    width: SIZES.twentyFive,
+                    height: SIZES.twentyFive,
+                    resizeMode: 'contain',
+                  }}
+                />
+              </View>
+            </View>
+            <CalendarList
+              horizontal={true}
+              date={this.state.selected}
               firstDay={1}
               minDate={new Date()}
               monthFormat={'MMM yyyy'}
-              disabledByDefault={true}
+              disabledByDefault={false}
               hideExtraDays
               onDayPress={this.onDayPress}
               markingType={'custom'}
@@ -507,7 +638,7 @@ export default class DateTimeSlots extends Component {
                 )
               }
               markedDates={{
-                [moment(this.state.selected).format("YYYY-MM-DD")]: {
+                [moment(this.state.selected).format('YYYY-MM-DD')]: {
                   customStyles: {
                     container: styles.selectedDateBG,
                     text: {
@@ -518,21 +649,24 @@ export default class DateTimeSlots extends Component {
                 },
               }}
               theme={{
-                textDayFontFamily: Constants.fontRegular,
+                textDayFontFamily: Constants.fontBold,
                 textMonthFontFamily: Constants.fontRegular,
                 textDayHeaderFontFamily: Constants.fontRegular,
-                textDisabledColor: Colors.navy,
+                textDisabledColor: Colors.silver,
                 monthTextColor: Colors.navy,
-                dayTextColor: 'red',
-                todayTextColor: 'yellow',
+                dayTextColor: Colors.sickGreen,
+                todayTextColor: Colors.white,
                 textSectionTitleColor: Colors.navy,
+                todayBackgroundColor: Colors.pinkishGrey,
+                textDayFontWeight: '500',
               }}
               style={{
                 width: width / 1.15,
-                height: height / 2,
+                height: height / 2.35,
               }}
             />
           </View>
+
           {/* <View
             style={{
               flexDirection: 'row',
@@ -569,6 +703,7 @@ export default class DateTimeSlots extends Component {
               />
             </View>
           </View> */}
+
           <Text
             style={[
               FONTS.mediumFont16,
@@ -843,6 +978,10 @@ export default class DateTimeSlots extends Component {
               label="NEXT"
               bgColor={Colors.sickGreen}
               onPress={this.postScheduleJob}
+
+              // onPress={() => {
+              //   this.props.navigation.navigate(Constants.payment);
+              // }}
             />
           </View>
         </ScrollView>
@@ -918,18 +1057,12 @@ const styles = StyleSheet.create({
     elevation: SIZES.five,
   },
   selectedDateBG: {
-    height: SIZES.ten * 3,
-    width: SIZES.ten * 3,
-    padding: 2,
+    height: SIZES.ten * 4,
+    width: SIZES.ten * 4,
     backgroundColor: Colors.sickGreen,
     borderRadius: SIZES.fifteen,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#c5c5c5',
-    shadowOffset: {width: SIZES.five, height: SIZES.five},
-    shadowOpacity: 1.0,
-    shadowRadius: SIZES.ten,
-    elevation: SIZES.ten,
   },
   selectedTimeBG: {
     paddingHorizontal: SIZES.fifteen,

@@ -90,40 +90,68 @@ export default class DrawerScreen extends Component {
       .catch(onFailure);
   };
 
-  logout = async () => {
-    let user = await AsyncStorage.getItem('user');
-    let parsedUserId = JSON.parse(user);
-    console.log('userid drawer screeen =====>>>>>>>', parsedUserId.id);
+  // logout = async () => {
+  //   try {
+  //     const user = await AsyncStorage.getItem('user');
+  //     const parsedUserId = JSON.parse(user);
 
-    const onSuccess = async ({data}) => {
-      this.setState({isLoading: false});
+  //     await database()
+  //       .ref(`${FIREBASECONSTANTS.FIREBASE_TOKEN}/${parsedUserId.id}`)
+  //       .set('')
+  //       .then(() => console.log('FCM Data Upload'))
+  //       .catch((error) => console.error('FCM Data Upload Error:', error));
 
-      await database()
-        .ref(FIREBASECONSTANTS.FIREBASE_TOKEN)
-        .child(parsedUserId.id.toString())
-        .set('')
-        .then(() => console.log('HHHHAAAAMMMMZZZZAAAAA FCM Data Upload.'))
-        .catch((error) =>
-          console.log('HHHHAAAAMMMMZZZZAAAAA error ====>', error),
-        );
-      AsyncStorage.removeItem('user');
-      this.props.navigation.dispatch(resetAction);
+  //     this.props.navigation.dispatch(resetAction);
+  //     await AsyncStorage.removeItem('user');
+  //   } catch (error) {
+  //     console.error('Logout Error:', error);
+  //     utils.showResponseError(error);
+  //   }
+  // };
+
+  // Without Firebase
+
+  // logout = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('user');
+  //     this.props.navigation.dispatch(resetAction);
+  //   } catch (error) {
+  //     console.error('Logout Error:', error);
+  //     utils.showResponseError(error);
+  //   }
+  // };
+
+  /// With API
+
+  logout = () => {
+    console.log('ACCESS', this.state.accessToken);
+    const onSuccess = () => {
+      AsyncStorage.removeItem('user')
+        .then((response) => {
+          console.log('Logout successful');
+          this.props.navigation.dispatch(resetAction);
+        })
+        .catch((error) => {
+          console.error('Logout Error:', error);
+          utils.showResponseError(error);
+        });
     };
 
     const onFailure = (error) => {
-      this.setState({isLoading: false});
+      console.error('Logout Error:', error);
       utils.showResponseError(error);
     };
 
-    const options = {
+    const accessToken = this.state.accessToken.replace('Bearer ', ''); // Remove the "Bearer " prefix from the token
+
+    Axios.get(Constants.logoutURL, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: this.state.accessToken,
       },
-    };
-
-    this.setState({isLoading: true});
-    Axios.get(Constants.logoutURL, options).then(onSuccess).catch(onFailure);
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   toggleModal = () => {
@@ -266,6 +294,7 @@ export default class DrawerScreen extends Component {
                 />
                 <RegularTextCB style={styles.drawerSubText}>Chat</RegularTextCB>
               </TouchableOpacity> */}
+
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -273,16 +302,23 @@ export default class DrawerScreen extends Component {
                   padding: SIZES.fifteen,
                 }}
                 onPress={() => {
-                  this.props.navigation.navigate(Constants.settings);
+                  {
+                    this.state.isVendor
+                      ? this.props.navigation.navigate(Constants.MyWallet, {
+                          token: this.state.accessToken,
+                        })
+                      : this.props.navigation.navigate(Constants.payment, {
+                          data: 'none',
+                          token: this.state.accessToken,
+                        });
+                  }
                 }}>
-                <Image
-                  source={Images.iconDrawerSettings}
-                  style={styles.iconDrawer}
-                />
+                <Image source={Images.bookings} style={styles.iconDrawer} />
                 <RegularTextCB style={styles.drawerSubText}>
-                  Settings
+                  {this.state.isVendor ? 'My Wallet' : 'My Cards'}
                 </RegularTextCB>
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -353,8 +389,23 @@ export default class DrawerScreen extends Component {
                   Support
                 </RegularTextCB>
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.toggleModal()}
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  padding: SIZES.fifteen,
+                }}>
+                <Image
+                  source={Images.iconDrawerLogOut}
+                  style={styles.iconDrawer}
+                />
+                <RegularTextCB style={styles.drawerSubText}>
+                  Logout
+                </RegularTextCB>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => this.toggleModal()}
               style={{
                 flexDirection: 'row',
@@ -369,7 +420,7 @@ export default class DrawerScreen extends Component {
                 style={styles.iconDrawer}
               />
               <RegularTextCB style={styles.drawerSubText}>Logout</RegularTextCB>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         <Modal

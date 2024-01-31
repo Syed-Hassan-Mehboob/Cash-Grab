@@ -32,6 +32,8 @@ target 'CashGrab' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
   target 'CashGrabTests' do
     inherit! :complete
     # Pods for testing

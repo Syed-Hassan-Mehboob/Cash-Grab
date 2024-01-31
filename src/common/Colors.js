@@ -26,5 +26,7 @@ const Colors = {
   paleGrey: '#eef1ff',
   sickGreen: '#abcf37FF',
   barBg: '#DDE2E2',
+  transparent: 'transparent',
 };
+
 export default Colors;

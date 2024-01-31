@@ -111,13 +111,13 @@ export default class DrawerNavigator extends React.Component {
   /*  ************************** FIREBASE NOTIFICATIION ************************ */
   /*  ###################################   ###################################* */
   notificationListener = async () => {
-    // await Firebase();
+    await Firebase();
 
     console.log('notificationListener started');
 
-    // messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-    //   console.log('Your message was handled in background', remoteMessage);
-    // });
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log('Your message was handled in background', remoteMessage);
+    });
 
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     messaging().onNotificationOpenedApp((rm) => {

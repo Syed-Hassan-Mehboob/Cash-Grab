@@ -105,6 +105,7 @@ export default class VendorEditProfile extends Component {
                     lat: details.geometry.location.lat,
                     lng: details.geometry.location.lng,
                   },
+
                   () => {
                     setTimeout(() => {
                       this.setState({showModal: false});
@@ -308,8 +309,8 @@ export default class VendorEditProfile extends Component {
       name: `image-profile`,
       type: 'image/jpeg',
     });
-    formData.append('lat', lat);
-    formData.append('lng', lng);
+    formData.append('latitude', lat);
+    formData.append('longitude', lng);
     formData.append('company_name', companyName);
     formData.append('company_email', companyEmail);
     formData.append('company_location', companyLocation);
@@ -683,8 +684,8 @@ export default class VendorEditProfile extends Component {
                   });
                 }}>
                 <RegularTextCB>
-                  {this.state.companyLocation
-                    ? this.state.companyLocation
+                  {this.state.location
+                    ? this.state.location
                     : 'Search Location'}
                 </RegularTextCB>
               </TouchableOpacity>
@@ -826,15 +827,15 @@ export default class VendorEditProfile extends Component {
           </View> */
           }
 
-          <Text
+          {/* <Text
             style={[
               FONTS.boldFont18,
               {marginVertical: SIZES.twenty, marginLeft: SIZES.twenty},
             ]}>
             Additional information
-          </Text>
+          </Text> */}
 
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -852,9 +853,9 @@ export default class VendorEditProfile extends Component {
               }}
               style={[styles.textInput, {}]}
             />
-          </View>
+          </View> */}
 
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -872,9 +873,9 @@ export default class VendorEditProfile extends Component {
               }}
               style={[styles.textInput, {}]}
             />
-          </View>
+          </View> */}
 
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -920,7 +921,7 @@ export default class VendorEditProfile extends Component {
               </TouchableOpacity>
             </View>
 
-            {/* <EditText
+            <EditText
               ref={'location'}
               placeholder={'Location'}
               value={this.state.location}
@@ -928,8 +929,8 @@ export default class VendorEditProfile extends Component {
                 this.setState({location: text});
               }}
               style={[styles.textInput]}
-            /> */}
-          </View>
+            />
+          </View> */}
 
           {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
@@ -952,7 +953,7 @@ export default class VendorEditProfile extends Component {
             />
           </View> */}
 
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <RegularTextCB
               style={{
                 color: Colors.coolGrey,
@@ -975,7 +976,7 @@ export default class VendorEditProfile extends Component {
                 renderItem={(item, index) => this.renderTeamMember(item, index)}
               />
             </View>
-          </View>
+          </View> */}
         </ScrollView>
 
         <Modal isVisible={this.state.isModalVisible} style={styles.modal}>

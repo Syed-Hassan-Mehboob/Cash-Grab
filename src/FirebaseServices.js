@@ -5,7 +5,6 @@ import database from '@react-native-firebase/database';
 
 export async function requestUserPermission(userToken, userId) {
   console.log('permission method start', userId);
-
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||

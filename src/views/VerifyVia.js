@@ -17,7 +17,6 @@ import RegularTextCB from '../components/RegularTextCB';
 import BoldTextCB from '../components/BoldTextCB';
 import utils from '../utils';
 import Axios from '../network/APIKit';
-
 import {CommonActions} from '@react-navigation/native';
 
 export default class VerifyVia extends Component {
@@ -40,8 +39,8 @@ export default class VerifyVia extends Component {
     ],
   });
   componentDidMount() {
-    // this.payload = this.props.route.params.payload;
-    // console.log("payload data =========>", this.props.route.params.payload)
+    this.payload = this.props.route.params.payload;
+    console.log('payload data =========>', this.props.route.params.payload);
   }
 
   signUp = () => {
@@ -66,7 +65,8 @@ export default class VerifyVia extends Component {
 
       this.setState({isLoading: false});
     };
-    console.log('user type', this.payload.type);
+    console.log('user typeee', this.payload.type);
+    console.log('user type', this.props.route.params.payload);
     // Show spinner when call is made
     this.setState({isLoading: true});
     var postData = null;
@@ -75,10 +75,10 @@ export default class VerifyVia extends Component {
       postData = {
         name: this.payload.name,
         email: this.payload.email,
-        type: this.payload.type,
         country_code: this.payload.country_code,
         country_flag: this.payload.country_flag,
         phone: this.payload.phone,
+        type: this.payload.type,
         password: this.payload.password,
         password_confirmation: this.payload.password_confirmation,
         verified_by: verifyVia,
@@ -96,6 +96,7 @@ export default class VerifyVia extends Component {
         password_confirmation: this.payload.password_confirmation,
         verified_by: verifyVia,
       };
+      console.log('User', postData);
     }
     console.log('postData=============>', postData);
     Axios.post(Constants.signUpURL, postData).then(onSuccess).catch(onFailure);
@@ -170,14 +171,15 @@ export default class VerifyVia extends Component {
                   Email
                 </RegularTextCB>
               </TouchableOpacity>
-              <BoldTextCB
-                  style={{
-                    fontSize: 16,
-                    color: Colors.black,
-                    marginVertical:SIZES.fifteen
-                  }}>
-                  OR
-                </BoldTextCB>
+
+              {/* <BoldTextCB
+                style={{
+                  fontSize: 16,
+                  color: Colors.black,
+                  marginVertical: SIZES.fifteen,
+                }}>
+                OR
+              </BoldTextCB>
               <TouchableOpacity
                 activeOpacity={0.85}
                 style={[
@@ -199,7 +201,7 @@ export default class VerifyVia extends Component {
                   }}>
                   Phone Number
                 </RegularTextCB>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <View

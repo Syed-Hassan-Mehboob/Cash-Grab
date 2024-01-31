@@ -14,9 +14,19 @@ const App = () => {
 
   return (
     <SafeAreaProvider style={{flex: 1}}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.navy} />
+      {/* <StatusBar
+        barStyle="dark-content"
+        // backgroundColor={Colors.navy}
+      /> */}
+
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={'transparent'}
+        translucent={true}
+      />
+
       <SafeAreaView
-        style={{flex: 1, backgroundColor: Colors.navy}}
+        style={{flex: 1, backgroundColor: 'transparent'}}
         edges={['top', 'left', 'right']}>
         <InternetConnectionAlert>
           <Root>
@@ -28,5 +38,3 @@ const App = () => {
   );
 };
 export default App;
-
-// "#002926"

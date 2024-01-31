@@ -29,10 +29,25 @@ export default class CreateAccount extends React.Component {
     AsyncStorage.setItem('isVendor', JSON.stringify(isVendor));
     setTimeout(() => {
       this.props.navigation.navigate(Constants.signUp);
-    }, 500);
+    }, 5000);
   }
 
   render() {
+    const setAsyncValue = async (type) => {
+      try {
+        const value = type; // Replace with your desired value
+        await AsyncStorage.setItem(value, 'true');
+
+        console.log('Value set successfully!', value);
+      } catch (error) {
+        console.error('Error setting value in AsyncStorage:', error);
+      }
+    };
+
+    const onPressButton = (type) => {
+      setAsyncValue(type); // Call the async method to set the value
+    };
+
     return (
       <ImageBackground
         source={Images.loginBgWeb}
@@ -84,14 +99,24 @@ export default class CreateAccount extends React.Component {
             Which type of account would you like?
           </RegularTextCB>
           <TouchableOpacity
+            // onPress={() => {
+            //   this.setState({
+            //     isUserSelected: true,
+            //     isVendorSelected: false,
+            //   });
+
+            //   onPressButton('user');
+
+            //   setTimeout(() => {
+            //     this.props.navigation.navigate(Constants.signUp);
+            //   }, 800);
+            // }}
             onPress={() => {
-              this.setState({
-                isUserSelected: true,
-                isVendorSelected: false,
-              });
               setTimeout(() => {
-                this.props.navigation.navigate(Constants.signUp);
-              }, 500);
+                this.props.navigation.navigate(Constants.signUp, {
+                  type: 'user',
+                });
+              }, 800);
             }}
             style={[
               styles.card,
@@ -109,20 +134,18 @@ export default class CreateAccount extends React.Component {
               </RegularTextCB>
               <RegularTextCB
                 style={{fontSize: SIZES.twenty * 1.05, color: Colors.coolGrey}}>
-                Lorem ipsum eluit fold sed, fludin gem
+                Find a helping hand for any task, big or small.{' '}
               </RegularTextCB>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => {
-              this.setState({
-                isUserSelected: false,
-                isVendorSelected: true,
-              });
               setTimeout(() => {
-                this.props.navigation.navigate(Constants.VendorSignUp);
-              }, 500);
+                this.props.navigation.navigate(Constants.signUp, {
+                  type: 'vendor',
+                });
+              }, 800);
             }}
             style={[
               styles.card,
@@ -140,7 +163,7 @@ export default class CreateAccount extends React.Component {
               </RegularTextCB>
               <RegularTextCB
                 style={{fontSize: SIZES.twenty * 1.05, color: Colors.coolGrey}}>
-                Lorem ipsum eluit fold sed, fludin gem
+                Get paid for doing what you love{' '}
               </RegularTextCB>
             </View>
           </TouchableOpacity>

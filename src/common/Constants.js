@@ -39,6 +39,7 @@ const Constants = {
   ViewQuickJob: 'ViewQuickJob',
   chat: 'Chat',
   chatListing: 'ChatListing',
+  Redeem: 'Redeem',
   vendorSingleCategory: 'VendorSingleCategory',
   vendorAllJobs: 'vendorAllJobs',
   viewJob: 'ViewJob',
@@ -49,6 +50,9 @@ const Constants = {
   dateTimeSlots: 'DateTimeSlots',
   search: 'Search',
   confirmPayment: 'ConfirmPayment',
+  payment: 'Payment',
+  MyWallet: 'MyWallet',
+  AddCard: 'AddCard',
   withDraw: 'WithDraw',
   ScheduleJobs: 'ScheduleJobs',
   UserQuickJobs: 'UserQuickJobs',
@@ -98,8 +102,10 @@ const Constants = {
   /* * cache keys * */
 
   /* * api urls * */
-  baseURL: 'https://cash-grab.reignsol.net/api/v1/',
-  imageURL: 'https://cash-grab.reignsol.net',
+
+  baseURL: 'https://reignsol.com/cashgrab-app/api/v1/',
+  imageURL: 'https://reignsol.com/cashgrab-app/',
+
   signUpURL: 'auth/register',
   loginURL: 'auth/login',
   CheckEmailNPhone: '/auth/check-email',
@@ -110,7 +116,11 @@ const Constants = {
   forgotPasswordURL: 'auth/forgot-password',
   resetPasswordURL: 'auth/reset-password',
   updatePasswordURL: 'auth/update-password',
+  deleteCard: 'deleteCard',
   getProfileURL: 'auth/get-profile',
+  getCard: 'getCards',
+  addCard: 'addCard',
+  getWallet: 'auth/getWallet',
   getServicesOfVendorURL: 'vendors/get-service-of-vendor?',
   updateProfileURL: 'auth/update-profile',
   addTeamMemberURL: 'vendors/team/create',
@@ -131,7 +141,9 @@ const Constants = {
   getvendorAround: 'customer/vendorAroundYou?',
   getTopSerVices: 'customer/getAllVendors',
   customerFilterservice: 'customer/getfilters',
+
   quickOrder2: 'order/quick-order',
+
   customerFilter: 'customer/filter?',
   getVenderByCatagory: 'customer/get-vendor-profile?',
   getVenderAllCategory: 'vendors/categories',
@@ -142,8 +154,11 @@ const Constants = {
   venderFilterd: 'vendors/filter?',
   getMyJob: 'customer/jobs/my-jobs',
   scheduleJob: 'order/get-schedule-bookings',
+
   quickOrder: 'order/get-quick-bookings',
-  quickJobsVendor: 'order/get-quick-bookings-vendor',
+
+  quickJobsVendor: 'order/getQuickOrders',
+
   scheduleBookingsVendor: 'order/get-schedule-bookings-vendor',
   orderDetail: 'order/details?',
   jobAcceptance: 'customer/jobs/detail?',
@@ -155,6 +170,7 @@ const Constants = {
   getScheduleBookings: 'order/get-schedule-bookings-vendor',
   orderStatus: 'order/order-status?',
   orderProcess: 'order/proceed',
+  withdrawRequest: 'vendors/withDrawRequest',
   orderCompleted: 'order/completed',
   jobRequest: 'customer/job-request',
   getScheduleBookings: 'order/get-schedule-bookings-vendor',

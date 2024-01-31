@@ -409,7 +409,7 @@ export default class EditProfile extends Component {
           style={{
             borderBottomStartRadius: SIZES.ten * 3,
             borderBottomEndRadius: SIZES.ten * 3,
-            height: height / 3.1,
+            height: height / 3.7,
             backgroundColor: Colors.navy,
             alignItems: 'center',
             paddingTop:
@@ -458,11 +458,16 @@ export default class EditProfile extends Component {
               <RegularTextCB style={{color: Colors.white}}>Save</RegularTextCB>
             </TouchableOpacity>
           </View>
+
           <TouchableOpacity
             activeOpacity={0.85}
             style={[
               styles.circleCard,
-              {justifyContent: 'center', alignItems: 'center'},
+              {
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: SIZES.fifteen,
+              },
             ]}
             onPress={() => this.toggleIsModalVisible()}>
             <Image
@@ -482,32 +487,11 @@ export default class EditProfile extends Component {
               }}
             />
           </TouchableOpacity>
+
           <RegularTextCB
             style={{color: Colors.white, fontSize: 16, marginTop: SIZES.ten}}>
             {this.state.firstName + ' ' + this.state.lastName}
           </RegularTextCB>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              paddingHorizontal: SIZES.ten,
-              borderRadius: SIZES.ten,
-              width: width / 1.65,
-              height: width * 0.15,
-              // marginVertical: SIZES.five,
-              // marginBottom: SIZES.twenty,
-            }}>
-            <TextInput
-              multiline={true}
-              placeholder="About Me"
-              value={this.state.abouteMe}
-              // numberOfLines={2}
-              selectionColor={Colors.sickGreen}
-              style={[FONTS.mediumFont12]}
-              onChangeText={(text) => {
-                this.setState({abouteMe: text});
-              }}
-            />
-          </View>
         </View>
         <ScrollView
           contentContainerStyle={{paddingHorizontal: SIZES.ten}}
@@ -688,7 +672,7 @@ export default class EditProfile extends Component {
           </View>
 
           <RnModal
-            animationType="fade"
+            animationType="slide"
             transparent={true}
             visible={this.state.showModal}
             onRequestClose={() => {
@@ -698,7 +682,8 @@ export default class EditProfile extends Component {
               <View
                 style={{
                   flex: 1,
-                  padding: SIZES.twenty,
+                  paddingVertical: SIZES.twentyFive + 20,
+                  paddingHorizontal: SIZES.twenty,
                 }}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                   {this.GooglePlacesInput()}
@@ -716,6 +701,7 @@ export default class EditProfile extends Component {
                         height: SIZES.fifteen,
                         width: SIZES.fifteen,
                         tintColor: '#fff',
+                        marginLeft: SIZES.five,
                       }}
                       resizeMode="contain"
                       source={Images.iconClose}

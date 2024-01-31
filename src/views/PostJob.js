@@ -9,10 +9,10 @@ import {
   View,
   Dimensions,
 } from 'react-native';
-import moment from "moment"
+import moment from 'moment';
 import Modal from 'react-native-modal';
 import Colors from '../common/Colors';
-import Constants, {SIZES, STYLES} from '../common/Constants';
+import Constants, {FONTS, SIZES, STYLES} from '../common/Constants';
 import Images from '../common/Images';
 import ButtonRadius10 from '../components/ButtonRadius10';
 import EditText from '../components/EditText';
@@ -21,7 +21,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import utils from '../utils';
 import Axios from '../network/APIKit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {MultiDropdownPicker} from '../components/MultiDropDownPicker';
+import {MultiDropdownPicker} from '../components/quickNotifyServeses';
 
 import {Calendar} from 'react-native-calendars';
 import GetLocation from 'react-native-get-location';
@@ -37,6 +37,7 @@ export default class postJob extends Component {
     super(props);
   }
   state = {
+    selectedCard: '',
     serviceCaption: '',
     services: [],
     isModalVisible: false,
@@ -178,7 +179,9 @@ export default class postJob extends Component {
 
   getUserAccessToken = async () => {
     const token = await AsyncStorage.getItem(Constants.accessToken);
-    this.setState({accessToken: token});
+    this.setState({accessToken: token}, () => {
+      this.getAllCards();
+    });
   };
 
   getServies = () => {
@@ -189,6 +192,29 @@ export default class postJob extends Component {
       utils.showResponseError(error);
     };
     Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
+  };
+
+  getAllCards = () => {
+    const onSuccess = ({data}) => {
+      console.log('CARDS ==========> ', data?.data);
+      this.setState({isLoading: false, getAllCards: data?.data});
+    };
+
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      console.log('=================', error);
+      utils.showResponseError(error);
+    };
+    this.setState({isLoading: true});
+
+    Axios.get(Constants.getCard, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   toggleIsLoading = () => {
@@ -224,6 +250,7 @@ export default class postJob extends Component {
       services: this.state.services,
       latitude: this.state.latitude,
       longitude: this.state.longitude,
+      card_id: this.state.selectedCard,
     };
 
     // console.log('Post data ==== === ==== ',this.state.jobImages)
@@ -234,7 +261,23 @@ export default class postJob extends Component {
         'Post Jobe Data =====================================================',
         data,
       );
-      this.setState({isLoading: false});
+
+      this.setState({
+        isLoading: false,
+        title: '',
+        price: '',
+        description: '',
+        expiry_date: '',
+        address: '',
+        rateRequested: '',
+        location: '',
+        image: [],
+        services: '',
+        latitude: '',
+        longitude: '',
+        card_id: '',
+      });
+
       utils.showToast('Your Job Has Been Posted');
       this.props.navigation.navigate(Constants.home);
     };
@@ -261,40 +304,48 @@ export default class postJob extends Component {
   };
 
   openGallery = () => {
-    launchImageLibrary({mediaType: 'photo', selectionLimit: 4}, (response) => {
-      if (response.didCancel) {
-        console.log('user conacel image  picker');
-      } else if (response.errorCode) {
-        console.log('Image Picker Error', response.errorCode);
-      } else if (response.errorMessage) {
-        console.log('Image Picker Error', response.errorMessage);
-      } else if (response.assets) {
-        var imageuriBase64 = [];
-        var JobImagesUri = [];
-        response.assets.map((item) => {
-          // console.log('Image Uri ==== ==== ', item.uri);
-          JobImagesUri.push(item.uri);
-          ImgToBase64.getBase64String(item.uri)
-            .then((base64String) => {
-              // console.log("image converted to base 64 =======>>>>", 'data:image/png;base64,'+base64String)
-              imageuriBase64.push('data:image/png;base64,' + base64String);
-            })
-            .catch((err) =>
-              console.log(
-                'catch error while converting image to base 64=====>>>>',
-                err,
-              ),
-            );
-        });
+    launchImageLibrary(
+      {
+        maxHeight: 1024,
+        maxWidth: 1024,
+        mediaType: 'photo',
+        selectionLimit: 4,
+      },
+      (response) => {
+        if (response.didCancel) {
+          console.log('user conacel image  picker');
+        } else if (response.errorCode) {
+          console.log('Image Picker Error', response.errorCode);
+        } else if (response.errorMessage) {
+          console.log('Image Picker Error', response.errorMessage);
+        } else if (response.assets) {
+          var imageuriBase64 = [];
+          var JobImagesUri = [];
+          response.assets.map((item) => {
+            // console.log('Image Uri ==== ==== ', item.uri);
+            JobImagesUri.push(item.uri);
+            ImgToBase64.getBase64String(item.uri)
+              .then((base64String) => {
+                // console.log("image converted to base 64 =======>>>>", 'data:image/png;base64,'+base64String)
+                imageuriBase64.push('data:image/png;base64,' + base64String);
+              })
+              .catch((err) =>
+                console.log(
+                  'catch error while converting image to base 64=====>>>>',
+                  err,
+                ),
+              );
+          });
 
-        this.setState({
-          JobImagesUri: JobImagesUri,
-          jobImages: imageuriBase64,
-          showImages: true,
-        });
-      } else {
-      }
-    });
+          this.setState({
+            JobImagesUri: JobImagesUri,
+            jobImages: imageuriBase64,
+            showImages: true,
+          });
+        } else {
+        }
+      },
+    );
   };
 
   remove(image) {
@@ -351,7 +402,7 @@ export default class postJob extends Component {
               )
             }
             markedDates={{
-              [moment(this.state.expirydate).format("YYYY-MM-DD")]: {
+              [moment(this.state.expirydate).format('YYYY-MM-DD')]: {
                 customStyles: {
                   container: styles.selectedDateBG,
                   text: {
@@ -381,7 +432,7 @@ export default class postJob extends Component {
       <>
         <ScrollView
           style={STYLES.container}
-          contentContainerStyle={{paddingBottom: 130}}
+          contentContainerStyle={{paddingBottom: 50}}
           showsVerticalScrollIndicator={false}>
           {/* <View
             style={{
@@ -421,7 +472,12 @@ export default class postJob extends Component {
           <View
             style={{paddingHorizontal: SIZES.twenty, paddingTop: SIZES.ten}}>
             <View>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  color: Colors.black,
+                  paddingBottom: SIZES.five,
+                }}>
                 Service Caption
               </RegularTextCB>
               <EditText
@@ -437,28 +493,57 @@ export default class postJob extends Component {
               />
             </View>
             <View style={{marginTop: SIZES.twenty}}>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  color: Colors.black,
+                  paddingBottom: SIZES.five,
+                }}>
                 Select Service
               </RegularTextCB>
-              <MultiDropdownPicker
-                viewProperty="name"
-                value={this.state.services}
-                data={this.state.selections}
-                screenName="postJob"
-                onChangeValue={(val) => {
-                  this.setState({services: val});
-                }}
-              />
+              <View
+                style={{
+                  height: 60,
+                  backgroundColor: Colors.white,
+                  borderRadius: height * 0.01,
+                  shadowColor: '#c5c5c5',
+                  shadowOffset: {width: SIZES.five, height: SIZES.five},
+                  shadowOpacity: 1.0,
+                  shadowRadius: 10,
+                  justifyContent: 'center',
+                  marginTop: SIZES.ten,
+                }}>
+                <MultiDropdownPicker
+                  viewProperty="name"
+                  value={this.state.services}
+                  data={this.state.selections}
+                  screenName="postJob"
+                  onChangeValue={(val) => {
+                    this.setState({services: val});
+                  }}
+                />
+              </View>
             </View>
 
             <View style={[{marginTop: SIZES.twenty}]}>
-              <View style={{flexDirection:'row',alignItems:'center'}}> 
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
-                Rate Requested
-              </RegularTextCB>
-              <RegularTextCB style={{fontSize: 10, color: Colors.coolGrey,marginStart:SIZES.five}}>
-                (for complete job)
-              </RegularTextCB>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <RegularTextCB
+                  style={{
+                    fontSize: 14,
+                    color: Colors.black,
+                    paddingBottom: SIZES.five,
+                  }}>
+                  Rate Requested
+                </RegularTextCB>
+                <RegularTextCB
+                  style={{
+                    fontSize: 10,
+                    color: Colors.coolGrey,
+                    marginStart: SIZES.five,
+                    paddingBottom: SIZES.five,
+                  }}>
+                  (for complete job)
+                </RegularTextCB>
               </View>
               <EditText
                 ref={'rate'}
@@ -476,7 +561,12 @@ export default class postJob extends Component {
               />
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  color: Colors.black,
+                  paddingBottom: SIZES.five,
+                }}>
                 Location
               </RegularTextCB>
               <View
@@ -509,7 +599,12 @@ export default class postJob extends Component {
               </View>
             </View>
             <View style={[{marginTop: SIZES.twenty}]}>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  color: Colors.black,
+                  paddingBottom: SIZES.five,
+                }}>
                 Address
               </RegularTextCB>
               <EditText
@@ -523,7 +618,12 @@ export default class postJob extends Component {
               />
             </View>
             <View style={{marginTop: SIZES.twenty}}>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  color: Colors.black,
+                  paddingBottom: SIZES.five,
+                }}>
                 Expiry date
               </RegularTextCB>
               <TouchableOpacity
@@ -539,8 +639,14 @@ export default class postJob extends Component {
                 </RegularTextCB>
               </TouchableOpacity>
             </View>
+
             <View style={[{marginTop: SIZES.twenty}]}>
-              <RegularTextCB style={{fontSize: 14, color: Colors.black}}>
+              <RegularTextCB
+                style={{
+                  fontSize: 14,
+                  color: Colors.black,
+                  paddingBottom: SIZES.five,
+                }}>
                 Job Description
               </RegularTextCB>
               <View style={styles.card}>
@@ -565,6 +671,44 @@ export default class postJob extends Component {
                 />
               </View>
             </View>
+
+            <RegularTextCB
+              style={[
+                {
+                  fontSize: 14,
+                  color: Colors.black,
+                  marginTop: SIZES.fifteen,
+                },
+              ]}>
+              Select Card
+            </RegularTextCB>
+
+            <View
+              style={{
+                height: 60,
+                backgroundColor: Colors.white,
+                borderRadius: height * 0.01,
+                shadowColor: '#c5c5c5',
+                shadowOffset: {width: SIZES.five, height: SIZES.five},
+                shadowOpacity: 1.0,
+                shadowRadius: 10,
+                justifyContent: 'center',
+                marginTop: SIZES.ten,
+              }}>
+              <MultiDropdownPicker
+                sample="Select Card"
+                viewProperty="cardholder_name"
+                value={this.state.selectedCard}
+                data={this.state.getAllCards}
+                onChangeValue={(val) => {
+                  this.setState({selectedCard: val}, () => {
+                    console.log('CARD ID', val);
+                    // Handle the selected card value
+                  });
+                }}
+              />
+            </View>
+
             <TouchableOpacity
               onPress={() => {
                 this.openGallery();
@@ -657,6 +801,7 @@ export default class postJob extends Component {
                 label="POST"
                 onPress={() => {
                   this.postJob();
+
                   setTimeout(() => {
                     // this.props.navigation.navigate(Constants.home);
                   }, 5000);

@@ -40,6 +40,7 @@ export default class SignUp extends Component {
       confirmPassword: '',
       selections: [],
       services: [],
+      type: '',
     };
   }
 
@@ -53,16 +54,40 @@ export default class SignUp extends Component {
     Axios.get(Constants.servies).then(onSuccess).catch(onFailure);
   };
 
-  componentDidMount() {
-    this.getUserType();
-    this.getServies();
-  }
-
   getUserType = async () => {
     const value = await AsyncStorage.getItem('isVendor');
     const data = JSON.parse(value);
+    console.log('TYPE', value);
     this.setState({isVendor: data});
   };
+
+  getDataFromAsyncStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem('true'); // Replace 'yourKey' with the key you used to store the data
+      if (value !== null) {
+        // Data retrieval successful
+        console.log('Data retrieved:', value);
+        // You can now use the retrieved data as needed in this screen
+      } else {
+        // Data retrieval unsuccessful (key not found or value is null)
+        console.log('No data found in AsyncStorage');
+      }
+    } catch (error) {
+      // Error occurred during data retrieval
+      console.error('Error retrieving data from AsyncStorage:', error);
+      // Handle the error appropriately
+    }
+  };
+
+  componentDidMount() {
+    this.getUserType();
+    this.getServies();
+    this.getDataFromAsyncStorage();
+    const {route} = this.props;
+    const {type} = route.params || {};
+    console.log('DATES', type);
+    this.setState({type: type}); // Set the type value in component state
+  }
 
   toggleIsSelectionModalVisible = () => {
     this.setState({
@@ -179,31 +204,66 @@ export default class SignUp extends Component {
       return;
     }
 
-    const payload = this.state.isVendor
-      ? {
-          name,
-          services,
-          email,
-          password,
-          password_confirmation,
-          type: 'vendor',
-          country_code,
-          country_flag,
-          phone,
-        }
-      : {
-          name,
-          email,
-          password,
-          password_confirmation,
-          type: 'customer',
-          country_code,
-          country_flag,
-          phone,
-        };
+    //   const payload = this.state.type
+    //     ? {
+    //         name,
+    //         services,
+    //         email,
+    //         password,
+    //         password_confirmation,
+    //         type: 'vendor',
+    //         country_code,
+    //         country_flag,
+    //         phone,
+    //       }
+    //     : {
+    //         name,
+    //         email,
+    //         password,
+    //         password_confirmation,
+    //         type: 'customer',
+    //         country_code,
+    //         country_flag,
+    //         phone,
+    //       };
 
+    //   console.log(payload);
+    //   // this.props.navigation.navigate(Constants.verifyVia, {payload});
+    // };
+
+
+
+    const payload =
+      this.state.type === 'vendor'
+        ? {
+            name,
+            services,
+            email,
+            password,
+            password_confirmation,
+            type: 'vendor',
+            country_code,
+            country_flag,
+            phone,
+          }
+        : this.state.type === 'user'
+        ? {
+            name,
+            email,
+            password,
+            password_confirmation,
+            type: 'customer',
+            country_code,
+            country_flag,
+            phone,
+          }
+        : null;
+
+    console.log(payload);
     this.props.navigation.navigate(Constants.verifyVia, {payload});
   };
+
+  
 
   render() {
     return (

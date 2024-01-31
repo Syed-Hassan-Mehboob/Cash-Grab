@@ -32,38 +32,38 @@ export default class ConfirmPayment extends Component {
     this.props.navigation.dispatch(resetAction);
   }
 
-  componentDidMount() {
-    this.props.navigation.addListener('focus', () => {
-      if (
-        this.props.route.params.from === 'notification' ||
-        this.props.route.params.from === 'quick'
-      ) {
-        this.getUserAccessToken();
-      }
-      if (this.props.route.params.from === 'scheduled') {
-        // this.getUserAccessToken();
-        alert('from scheduled flow');
-      }
-      if (this.props.route.params?.from === 'posted') {
-        // this.getUserAccessToken();
-        alert('from posted flow');
-      }
-    });
-    if (
-      this.props.route.params.from === 'notification' ||
-      this.props.route.params.from === 'quick'
-    ) {
-      this.getUserAccessToken();
-    }
-    if (this.props.route.params.from === 'scheduled') {
-      // this.getUserAccessToken();
-      alert('from scheduled flow');
-    }
-    if (this.props.route.params?.from === 'posted') {
-      // this.getUserAccessToken();
-      alert('from posted flow');
-    }
-  }
+  // componentDidMount() {
+  //   this.props.navigation.addListener('focus', () => {
+  //     if (
+  //       this.props.route.params.from === 'notification' ||
+  //       this.props.route.params.from === 'quick'
+  //     ) {
+  //       this.getUserAccessToken();
+  //     }
+  //     if (this.props.route.params.from === 'scheduled') {
+  //       // this.getUserAccessToken();
+  //       // alert('from scheduled flow');
+  //     }
+  //     if (this.props.route.params?.from === 'posted') {
+  //       // this.getUserAccessToken();
+  //       alert('from posted flow');
+  //     }
+  //   });
+  //   if (
+  //     this.props.route.params.from === 'notification' ||
+  //     this.props.route.params.from === 'quick'
+  //   ) {
+  //     this.getUserAccessToken();
+  //   }
+  //   if (this.props.route.params.from === 'scheduled') {
+  //     // this.getUserAccessToken();
+  //     alert('from scheduled flow');
+  //   }
+  //   if (this.props.route.params?.from === 'posted') {
+  //     // this.getUserAccessToken();
+  //     alert('from posted flow');
+  //   }
+  // }
 
   getUserAccessToken = async () => {
     const value = await AsyncStorage.getItem('user');

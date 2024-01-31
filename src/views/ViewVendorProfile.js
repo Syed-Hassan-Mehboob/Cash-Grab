@@ -189,8 +189,10 @@ export default class ViewVendorProfile extends React.Component {
           justifyContent: 'space-between',
           marginTop: SIZES.twenty,
         }}>
-        <Text style={[FONTS.mediumFont16]}>{item.name}</Text>
-        <Text style={[FONTS.boldFont14]}>$ {item.price}</Text>
+        <Text style={[FONTS.mediumFont16, {textTransform: 'capitalize'}]}>
+          {item.name}
+        </Text>
+        <Text style={[FONTS.boldFont14]}>{item.price}$</Text>
       </View>
     );
   };
@@ -750,7 +752,7 @@ export default class ViewVendorProfile extends React.Component {
           </View>
           {this.state.isDescriptionSelected && (
             <View>
-              <View style={{marginTop: SIZES.twentyFive}}>
+              {/* <View style={{marginTop: SIZES.twentyFive}}>
                 <Text
                   style={[
                     FONTS.mediumFont16,
@@ -760,7 +762,7 @@ export default class ViewVendorProfile extends React.Component {
                       marginVertical: SIZES.twenty,
                     },
                   ]}>
-                  Interest
+                  Interests
                 </Text>
 
                 <FlatList
@@ -784,7 +786,8 @@ export default class ViewVendorProfile extends React.Component {
                       Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
                   }}
                 />
-              </View>
+              </View> */}
+
               <View style={{marginTop: SIZES.twentyFive}}>
                 <View
                   style={{
@@ -831,13 +834,15 @@ export default class ViewVendorProfile extends React.Component {
                   data={this.state.categories}
                   renderItem={this.renderServicesItem}
                   keyExtractor={(item) => item.id}
-                  contentInset={{
-                    // for ios
-                    top: 0,
-                    bottom: SPACING_FOR_CARD_INSET,
-                    left: SPACING_FOR_CARD_INSET,
-                    right: SPACING_FOR_CARD_INSET,
-                  }}
+                  contentInset={
+                    {
+                      // for ios
+                      // top: 0,
+                      // bottom: SPACING_FOR_CARD_INSET,
+                      // left: SPACING_FOR_CARD_INSET,
+                      // right: SPACING_FOR_CARD_INSET,
+                    }
+                  }
                   contentContainerStyle={{
                     // for android
                     paddingHorizontal:
@@ -860,13 +865,15 @@ export default class ViewVendorProfile extends React.Component {
                     No Service(s)!
                   </Text>
                 )}
-                contentInset={{
-                  // for ios
-                  top: 0,
-                  bottom: SPACING_FOR_CARD_INSET,
-                  left: SPACING_FOR_CARD_INSET,
-                  right: SPACING_FOR_CARD_INSET,
-                }}
+                contentInset={
+                  {
+                    // for ios
+                    // top: 0,
+                    // bottom: SPACING_FOR_CARD_INSET,
+                    // left: SPACING_FOR_CARD_INSET,
+                    // right: SPACING_FOR_CARD_INSET,
+                  }
+                }
                 contentContainerStyle={{
                   // backgroundColor: 'red',
                   paddingHorizontal: SIZES.twenty,

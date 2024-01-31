@@ -10,6 +10,7 @@ const ButtonRadius10 = ({
   bgColor = Colors.sickGreen,
   textColor = Colors.black,
   disabled,
+  loginBtnBg,
 }) => (
   <View>
     <TouchableOpacity

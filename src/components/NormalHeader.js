@@ -2,7 +2,7 @@ import {Icon} from 'native-base';
 import React from 'react';
 import {StyleSheet, Image, TouchableOpacity, View} from 'react-native';
 import Colors from '../common/Colors';
-import {SIZES} from '../common/Constants';
+import Constants, {SIZES} from '../common/Constants';
 import RegularTextCB from './RegularTextCB';
 import {useNavigation} from '@react-navigation/native';
 import Images from '../common/Images';
@@ -33,7 +33,7 @@ export default function NormalHeader(props) {
               props.name === 'Service Provider On the Way' &&
               Platform.OS === 'ios'
                 ? SIZES.ten * 2.5
-                : SIZES.ten * 3,
+                : SIZES.ten * 2.5,
           },
         ]}>
         {props.name}

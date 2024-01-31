@@ -173,12 +173,14 @@ export default class VendorHome extends Component {
       utils.showResponseError(error);
       //console.log('==================Error', error);
     };
+
     this.setState({isLoading: true});
+
     Axios.get(Constants.quickJobsVendor, {
-      params: {
-        limit: 1,
-        offset: 0,
-      },
+      // params: {
+      //   limit: 1,
+      //   offset: 0,
+      // },
       headers: {
         Authorization: this.state.accessToken,
       },
@@ -723,7 +725,7 @@ export default class VendorHome extends Component {
                   />
                 </View>
                 <RegularTextCB style={{fontSize: 16, marginStart: SIZES.ten}}>
-                  Welcome,
+                  Welcome,{' '}
                 </RegularTextCB>
                 <RegularTextCB
                   style={[FONTS.boldFont18, {color: Colors.black}]}>
@@ -819,7 +821,7 @@ export default class VendorHome extends Component {
             <View style={{paddingHorizontal: SIZES.twenty}}>
               <FlatList
                 data={this.state.quickOrder}
-                // horizontal
+                horizontal
                 keyExtractor={(item) => item.id}
                 renderItem={this.renderQuickJob}
                 showsHorizontalScrollIndicator={false}

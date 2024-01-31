@@ -11,6 +11,7 @@ import {
   Modal,
   TextInput,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -29,6 +30,8 @@ import Colors from '../common/Colors';
 import Images from '../common/Images';
 import {MultiDropdownPicker} from '../components/quickNotifyServeses';
 import MesageEditText from '../components/MessageEditText';
+import {Text} from 'react-native';
+
 export default class UserHome extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +47,7 @@ export default class UserHome extends Component {
       address: '',
       exactTime: '',
       selections: [],
-      startTime: '08:55',
+      startTime: 'Select Time',
       isDatePickerVisible: false,
       showModal: false,
       lat: '',
@@ -52,6 +55,7 @@ export default class UserHome extends Component {
       servicesid: undefined,
       getAllCategories: [],
       selectedCategory: '',
+      selectedCard: '',
       price: '',
     };
   }
@@ -65,12 +69,46 @@ export default class UserHome extends Component {
     const token = await AsyncStorage.getItem(Constants.accessToken);
     this.setState({accessToken: token}, () => {
       this.getAllCategories();
+      this.getUserProfile();
+      this.getAllCards();
     });
+  };
+
+  getUserProfile = () => {
+    const onSuccess = ({data}) => {
+      // console.log('Profile data ==== ', data.data.records);
+      this.setState({
+        avatar: data.data.records.user_profiles.image,
+        name: data.data.records.name,
+        email: data.data.records.email,
+        countryCode: data.data.records.country_code,
+        countryFlag: data.data.records.country_flag,
+        phone: data.data.records.phone,
+        location: data.data.records.user_profiles.location,
+        abouteMe: data.data.records.user_profiles.about_me,
+      });
+    };
+
+    const onFailure = (error) => {
+      utils.showResponseError(error);
+    };
+
+    // this.toggleIsLoading();
+    Axios.get(Constants.getProfileURL, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+      .then(onSuccess)
+      .catch(onFailure);
   };
 
   GooglePlacesInput = (props) => {
     return (
       <GooglePlacesAutocomplete
+        textInputProps={{
+          clearButtonMode: 'always',
+        }}
         placeholder={'Search Location'}
         minLength={2}
         keyboardKeyType={'search'}
@@ -163,20 +201,26 @@ export default class UserHome extends Component {
       price: Number(this.state.rateRequested),
       location: this.state.location,
       description: this.state.description,
+      card_id: this.state.selectedCard,
     };
 
-    // console.log('myData=======>>>>> ', postData);
+    console.log('myData=======>>>>> ', postData);
 
     const formData = new FormData();
-
-    for (const [key, value] in postData) {
-      formData.append(key, value);
+    for (const key in postData) {
+      formData.append(key, postData[key]);
     }
 
     if (!postData['category_id']) {
-      utils.showToast('Please Select category');
+      utils.showToast('Please Select Category');
       return;
     }
+
+    if (!postData['card_id']) {
+      utils.showToast('Please Select Card');
+      return;
+    }
+
     if (!postData.price) {
       utils.showToast("Rate field can't be empty");
       this.setState({isLoading: false});
@@ -206,32 +250,37 @@ export default class UserHome extends Component {
         isLoading: false,
         address: '',
         selectedCategory: '',
-        startTime: '',
+        startTime: 'Select Time',
         lat: '',
         long: '',
         rateRequested: '',
         location: '',
         description: '',
+        selectedCard: '',
       });
 
       utils.showToast('Your Request was successfull.');
+      console.log(data?.message);
     };
     const onFailure = (error) => {
-      // console.log(
-      //   'error =====================================================================>',
-      //   error,
-      // );
+      console.log(
+        'error =====================================================================>',
+        error,
+      );
       this.setState({isLoading: false});
       utils.showResponseError(error);
     };
+
     const options = {
       headers: {
         Authorization: this.state.accessToken,
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
     };
+
     this.setState({isLoading: true});
 
-    Axios.post(Constants.quickOrder2, postData, options)
+    Axios.post(Constants.quickOrder2, formData, options)
       .then(onSuccess)
       .catch(onFailure);
   };
@@ -241,272 +290,370 @@ export default class UserHome extends Component {
       // console.log('All Categoryyyyy ==========> ', data.data.records);
       this.setState({isLoading: false, getAllCategories: data.data.records});
     };
+    const onFailure = (error) => {
+      this.setState({isLoading: false});
+      // console.log('=================', error);
+      utils.showResponseError(error);
+    };
+    this.setState({isLoading: true});
+
+    console.log('STATE', this.state.accessToken);
+    Axios.get(Constants.getCategories, {
+      headers: {
+        Authorization: this.state.accessToken,
+      },
+    })
+
+      .then(onSuccess)
+      .catch(onFailure);
+  };
+
+  getAllCards = () => {
+    const onSuccess = ({data}) => {
+      console.log('CARDS ==========> ', data?.data);
+      this.setState({isLoading: false, getAllCards: data?.data});
+    };
 
     const onFailure = (error) => {
       this.setState({isLoading: false});
       // console.log('=================', error);
       utils.showResponseError(error);
     };
-
     this.setState({isLoading: true});
 
-    Axios.get(Constants.getCategories, {
+    Axios.get(Constants.getCard, {
       headers: {
         Authorization: this.state.accessToken,
       },
     })
+
       .then(onSuccess)
       .catch(onFailure);
   };
 
   render() {
+    const {open, value, items} = this.state;
+
     return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'always'}
-        style={STYLES.container}
-        contentContainerStyle={[
-          {paddingHorizontal: SIZES.ten * 2, paddingBottom: 120},
-        ]}>
-        {/* <StatusBar backgroundColor={Colors.white} barStyle="dark-content" /> */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: SIZES.twenty,
-          }}>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'always'}
+          style={STYLES.container}
+          contentContainerStyle={[
+            {paddingHorizontal: SIZES.ten * 2, paddingBottom: 100},
+          ]}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: SIZES.twenty,
+            }}>
+            <Image
+              source={{uri: Constants.imageURL + this.state.avatar}}
+              style={{
+                height: SIZES.twentyFive * 2,
+                width: SIZES.twentyFive * 2,
+                borderRadius: SIZES.fifteen * 2.85,
+              }}
+              resizeMode="cover"
+            />
+
+            <Text style={[FONTS.mediumFont16, {marginLeft: SIZES.ten}]}>
+              Welcome,{' '}
+              <Text style={[FONTS.boldFont18, {color: Colors.sickGreen}]}>
+                {this.state.name}
+              </Text>
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: SIZES.fifteen,
+            }}>
+            <RegularTextCB
+              style={[
+                FONTS.boldFont22,
+                {
+                  color: Colors.black,
+                },
+              ]}>
+              Quick Services
+            </RegularTextCB>
+
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => this.props.navigation.navigate(Constants.home)}>
+              <Image
+                source={Images.iconSearch}
+                style={{height: SIZES.fifty * 1, width: SIZES.fifty * 1}}
+              />
+            </TouchableOpacity>
+          </View>
           <RegularTextCB
             style={[
-              FONTS.boldFont22,
+              FONTS.mediumFont18,
               {
                 color: Colors.black,
+                marginVertical: SIZES.ten,
               },
             ]}>
-            Quick Services
-          </RegularTextCB>
-        </View>
-        <RegularTextCB
-          style={[
-            FONTS.mediumFont18,
-            {
-              color: Colors.black,
-              marginVertical: SIZES.ten,
-            },
-          ]}>
-          Select Services
-        </RegularTextCB>
-        <View
-          style={{
-            height: 60,
-            backgroundColor: Colors.white,
-            borderRadius: height * 0.01,
-            shadowColor: '#c5c5c5',
-            shadowOffset: {width: SIZES.five, height: SIZES.five},
-            shadowOpacity: 1.0,
-            shadowRadius: 10,
-            justifyContent: 'center',
-            marginTop: SIZES.ten,
-          }}>
-          <MultiDropdownPicker
-            viewProperty="name"
-            value={this.state.services}
-            data={this.state.getAllCategories}
-            onChangeValue={(val) => {
-              this.setState({selectedCategory: val}, () => {
-                // console.log(
-                //   'multidropdown picker ',
-                //   typeof this.state.servicesid,
-                //   'value',
-                //   val,
-                // );
-              });
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: SIZES.twenty,
-          }}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-            Rate Requested
-          </RegularTextCB>
-          <RegularTextCB
-            style={{
-              fontSize: 12,
-              color: Colors.coolGrey,
-              marginStart: SIZES.five,
-            }}>
-            (for complete job)
-          </RegularTextCB>
-        </View>
-        <EditText
-          ref={'rate'}
-          placeholder={'Enter Rate'}
-          keyboardType={'number-pad'}
-          value={this.state.rateRequested}
-          onChangeText={(text) => {
-            var numbers = /^[0-9]+$/;
-            if (!text.match(numbers)) {
-              utils.showToast('Price can only be Number');
-              return;
-            }
-            this.setState({
-              rateRequested: text,
-            });
-          }}
-          style={{marginTop: SIZES.ten}}
-        />
-        <View style={[{marginTop: SIZES.twenty}]}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-            Location
+            Select Services
           </RegularTextCB>
           <View
-            style={[
-              {
+            style={{
+              height: 60,
+              backgroundColor: Colors.white,
+              borderRadius: height * 0.01,
+              shadowColor: '#c5c5c5',
+              shadowOffset: {width: SIZES.five, height: SIZES.five},
+              shadowOpacity: 1.0,
+              shadowRadius: 10,
+              justifyContent: 'center',
+              marginTop: SIZES.ten,
+            }}>
+            <MultiDropdownPicker
+              viewProperty="name"
+              value={this.state.services}
+              data={this.state.getAllCategories}
+              onChangeValue={(val) => {
+                this.setState({selectedCategory: val}, () => {
+                  // console.log(
+                  //   'multidropdown picker ',
+                  //   typeof this.state.servicesid,
+                  //   'value',
+                  //   val,
+                  // );
+                });
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: SIZES.twenty,
+            }}>
+            <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+              Rate Requested
+            </RegularTextCB>
+            <RegularTextCB
+              style={{
+                fontSize: 12,
+                color: Colors.coolGrey,
+                marginStart: SIZES.five,
+              }}>
+              (for complete job)
+            </RegularTextCB>
+          </View>
+          <EditText
+            ref={'rate'}
+            placeholder={'Enter Rate'}
+            keyboardType={'number-pad'}
+            value={this.state.rateRequested}
+            onChangeText={(text) => {
+              var numbers = /^[0-9]+$/;
+              if (!text.match(numbers)) {
+                utils.showToast('Price can only be Number');
+                return;
+              }
+              this.setState({
+                rateRequested: text,
+              });
+            }}
+            style={{marginTop: SIZES.ten}}
+          />
+          <View style={[{marginTop: SIZES.twenty}]}>
+            <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+              Location
+            </RegularTextCB>
+            <View
+              style={[
+                {
+                  height: 60,
+                  backgroundColor: Colors.white,
+                  borderRadius: height * 0.01,
+                  shadowColor: '#c5c5c5',
+                  shadowOffset: {width: SIZES.five, height: SIZES.five},
+                  shadowOpacity: 1.0,
+                  shadowRadius: SIZES.ten,
+                  elevation: SIZES.ten,
+                  justifyContent: 'center',
+                  paddingLeft: SIZES.twenty,
+                  marginTop: SIZES.ten,
+                },
+              ]}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    showModal: true,
+                  });
+                }}>
+                <RegularTextCB style={{fontSize: 16}}>
+                  {this.state.location
+                    ? this.state.location
+                    : 'Search Location'}
+                </RegularTextCB>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.showModal}
+            onRequestClose={() => {
+              this.setState({showModal: false});
+            }}>
+            <View
+              style={{
+                flex: 1,
+                padding: SIZES.twenty,
+                backgroundColor: '#00000085',
+              }}>
+              <View
+                style={{
+                  // flex: 1,
+                  padding: SIZES.five,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                {this.GooglePlacesInput()}
+                <TouchableOpacity
+                  style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
+                  onPress={() => {
+                    this.setState({showModal: false});
+                  }}>
+                  <Image
+                    style={{
+                      height: SIZES.fifteen,
+                      width: SIZES.fifteen,
+                      tintColor: Colors.white,
+                      marginLeft: SIZES.five,
+                    }}
+                    resizeMode="contain"
+                    source={Images.iconClose}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          <View style={{marginTop: SIZES.twenty}}>
+            <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
+              Address
+            </RegularTextCB>
+            <EditText
+              ref={'rate'}
+              placeholder={'Enter Address'}
+              value={this.state.address}
+              onChangeText={(text) => {
+                this.setState({
+                  address: text,
+                });
+              }}
+              style={{
+                marginTop: SIZES.ten,
+              }}
+            />
+          </View>
+          <View style={[{marginTop: SIZES.twenty}]}>
+            <RegularTextCB
+              style={{fontSize: 18, color: '#000', marginBottom: SIZES.ten}}>
+              Exact Time
+            </RegularTextCB>
+
+            <TimePicker
+              onPress={this.showDatePicker}
+              isVisible={this.state.isDatePickerVisible}
+              mode="time"
+              onConfirm={this.handleConfirm}
+              onCancel={this.hideDatePicker}
+              is24Hour={false}
+              hideTitleContainerIOS={true}
+              time={this.state.startTime}
+            />
+          </View>
+          <View style={{marginTop: SIZES.twenty}}>
+            <RegularTextCB
+              style={{
+                fontSize: 18,
+                color: Colors.black,
+                marginBottom: SIZES.fifteen,
+              }}>
+              Job Description
+            </RegularTextCB>
+
+            <MesageEditText
+              placeholder={'Enter Job Description '}
+              height={SIZES.twentyFive * 4.5}
+              value={this.state.description}
+              onChangeText={(text) => {
+                this.setState({description: text});
+              }}
+            />
+
+            <RegularTextCB
+              style={[
+                FONTS.mediumFont18,
+                {
+                  color: Colors.black,
+                  marginTop: SIZES.fifteen,
+                  marginBottom: SIZES.ten,
+                },
+              ]}>
+              Select Card
+            </RegularTextCB>
+            <View
+              style={{
                 height: 60,
                 backgroundColor: Colors.white,
                 borderRadius: height * 0.01,
                 shadowColor: '#c5c5c5',
                 shadowOffset: {width: SIZES.five, height: SIZES.five},
                 shadowOpacity: 1.0,
-                shadowRadius: SIZES.ten,
-                elevation: SIZES.ten,
+                shadowRadius: 10,
                 justifyContent: 'center',
-                paddingLeft: SIZES.twenty,
                 marginTop: SIZES.ten,
-              },
-            ]}>
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({
-                  showModal: true,
-                });
               }}>
-              <RegularTextCB style={{fontSize: 16}}>
-                {this.state.location ? this.state.location : 'Search Location'}
-              </RegularTextCB>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={this.state.showModal}
-          onRequestClose={() => {
-            this.setState({showModal: false});
-          }}>
-          <View
-            style={{
-              flex: 1,
-              padding: SIZES.twenty,
-              backgroundColor: 'rgba(52, 52, 52, 0.SIZES.five)',
-            }}>
-            <View
-              style={{
-                // flex: 1,
-                padding: SIZES.five,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              {this.GooglePlacesInput()}
-              <TouchableOpacity
-                style={{marginTop: SIZES.fifteen, marginLeft: SIZES.five}}
-                onPress={() => {
-                  this.setState({showModal: false});
-                }}>
-                <Image
-                  style={{
-                    height: SIZES.fifteen,
-                    width: SIZES.fifteen,
-                    tintColor: Colors.black,
-                  }}
-                  resizeMode="contain"
-                  source={Images.iconClose}
-                />
-              </TouchableOpacity>
+              <MultiDropdownPicker
+                sample="Select Card"
+                viewProperty="cardholder_name"
+                value={this.state.selectedCard}
+                data={this.state.getAllCards}
+                onChangeValue={(val) => {
+                  this.setState({selectedCard: val}, () => {
+                    console.log('CARD ID', val);
+                    // Handle the selected card value
+                  });
+                }}
+              />
             </View>
           </View>
-        </Modal>
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-            Address
-          </RegularTextCB>
-          <EditText
-            ref={'rate'}
-            placeholder={'Enter Address'}
-            value={this.state.address}
-            onChangeText={(text) => {
-              this.setState({
-                address: text,
-              });
-            }}
+
+          <View
             style={{
-              marginTop: SIZES.ten,
-            }}
-          />
-        </View>
-        <View style={[{marginTop: SIZES.twenty}]}>
-          <RegularTextCB
-            style={{fontSize: 18, color: '#000', marginBottom: SIZES.ten}}>
-            Exact Time
-          </RegularTextCB>
+              marginTop: SIZES.ten * 5,
+              paddingBottom: SIZES.ten,
+              marginHorizontal: SIZES.ten,
+            }}>
+            <ButtonRadius10
+              bgColor={Colors.sickGreen}
+              label="QUICK NOTIFY"
+              onPress={() => {
+                this.postQuickOrder();
+              }}
+            />
+          </View>
 
-          <TimePicker
-            onPress={this.showDatePicker}
-            isVisible={this.state.isDatePickerVisible}
-            mode="time"
-            onConfirm={this.handleConfirm}
-            onCancel={this.hideDatePicker}
-            is24Hour={false}
-            hideTitleContainerIOS={true}
-            time={this.state.startTime}
+          <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
           />
-        </View>
-        <View style={{marginTop: SIZES.twenty}}>
-          <RegularTextCB style={{fontSize: 18, color: Colors.black}}>
-            Job Description
-          </RegularTextCB>
-
-          <MesageEditText
-            placeholder={'Enter Job Description '}
-            height={SIZES.twentyFive * 4.5}
-            value={this.state.description}
-            onChangeText={(text) => {
-              this.setState({description: text});
-            }}
-          />
-        </View>
-        <View
-          style={{
-            marginTop: SIZES.ten * 5,
-            paddingBottom: SIZES.ten,
-            marginHorizontal: SIZES.ten,
-          }}>
-          <ButtonRadius10
-            bgColor={Colors.sickGreen}
-            label="QUICK NOTIFY"
-            onPress={() => {
-              this.postQuickOrder();
-            }}
-          />
-        </View>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => this.props.navigation.navigate(Constants.home)}
-          style={{alignSelf: 'flex-end'}}>
-          <Image
-            source={Images.iconSearch}
-            style={{height: SIZES.fifty * 1.5, width: SIZES.fifty * 1.5}}
-          />
-        </TouchableOpacity>
-        <Spinner
-          visible={this.state.isLoading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
